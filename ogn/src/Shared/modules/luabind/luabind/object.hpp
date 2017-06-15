@@ -553,8 +553,8 @@ namespace detail
       return boost::operator op(x, y); \
   }
 
-  LUABIND_OPERATOR_ADL_WKND(==)
-  LUABIND_OPERATOR_ADL_WKND(!=)
+  //LUABIND_OPERATOR_ADL_WKND(==)
+  //LUABIND_OPERATOR_ADL_WKND(!=)
 
 #undef LUABIND_OPERATOR_ADL_WKND
  
