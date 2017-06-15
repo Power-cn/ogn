@@ -25,10 +25,13 @@ public:
 
 	void sendPacketToWorld(Packet& packet);
 	void sendBufferToWorld(void* data, int32 count);
+	const std::string& getHost() { return mHost; }
+	void setHost(const std::string& host) { mHost = host; }
 protected:
 	static		uint32 sId;
 protected:
 	SessionID	mSessionId;
 	Player*		mPlayer;
 	Socket*		mSocket;
+	std::string mHost;
 };

@@ -234,7 +234,7 @@ bool Player::onSavejson(Json::Value& root)
 {
 	root["test"] = "test";
 	root["offline"] = GetOfflineTimer();
-	root["lasthost"] = session->getSocket()->getIP();
+	root["lasthost"] = session->getHost();
 	return true;
 }
 
