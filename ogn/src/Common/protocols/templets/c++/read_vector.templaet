@@ -1,0 +1,7 @@
+uint32 #NAME#_TEMP = 0;
+bytes >> #NAME#_TEMP;
+for (uint32 i = 0; i < #NAME#_TEMP; ++i) {
+	#ELEMENT# info;
+	bytes >> info;
+	#NAME#.push_back(info);
+}

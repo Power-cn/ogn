@@ -1,0 +1,258 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{60ad3983-e365-411b-ab4b-7049c3dc719c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{715a6521-8933-49bf-b40d-2e52f8568fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{884598f3-ffd5-44e2-9ff1-e082354a1d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{960981c9-6b80-4825-a7bd-669db5e0770b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\MapModule">
+      <UniqueIdentifier>{dbdfeabb-b654-4d68-a5ef-359fb5c3e860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\MapModule\map">
+      <UniqueIdentifier>{8588201a-8e83-4491-a10b-709cd0d5e71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Handler">
+      <UniqueIdentifier>{8186e7af-6e60-4f55-8ce8-309ee28335ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\TeamModule">
+      <UniqueIdentifier>{8a4c6b80-290b-4c6c-b15d-2e582a02e788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\TeamModule\team">
+      <UniqueIdentifier>{c2d4d6d6-cdf2-43b0-8711-168e8b9c386c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\BackpackModule">
+      <UniqueIdentifier>{97ca9c29-8012-431b-a513-8c740bcc52d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\ItemModule">
+      <UniqueIdentifier>{baed9fac-3624-49e0-9345-b1f4f49fc046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule">
+      <UniqueIdentifier>{6bc23a8c-333e-44cf-a259-921a059288ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule\Entity">
+      <UniqueIdentifier>{0ce61455-96bb-4e12-8042-17aab902da93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule\Entity\npc">
+      <UniqueIdentifier>{338f817e-023d-4295-b5d9-ca47a34b4630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WarModule">
+      <UniqueIdentifier>{b61e8e76-9200-467d-bbdd-fd0c1a9553e9}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\World\main.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Session.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\SessionManager.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Common\ConfigManager.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Map.cpp">
+      <Filter>Module\MapModule\map</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\MapModule.cpp">
+      <Filter>Module\MapModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\DBHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\SessionHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\PlayerHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\TeamModule.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Team.cpp">
+      <Filter>Module\TeamModule\team</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\BackpackModule.cpp">
+      <Filter>Module\BackpackModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Backpack.cpp">
+      <Filter>Module\BackpackModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Item.cpp">
+      <Filter>Module\ItemModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\ItemModule.cpp">
+      <Filter>Module\ItemModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\WorldModule.cpp">
+      <Filter>Module\WorldModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Entity.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Player.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Npc.cpp">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Common\Utils.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarModule.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\War.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Handler\WarHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Common\Property.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaEngineBind.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\World\Session.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\SessionManager.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\ConfigManager.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\stdafx.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Map.h">
+      <Filter>Module\MapModule\map</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\MapModule.h">
+      <Filter>Module\MapModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\protocols\protocols.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\DBHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\SessionHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\PlayerHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\TeamModule.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Team.h">
+      <Filter>Module\TeamModule\team</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Channel.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\BackpackModule.h">
+      <Filter>Module\BackpackModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Backpack.h">
+      <Filter>Module\BackpackModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Item.h">
+      <Filter>Module\ItemModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\ItemModule.h">
+      <Filter>Module\ItemModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\MsgCode.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\WorldModule.h">
+      <Filter>Module\WorldModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Entity.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Player.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Npc.h">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Utils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarModule.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\War.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Handler\WarHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Property.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Application.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\LuaEngine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\src\Common\protocols\protocols.xml">
+      <Filter>Common</Filter>
+    </Xml>
+    <Xml Include="..\..\bin\World\config.xml" />
+  </ItemGroup>
+</Project>

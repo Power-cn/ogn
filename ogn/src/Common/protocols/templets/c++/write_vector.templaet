@@ -1,0 +1,5 @@
+uint32 #NAME#_TEMP = #NAME#.size();
+bytes << #NAME#_TEMP;
+for (uint32 i = 0; i < #NAME#_TEMP; ++i) {
+	bytes << #NAME#[i];
+}

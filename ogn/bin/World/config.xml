@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <file path="config.json"/>
+  <file path="config/actor.json"/>
+  <file path="config/animation.json"/>
+  <file path="config/character.json"/>
+  <file path="config/map.json"/>
+  <file path="config/msg.json"/>
+  <file path="config/npc.json"/>
+  <file path="config/property.json"/>
+  <file path="config/resource.json"/>
+  <file path="config/robot.json"/>
+</root>
+

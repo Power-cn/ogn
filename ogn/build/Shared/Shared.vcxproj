@@ -1,0 +1,304 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{EE50C94D-6E57-4BEA-90A2-DD004F97B202}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>Core</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+    <ProjectName>Shared</ProjectName>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>StaticLibrary</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../lib</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../lib</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis-win32;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis-win32;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Shared\core\core\Astar.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\BinaryStream.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Bit.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\BlockStream.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\CircularBuffer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\CmdDispatcher.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Compression.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\conio.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\DateTime.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Dictionary.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\dump.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Event.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\EventDispatcher.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\EventListener.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\List.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log_console_outpter.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log_file_outputer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log_outputer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log_system.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\log_win_outputer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\BinaryUtils.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\MathUtils.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\Point2.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\Rectangle.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector2.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector3.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector4.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Mutex.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Network.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Object.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Packet.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\PacketManager.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\RedisProxy.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Reference.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\RTTI.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Shared.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Socket.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\SocketAngent.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\SocketClient.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\SocketEvent.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\SocketServer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Status.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Threader.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\ThreaderPool.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\TimerDispatcher.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\Variant.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_reader.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_value.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_writer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\adler32.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\compress.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\crc32.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\deflate.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzclose.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzlib.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzread.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzwrite.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\infback.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\inffast.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\inflate.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\inftrees.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\trees.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\uncompr.c" />
+    <ClCompile Include="..\..\src\Shared\core\zlib\zutil.c" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Shared\core\core\Astar.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\BinaryStream.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Bit.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\BlockStream.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\CircularBuffer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\CmdDispatcher.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Compression.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\conio.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\DateTime.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Dictionary.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\dump.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Event.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\EventDispatcher.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\EventListener.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\EventRegister.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\List.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log_console_outpter.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log_file_outputer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log_outputer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log_system.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\log_win_outputer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\BinaryUtils.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\MathUtils.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\Point2.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\Rectangle.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector2.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector3.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector4.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Mutex.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Network.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Object.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Object.hpp" />
+    <ClInclude Include="..\..\src\Shared\core\core\Packet.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\PacketManager.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\RedisProxy.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Reference.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\RTTI.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Shared.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Shared.hpp" />
+    <ClInclude Include="..\..\src\Shared\core\core\Singleton.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SmartPointer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Socket.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SocketAngent.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SocketClient.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SocketEvent.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SocketServer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Status.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Threader.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\ThreaderPool.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\TimerDispatcher.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\Variant.h" />
+    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_batchallocator.h" />
+    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_tool.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\crc32.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\deflate.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\gzguts.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\inffast.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\inffixed.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\inflate.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\inftrees.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\trees.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\zconf.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\zlib.h" />
+    <ClInclude Include="..\..\src\Shared\core\zlib\zutil.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalarray.inl" />
+    <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalmap.inl" />
+    <None Include="..\..\src\Shared\core\json\src\lib_json\json_valueiterator.inl" />
+    <None Include="..\..\src\Shared\core\json\src\lib_json\sconscript" />
+    <None Include="..\..\src\Shared\core\json\src\lib_json\version.h.in" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\..\src\Shared\core\json\src\lib_json\CMakeLists.txt" />
+  </ItemGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

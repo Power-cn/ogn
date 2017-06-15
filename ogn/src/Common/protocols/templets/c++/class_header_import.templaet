@@ -1,0 +1,10 @@
+#pragma once
+#include "Core.h"
+
+enum PACKET_ID_ENUM {
+#PACKET_ID_ENUM#
+};
+
+#PROTOCOLS#
+
+#REGISTER#

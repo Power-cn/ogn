@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?>
+<item>
+  <class>
+    
+    <element name="DBAccountInfo" parent="object">
+      <member type="int32" name="id" />
+      <member type="string" name="user" />
+      <member type="BinaryStream" name="password" />
+      <member type="string" name="name" />
+      <member type="string" name="email" />
+      <member type="string" name="phone" />
+    </element>
+    
+    <element name="DBRoleInfo" parent="object">
+      <member type="int32" name="id" />
+      <member type="int32" name="accountId" />
+      <member type="string" name="name" />
+      <member type="BinaryStream" name="property" />
+    </element>
+
+    <element name="Point" parent="object">
+      <member type="int32" name="x" />
+      <member type="int32" name="y" />
+    </element>
+
+    <element name="TeamEntityInfo" parent="object">
+      <member type="string" name="name" />
+      <member type="int32" name="instanceId" />
+    </element>
+    
+    <element name="TeamInfo" parent="object">
+      <member type="int32" name="teamId" />
+      <member type="int32" name="leaderInsId" />
+      <member type="vector" name="teamEntityInfos" element="TeamEntityInfo" />
+    </element>
+    
+  </class>
+
+  <protocol>
+
+    <element id="ID_NetFirst" name="NetFirst" >
+    </element>
+    
+    <element id="ID_NetSessionEnterNotify" name="NetSessionEnterNotify" >
+      <member type="uint32" name="socketId" />
+    </element>
+
+    <element id="ID_NetSessionLeaveNotify" name="NetSessionLeaveNotify" >
+    </element>
+
+    <element id="ID_NetPingNotify" name="NetPingNotify" >
+      <member type="uint32" name="time" />
+    </element>
+
+    <element id="ID_NetLoginReq" name="NetLoginReq" >
+		  <member type="string" name="user" />
+      <member type="string" name="password" />
+	  </element>
+
+    <element id="ID_NetLoginRes" name="NetLoginRes" >
+      <member type="int32" name="result" comment="0.成功 1.帐号或密码错误 2.此号在异地登陆, 被强制踢下线 3.重复登陆" />
+      <member type="int32" name="instanceId" />
+      <member type="DBAccountInfo" name="accountInfo" />
+    </element>
+
+    <element id="ID_NetGmMsg" name="NetGmMsg" >
+      <member type="string" name="name" />
+      <member type="vector" name="gmParams" element="string" />
+    </element>
+
+    <element id="ID_NetQueryRoleReq" name="NetQueryRoleReq" >
+      <member type="int32" name="accountId" />
+      <member type="string" name="user" />
+      <member type="int8" name="roleCount" />
+    </element>
+
+    <element id="ID_NetQueryRoleRes" name="NetQueryRoleRes" >
+      <member type="int32" name="accountId" />
+      <member type="vector" name="roleInfos" element="DBRoleInfo"  />
+    </element>
+
+    <element id="ID_NetPropertyReq" name="NetPropertyReq" >
+      <member type="int32" name="guid" />
+    </element>
+    
+    <element id="ID_NetPropertyRes" name="NetPropertyRes" >
+      <member type="int32" name="guid" />
+      <member type="BinaryStream" name="property" />
+    </element>
+
+    <element id="ID_NetEntityPropertyNotify" name="NetEntityPropertyNotify" >
+      <member type="int32" name="guid" />
+      <member type="BinaryStream" name="property" />
+    </element>
+
+    <element id="ID_NetEntityEnterMapNotify" name="NetEntityEnterMapNotify" >
+      <member type="string" name="name" />
+      <member type="int32" name="guid" />
+      <member type="int32" name="mapInsId" />
+      <member type="int32" name="mapId" />
+    </element>
+    
+    <element id="ID_NetEntityLeaveMapNotify" name="NetEntityLeaveMapNotify" >
+      <member type="int32" name="guid" />
+      <member type="int32" name="mapInsId" />
+      <member type="int32" name="mapId" />
+    </element>
+
+    <element id="ID_NetPlayerEnterViewNotify" name="NetPlayerEnterViewNotify" >
+      <member type="string" name="name" />
+      <member type="int32" name="guid" />
+      <member type="int32" name="entityType" />
+      <member type="int32" name="mapId" />
+      <member type="int32" name="charId" comment="角色ID" />
+      <member type="Point" name="pos" />
+      <member type="float32" name="speed" />
+      <member type="int32" name="status" />
+      <member type="int32" name="dir" />
+    </element>
+
+    <element id="ID_NetPlayerLeaveViewNotify" name="NetPlayerLeaveViewNotify" >
+      <member type="int32" name="guid" />
+      <member type="int32" name="mapId" />
+    </element>
+
+    <element id="ID_NetNpcEnterViewNotify" name="NetNpcEnterViewNotify" >
+      <member type="string" name="name" />
+      <member type="int32" name="guid" />
+      <member type="int32" name="entityType" />
+      <member type="int32" name="mapId" />
+      <member type="int32" name="npcId" comment="npcId" />
+      <member type="Point" name="pos" />
+      <member type="float32" name="speed" />
+      <member type="int32" name="status" />
+      <member type="int32" name="dir" />
+    </element>
+
+    <element id="ID_NetNpcLeaveViewNotify" name="NetNpcLeaveViewNotify" >
+      <member type="int32" name="guid" />
+      <member type="int32" name="mapId" />
+    </element>
+
+    <element id="ID_NetEntityMoveNotify" name="NetEntityMoveNotify" >
+      <member type="int32" name="guid" />
+      <member type="int8" name="startDir" />
+      <member type="int32" name="x" />
+      <member type="int32" name="y" />
+    </element>
+    
+    <element id="ID_NetEntityMoveToNotify" name="NetEntityMoveToNotify" >
+      <member type="int32" name="guid" />
+      <member type="int32" name="x" />
+      <member type="int32" name="y" />
+    </element>
+
+    <element id="ID_NetEntityAttackNotify" name="NetEntityAttackNotify" >
+      <member type="int32" name="guid" />
+      <member type="int8" name="index" />
+      <member type="int32" name="tarGuid" />
+      <member type="int8" name="dirPos" />
+    </element>
+    
+    <element id="ID_NetEntityFollowNotify" name="NetEntityFollowNotify" >
+      <member type="int32" name="tarGuid" />
+    </element>
+
+    <element id="ID_NetEntityCancelFollowNotify" name="NetEntityCancelFollowNotify" >
+      <member type="int32" name="tarGuid" />
+    </element>
+    
+    <element id="ID_NetChatMsgNotify" name="NetChatMsgNotify" >
+      <member type="string" name="from" />
+      <member type="string" name="to" />
+      <member type="int8" name="channelType" />
+      <member type="string" name="chatMsg" />
+      <member type="BinaryStream" name="chatData" />
+    </element>
+
+    <element id="ID_NetResponseMsgNotify" name="NetResponseMsgNotify" >
+      <member type="int32" name="msgId" />
+      <member type="vector" name="msgParams" element="string" />
+    </element>
+    
+    <element id="ID_NetOrganizeTeamReq" name="NetOrganizeTeamReq" >
+      <member type="string" name="name" />
+    </element>
+
+    <element id="ID_NetOrganizeTeamRes" name="NetOrganizeTeamRes" >
+      <member type="string" name="name" />
+      <member type="int8" name="isJoin" comment="0.邀请 1.申请" />
+    </element>
+
+    <element id="ID_NetAgreeTeamReq" name="NetAgreeTeamReq" >
+      <member type="string" name="name" />
+      <member type="int8" name="isJoin" comment="0.邀请 1.申请" />
+    </element>
+
+
+    <element id="ID_NetTeamInfoRes" name="NetTeamInfoRes" >
+      <member type="TeamInfo" name="teamInfo" />
+    </element>
+
+    <element id="ID_NetTeamListReq" name="NetTeamListReq" >
+    </element>
+    
+    <element id="ID_NetTeamListRes" name="NetTeamListRes" >
+      <member type="vector" name="teamInfos" element="TeamInfo" />
+    </element>
+    
+    <element id="ID_NetEnd" name="NetEnd" >
+    </element>
+
+  </protocol>
+  
+</item>
