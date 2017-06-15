@@ -95,7 +95,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis-win32;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -126,7 +126,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis-win32;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared;../../src/Shared/modules/hiredis;../../src/Shared/modules/libevent/include;../../src/Shared/modules/libmysql/include;../../src/Shared/modules/libevent/WIN32-Code/nmake;../../src/Shared/core/core;../../src/Shared/core/json/include;../../src/Shared/core/json;../../src/Shared/core/zlib;../../src/Shared/core/math;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
