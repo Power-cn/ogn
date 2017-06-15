@@ -24,9 +24,6 @@
     <ClCompile Include="..\..\src\Shared\modules\hiredis\async.c">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Shared\modules\hiredis\dict.c">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Shared\modules\hiredis\hiredis.c">
       <Filter>src</Filter>
     </ClCompile>
@@ -41,10 +38,7 @@
     <ClInclude Include="..\..\src\Shared\modules\hiredis\async.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Shared\modules\hiredis\dict.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\modules\hiredis\fmacros.h">
+    <ClInclude Include="..\..\src\Shared\modules\hiredis\config.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\modules\hiredis\hiredis.h">

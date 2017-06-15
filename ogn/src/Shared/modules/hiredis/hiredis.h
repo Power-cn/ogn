@@ -31,21 +31,19 @@
 
 #ifndef __HIREDIS_H
 #define __HIREDIS_H
+
+#if defined(_MSC_VER)
+#define HIREDIS_WIN 1
+#endif
+
 #include <stdio.h> /* for size_t */
 #include <stdarg.h> /* for va_list */
-#ifndef _WIN32
-#include <sys/time.h> /* for struct timeval */
-#endif
-#ifdef _WIN32
-    #ifndef FD_SETSIZE
-      #define FD_SETSIZE 16000
-    #endif
-    #include <winsock2.h>
-    #include <windows.h>
 
-    #ifndef va_copy
-      #define va_copy(d,s) d = (s)
-    #endif
+#ifndef HIREDIS_WIN
+#include <sys/time.h> /* for struct timeval */
+#else
+#include <winsock2.h>
+#include <ws2tcpip.h>
 #endif
 
 #define HIREDIS_MAJOR 0
@@ -89,9 +87,6 @@
 /* Flag that is set when the async context has one or more subscriptions. */
 #define REDIS_SUBSCRIBED 0x20
 
-/* Flag that is set when monitor mode is active */
-#define REDIS_MONITORING 0x40
-
 #define REDIS_REPLY_STRING 1
 #define REDIS_REPLY_ARRAY 2
 #define REDIS_REPLY_INTEGER 3
@@ -99,12 +94,11 @@
 #define REDIS_REPLY_STATUS 5
 #define REDIS_REPLY_ERROR 6
 
-#define REDIS_READER_MAX_BUF (1024*16)  /* Default max unused reader buffer. */
-
 #ifdef __cplusplus
 extern "C" {
 #endif
 
+#pragma pack(1)
 /* This is the reply object returned by redisCommand() */
 typedef struct redisReply {
     int type; /* REDIS_REPLY_* */
@@ -140,9 +134,8 @@ typedef struct redisReader {
     char *buf; /* Read buffer */
     size_t pos; /* Buffer cursor */
     size_t len; /* Buffer length */
-    size_t maxbuf; /* Max length of unused buffer */
 
-    redisReadTask rstack[9];
+    redisReadTask rstack[3];
     int ridx; /* Index of current read task */
     void *reply; /* Temporary reply pointer */
 
@@ -177,11 +170,7 @@ int redisFormatCommandArgv(char **target, int argc, const char **argv, const siz
 typedef struct redisContext {
     int err; /* Error flags, 0 when there is no error */
     char errstr[128]; /* String representation of error when applicable */
-#ifdef _WIN32
-    SOCKET fd;
-#else
     int fd;
-#endif
     int flags;
     char *obuf; /* Write buffer */
     redisReader *reader; /* Protocol reader */
@@ -193,17 +182,10 @@ redisContext *redisConnectNonBlock(const char *ip, int port);
 redisContext *redisConnectUnix(const char *path);
 redisContext *redisConnectUnixWithTimeout(const char *path, struct timeval tv);
 redisContext *redisConnectUnixNonBlock(const char *path);
-redisContext *redisConnected();
-redisContext *redisConnectedNonBlock();
 int redisSetTimeout(redisContext *c, struct timeval tv);
 void redisFree(redisContext *c);
 int redisBufferRead(redisContext *c);
 int redisBufferWrite(redisContext *c, int *done);
-#ifdef _WIN32
-redisContext *redisPreConnectNonBlock(const char *ip, int port, struct sockaddr_in *sa);
-int redisBufferReadDone(redisContext *c, char *buf, int nread);
-int redisBufferWriteDone(redisContext *c, int nwritten, int *done);
-#endif
 
 /* In a blocking context, this function first checks if there are unconsumed
  * replies to return and returns one if so. Otherwise, it flushes the output

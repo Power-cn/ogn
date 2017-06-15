@@ -25,6 +25,7 @@ public:
 	~RedisProxy();
 public:
 	bool Connect(const std::string& host, short port);
+	bool AsyncConnect(const std::string& host, short port);
 	void sendCmd(const std::string& cmd, EventCallback callback, Object* thisObject);
 	void sendCmd(const std::string& cmd, EventCallback callback, Object* thisObject, std::vector<std::string>& parstr);
 

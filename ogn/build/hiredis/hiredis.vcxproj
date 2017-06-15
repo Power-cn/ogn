@@ -86,7 +86,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../..//src/Shared/modules/hiredis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/hiredis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -117,7 +117,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_LIB;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../..//src/Shared/modules/hiredis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/hiredis;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Windows</SubSystem>
@@ -149,15 +149,13 @@
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Shared\modules\hiredis\async.c" />
-    <ClCompile Include="..\..\src\Shared\modules\hiredis\dict.c" />
     <ClCompile Include="..\..\src\Shared\modules\hiredis\hiredis.c" />
     <ClCompile Include="..\..\src\Shared\modules\hiredis\net.c" />
     <ClCompile Include="..\..\src\Shared\modules\hiredis\sds.c" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Shared\modules\hiredis\async.h" />
-    <ClInclude Include="..\..\src\Shared\modules\hiredis\dict.h" />
-    <ClInclude Include="..\..\src\Shared\modules\hiredis\fmacros.h" />
+    <ClInclude Include="..\..\src\Shared\modules\hiredis\config.h" />
     <ClInclude Include="..\..\src\Shared\modules\hiredis\hiredis.h" />
     <ClInclude Include="..\..\src\Shared\modules\hiredis\net.h" />
     <ClInclude Include="..\..\src\Shared\modules\hiredis\sds.h" />

@@ -62,8 +62,12 @@ bool Application::Initialize()
 	INSTANCE(LuaEngine).reloadScript();
 
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
-	IF_FALSE(!INSTANCE(RedisProxy).Connect(cfg.Host, cfg.Port))
+
+	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
 		return false;
+
+
+
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
 	int32 maxplayer = 0;
@@ -471,11 +475,6 @@ int32 Application::RedisConnect(RedisEvent& e)
 int32 Application::RedisAuth(RedisEvent& e)
 {
 	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success");
-	INSTANCE(RedisProxy).sendCommand("zadd test 1 w1");
-	INSTANCE(RedisProxy).sendCommand("zadd test 2 w2");
-	INSTANCE(RedisProxy).sendCommand("zadd test 3 w3");
-	INSTANCE(RedisProxy).sendCommand("zadd test 4 w4");
-	INSTANCE(RedisProxy).sendCommand("zadd test 5 w5");
 	INSTANCE(RedisProxy).sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
 	INSTANCE(RedisProxy).sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
 	sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);

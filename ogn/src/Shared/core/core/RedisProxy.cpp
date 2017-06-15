@@ -23,11 +23,20 @@ bool RedisProxy::Connect(const std::string& host, short port)
 {
 	mHost = host;
 	mPort = port;
-
-	//RedisRequest request;
-	//request.cmd = RedisEvent::CONNECT;
-	//mRedisRequest.push_back(request);
+	mContext = redisConnect(mHost.c_str(), mPort);
+	redisContext* context = (redisContext*)mContext;
+	if (context->err) {
+		mContext = NULL;
+		return false;
+	}
 	return true;		
+}
+
+bool RedisProxy::AsyncConnect(const std::string& host, short port)
+{
+	mHost = host;
+	mPort = port;
+	return true;
 }
 
 std::string RedisProxy::get(const std::string& key)
