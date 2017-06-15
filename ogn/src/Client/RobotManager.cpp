@@ -137,7 +137,7 @@ int RobotManager::onNetPlayerLeaveViewNotify(Robot* robot, NetPlayerLeaveViewNot
 int RobotManager::onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotify* nfy)
 {
 	Dictionary dict;
-	dict.Deserialize(nfy->property);
+	nfy->property >> dict;
 
 	LOG_DEBUG(LogSystem::csl_color_green, "Guid[%d][%s]", nfy->guid, robot->user.c_str());
 	for (auto itr : dict.MapVariant())

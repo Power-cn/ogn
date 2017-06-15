@@ -94,6 +94,7 @@ int Application::onGateAccept(SocketEvent& e)
 		return 0;
 
 	NetSessionEnterNotify nfy;
+	nfy.host = e.socket->getIP();
 	LOG_INFO("sessionId %0.16llx [%s] accept", session->getSessionId(), e.socket->getIP());
 	sendPacketToWorld(nfy, session);
 	return 0;
@@ -108,14 +109,14 @@ int Application::onGateRecv(SocketEvent& e)
 		return 0;
 	}
 
-#ifdef DEBUG
+#ifdef _DEBUG
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;
 	int32 rpos = out.getWPostion();
 	CHECK_RETURN(out >> msgId, 0);
 	out.setRPostion(rpos);
-	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "session:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).getPacketName(msgId).c_str(), e.count);
-#endif // DEBUG
+	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "session:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
+#endif // _DEBUG
 
 
 	/*

@@ -30,8 +30,10 @@
 #include <time.h>
 #include <thread>
 #include <mutex>
+#include <functional>
 
 #if (defined(WIN32) || defined(WIN64))
+
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4091)
 #define _CRT_SECURE_NO_DEPRECATE 1

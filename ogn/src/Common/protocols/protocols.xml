@@ -42,7 +42,7 @@
     </element>
     
     <element id="ID_NetSessionEnterNotify" name="NetSessionEnterNotify" >
-      <member type="uint32" name="socketId" />
+      <member type="string" name="host" />
     </element>
 
     <element id="ID_NetSessionLeaveNotify" name="NetSessionLeaveNotify" >

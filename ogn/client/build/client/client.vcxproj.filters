@@ -21,9 +21,6 @@
     <ClCompile Include="..\..\..\src\Client\main.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\..\src\Common\ConfigManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\..\src\Client\SocketHandler.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
@@ -36,13 +33,13 @@
     <ClCompile Include="..\..\..\src\Client\RobotManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\..\src\Client\ConfigManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\..\src\Client\stdafx.h">
       <Filter>头文件</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\..\src\Common\ConfigManager.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Common\MsgCode.h">
       <Filter>Common</Filter>
@@ -60,6 +57,9 @@
       <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\..\src\Client\RobotManager.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\..\src\Client\ConfigManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>

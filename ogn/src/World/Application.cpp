@@ -29,6 +29,8 @@ bool Application::Initialize()
 	std::vector<std::string> dest;
 	Shared::split(str, dest, "#");
 
+	std::function<void(int, int)> f1;
+
 	int32 i = 0;
 
 	//INSTANCE(RedisProxy).sendCommand("auth root123456");
@@ -128,7 +130,7 @@ bool Application::Update()
 		mFPSTimer = 0.0;
 	}
 
-	INSTANCE(RedisProxy).loop();
+	sRedisProxy.loop();
 	INSTANCE(Network).update(0.f, 0.f);
 	INSTANCE(CmdDispatcher).update((float32)mTime, (float32)mDelay);
 	for (auto itr : mMapModule)
@@ -473,8 +475,8 @@ int32 Application::RedisConnect(RedisEvent& e)
 int32 Application::RedisAuth(RedisEvent& e)
 {
 	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success");
-	INSTANCE(RedisProxy).sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
-	INSTANCE(RedisProxy).sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
+	sRedisProxy.sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
+	sRedisProxy.sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
 	sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);
 	return 0;
 }

@@ -291,25 +291,25 @@ public class NetSessionEnterNotify : Packet
 {
 	public NetSessionEnterNotify():base((int)PACKET_ID_ENUM.ID_NetSessionEnterNotify)
 	{
-socketId = 0;
+host = "";
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
-bytes.Write(socketId);
+bytes.Write(host);
 
 		return true;
 	}
 
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
-bytes.Read(ref socketId);
+bytes.Read(ref host);
 
 		return true;
 	}
 
-public uint socketId;
+public string host;
 
 }
 public class NetSessionLeaveNotify : Packet
