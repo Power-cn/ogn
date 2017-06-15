@@ -164,6 +164,11 @@ int DateTime::getNow()
 	return (int)time(0);
 }
 
+int32 DateTime::Now()
+{
+	return (int32)time(0);
+}
+
 __int64 DateTime::getNowMillisecond()
 {
 	//tm tm_;

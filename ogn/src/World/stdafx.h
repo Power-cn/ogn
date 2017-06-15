@@ -22,6 +22,7 @@
 #pragma comment(lib, "lua_d.lib")
 #pragma comment(lib, "luabind_d.lib")
 #pragma comment(lib, "hiredis_d.lib")
+#pragma comment(lib, "python36_d.lib")
 
 #else
 
@@ -29,10 +30,19 @@
 #pragma comment(lib, "lua.lib")
 #pragma comment(lib, "luabind.lib")
 #pragma comment(lib, "hiredis.lib")
+#pragma comment(lib, "python36.lib")
 
 #endif // DEBUG
 
 #endif
+
+//////////////////////////////////////////////////////////////////////////
+#include <json/json.h>
+#include <lua.hpp>
+#include <luabind/luabind.hpp>
+
+//////////////////////////////////////////////////////////////////////////
+#include "protocols/protocols.h"
 
 #include "MsgCode.h"
 #include "LuaEngine.h"
@@ -56,14 +66,12 @@
 #include "./Module/WarModule/War.h"
 #include "./Module/WarModule/WarModule.h"
 
-#include "protocols/protocols.h"
 #include "Utils.h"
 #include "DBHandler.h"
 #include "PlayerHandler.h"
 #include "SessionHandler.h"
 #include "./Handler/WarHandler.h"
 #include "RedisProxy.h"
-#include "json/json.h"
 
 #include "Application.h"
 

@@ -529,3 +529,8 @@ std::string Shared::GetCodeMessage(int32 error_code)
 	LocalFree(lpMsgBuf);
 	return error_mes;
 }
+
+void Shared::srand(uint32 seed)
+{
+	::srand(seed);
+}

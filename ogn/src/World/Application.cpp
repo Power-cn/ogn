@@ -48,7 +48,7 @@ bool Application::Initialize()
 	//INSTANCE(RedisProxy).sendCommand("append player name1");
 	//INSTANCE(RedisProxy).sendCommand("save");
 
-	srand(time(NULL));
+	Shared::srand(DateTime::Now());
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("ref", (EventCallback)&Application::onRefresh, this);

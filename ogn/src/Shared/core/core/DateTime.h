@@ -67,6 +67,7 @@ public:
 public:
 	static float64 DateTime::GetNowAppUS();
 	static int32 getNow();
+	static int32 Now();
 	static int64 getNowMillisecond();
 	static void getNowMillisecond(std::string& time);
 	static void getNow(DateTime& time);

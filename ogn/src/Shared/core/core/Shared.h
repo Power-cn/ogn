@@ -171,6 +171,8 @@ namespace Shared
 	void Clipboard(const std::string& str);
 	int32 GetFileLength(FILE* fp);
 	std::string GetCodeMessage(int32 error_code);
+
+	void srand(uint32 seed);
 };
 
 //

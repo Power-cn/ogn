@@ -1,7 +1,4 @@
 #include "stdafx.h"
-#include "lua.hpp"
-#include <luabind/luabind.hpp>
-
 
 static Object* sCurrentObject = NULL;
 
