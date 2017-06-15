@@ -11,9 +11,9 @@
 
 #ifdef WIN32
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libevent.lib")
-#pragma comment(lib, "libevent_core.lib")
-#pragma comment(lib, "libevent_extras.lib")
+#pragma comment(lib, "libevent/libevent.lib")
+#pragma comment(lib, "libevent/libevent_core.lib")
+#pragma comment(lib, "libevent/libevent_extras.lib")
 
 #ifdef _DEBUG
 

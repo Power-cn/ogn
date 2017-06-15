@@ -12,9 +12,9 @@
 
 #ifdef WIN32
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libevent.lib")
-#pragma comment(lib, "libevent_core.lib")
-#pragma comment(lib, "libevent_extras.lib")
+#pragma comment(lib, "libevent/libevent.lib")
+#pragma comment(lib, "libevent/libevent_core.lib")
+#pragma comment(lib, "libevent/libevent_extras.lib")
 
 #ifdef _DEBUG
 
@@ -22,7 +22,7 @@
 #pragma comment(lib, "lua_d.lib")
 #pragma comment(lib, "luabind_d.lib")
 #pragma comment(lib, "hiredis_d.lib")
-#pragma comment(lib, "python36_d.lib")
+#pragma comment(lib, "python/python36_d.lib")
 
 #else
 
@@ -30,7 +30,7 @@
 #pragma comment(lib, "lua.lib")
 #pragma comment(lib, "luabind.lib")
 #pragma comment(lib, "hiredis.lib")
-#pragma comment(lib, "python36.lib")
+#pragma comment(lib, "python/python36.lib")
 
 #endif // DEBUG
 
