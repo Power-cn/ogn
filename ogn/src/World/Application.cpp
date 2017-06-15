@@ -61,14 +61,6 @@ bool Application::Initialize()
 	INSTANCE(ConfigManager).reloadConfig();
 	INSTANCE(LuaEngine).reloadScript();
 
-	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
-
-	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
-		return false;
-
-
-
-	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
 	int32 maxplayer = 0;
 	maxplayer = LuaEngine::GetInt32("global", "maxplayer");
@@ -82,6 +74,12 @@ bool Application::Initialize()
 	worldServer = INSTANCE(Network).listen(cf.Port);
 	IF_FALSE(!worldServer)
 		return false;
+
+	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
+	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
+		return false;
+	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
+
 
 	INSTANCE(SessionHandler);
 	INSTANCE(PlayerHandler);
