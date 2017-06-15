@@ -155,8 +155,8 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\DB\Application.cpp" />
+    <ClCompile Include="..\..\src\DB\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\DB\DBTable.cpp" />
     <ClCompile Include="..\..\src\DB\main.cpp" />
     <ClCompile Include="..\..\src\DB\Player.cpp" />
@@ -166,8 +166,8 @@
     <ClCompile Include="..\..\src\DB\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h" />
     <ClInclude Include="..\..\src\DB\Application.h" />
+    <ClInclude Include="..\..\src\DB\ConfigManager.h" />
     <ClInclude Include="..\..\src\DB\DBTable.h" />
     <ClInclude Include="..\..\src\DB\Player.h" />
     <ClInclude Include="..\..\src\DB\Session.h" />

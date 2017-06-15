@@ -19,12 +19,12 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Common\Property.cpp" />
     <ClCompile Include="..\..\src\Common\Utils.cpp" />
     <ClCompile Include="..\..\src\World\Application.cpp" />
     <ClCompile Include="..\..\src\World\Backpack.cpp" />
     <ClCompile Include="..\..\src\World\BackpackModule.cpp" />
+    <ClCompile Include="..\..\src\World\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\World\DBHandler.cpp" />
     <ClCompile Include="..\..\src\World\Handler\WarHandler.cpp" />
     <ClCompile Include="..\..\src\World\Item.cpp" />
@@ -51,7 +51,6 @@
     <ClCompile Include="..\..\src\World\WorldModule.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h" />
     <ClInclude Include="..\..\src\Common\MsgCode.h" />
     <ClInclude Include="..\..\src\Common\Property.h" />
     <ClInclude Include="..\..\src\Common\protocols\protocols.h" />
@@ -60,6 +59,7 @@
     <ClInclude Include="..\..\src\World\Backpack.h" />
     <ClInclude Include="..\..\src\World\BackpackModule.h" />
     <ClInclude Include="..\..\src\World\Channel.h" />
+    <ClInclude Include="..\..\src\World\ConfigManager.h" />
     <ClInclude Include="..\..\src\World\DBHandler.h" />
     <ClInclude Include="..\..\src\World\Handler\WarHandler.h" />
     <ClInclude Include="..\..\src\World\Item.h" />

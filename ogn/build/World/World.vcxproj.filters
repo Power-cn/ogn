@@ -69,9 +69,6 @@
     <ClCompile Include="..\..\src\World\SessionManager.cpp">
       <Filter>Session</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\Map.cpp">
       <Filter>Module\MapModule\map</Filter>
     </ClCompile>
@@ -150,6 +147,9 @@
     <ClCompile Include="..\..\src\World\LuaEngineBind.cpp">
       <Filter>Script</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\ConfigManager.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -157,9 +157,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\SessionManager.h">
       <Filter>Session</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h">
-      <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\World\stdafx.h">
       <Filter>头文件</Filter>
@@ -247,6 +244,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\LuaEngine.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\ConfigManager.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

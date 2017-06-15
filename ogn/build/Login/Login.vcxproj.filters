@@ -24,8 +24,8 @@
     <ClCompile Include="..\..\src\Login\Application.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp">
-      <Filter>Common</Filter>
+    <ClCompile Include="..\..\src\Login\ConfigManager.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -35,11 +35,11 @@
     <ClInclude Include="..\..\src\Login\Application.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Common\protocols\protocols.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Login\ConfigManager.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -19,8 +19,8 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Gate\Application.cpp" />
+    <ClCompile Include="..\..\src\Gate\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Gate\main.cpp" />
     <ClCompile Include="..\..\src\Gate\Player.cpp" />
     <ClCompile Include="..\..\src\Gate\Session.cpp" />
@@ -28,8 +28,8 @@
     <ClCompile Include="..\..\src\Gate\Entity.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h" />
     <ClInclude Include="..\..\src\Gate\Application.h" />
+    <ClInclude Include="..\..\src\Gate\ConfigManager.h" />
     <ClInclude Include="..\..\src\Gate\Player.h" />
     <ClInclude Include="..\..\src\Gate\Session.h" />
     <ClInclude Include="..\..\src\Gate\SessionManager.h" />

@@ -36,9 +36,6 @@
     <ClCompile Include="..\..\src\DB\SessionManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp">
-      <Filter>src\Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\DB\SessionHandler.cpp">
       <Filter>src</Filter>
     </ClCompile>
@@ -46,6 +43,9 @@
       <Filter>src</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\DB\Entity.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\DB\ConfigManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,9 +65,6 @@
     <ClInclude Include="..\..\src\DB\SessionManager.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h">
-      <Filter>src\Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\DB\SessionHandler.h">
       <Filter>src</Filter>
     </ClInclude>
@@ -75,6 +72,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\DB\Entity.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DB\ConfigManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

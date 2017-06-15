@@ -19,14 +19,14 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Login\Application.cpp" />
+    <ClCompile Include="..\..\src\Login\ConfigManager.cpp" />
     <ClCompile Include="..\..\src\Login\main.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h" />
     <ClInclude Include="..\..\src\Common\protocols\protocols.h" />
     <ClInclude Include="..\..\src\Login\Application.h" />
+    <ClInclude Include="..\..\src\Login\ConfigManager.h" />
     <ClInclude Include="..\..\src\Login\stdafx.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

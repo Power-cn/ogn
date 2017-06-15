@@ -33,13 +33,13 @@
     <ClCompile Include="..\..\src\Gate\SessionManager.cpp">
       <Filter>Session</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Common\ConfigManager.cpp">
-      <Filter>Common</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Gate\Entity.cpp">
       <Filter>Session</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Gate\Application.cpp">
+      <Filter>源文件</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Gate\ConfigManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
@@ -56,13 +56,13 @@
     <ClInclude Include="..\..\src\Gate\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Common\ConfigManager.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Gate\Entity.h">
       <Filter>Session</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Gate\Application.h">
+      <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Gate\ConfigManager.h">
       <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
