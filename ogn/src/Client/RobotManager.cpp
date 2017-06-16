@@ -16,6 +16,8 @@ RobotManager::RobotManager()
 	//addEventListener(ID_NetPlayerLeaveViewNotify, (EventCallbackProcess)&RobotManager::onNetPlayerLeaveViewNotify, this);
 
 	addEventListener(ID_NetEntityPropertyNotify, (EventCallbackProcess)&RobotManager::onNetEntityPropertyNotify, this);
+
+	addEventListener(ID_NetChatMsgNotify, (EventCallbackProcess)&RobotManager::onNetChatMsgNotify, this);
 }
 
 RobotManager::~RobotManager()
@@ -85,7 +87,12 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		msg.gmParams.push_back("p3");
 		robot->sendPacket(msg);
 
-
+		NetChatMsgNotify msgNfy;
+		char szBuffer[256] = { 0 };
+		sprintf_s(szBuffer, 256, "login ok");
+		msgNfy.chatMsg = szBuffer;
+		msgNfy.channelType = 1;
+		robot->sendPacket(msgNfy);
 	}
 	else
 	{
@@ -152,5 +159,11 @@ int RobotManager::onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotif
 		//LOG_INFO("type:[%s] value:[%s]", Property::GetPropertyName(itr.first.valueInt32()).c_str(), itr.second.toString().c_str());
 	}
 	LOG_DEBUG(LogSystem::csl_color_green, "Guid");
+	return 0;
+}
+
+int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
+{
+	LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(),nfy->from.c_str(), nfy->chatMsg.c_str());
 	return 0;
 }

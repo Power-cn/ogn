@@ -18,6 +18,7 @@ protected:
 	int onNetPlayerEnterViewNotify(Robot* robot, NetPlayerEnterViewNotify* nfy);
 	int onNetPlayerLeaveViewNotify(Robot* robot, NetPlayerLeaveViewNotify* nfy);
 	int onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotify* nfy);
+	int onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy);
 protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;

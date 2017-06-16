@@ -272,5 +272,5 @@ void WorldModule::sendPacketToMsg(EnumChannel ec, const std::string& msg, Player
 	nfy.chatMsg = msg;
 	nfy.channelType = ec;
 	nfy.from = self->getName();
-	sendPacketToTarget(ec, nfy, self);
+	sendPacketToTarget((EnumChannel)ec, nfy, self);
 }

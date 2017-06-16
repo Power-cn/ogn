@@ -30,6 +30,8 @@ void LuaScript::bindScript()
 		[
 			luabind::class_<BinaryStream>("BinaryStream")
 			,
+			luabind::class_<Guid>("Guid")
+			,
 			luabind::class_<Object>("Object")
 			.def("Serialize", &Object::operator<<)
 			.def("Deserialize", &Object::operator>>)
@@ -46,6 +48,9 @@ void LuaScript::bindScript()
 			.def("sendPacketToAll", &WorldModule::sendPacketToAll)
 			.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
 			.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
+			.def("getEntityByName", &WorldModule::getEntityByName)
+			.def("getPlayerByName", &WorldModule::getPlayerByName)
+			.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
 			,
 			luabind::class_<LUATest>("LUATest")
 			.def_readonly("a", &LUATest::a)

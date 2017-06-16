@@ -32,7 +32,6 @@ public:
 	void removePlayerToUserId(uint32 userId);
 	Player* getPlayerToUserId(uint32 userId);
 
-
 	Npc* addNpc(Npc* npc);
 	Npc* getNpc(uint32 npcId);
 	Npc* getNpcByName(const std::string& name);
