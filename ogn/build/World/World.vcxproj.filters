@@ -150,6 +150,9 @@
     <ClCompile Include="..\..\src\World\ConfigManager.cpp">
       <Filter>源文件</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -247,6 +250,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\ConfigManager.h">
       <Filter>头文件</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\LuaScriptEngine.h">
+      <Filter>Script</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

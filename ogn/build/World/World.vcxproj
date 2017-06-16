@@ -29,6 +29,7 @@
     <ClCompile Include="..\..\src\World\Handler\WarHandler.cpp" />
     <ClCompile Include="..\..\src\World\Item.cpp" />
     <ClCompile Include="..\..\src\World\ItemModule.cpp" />
+    <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp" />
     <ClCompile Include="..\..\src\World\main.cpp" />
     <ClCompile Include="..\..\src\World\Map.cpp" />
     <ClCompile Include="..\..\src\World\MapModule.cpp" />
@@ -64,6 +65,7 @@
     <ClInclude Include="..\..\src\World\Handler\WarHandler.h" />
     <ClInclude Include="..\..\src\World\Item.h" />
     <ClInclude Include="..\..\src\World\ItemModule.h" />
+    <ClInclude Include="..\..\src\World\LuaScriptEngine.h" />
     <ClInclude Include="..\..\src\World\Map.h" />
     <ClInclude Include="..\..\src\World\MapModule.h" />
     <ClInclude Include="..\..\src\World\Module.h" />
