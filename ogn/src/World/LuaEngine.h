@@ -51,6 +51,14 @@ public:
 	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3);
 	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4);
 	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1);
+	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2);
+	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3);
+	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4);
+	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1);
+	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2);
+	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3);
+	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4);
+
 
 	static int32 GetInt32(const std::string& name, const std::string& field);
 	static bool SetInt32(const std::string& name, const std::string& field, const int32 value);
@@ -111,17 +119,9 @@ public:
 		}
 		return false;
 	}
+public:
+	static Object* sCurrentObject;
 protected:
-
 	std::map<std::string, LuaScript*>		mMapLuaScript;
 private:
 };
-
-Object* luaObject();
-Entity* luaEntity();
-Player* luaPlayer();
-
-Entity* luaPlayerToEntity(Player* player);
-Entity* luaNpcToEntity(Npc* npc);
-PropertyHelper* luaPropertyHelper();
-

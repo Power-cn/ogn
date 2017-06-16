@@ -1,6 +1,4 @@
 #include "stdafx.h"
-#include "lua.hpp"
-#include <luabind/luabind.hpp>
 
 class LUATest
 {
@@ -14,7 +12,6 @@ public:
 	}
 };
 
-
 void LuaScript::bindScript()
 {
 	luabind::module(mLuaState)
@@ -24,7 +21,8 @@ void LuaScript::bindScript()
 			luabind::def("luaPlayer", &luaPlayer),
 			luabind::def("luaPlayerToEntity", &luaPlayerToEntity),
 			luabind::def("luaNpcToEntity", &luaNpcToEntity),
-			luabind::def("luaPropertyHelper", &luaPropertyHelper)
+			luabind::def("luaPropertyHelper", &luaPropertyHelper),
+			luabind::def("luaWorld", &luaWorld)
 			//luabind::def("TestFunc", &TestFunc)
 		];
 
@@ -43,6 +41,11 @@ void LuaScript::bindScript()
 			luabind::class_<Npc>("Npc"),
 			luabind::class_<PropertyHelper>("PropertyHelper")
 			.def("setMaxHp", &PropertyHelper::setMaxHp)
+			,
+			luabind::class_<WorldModule>("WorldModule")
+			.def("sendPacketToAll", &WorldModule::sendPacketToAll)
+			.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
+			.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
 			,
 			luabind::class_<LUATest>("LUATest")
 			.def_readonly("a", &LUATest::a)
@@ -65,6 +68,7 @@ void LuaEngine::reloadScript()
 	loadScript("./config/script/global.lua");
 	loadScript("./config/script/player.lua");
 	loadScript("./config/script/gm.lua");
+	loadScript("./config/script/team.lua");
 
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

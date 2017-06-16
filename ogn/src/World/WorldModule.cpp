@@ -239,3 +239,38 @@ void WorldModule::sendPacketToAll(Packet& packet)
 	for (auto itr : mMapPlayer)
 		itr.second->sendBuffer(in.getPtr(), in.getWPostion());
 }
+
+void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* self, const std::string& tar /*= ""*/)
+{
+	switch (ec)
+	{
+	case EC_WORLD:
+		self->sendPacketToWorld(packet);
+		break;
+	case EC_MAP:
+		self->sendPacketToMap(packet);
+		break;
+	case EC_VIEW:
+		self->sendPacketToView(packet);
+		break;
+	case EC_TEAM:
+		self->sendPacketToTeam(packet);
+		break;
+	case EC_TARGET:
+		Player* tarPlr = GetModule(WorldModule)->getPlayerByName(tar.c_str());
+		if (tarPlr == NULL)
+			self->sendPacket(packet);
+		else
+			tarPlr->sendPacket(packet);
+		break;
+	}
+}
+
+void WorldModule::sendPacketToMsg(EnumChannel ec, const std::string& msg, Player* self)
+{
+	NetChatMsgNotify nfy;
+	nfy.chatMsg = msg;
+	nfy.channelType = ec;
+	nfy.from = self->getName();
+	sendPacketToTarget(ec, nfy, self);
+}

@@ -142,8 +142,8 @@ bool TeamModule::doPlayerAddTeam(Player* player, Team* team)
 bool TeamModule::doPlayerRemoveTeam(uint32 userId, Team* team)
 {
 	TeamEntity* teny = team->getPlayer(userId);
-	if (teny && teny->player)
-		team->onLeaveTeam(teny->player);
+	if (teny && teny->getPlayer())
+		team->onLeaveTeam(teny->getPlayer());
 
 	if (!team->destoryPlayer(userId))
 		return false;

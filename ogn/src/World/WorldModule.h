@@ -14,6 +14,8 @@ protected:
 	virtual bool onLeaveWorld(Player* player, Dictionary& dict);
 public:
 	void sendPacketToAll(Packet& packet);
+	void sendPacketToTarget(EnumChannel ec, Packet& packet, Player* self, const std::string& tar = "");
+	void sendPacketToMsg(EnumChannel ec, const std::string& msg, Player* self);
 public:
 	Entity* getEntityByName(const std::string& name);
 	Entity* getEntity(Guid guid);

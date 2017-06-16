@@ -1,37 +1,5 @@
 #include "stdafx.h"
 
-static Object* sCurrentObject = NULL;
-
-Object* luaObject()
-{
-	return sCurrentObject;
-}
-
-Entity* luaEntity()
-{
-	return (Entity*)sCurrentObject;
-}
-
-Player* luaPlayer()
-{
-	return (Player*)sCurrentObject;
-}
-
-Entity* luaPlayerToEntity(Player* player)
-{
-	return player;
-}
-
-Entity* luaNpcToEntity(Npc* npc)
-{
-	return npc;
-}
-
-PropertyHelper* luaPropertyHelper()
-{
-	return &INSTANCE(PropertyHelper);
-}
-
 LuaScript::LuaScript(const std::string& path)
 {
 	int32 spos = path.find_last_of("/");
@@ -81,6 +49,8 @@ bool LuaScript::loadScript(const std::string& path)
 	LOG_INFO("load script <%s> success", path.c_str());
 	return true;
 }
+
+Object* LuaEngine::sCurrentObject = NULL;
 
 LuaEngine::LuaEngine()
 {
@@ -327,6 +297,31 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
+uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func)
+{
+	sCurrentObject = object;
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str());
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
 uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
@@ -351,16 +346,159 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func)
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2)
 {
-	sCurrentObject = object;
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
 	lua_State* luaState = luaScript->getLuaState();
 	if (!luaState) return 0;
 
 	try {
-		int ret = luabind::call_function<int>(luaState, func.c_str());
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2, p3);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2, p3, p4);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2, p3);
+		return ret;
+	}
+	catch (luabind::error& e)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+		return 0;
+	}
+	catch (const char* msg)
+	{
+		LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+		return 0;
+	}
+	return 0;
+}
+
+uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4)
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+	if (!luaScript) return 0;
+	lua_State* luaState = luaScript->getLuaState();
+	if (!luaState) return 0;
+
+	try {
+		int ret = luabind::call_function<int>(luaState, func.c_str(), p1, p2, p3, p4);
 		return ret;
 	}
 	catch (luabind::error& e)

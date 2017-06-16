@@ -46,6 +46,8 @@
 
 #include "MsgCode.h"
 #include "LuaEngine.h"
+#include "LuaScriptEngine.h"
+
 #include "Channel.h"
 #include "Map.h"
 #include "Team.h"

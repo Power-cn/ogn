@@ -63,7 +63,6 @@ bool Application::Initialize()
 	INSTANCE(ConfigManager).reloadConfig();
 	INSTANCE(LuaEngine).reloadScript();
 
-
 	int32 maxplayer = 0;
 	maxplayer = LuaEngine::GetInt32("global", "maxplayer");
 
@@ -72,6 +71,14 @@ bool Application::Initialize()
 
 	maxplayer = LuaEngine::GetInt32("global", "maxplayer");
 
+	LuaEngine::SetInt32("global", "EC_WORLD", EnumChannel::EC_WORLD);
+	LuaEngine::SetInt32("global", "EC_MAP", EnumChannel::EC_MAP);
+	LuaEngine::SetInt32("global", "EC_VIEW", EnumChannel::EC_VIEW);
+	LuaEngine::SetInt32("global", "EC_TEAM", EnumChannel::EC_TEAM);
+	LuaEngine::SetInt32("global", "EC_TARGET", EnumChannel::EC_TARGET);
+
+
+	LuaEngine::executeScript("team", "onEnterTeam", "sdfsdfsdfdsf");
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("World");
 	worldServer = INSTANCE(Network).listen(cf.Port);
 	IF_FALSE(!worldServer)
@@ -81,6 +88,8 @@ bool Application::Initialize()
 	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
 		return false;
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
+
+
 
 
 	INSTANCE(SessionHandler);

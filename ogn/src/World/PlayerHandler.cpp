@@ -22,27 +22,7 @@ PlayerHandler::PlayerHandler()
 int32 PlayerHandler::onNetChatMsgNotify(Player* player, NetChatMsgNotify* nfy)
 {
 	nfy->from = player->getName();
-	switch (nfy->channelType)
-	{
-	case EC_WORLD:
-		player->sendPacketToWorld(*nfy);
-		break;
-	case EC_MAP:
-		player->sendPacketToMap(*nfy);
-		break;
-	case EC_VIEW:
-		player->sendPacketToView(*nfy);
-		break;
-	case EC_TEAM:
-		player->sendPacketToTeam(*nfy);
-		break;
-	case EC_TARGET:
-		Player* tar = GetModule(WorldModule)->getPlayerByName(nfy->to.c_str());
-		if (tar == NULL)
-			break;
-		tar->sendPacket(*nfy);
-		break;
-	}
+	sWorld.sendPacketToTarget((EnumChannel)nfy->channelType, *nfy, player, nfy->to);
 	return 0;
 }
 
