@@ -181,6 +181,7 @@ namespace Shared
 	std::string GetCodeMessage(int32 error_code);
 
 	void srand(uint32 seed);
+	void Sleep(uint32 milliseconds);
 };
 
 //

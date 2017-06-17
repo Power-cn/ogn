@@ -37,7 +37,7 @@ void LogFileOutputer::Outputer(const char* content, int color /* = 0 */, int lev
 		fwrite(temp, strlen(temp), 1, file);
 
 		std::string str("%Y-%m-%d %H:%M:%S ");
-		DateTime::getNow(str);
+		DateTime::Now(str);
 		if (str.length() > 0)
 		{
 			fwrite(str.c_str(), str.length(), 1, file);

@@ -201,7 +201,7 @@ void RedisProxy::run()
 {
 	while (1)
 	{
-
+		Shared::Sleep(1);
 		if (mContext == NULL)
 		{
 			if (mHost == "" || mPort == 0) continue;
@@ -219,25 +219,24 @@ void RedisProxy::run()
 			
 			RedisEvent* redisEvent = new RedisEvent;
 			redisEvent->event = RedisEvent::CONNECT;
+			mMutex.lock();
 			mRedisResponse.push_back(redisEvent);
+			mMutex.unlock();
 		}
 		if (mContext == NULL) continue;
+		if (mRedisRequest.size() <= 0) continue;
 
-		//std::thread::sleep(1);
-		if (mRedisRequest.size() > 0)
-		{
-			mMutex.lock();
-			RedisRequest request = mRedisRequest.front();
-			mRedisRequest.pop_front();
-			mMutex.unlock();
-			RedisEvent* redisEvent = new RedisEvent;
-			redisEvent->event = request.cmd;
-			redisEvent->backstr = sendCommand(request.cmd.c_str());
-			redisEvent->parstr = request.parstr;
-			Shared::split(request.cmd, redisEvent->cmdstr, " ");
-			mMutex.lock();
-			mRedisResponse.push_back(redisEvent);
-			mMutex.unlock();
-		}
+		mMutex.lock();
+		RedisRequest request = mRedisRequest.front();
+		mRedisRequest.pop_front();
+		mMutex.unlock();
+		RedisEvent* redisEvent = new RedisEvent;
+		redisEvent->event = request.cmd;
+		redisEvent->backstr = sendCommand(request.cmd.c_str());
+		redisEvent->parstr = request.parstr;
+		Shared::split(request.cmd, redisEvent->cmdstr, " ");
+		mMutex.lock();
+		mRedisResponse.push_back(redisEvent);
+		mMutex.unlock();
 	}
 }

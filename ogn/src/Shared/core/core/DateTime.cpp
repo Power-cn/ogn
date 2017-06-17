@@ -159,14 +159,26 @@ double DateTime::GetNowAppUS()
 #endif
 }
 
-int DateTime::getNow()
-{
-	return (int)time(0);
-}
-
 int32 DateTime::Now()
 {
 	return (int32)time(0);
+}
+
+int32 DateTime::Now(DateTime& time)
+{
+	time_t t = (time_t)Now();
+	tm localTime;
+	localtime_s(&localTime, &t);
+	time = localTime;
+	return t;
+}
+
+int32 DateTime::Now(std::string& time)
+{
+	DateTime dt;
+	int32 t = Now(dt);
+	dt.toString(time);
+	return t;
 }
 
 __int64 DateTime::getNowMillisecond()
@@ -186,21 +198,6 @@ void DateTime::getNowMillisecond( std::string& time )
 	char time_buf[64] = {0};
 	sprintf_s(time_buf, 64, "%I64d", time_);
 	time = time_buf;
-}
-
-void DateTime::getNow(DateTime& time)
-{
-	time_t t = (time_t)getNow();
-	tm localTime;
-	localtime_s(&localTime, &t);
-	time = localTime;
-}
-
-void DateTime::getNow(std::string& time)
-{
-	DateTime dt;
-	getNow(dt);
-	dt.toString(time);
 }
 
 void DateTime::updateFrame()
@@ -301,11 +298,11 @@ DateTime DateTime::addMillisecond(float32 millisecond )
 	return *this;
 }
 
-time_t DateTime::ConvertStringToTime(const std::string & time_string)
+time_t DateTime::ConvertStringToTime(const std::string& timestr)
 {  
 	struct tm tm1;  
 	time_t time1;  
-	int i = sscanf_s(time_string.c_str(), "%d/%d/%d %d:%d:%d" ,       
+	int i = sscanf_s(timestr.c_str(), "%d/%d/%d %d:%d:%d" ,
 		&(tm1.tm_year),   
 		&(tm1.tm_mon),   
 		&(tm1.tm_mday),  
@@ -321,27 +318,27 @@ time_t DateTime::ConvertStringToTime(const std::string & time_string)
 	return time1;  
 }
 
-int32 DateTime::ConvertTimeToString(std::string &time_string, const time_t &time_data)
+int32 DateTime::ConvertTimeToString(std::string& timestr, const time_t& timedat)
 {
-	if (time_data <= 0)
+	if (timedat <= 0)
 		return 0;
 
-	int8 buffer[64] = {0};
-	struct tm p;
+	char buffer[64] = {0};
+	struct tm p = { 0 };
 
-	int32 res = localtime_s(&p, &time_data);
+	int32 res = localtime_s(&p, &timedat);
 	if (res == 0)
 	{
 		p.tm_year = p.tm_year + 1900;
 		p.tm_mon = p.tm_mon + 1;
 
 		sprintf_s(buffer, sizeof(buffer), "%04d-%02d-%02d %d:%02d:%02d", p.tm_year, p.tm_mon, p.tm_mday, p.tm_hour, p.tm_min, p.tm_sec);
-		time_string = buffer;
+		timestr = buffer;
 	}
 	else
 	{
 		sprintf_s(buffer, sizeof(buffer), "%04d-%02d-%02d %d:%02d:%02d", 0, 0, 0, 0, 0, 0);
-		time_string = buffer;
+		timestr = buffer;
 	}
 	
 	return 0;

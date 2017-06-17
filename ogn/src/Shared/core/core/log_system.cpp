@@ -78,7 +78,7 @@ void LogSystem::info(const char* formt, ...)
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -101,7 +101,7 @@ void LogSystem::warn(const char* formt, ...)
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -124,7 +124,7 @@ void LogSystem::error(const char* formt, ...)
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -243,7 +243,7 @@ void LogSystem::outHex(const void* data, int len)
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -303,7 +303,7 @@ void LogSystem::debug( int color, const char* formt, ... )
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -328,7 +328,7 @@ void LogSystem::error_line( const char* formt, const char* file, const int line,
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
@@ -353,7 +353,7 @@ void LogSystem::debug_line( int color, const char* formt, const char* file, cons
 	stContent st;
 
 	std::string now_time = "";
-	DateTime::getNow(now_time);
+	DateTime::Now(now_time);
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";

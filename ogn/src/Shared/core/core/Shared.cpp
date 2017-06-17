@@ -534,3 +534,8 @@ void Shared::srand(uint32 seed)
 {
 	::srand(seed);
 }
+
+void Shared::Sleep(uint32 milliseconds)
+{
+	::Sleep(milliseconds);
+}

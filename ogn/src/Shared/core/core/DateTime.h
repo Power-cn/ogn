@@ -66,14 +66,14 @@ public:
 	tm& getDataTime();
 public:
 	static float64 DateTime::GetNowAppUS();
-	static int32 getNow();
 	static int32 Now();
+	static int32 Now(DateTime& time);
+	static int32 Now(std::string& time);
+
 	static int64 getNowMillisecond();
 	static void getNowMillisecond(std::string& time);
-	static void getNow(DateTime& time);
-	static void getNow(std::string& time);
-	static time_t ConvertStringToTime(const std::string & time_string);
-	static int32 ConvertTimeToString(std::string &time_string, const time_t &time_data);
+	static time_t ConvertStringToTime(const std::string& timestr);
+	static int32 ConvertTimeToString(std::string& timestr, const time_t& timedat);
 private:
 	tm			m_time;
 	static double sTime;

@@ -11,7 +11,7 @@ char global_dump_file_name[MAX_PATH] = "dump_file.dmp";
 LONG WINAPI CustomUnhandledExceptionFilter(struct _EXCEPTION_POINTERS* ExceptionInfo)
 {
 	std::string dateStr;
-	DateTime::getNow(dateStr);
+	DateTime::Now(dateStr);
 	sprintf_s(global_dump_file_name, MAX_PATH, "%s.dmp", dateStr.c_str());
 	HANDLE lhDumpFile = CreateFileA(global_dump_file_name, GENERIC_WRITE, 0, NULL, CREATE_ALWAYS,FILE_ATTRIBUTE_NORMAL ,NULL);
 
