@@ -61,7 +61,7 @@ void RobotManager::update(float32 time, float32 delay)
 int RobotManager::onNetPingNotify(Robot* robot, NetPingNotify* nfy)
 {
 	std::string str;
-	DateTime::getNow(str);
+	DateTime::Now(str);
 	LOG_INFO("[%s] ping [%d]", str.c_str(), GetTickCount() - nfy->time);
 
 	return 0;

@@ -78,7 +78,7 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 
 	if (res->roleInfos.size() == 1)
 	{
-		player->SetOfflineTimer(DateTime::getNow());
+		player->SetOfflineTimer(DateTime::Now());
 
 		DBRoleInfo& info = res->roleInfos[0];
 		player->setUserId(info.id);

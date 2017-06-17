@@ -235,7 +235,7 @@ void Application::doSessionLeaveWorld(Session* session)
 	Player* plr = session->getPlayer();
 	if (plr)
 	{
-		plr->SetOfflineTimer(DateTime::getNow());
+		plr->SetOfflineTimer(DateTime::Now());
 		Dictionary dict;
 		doPlayerSave(plr, dict);
 
