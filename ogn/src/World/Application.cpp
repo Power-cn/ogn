@@ -68,13 +68,7 @@ bool Application::Initialize()
 	IF_FALSE(!worldServer)
 		return false;
 
-	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
-	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
-		return false;
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
-
-
-
 
 	INSTANCE(SessionHandler);
 	INSTANCE(PlayerHandler);
@@ -493,6 +487,9 @@ int32 Application::onRefresh(CmdEvent& e)
 
 void Application::OnInitialize()
 {
+	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
+	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
+		return ;
 	LuaEngine::SetInt32("global", "EC_WORLD", EnumChannel::EC_WORLD);
 	LuaEngine::SetInt32("global", "EC_MAP", EnumChannel::EC_MAP);
 	LuaEngine::SetInt32("global", "EC_VIEW", EnumChannel::EC_VIEW);

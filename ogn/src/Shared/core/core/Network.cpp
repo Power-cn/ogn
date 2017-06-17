@@ -31,13 +31,15 @@ public:
 		WSACleanup();
 #endif // WIN32
 	}
+protected:
+	bool mStart;
 };
-static WinNet s_win_net;
 
 static struct event_base* s_base_event = NULL;
 
 Network::Network()
 {
+	INSTANCE(WinNet);
 	s_base_event = event_base_new();
 }
 

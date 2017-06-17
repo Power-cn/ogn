@@ -18,18 +18,18 @@
 
 #ifdef _DEBUG
 
+#pragma comment(lib, "hiredis_d.lib")
 #pragma comment(lib, "Shared_d.lib")
 #pragma comment(lib, "lua_d.lib")
 #pragma comment(lib, "luabind_d.lib")
-#pragma comment(lib, "hiredis_d.lib")
 #pragma comment(lib, "python/python36_d.lib")
 
 #else
 
+#pragma comment(lib, "hiredis.lib")
 #pragma comment(lib, "Shared.lib")
 #pragma comment(lib, "lua.lib")
 #pragma comment(lib, "luabind.lib")
-#pragma comment(lib, "hiredis.lib")
 #pragma comment(lib, "python/python36.lib")
 
 #endif // DEBUG

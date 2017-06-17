@@ -21,14 +21,16 @@ RedisProxy::~RedisProxy()
 
 bool RedisProxy::Connect(const std::string& host, short port)
 {
-	mHost = host;
-	mPort = port;
-	mContext = redisConnect(mHost.c_str(), mPort);
+	mContext = redisConnect(host.c_str(), port);
 	redisContext* context = (redisContext*)mContext;
 	if (context->err) {
+		printf("%s %d", context->errstr, context->err);
 		mContext = NULL;
 		return false;
 	}
+
+	mHost = host;
+	mPort = port;
 	return true;		
 }
 
@@ -132,7 +134,11 @@ std::vector<std::string> RedisProxy::sendCommand(const char *format, va_list ap)
 		if (reply->str)
 			backstr.push_back(reply->str);
 		break;
-
+	case REDIS_REPLY_STATUS:
+		break;
+	case REDIS_REPLY_ERROR:
+		printf("Failed to execute command key[%s] err[%s]\n", format, reply->str);
+		break;
 	default:
 		printf("Failed to execute command key[%s]\n", format);
 		break;
@@ -199,9 +205,14 @@ void RedisProxy::run()
 		if (mContext == NULL)
 		{
 			if (mHost == "" || mPort == 0) continue;
-			mContext = redisConnect(mHost.c_str(), mPort);
+			int timeout = 1000;
+			struct timeval tv;
+			tv.tv_sec = timeout / 1000;
+			tv.tv_usec = timeout * 1000;
+			mContext = redisConnectWithTimeout(mHost.c_str(), mPort, tv);
 			redisContext* context = (redisContext*)mContext;
 			if (context->err) {
+				LOG_ERROR("error:[%s] [%s] [%d]",context->errstr, mHost.c_str(), mPort);
 				mContext = NULL;
 				continue;
 			}
