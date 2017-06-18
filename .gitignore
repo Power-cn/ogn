@@ -3,6 +3,16 @@
 *.lo
 *.o
 *.obj
+*.iobj
+*.ilk
+*.rdb
+*.suo
+*.db
+*.opendb
+*.idb
+*.log
+*.tlog
+*.lastbuildstate
 
 # Compiled Dynamic libraries
 *.so
