@@ -50,8 +50,10 @@ Packet* PacketManager::Alloc(uint32 msgId)
 void PacketManager::Free(Packet*& pack)
 {
 	auto itr = mMapPacketHelper.find(pack->getMsgId());
-	if (itr != mMapPacketHelper.end())
-		itr->second->Free();
+	if (itr == mMapPacketHelper.end()) return;
+
+	itr->second->Free();
+	pack = NULL;
 }
 
 std::string PacketManager::GetName(uint32 uiID)
