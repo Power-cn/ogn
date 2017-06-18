@@ -34,14 +34,15 @@ Network::Network()
 
 Network::~Network()
 {
-
+	event_base_free(s_base_event);
+	s_base_event = NULL;
 }
 
 void Network::update(float32 time, float32 dealy)
 {
 	event_base_loop(s_base_event, EVLOOP_NONBLOCK);
 
-	if (m_queue_close_socket_.size() > 0)
+	while (m_queue_close_socket_.size() > 0)
 	{
 		std::pair<SocketAngent*, int>& close_s = m_queue_close_socket_.front();
 		if (close_s.first != NULL)

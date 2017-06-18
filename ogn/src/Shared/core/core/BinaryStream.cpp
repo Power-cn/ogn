@@ -1,7 +1,7 @@
 #include "Shared.hpp"
 
 
-BinaryStream::BinaryStream(int32 count /* = 4096 */):
+BinaryStream::BinaryStream(int32 count /* = BINARY_LENGTH */):
 mCount(count),
 mBytes(NULL),
 mWritePosition(0),
@@ -10,7 +10,10 @@ mIsDel(false),
 mResize(true)
 {
 	mIsDel = true;
-	mBytes = new int8[mCount];
+	if (mCount <= 0)
+		mBytes = NULL;
+	else
+		mBytes = new int8[mCount];
 }
 
 BinaryStream::BinaryStream(void* ptr, int32 count, bool isDel):

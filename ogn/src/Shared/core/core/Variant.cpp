@@ -620,7 +620,6 @@ void Variant::reset()
 		if (mValue.value_bytes)
 			mValue.value_bytes->Clear();
 	}
-
 }
 
 void Variant::copyValue(const ValueUnion& src, ValueUnion& des, int8 type)
