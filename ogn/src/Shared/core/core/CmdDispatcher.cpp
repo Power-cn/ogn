@@ -1,15 +1,6 @@
 #include "Shared.hpp"
 
-#ifdef WIN32
-#include <windows.h>
-#endif // WIN32
 
-#include <string>
-#include <vector>
-#include <iostream>
-#include <conio.h>
-#include <regex>
-#include <unordered_map> 
 
 using std::string;
 using std::vector;

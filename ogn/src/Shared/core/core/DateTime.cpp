@@ -1,9 +1,5 @@
 #include "Shared.hpp"
 
-#if ((defined WIN32) || (defined WIN64))
-#include <windows.h>  
-#endif // WIN32
-
 #define SECS_TO_FT_MULT 10000000  
 static LARGE_INTEGER base_time;
 
@@ -220,13 +216,9 @@ void DateTime::toString(std::string& str)
 {
 	char szTime[32] = {0};
 	if (str.length() <= 0)
-	{
 		strftime(szTime, 256, "%Y-%m-%d %H:%M:%S", &m_time);
-	}
 	else
-	{
 		strftime(szTime, 256, str.c_str(), &m_time);
-	}
 	str = szTime;
 }
 

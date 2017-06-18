@@ -1,19 +1,8 @@
 #include "Shared.hpp"
-
 #include <event.h>
-
-#if ((defined WIN32) || (defined WIN64))
-#include <windows.h>  
-#include <winsock2.h>
-#else
-#include <netinet/in.h>
-#include <sys/socket.h>
-#include <sys/types.h>
-#endif // WIN32
 
 int8 Network::sPacketBuffer_0[PACKET_MAX_LENGTH] = { 0 };
 int8 Network::sPacketBuffer_1[PACKET_MAX_LENGTH] = { 0 };
-
 
 class WinNet
 {

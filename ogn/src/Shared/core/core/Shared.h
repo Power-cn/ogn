@@ -31,16 +31,43 @@
 #include <thread>
 #include <mutex>
 #include <functional>
+#include <stdio.h>
+#include <stdarg.h>
+#include <iostream>
+#include <conio.h>
+#include <regex>
+#include <unordered_map> 
+#include <io.h>   
+#include <fcntl.h>
+#include <direct.h>
+
+#pragma comment(lib, "libevent/libevent.lib")
+#pragma comment(lib, "libevent/libevent_core.lib")
+#pragma comment(lib, "libevent/libevent_extras.lib")
 
 #if (defined(WIN32) || defined(WIN64))
-
 #pragma warning(disable : 4996)
 #pragma warning(disable : 4091)
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
 #pragma warning(disable:4251)		// dll-interface bullshit
-
 #define hash_stdext std
+
+// include
+
+#include <winsock2.h>
+#include <windows.h>  
+#include <Dbghelp.h>
+#include <WS2tcpip.h>
+#include <nb30.h>
+#include <consoleapi.h>
+#include <corecrt_io.h>
+#include <process.h>
+
+// lib
+#pragma comment(lib, "DbgHelp")
+#pragma comment(lib, "Netapi32.lib")
+#pragma comment(lib, "ws2_32.lib")
 
 typedef	char							int8;
 typedef	short							int16;
@@ -55,6 +82,12 @@ typedef double							float64;
 
 #else
 #include <ext/hash_map>
+#include <netinet/in.h>
+#include <sys/socket.h>
+#include <sys/types.h>
+#include<netdb.h>
+#include <pthread.h>
+
 #define hash_stdext __gnu_cxx
 
 typedef int8_t							int8;

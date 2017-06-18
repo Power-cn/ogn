@@ -1,20 +1,5 @@
-#ifdef WIN32
-#include <Windows.h>
-#endif // WIN32
+#include "Shared.hpp"
 
-#include "Shared.h"
-#include "Reference.h"
-#include "SmartPointer.h"
-#include "RTTI.h"
-#include "Object.h"
-#include "Event.h"
-#include "Threader.h"
-#include "DateTime.h"
-
-#include "log_outputer.h"
-#include "log_system.h"
-#include <stdio.h>
-#include <stdarg.h>
 #pragma warning(push)
 #pragma warning(disable : 4996)
 
@@ -45,7 +30,8 @@ unsigned int LogThreadProcessor::ThreadProcess(Threader* pThread)
 	return 0;
 }
 
-LogSystem::LogSystem(void)
+LogSystem::LogSystem(void):
+m_mutex()
 {
 	m_log.clear();
 	m_pThreadProcessor = new LogThreadProcessor(this);
@@ -73,7 +59,6 @@ void LogSystem::info(const char* formt, ...)
 	va_list va;
 	va_start(va, formt);
 
-	m_mutex.lock();
 	vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
 	stContent st;
 
@@ -86,17 +71,14 @@ void LogSystem::info(const char* formt, ...)
 	st.context += m_buffer;
 	st.level = logLevel_info;
 	st.color = 0;
-	m_contexts.push(st);
-	m_mutex.unlock();
-
 	va_end(va);
+	addContent(st);
 }
 
 void LogSystem::warn(const char* formt, ...)
 {
 	va_list va;
 	va_start(va, formt);
-	m_mutex.lock();
 	vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
 	stContent st;
 
@@ -109,17 +91,16 @@ void LogSystem::warn(const char* formt, ...)
 	st.context += m_buffer;
 	st.level = logLevel_warn;
 	st.color = 0;
-	m_contexts.push(st);
-	m_mutex.unlock();
 
 	va_end(va);
+
+	addContent(st);
 }
 
 void LogSystem::error(const char* formt, ...)
 {
 	va_list va;
 	va_start(va, formt);
-	m_mutex.lock();
 	vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
 	stContent st;
 
@@ -132,10 +113,10 @@ void LogSystem::error(const char* formt, ...)
 	st.context += m_buffer;
 	st.level = logLevel_error;
 	st.color = 0;
-	m_contexts.push(st);
-	m_mutex.unlock();
 
 	va_end(va);
+
+	addContent(st);
 }
 
 void LogSystem::processOutputer()
@@ -167,6 +148,13 @@ void LogSystem::processOutputer()
 	}
 }
 
+void LogSystem::addContent(stContent& content)
+{
+	m_mutex.lock();
+	m_contexts.push(content);
+	m_mutex.unlock();
+}
+
 void LogSystem::outHex(const void* data, int len)
 {
 	std::string str;
@@ -179,67 +167,7 @@ void LogSystem::outHex(const void* data, int len)
 		sprintf_s(s, sizeof(s), "%02x", ((unsigned char*)data)[i]);
 		str += s;
 	}
-	//for (int i = 0; i < len; ++i)
-	//{
-	//	if (i % 16 == 0 && i > 0)
-	//	{
-	//		str += "		";
-	//		for (int j = 0; j < i - startPos; ++j)
-	//		{
-	//			if (((unsigned char*)temp)[j] == 0)
-	//			{
-	//				str += '.';
-	//			}
-	//			else
-	//			{
-	//				str += ((unsigned char*)temp)[j];
-	//			}
-	//		}
-	//		str += "\r\n";
-	//		startPos = i;
-	//		temp = (unsigned char*)data + startPos;
-	//	}
-	//	else if (i % 4 == 0 && i > 0)
-	//	{
-	//		str += ' ';
-	//	}
-
-	//	sprintf_s(s, sizeof(s), "%02x", ((unsigned char*)data)[i]);
-	//	str += s;
-
-	//	if (i == len - 1)
-	//	{
-	//		if (i - startPos < 16)
-	//		{
-	//			// Ê£ÏÂµÄ;
-	//			int pos = 16 - (i - startPos + 1);
-	//			for (int j = 0; j < pos; ++j)
-	//			{
-	//				str += "  ";
-	//			}
-
-	//			for (int j = 0; j < pos / 4; ++j)
-	//			{
-	//				str += ' ';
-	//			}
-	//			str += "		";
-
-	//			for (int j = 0; j <= i - startPos; ++j)
-	//			{
-	//				unsigned char uc = ((unsigned char*)temp)[j];
-	//				if (uc == 0 || uc == '\r' || uc == '\n')
-	//				{
-	//					str += '.';
-	//				}
-	//				else
-	//				{
-	//					str += uc;
-	//				}
-	//			}
-	//		}
-	//	}
-	//}
-	m_mutex.lock();
+	
 	stContent st;
 
 	std::string now_time = "";
@@ -250,8 +178,8 @@ void LogSystem::outHex(const void* data, int len)
 
 	st.context += str.c_str();
 	st.level = logLevel_hex;
-	m_contexts.push(st);
-	m_mutex.unlock();
+
+	addContent(st);
 }
 
 bool LogSystem::assertFail( const char* pszExpression, const char* pszFile, const char* pszFunction, const int iLine )

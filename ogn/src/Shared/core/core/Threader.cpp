@@ -1,20 +1,5 @@
-#include "Shared.h"
+#include "Shared.hpp"
 
-#if (defined(WIN32) || defined(WIN64))
-#include <process.h>
-#include <Windows.h>
-#else
-#include <pthread.h>
-#endif
-
-
-#include "Reference.h"
-#include "SmartPointer.h"
-#include "RTTI.h"
-#include "Object.h"
-#include "Event.h"
-
-#include "Threader.h"
 
 Threader::Threader(void):
 m_processor(NULL),

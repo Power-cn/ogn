@@ -1,23 +1,4 @@
-#include "Shared.h"
-#include <direct.h>
-
-#ifdef WIN32
-
-#include <WinSock2.h>
-#include <WS2tcpip.h>
-#include <nb30.h>
-#pragma comment(lib,"Netapi32.lib")
-#include <Windows.h>
-#include <consoleapi.h>
-#include <corecrt_io.h>
-
-#else
-
-#include<netdb.h>
-
-#endif // WIN32
-
-
+#include "Shared.hpp"
 
 union bit2
 {

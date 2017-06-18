@@ -1,11 +1,4 @@
-#include "Shared.h"
-
-#include "log_outputer.h"
-#include "log_win_outputer.h"
-
-#if (defined(WIN32) || defined(WIN64))
-#include <Windows.h>
-#endif
+#include "Shared.hpp"
 
 void LogWinOutputer::Outputer(const char* content, int color, int level)
 {

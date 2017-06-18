@@ -5,6 +5,8 @@ class QueryResult;
 class InsertResult;
 class UpdateResult;
 class DeleteResult;
+struct st_mysql;
+
 
 class DBConnector : public ThreadProcessor
 {
@@ -34,7 +36,7 @@ public: // Í¬²½;
 	int8* doUpdate(const DBRecord& update_record, const std::string& sql_name, uint32& update_rows);
 	int8* doDelete(const DBRecord& delete_record, const std::string& compare_record_names, uint32& update_rows);
 protected:
-	MYSQL*					mMysql;
+	st_mysql*					mMysql;
 private:
 	std::string				mHost;
 	std::string				mUser;

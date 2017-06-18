@@ -1,7 +1,4 @@
-#include "Shared.h"
-#include "DateTime.h"
-#include "log_outputer.h"
-#include "log_file_outputer.h"
+#include "Shared.hpp"
 
 LogFileOutputer::LogFileOutputer(const std::string& path)
 {

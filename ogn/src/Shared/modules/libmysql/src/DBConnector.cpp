@@ -1,4 +1,5 @@
 #include "mysql.hpp"
+#include <mysql.h>
 
 DBConnector::DBConnector()
 {
@@ -9,7 +10,6 @@ DBConnector::~DBConnector()
 {
 	delete mMysql;
 }
-
 
 bool DBConnector::connect(const std::string& host, const std::string& user, const std::string& password, const std::string& name, int16 port)
 {

@@ -1,10 +1,5 @@
-#include "dump.h"
 #include "Shared.hpp"
-#ifdef WIN32
-#include <windows.h>
-#include <Dbghelp.h>
-#pragma comment(lib, "DbgHelp")
-#endif
+
 
 char global_dump_file_name[MAX_PATH] = "dump_file.dmp";
 

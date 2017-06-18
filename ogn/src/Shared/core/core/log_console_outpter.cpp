@@ -1,20 +1,4 @@
-#include "Shared.h"
-
-#include "Object.hpp"
-
-#include "log_outputer.h"
-#include "log_console_outpter.h"
-#include "log_system.h"
-
-#include <stdio.h>
-#include <conio.h>
-#include <io.h>   
-#include <fcntl.h>
-
-#if (defined(WIN32) || defined(WIN64))
-#include <Windows.h>
-#endif // WIN32
-
+#include "Shared.hpp"
 
 #ifdef __GNUC__
 

@@ -1,13 +1,9 @@
 #pragma once
 
-#include "Threader.h"
-#include "Mutex.h"
-
-#include <vector>
-#include <queue>
-#include <string>
-
 class LogOutputer;
+class Threader;
+class ThreadProcessor;
+
 class LogSystem
 {
 public:
@@ -24,6 +20,13 @@ public:
 		csl_color_green_blue,	// ÂÌÀ¶;
 		csl_color_red_blue,		// ºì À¶×Ö;
 	};
+	struct stContent
+	{
+		int				level;
+		std::string		context;
+		int				color;	// 0 1 2 3;
+	};
+
 	friend class LogThreadProcessor;
 public:
 	LogSystem(void);
@@ -42,16 +45,12 @@ public:
 	static bool outMessagebox(const char* formt, const char* pszFile, const char* pszFunction, const int iLine, ...);
 private:
 	void processOutputer();
+	void addContent(stContent& content);
 private:
 	typedef std::vector<LogOutputer*>					LogOutputerList;
 	typedef LogOutputerList::iterator					LogOutputerListItr;
 private:
-	struct stContent
-	{
-		int				level;
-		std::string		context;
-		int				color;	// 0 1 2 3;
-	};
+
 	LogOutputerList										m_log;
 	Threader*											m_pThread;
 	ThreadProcessor*									m_pThreadProcessor;

@@ -1,10 +1,9 @@
 #pragma once
 
-#include "log_system.h"
-
 class LogConsoleOutpter;
 class LogWinOutputer;
 class LogFileOutputer;
+class LogSystem;
 
 class log
 {

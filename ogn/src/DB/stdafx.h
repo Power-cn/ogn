@@ -15,10 +15,6 @@
 
 #ifdef WIN32
 
-#pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libevent/libevent.lib")
-#pragma comment(lib, "libevent/libevent_core.lib")
-#pragma comment(lib, "libevent/libevent_extras.lib")
 #pragma comment(lib, "libmysql/libmysql.lib")
 
 #ifdef _DEBUG

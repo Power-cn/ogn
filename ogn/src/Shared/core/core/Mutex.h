@@ -9,11 +9,11 @@ public:
 	void unlock();
 private:
 	void*					m_pMutex;
-
-// #if (defined(WIN32) || defined(WIN64))
-// #else
-// 	pthread_mutex_t			m_mutex;
-// #endif
+//
+//#if (defined(WIN32) || defined(WIN64))
+//#else//
+//	pthread_mutex_t			m_mutex;//
+//#endif
 };
 
 class MutexGuard

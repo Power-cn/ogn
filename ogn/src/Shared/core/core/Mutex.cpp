@@ -1,10 +1,4 @@
-#include "Mutex.h"
-
-#if (defined(WIN32) || defined(WIN64))
-
-#include <Windows.h>
-
-#endif
+#include "Shared.hpp"
 
 Mutex::Mutex(void)
 {
@@ -20,6 +14,8 @@ Mutex::~Mutex(void)
 {
 #if (defined(WIN32) || defined(WIN64))
 	DeleteCriticalSection((CRITICAL_SECTION*)m_pMutex);
+	delete (CRITICAL_SECTION*)m_pMutex;
+	m_pMutex = NULL;
 #else
 	pthread_mutex_destroy(&m_mutex);
 #endif

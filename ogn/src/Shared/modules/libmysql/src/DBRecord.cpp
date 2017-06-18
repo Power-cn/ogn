@@ -1,4 +1,5 @@
 #include "mysql.hpp"
+#include <mysql.h>
 
 #define IS_CHAR_AVIALABLE(x) ((x <= 'z' && x >= 'a') || (x <= 'Z' && x >= 'A') || (x <= '9' && x >= '0') || (x == '_'))
 
