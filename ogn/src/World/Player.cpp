@@ -2,7 +2,8 @@
 
 Player::Player() :
 Entity(ET_Player),
-accountId(0)
+accountId(0),
+mJson()
 {
 	mOnlineTimer = 0;
 	mOfflineTimer = 0;
@@ -99,9 +100,21 @@ void Player::unbindSession()
 	setSession(NULL);
 }
 
+Json::Value& Player::GetJson()
+{
+	return mJson;
+}
+
 void Player::onCreate()
 {
 	LuaEngine::executeScript(this, "player", "onCreate");
+}
+
+bool Player::onSaveBegin(Dictionary& dict)
+{
+	Json::Value& root = GetJson();
+	root.clear();
+	return true;
 }
 
 bool Player::onSave(Dictionary& dict)
@@ -131,6 +144,11 @@ bool Player::onSave(Dictionary& dict)
 			LOG_INFO("type:[%s] value:[%s]", Property::GetPropertyName(var.valueInt32()).c_str(), second.toString().c_str());
 	}
 	LOG_DEBUG(LogSystem::csl_color_green, "onSave");
+	return true;
+}
+
+bool Player::onSaveEnd(Dictionary& dict)
+{
 	return true;
 }
 
@@ -205,7 +223,9 @@ bool Player::onLoadJson(Dictionary& dict)
 	if (dict.ContainsKey("json"))
 		jsonstr = dict["json"].valueString();
 	Json::Reader jsonReader;
-	Json::Value root;
+	Json::Value& root = GetJson();
+	root.clear();
+
 	if (!jsonReader.parse(jsonstr, root))
 		return false;
 	onLoadJson(root);
@@ -214,8 +234,10 @@ bool Player::onLoadJson(Dictionary& dict)
 
 bool Player::onLoadJson(Json::Value& root)
 {
-	std::string teststr = root["test"].asString();
-	uint32 offline_time = root["offline"].asUInt();
+	Json::Value userJson = root["user"]; 
+
+	std::string teststr = userJson["test"].asString();
+	uint32 offline_time = userJson["offline"].asUInt();
 	SetOfflineTimer(offline_time);
 
 	return true;
@@ -223,18 +245,28 @@ bool Player::onLoadJson(Json::Value& root)
 
 bool Player::onSavejson(Dictionary& dict)
 {
-	Json::Value root;
+	Json::Value& root = GetJson();
 	onSavejson(root);
-	std::string jsonstr = root.toStyledString();
+	std::string jsonstr = root.toStyledString(true);
 	dict.Add("json", jsonstr);
+	char szBuffer[4096] = { 0 };
+	sprintf_s(szBuffer, 4096, "hmset user %d %s", getUserId(), jsonstr.c_str());
+	LOG_ERROR(szBuffer);
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
 	return true;
 }
 
 bool Player::onSavejson(Json::Value& root)
 {
-	root["test"] = "test";
-	root["offline"] = GetOfflineTimer();
-	root["lasthost"] = session->getHost();
+	Json::Value userJson;
+	userJson["userId"] = getUserId();
+	userJson["test"] = "test";
+	userJson["offline"] = GetOfflineTimer();
+	userJson["lasthost"] = session->getHost();
+
+	root["user"] = userJson;
+
 	return true;
 }
 

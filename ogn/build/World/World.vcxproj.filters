@@ -58,6 +58,9 @@
     <Filter Include="Module\WarModule">
       <UniqueIdentifier>{b61e8e76-9200-467d-bbdd-fd0c1a9553e9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\FriendsModule">
+      <UniqueIdentifier>{0a2a4552-bef4-442b-b090-64412b72a96d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -152,6 +155,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp">
       <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp">
+      <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp">
+      <Filter>Module\FriendsModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -253,6 +262,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\LuaScriptEngine.h">
       <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h">
+      <Filter>Module\FriendsModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h">
+      <Filter>Module\FriendsModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

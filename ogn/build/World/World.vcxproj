@@ -34,6 +34,8 @@
     <ClCompile Include="..\..\src\World\Map.cpp" />
     <ClCompile Include="..\..\src\World\MapModule.cpp" />
     <ClCompile Include="..\..\src\World\Module.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\War.cpp" />
@@ -69,6 +71,8 @@
     <ClInclude Include="..\..\src\World\Map.h" />
     <ClInclude Include="..\..\src\World\MapModule.h" />
     <ClInclude Include="..\..\src\World\Module.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\War.h" />

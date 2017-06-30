@@ -56,6 +56,9 @@ bool Application::Initialize()
 	INSTANCE(CmdDispatcher).addEventListener("ref", (EventCallback)&Application::onRefresh, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&Application::onClose, this);
 
+	INSTANCE(CmdDispatcher).addEventListener("addfrd", (EventCallback)&Application::onAddFrd, this);
+
+
 	INSTANCE(ConfigManager);
 	INSTANCE(SessionManager);
 	INSTANCE(LuaEngine);
@@ -83,6 +86,7 @@ bool Application::Initialize()
 	addModule(new MapModule);
 	addModule(new TeamModule);
 	addModule(new WarModule);
+	addModule(new FriendsModule);
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 
@@ -213,10 +217,11 @@ bool Application::onLoad(Player* player, Dictionary& bytes)
 
 bool Application::onSave(Player* player, Dictionary& bytes)
 {
+	player->onSaveBegin(bytes);
 	for (auto itr : mMapModule)
 		itr.second->onSave(player, bytes);
 	player->onSave(bytes);
-
+	player->onSaveEnd(bytes);
 	for (auto itr : mMapModule)
 		itr.second->onSaveEnd(player, bytes);
 	return true;
@@ -438,7 +443,6 @@ void Application::addSessionMessage(uint32 msgId)
 
 int32 Application::onClose(CmdEvent& e)
 {
-
 	std::map<uint32, Player*>& mapPlayer = GetModule(WorldModule)->getMapPlayer();
 	while (mapPlayer.size() > 0)
 	{
@@ -448,6 +452,18 @@ int32 Application::onClose(CmdEvent& e)
 
 		Player* plr = itr->second;
 		doSessionLeaveWorld(plr->getSession());
+	}
+
+	return 0;
+}
+
+int32 Application::onAddFrd(CmdEvent& e)
+{
+	Player* tar = sWorld.getPlayerByName(e.cmdExecute->params[0]);
+	Player* frd = sWorld.getPlayerByName(e.cmdExecute->params[1]);
+	if (tar && frd)
+	{
+		sFriends.MutualBindFriend(tar, frd);
 	}
 
 	return 0;

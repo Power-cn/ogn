@@ -1,5 +1,11 @@
 #pragma once
 #include "Shared.hpp"
+//////////////////////////////////////////////////////////////////////////
+#include <json/json.h>
+#include <lua.hpp>
+#include <luabind/luabind.hpp>
+//////////////////////////////////////////////////////////////////////////
+
 #include "ConfigManager.h"
 #include "Property.h"
 #include "Entity.h"
@@ -32,12 +38,6 @@
 
 #endif
 
-//////////////////////////////////////////////////////////////////////////
-#include <json/json.h>
-#include <lua.hpp>
-#include <luabind/luabind.hpp>
-
-//////////////////////////////////////////////////////////////////////////
 #include "protocols/protocols.h"
 
 #include "MsgCode.h"
@@ -63,6 +63,8 @@
 #include "./Module/WarModule/EntityStatus.h"
 #include "./Module/WarModule/War.h"
 #include "./Module/WarModule/WarModule.h"
+#include "./Module/FriendsModule/Friends.h"
+#include "./Module/FriendsModule/FriendsModule.h"
 
 #include "Utils.h"
 #include "DBHandler.h"
@@ -80,3 +82,4 @@
 #define sRedisProxy INSTANCE(RedisProxy)
 
 #define sWorld (*GetModule(WorldModule))
+#define sFriends (*GetModule(FriendsModule))

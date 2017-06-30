@@ -1357,10 +1357,15 @@ Value::getComment( CommentPlacement placement ) const
 
 
 std::string 
-Value::toStyledString() const
+Value::toStyledString(bool easy) const
 {
+	if (easy)
+	{
+		FastWriter writer;
+		return writer.write(*this);
+	}
    StyledWriter writer;
-   return writer.write( *this );
+   return writer.write(*this);
 }
 
 

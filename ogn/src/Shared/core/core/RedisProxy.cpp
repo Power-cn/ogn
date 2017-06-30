@@ -115,8 +115,14 @@ std::vector<std::string> RedisProxy::sendCommand(const char* format, ...)
 
 std::vector<std::string> RedisProxy::sendCommand(const char *format, va_list ap)
 {
-	redisReply* reply = (redisReply*)redisvCommand((redisContext*)mContext, format, ap);
 	std::vector<std::string> backstr;
+	redisReply* reply = (redisReply*)redisvCommand((redisContext*)mContext, format, ap);
+	if (reply == NULL)
+	{
+		backstr.push_back("sendCommand error");
+		return backstr;
+	}
+
 	switch (reply->type)
 	{
 	case REDIS_REPLY_INTEGER:

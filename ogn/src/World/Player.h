@@ -2,6 +2,13 @@
 
 class Session;
 
+enum UserStatus : uint8
+{
+	UStatus_None,
+	UStatus_Online,
+	UStatus_Offline,
+};
+
 class Player : public Entity
 {
 protected:
@@ -10,7 +17,8 @@ protected:
 	std::string			user;
 	std::string			password;
 	Session*			session;
-	std::string			mJson;
+	UserStatus			mUserStatus;
+	Json::Value			mJson;
 public:
 	Player();
 	~Player();
@@ -25,6 +33,9 @@ public:
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
 	const std::string& getUser() { return user; }
+	void SetStatus(UserStatus s) { mUserStatus = s; }
+	UserStatus GetStatus() { return mUserStatus; }
+	Json::Value& GetJson();
 public:
 	void onCreate();
 public:
@@ -38,7 +49,9 @@ public:
 	virtual void sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams = NULL);
 public:
 	bool onLoad(Dictionary& dict);
+	bool onSaveBegin(Dictionary& dict);
 	bool onSave(Dictionary& dict);
+	bool onSaveEnd(Dictionary& dict);
 protected:
 	bool onLoadJson(Dictionary& dict);
 	bool onSavejson(Dictionary& dict);

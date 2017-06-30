@@ -91,8 +91,10 @@ int32 EventDispatcher::dispatch(int32 id, Parameter& par)
 
 	auto lst = itr->second;
 
-	for (auto pa : lst)
+	for (auto pa : lst) {
+		if (pa.first == NULL || pa.second == NULL) continue;
 		(pa.first->*(pa.second))(par);
+	}
 	return 0;
 }
 
@@ -166,6 +168,8 @@ int32 EventDispatcher::dispatch(Event& event)
 			try
 			{
 				result = 1;
+				if (lis->thisObject == NULL || lis->callback == NULL)
+					continue;
 				return (lis->thisObject->*(lis->callback))(event);
 			}
 			catch (std::string e)
@@ -192,6 +196,8 @@ int32 EventDispatcher::dispatch(int32 id, void* lparam, void* wparam)
 			++l_itr)
 		{
 			std::pair<Object*, EventCallbackProcess>& lis = (*l_itr);
+			if (lis.second == NULL || lis.first == NULL) continue;
+
 			(lis.first->*(lis.second))(lparam, wparam);
 			result = 1;
 		}
