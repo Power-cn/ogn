@@ -10,6 +10,5 @@ public:
 	void sendPacket(Packet& packet);
 	void sendBuffer(void* data, int32 count);
 public:
-	struct bufferevent*		buffer;
-protected:
+	LPFN_CONNECTEX						mPfn;
 };

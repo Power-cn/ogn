@@ -169,6 +169,7 @@
     <ClCompile Include="..\..\src\Shared\core\core\EventDispatcher.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\EventListener.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\List.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\log.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\log_console_outpter.cpp" />
@@ -196,7 +197,7 @@
     <ClCompile Include="..\..\src\Shared\core\core\SocketAngent.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\SocketClient.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\SocketEvent.cpp" />
-    <ClCompile Include="..\..\src\Shared\core\core\SocketServer.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\SocketListener.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Status.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Threader.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\ThreaderPool.cpp" />
@@ -237,6 +238,7 @@
     <ClInclude Include="..\..\src\Shared\core\core\EventDispatcher.h" />
     <ClInclude Include="..\..\src\Shared\core\core\EventListener.h" />
     <ClInclude Include="..\..\src\Shared\core\core\EventRegister.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h" />
     <ClInclude Include="..\..\src\Shared\core\core\List.h" />
     <ClInclude Include="..\..\src\Shared\core\core\log.h" />
     <ClInclude Include="..\..\src\Shared\core\core\log_console_outpter.h" />
@@ -268,7 +270,7 @@
     <ClInclude Include="..\..\src\Shared\core\core\SocketAngent.h" />
     <ClInclude Include="..\..\src\Shared\core\core\SocketClient.h" />
     <ClInclude Include="..\..\src\Shared\core\core\SocketEvent.h" />
-    <ClInclude Include="..\..\src\Shared\core\core\SocketServer.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\SocketListener.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Status.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Threader.h" />
     <ClInclude Include="..\..\src\Shared\core\core\ThreaderPool.h" />

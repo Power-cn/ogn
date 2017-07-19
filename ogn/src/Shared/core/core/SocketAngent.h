@@ -3,16 +3,20 @@
 class SocketAngent :public EventDispatcher
 {
 	friend class Network;
+	friend class IOCPModel;
 public:
 	SocketAngent();
 	~SocketAngent();
+	uint32 getSocketId() { return mSocketId; }
+	Socket* getSocket() { return mSocket; }
+protected:
 	void setSocketId(int32 socketId) { mSocketId = socketId; }
 	void setSocket(Socket* s) { mSocket = s; }
-	Socket* getSocket() { return mSocket; }
-private:
-	uint32 getSocketId() { return mSocketId; }
-	Network* network;
+	sockaddr_in& getSockaddr() { return mAddr; }
+protected:
+	Network*			network;
 protected:
 	uint32				mSocketId;
 	Socket*				mSocket;
+	struct sockaddr_in  mAddr;
 };

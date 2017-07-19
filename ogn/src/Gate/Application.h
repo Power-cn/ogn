@@ -1,6 +1,6 @@
 #pragma once
 
-class SocketServer;
+class SocketListener;
 class SocketClient;
 
 class SocketEvent;
@@ -30,7 +30,7 @@ protected:
 	int onWorldExit(SocketEvent& e);
 	int onWorldException(SocketEvent& e);
 protected:
-	SocketServer* gateServer;
+	SocketListener* gateServer;
 	SocketClient* worldServer;
 private:
 };

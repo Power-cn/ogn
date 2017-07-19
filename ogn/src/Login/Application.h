@@ -10,5 +10,5 @@ public:
 	bool Update();
 	bool Destroy();
 protected:
-	SocketServer* mLoginServer;
+	SocketListener* mLoginServer;
 };

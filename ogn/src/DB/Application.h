@@ -1,6 +1,6 @@
 #pragma once
 
-class SocketServer;
+class SocketListener;
 class SocketEvent;
 class DBConnector;
 
@@ -14,14 +14,14 @@ public:
 	bool Update();
 	bool Destroy();
 
-	SocketServer* getDBServer() { return dbServer; }
+	SocketListener* getDBServer() { return dbServer; }
 	DBConnector* getDBConnector() { return dbConnector; }
 protected:
 	int32 onDBAccept(SocketEvent& e);
 	int32 onDBRecv(SocketEvent& e);
 	int32 onDBExit(SocketEvent& e);
 protected:
-	SocketServer* dbServer;
+	SocketListener* dbServer;
 	DBConnector* dbConnector;
 private:
 };

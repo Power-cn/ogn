@@ -9,7 +9,7 @@ public:
 	bool Initialize();
 	bool Update();
 	bool Destroy();
-	SocketServer* getWorldServer() { return worldServer; }
+	SocketListener* getWorldServer() { return worldServer; }
 	SocketClient* getDBServer() { return dbServer; }
 	Module* getModule(const std::string& name);
 	Module* addModule(Module* module);
@@ -46,7 +46,7 @@ protected:
 	int32 RedisAuth(RedisEvent& e);
 	int32 RedisCallback1(RedisEvent& e);
 protected:
-	SocketServer* worldServer;
+	SocketListener* worldServer;
 	SocketClient* dbServer;
 	std::map<std::string, Module*> mMapModule;
 	float64 mTime;

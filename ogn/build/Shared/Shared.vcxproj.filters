@@ -132,9 +132,6 @@
     <ClCompile Include="..\..\src\Shared\core\core\SocketEvent.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\SocketServer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\core\Status.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -224,6 +221,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\zlib\zutil.c">
       <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\SocketListener.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp">
+      <Filter>源文件</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -344,9 +347,6 @@
     <ClInclude Include="..\..\src\Shared\core\core\SocketEvent.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\SocketServer.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\Status.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -421,6 +421,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\zlib\zutil.h">
       <Filter>zlib</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\SocketListener.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h">
+      <Filter>头文件</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

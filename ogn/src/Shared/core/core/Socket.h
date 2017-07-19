@@ -2,11 +2,35 @@
 
 class Packet;
 class CircularBuffer;
-struct event;
+class SocketAngent;
+class Socket;
+
+enum SocketState
+{
+	IOState_None,
+	IOState_Accept,
+	IOState_Connect,
+	IOState_Recv,
+	IOState_Send,
+};
+
+struct IO_OVERLAPPED
+{
+	OVERLAPPED							overlapped = { 0 };
+	WSABUF								wBuffer = { 0 };
+	SocketState							ioState = IOState_None;
+	char								dataBuffer[PACKET_MAX_LENGTH] = { 0 };
+	int32								dataBufferCount = PACKET_MAX_LENGTH;
+	uint32								dwBytesTransferred = 0;
+	uint32								dwResult = 0;
+	Socket*								socket = NULL;
+};
+
 class Socket : public EventDispatcher
 {
 public:
 	friend class Network;
+	friend class IOCPModel;
 	Socket(void);
 	~Socket(void);
 	int32 getSocketId() { return mSocketId; }
@@ -23,12 +47,12 @@ private:
 	void setPort(short port) { mPort = port; }
 public:
 	Network*						network;
-	event*							readEvent;
-	event*							writeEvent;
 	CircularBuffer*					readStream;
-	std::queue<StreamBuffer>		queueSend;
-	bool							startSend;
-	uint32							packetCount;
+	IO_OVERLAPPED					readOverlapped;
+	IO_OVERLAPPED					writeOverlapped;
+	SocketAngent*					angent = NULL;
+	std::queue<StreamBuffer>		sendQueue;
+	bool							startSend = false;
 protected:
 	int32							mSocketId;
 	std::string						mIP;

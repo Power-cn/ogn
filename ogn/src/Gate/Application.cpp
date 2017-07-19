@@ -105,7 +105,7 @@ int Application::onGateRecv(SocketEvent& e)
 	Session* session = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
 	if (session == NULL)
 	{
-		INSTANCE(Network).addCloseSocket((SocketServer*)e.targetDispatcher, e.socket->getSocketId());
+		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
 		return 0;
 	}
 
@@ -169,8 +169,8 @@ int Application::onWorldRecv(SocketEvent& e)
 		if (session == NULL)
 			break;
 
-#ifdef DEBUG
-		DEBUG_DEBUG(LogSystem::csl_color_yellow, "session:%0.16llx s to c %s size:%d", session->getSessionId(), INSTANCE(PacketManager).getPacketName(msgId).c_str(), packetCount);
+#ifdef _DEBUG
+		DEBUG_DEBUG(LogSystem::csl_color_yellow, "session:%0.16llx s to c %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
 #endif // DEBUG
 
 		if (msgId == ID_NetSessionLeaveNotify)

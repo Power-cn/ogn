@@ -56,6 +56,7 @@
 // include
 
 #include <winsock2.h>
+#include <mswsock.h>
 #include <windows.h>  
 #include <Dbghelp.h>
 #include <WS2tcpip.h>
@@ -68,6 +69,7 @@
 #pragma comment(lib, "DbgHelp")
 #pragma comment(lib, "Netapi32.lib")
 #pragma comment(lib, "ws2_32.lib")
+#pragma comment(lib, "Kernel32.lib") //IOCP需要用到的动态链接库
 
 typedef	char							int8;
 typedef	short							int16;

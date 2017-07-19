@@ -1,17 +1,15 @@
 #pragma once
 
-struct event;
 class Socket;
 class Packet;
-class SocketServer : public SocketAngent
+class SocketListener : public SocketAngent
 {
-	friend class Network;
 public:
-	SocketServer();
-	~SocketServer();
+	SocketListener();
+	~SocketListener();
 
 	Socket* addSocket(Socket* sock);
-	void removeSocket(int32 socketId);
+	void delSocket(int32 socketId);
 	Socket* getSocket(int32 socketId);
 	void clearSocket();
 	void sendPacket(Socket* socket, Packet& packet);
@@ -21,8 +19,9 @@ public:
 	void sendPacketToAll(Packet& packet);
 	void sendBufferToAll(void* data, int32 count);
 public:
-	struct event*		event_;
+	LPFN_ACCEPTEX					mPfn;
+	LPFN_GETACCEPTEXSOCKADDRS		mPfnSocketAddrs;
 protected:
-	std::map<int32, Socket*> _clients;
+	std::map<int32, Socket*>		mSockets;
 private:
 };
