@@ -161,6 +161,7 @@ void Network::OnAccept(SocketListener* listener, Socket* socket)
 	SocketEvent event;
 	event.event = SocketEvent::ACCEPT;
 	event.socket = socket;
+	listener->addSocket(socket);
 	socket->dispatch(event);
 	listener->dispatch(event);
 }
@@ -286,9 +287,16 @@ void Network::OnExit(Socket* socket)
 		listener->delSocket(socketId);
 }
 
-void Network::OnException()
+void Network::OnException(Socket* socket)
 {
-
+	uint32 socketId = socket->getSocketId();
+	SocketAngent* angent = socket->angent;
+	SocketEvent se;
+	se.event = SocketEvent::EXCEPTION;
+	socket->dispatch(se);
+	angent->dispatch(se);
+	DelSocket(socketId);
+	DelClient(socketId);
 }
 
 bool Network::unCompression(char* input, int inCount, char* output, int& outCount)

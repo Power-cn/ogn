@@ -92,42 +92,47 @@ SocketClient* IOCPModel::connect(const std::string& host, short port)
 
 bool IOCPModel::loop()
 {
-	mMutex.lock();
-	int queueSize = mQueueEvent.size();
-	mMutex.unlock();
-	if (queueSize <= 0)
-		return false;
 
-	mMutex.lock();
-	QueueResponse response = mQueueEvent.front();
-	mQueueEvent.pop();
-	mMutex.unlock();
-	
-	response.ioOverlapped->dwBytesTransferred = response.BytesTransferred;
-	response.ioOverlapped->dwResult = response.result;
-	IO_OVERLAPPED* ioOverlapped = response.ioOverlapped;
-	SocketAngent* angent = response.angent;
-	switch (response.ioOverlapped->ioState)
+	while (true)
 	{
-	case IOState_Accept:
-		DoAccept(angent->getSocketId(), ioOverlapped->socket);
-		break;
-	case IOState_Connect:
-		DoConnect(angent->getSocketId(), ioOverlapped->socket);
-		break;
-	case IOState_Recv:
-		DoRead(ioOverlapped->socket);
-		break;
-	case IOState_Send:
-		DoWrite(ioOverlapped->socket);
-		break;
+		mMutex.lock();
+		int queueSize = mQueueEvent.size();
+		mMutex.unlock();
+		if (queueSize <= 0)
+			break;
+
+		mMutex.lock();
+		QueueResponse response = mQueueEvent.front();
+		mQueueEvent.pop();
+		mMutex.unlock();
+
+		response.ioOverlapped->dwBytesTransferred = response.BytesTransferred;
+		response.ioOverlapped->dwResult = response.result;
+		IO_OVERLAPPED* ioOverlapped = response.ioOverlapped;
+		SocketAngent* angent = response.angent;
+		switch (response.ioOverlapped->ioState)
+		{
+		case IOState_Accept:
+			DoAccept(angent->getSocketId(), ioOverlapped->socket);
+			break;
+		case IOState_Connect:
+			DoConnect(angent->getSocketId(), ioOverlapped->socket);
+			break;
+		case IOState_Recv:
+			DoRead(ioOverlapped->socket);
+			break;
+		case IOState_Send:
+			DoWrite(ioOverlapped->socket);
+			break;
+		}
 	}
 
 	while (mQueueClose.size() > 0)
 	{
 		auto itr = mQueueClose.begin();
-		
+
 		DoExit(mNetwork->FindSocket(itr->first));
+		mQueueClose.erase(itr);
 	}
 	return true;
 }
@@ -361,12 +366,7 @@ void IOCPModel::DoConnect(uint32 socketId, Socket* socket)
 
 	if (ioOverlapped.dwResult == 0 && ioOverlapped.dwBytesTransferred == 0)
 	{
-		SocketEvent se;
-		se.event = SocketEvent::EXCEPTION;
-		socket->dispatch(se);
-		angent->dispatch(se);
-		mNetwork->DelSocket(socketId);
-		mNetwork->DelClient(socketId);
+		mNetwork->OnException(socket);
 		return;
 	}
 	mNetwork->OnConnect((SocketClient*)angent, socket);
@@ -400,6 +400,7 @@ void IOCPModel::DoWrite(Socket* socket)
 
 void IOCPModel::DoExit(Socket* socket)
 {
+	printf("%s\n", __FUNCTION__);
 	if (socket == NULL) return;
 	mNetwork->OnExit(socket);
 }

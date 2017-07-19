@@ -251,7 +251,6 @@ bool Player::onSavejson(Dictionary& dict)
 	dict.Add("json", jsonstr);
 	char szBuffer[4096] = { 0 };
 	sprintf_s(szBuffer, 4096, "hmset user %d %s", getUserId(), jsonstr.c_str());
-	LOG_ERROR(szBuffer);
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
 	return true;

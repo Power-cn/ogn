@@ -43,7 +43,7 @@ protected:
 	void OnRecv(Socket* socket);
 	void OnSend(Socket* socket);
 	void OnExit(Socket* socket);
-	void OnException();
+	void OnException(Socket* socket);
 protected:
 	bool compression(char* input, int inCount, char* output, int& outCount);
 	bool unCompression(char* input, int inCount, char* output, int& outCount);
