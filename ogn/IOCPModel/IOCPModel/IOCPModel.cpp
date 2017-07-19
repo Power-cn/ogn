@@ -325,13 +325,13 @@ void IOCPModel::DoAccept(SOCKET socketId, Socket* socket)
 	DWORD dwRemoteAddressLength = sizeof(SOCKADDR_IN) + 16;
 	DWORD dwReceiveDataLength = ioOverlapped.dataBufferCount - dwLocalAddressLength - dwRemoteAddressLength;
 
-	//listener->pfnSocketAddrs(
-	//	ioOverlapped.dataBuffer,
-	//	dwReceiveDataLength,
-	//	dwLocalAddressLength,
-	//	dwRemoteAddressLength,
-	//	(LPSOCKADDR*)&local, &localLen, 
-	//	(LPSOCKADDR*)&remote, &remoteLen);
+	listener->pfnSocketAddrs(
+		ioOverlapped.dataBuffer,
+		0,
+		dwLocalAddressLength,
+		dwRemoteAddressLength,
+		(LPSOCKADDR*)&local, &localLen, 
+		(LPSOCKADDR*)&remote, &remoteLen);
 
 	printf("listener %d  accept %d accept ok!\n", socketId, socket->socketId);
 	PostRead(socket);
@@ -361,7 +361,7 @@ void IOCPModel::DoRead(Socket* socket)
 
 void IOCPModel::DoWrite(Socket* socket)
 {
-	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
+	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 	if (ioOverlapped.dwBytesTransferred <= 0)
 	{
 		PushQueueClose(socket->angent, socket->socketId);
