@@ -129,6 +129,12 @@ typedef void*			varptr;
 #define SAFE_RELEASE(x)	if( (x)!=NULL ) { (x)->Release(); (x)=NULL; }
 #endif
 
+#ifndef SAFE_SOCKET
+#define SAFE_SOCKET(x)	if (x != INVALID_SOCKET && x != 0) { closesocket(x); x = 0; }
+#endif
+
+
+
 #define BIT(x)		(1<<x)
 
 

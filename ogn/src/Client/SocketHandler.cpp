@@ -69,7 +69,6 @@ void SocketHandler::createRobot()
 	if (mUsers.size() <= 0)
 		return;
 
-
 	std::pair<std::string, std::string>& pa = mUsers.front();
 	LOG_INFO("createRobot: %s", pa.first.c_str());
 

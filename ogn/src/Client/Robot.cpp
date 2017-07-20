@@ -27,7 +27,7 @@ void Robot::doLogin(const std::string& user, const std::string& pwd)
 	req.user = user;
 	req.password = password;
 
-	LOG_DEBUG(LogSystem::csl_color_green, "%s login request", user.c_str());
+	//LOG_DEBUG(LogSystem::csl_color_green, "%s login request", user.c_str());
 	sendPacket(req);
 }
 

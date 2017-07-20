@@ -57,6 +57,7 @@
     <ClInclude Include="..\..\src\Common\MsgCode.h" />
     <ClInclude Include="..\..\src\Common\Property.h" />
     <ClInclude Include="..\..\src\Common\protocols\protocols.h" />
+    <ClInclude Include="..\..\src\Common\RedisDef.h" />
     <ClInclude Include="..\..\src\Common\Utils.h" />
     <ClInclude Include="..\..\src\World\Application.h" />
     <ClInclude Include="..\..\src\World\Backpack.h" />

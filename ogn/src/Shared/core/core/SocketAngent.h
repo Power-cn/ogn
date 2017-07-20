@@ -14,8 +14,6 @@ protected:
 	void setSocket(Socket* s) { mSocket = s; }
 	sockaddr_in& getSockaddr() { return mAddr; }
 protected:
-	Network*			network;
-protected:
 	uint32				mSocketId;
 	Socket*				mSocket;
 	struct sockaddr_in  mAddr;

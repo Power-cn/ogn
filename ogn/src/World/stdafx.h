@@ -41,6 +41,7 @@
 #include "protocols/protocols.h"
 
 #include "MsgCode.h"
+#include "RedisDef.h"
 #include "LuaEngine.h"
 #include "LuaScriptEngine.h"
 
@@ -74,6 +75,7 @@
 #include "RedisProxy.h"
 
 #include "Application.h"
+
 
 #define sApp INSTANCE(Application)
 #define sPacketMgr INSTANCE(PacketManager)

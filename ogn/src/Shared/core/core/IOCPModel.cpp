@@ -276,6 +276,10 @@ void IOCPModel::PostRead(Socket* socket)
 	DWORD dwBufferCount = 1, dwRecvBytes = 0, Flags = 0;
 	int result = WSARecv(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, &Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
+	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
+		PushQueueClose(socket->angent, socket->getSocketId());
+	}
+
 	//if (ERROR_IO_PENDING != dwError)
 	//{
 	//	int err = WSAGetLastError();
@@ -315,12 +319,10 @@ void IOCPModel::PostWrite(Socket* socket)
 	ioOverlapped.ioState = IOState_Send;
 	int result = WSASend(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
-	//if (ERROR_IO_PENDING != dwError)
-	//{
-	//	int err = WSAGetLastError();
-	//	delete socket;
-	//	return;
-	//}
+	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
+		PushQueueClose(socket->angent, socket->getSocketId());
+	}
+
 }
 
 void IOCPModel::DoAccept(uint32 socketId, Socket* socket)
@@ -400,7 +402,6 @@ void IOCPModel::DoWrite(Socket* socket)
 
 void IOCPModel::DoExit(Socket* socket)
 {
-	printf("%s\n", __FUNCTION__);
 	if (socket == NULL) return;
 	mNetwork->OnExit(socket);
 }
@@ -417,7 +418,8 @@ void IOCPModel::PushQueueClose(SocketAngent* angent, uint32 socketId)
 {
 	auto itr = mQueueClose.find(socketId);
 	if (itr != mQueueClose.end()) return;
-
+	uint32 tSocketId = socketId;
+	SAFE_SOCKET(tSocketId);
 	mQueueClose.insert(std::make_pair(socketId, angent));
 }
 

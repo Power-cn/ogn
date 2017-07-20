@@ -87,12 +87,14 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		msg.gmParams.push_back("p3");
 		robot->sendPacket(msg);
 
-		NetChatMsgNotify msgNfy;
-		char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "login ok");
-		msgNfy.chatMsg = szBuffer;
-		msgNfy.channelType = 1;
-		robot->sendPacket(msgNfy);
+		//NetChatMsgNotify msgNfy;
+		//char szBuffer[256] = { 0 };
+		//sprintf_s(szBuffer, 256, "login ok");
+		//msgNfy.chatMsg = szBuffer;
+		//msgNfy.channelType = 1;
+		//robot->sendPacket(msgNfy);
+
+		INSTANCE(SocketHandler).createRobot();
 	}
 	else
 	{
@@ -128,7 +130,6 @@ int RobotManager::onNetPlayerEnterViewNotify(Robot* robot, NetPlayerEnterViewNot
 		robot->mSendPos.x = robot->mPosX;
 		robot->mSendPos.y = robot->mPosY;
 		robot->mSpeed = nfy->speed;
-		INSTANCE(SocketHandler).createRobot();
 	}
 
 

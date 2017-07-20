@@ -22,6 +22,7 @@ protected:
 public:
 	Player();
 	~Player();
+	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
 	void setSession(Session* s) { session = s; }
 	Session* getSession() { return session; }
@@ -67,6 +68,8 @@ protected:
 
 	virtual bool onEnterPlayerView(Player* plr);
 	virtual bool onLeavePlayerView(Player* plr);
+protected:
+	int32 onTimerSaveDB(TimerEvent& e);
 public:
 	uint32 GetOnlineTimer() { return mOnlineTimer; }
 	void SetOnlineTimer(uint32 t) { mOnlineTimer = t; }

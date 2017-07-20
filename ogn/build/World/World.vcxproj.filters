@@ -269,6 +269,9 @@
     <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h">
       <Filter>Module\FriendsModule</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Common\RedisDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Xml Include="..\..\src\Common\protocols\protocols.xml">

@@ -155,12 +155,12 @@ double DateTime::GetNowAppUS()
 #endif
 }
 
-int32 DateTime::Now()
+uint32 DateTime::Now()
 {
 	return (int32)time(0);
 }
 
-int32 DateTime::Now(DateTime& time)
+uint32 DateTime::Now(DateTime& time)
 {
 	time_t t = (time_t)Now();
 	tm localTime;
@@ -169,10 +169,10 @@ int32 DateTime::Now(DateTime& time)
 	return t;
 }
 
-int32 DateTime::Now(std::string& time)
+uint32 DateTime::Now(std::string& time)
 {
 	DateTime dt;
-	int32 t = Now(dt);
+	uint32 t = Now(dt);
 	dt.toString(time);
 	return t;
 }

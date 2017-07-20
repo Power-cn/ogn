@@ -14,6 +14,13 @@ Player::~Player()
 
 }
 
+bool Player::Initialize()
+{
+	Entity::Initialize();
+	mTimer.addEventListener((EventCallback)&Player::onTimerSaveDB, this, 60.f);
+	return true;
+}
+
 bool Player::Update(float time, float delay)
 {
 	Entity::Update(time, delay);
@@ -250,9 +257,8 @@ bool Player::onSavejson(Dictionary& dict)
 	std::string jsonstr = root.toStyledString(true);
 	dict.Add("json", jsonstr);
 	char szBuffer[4096] = { 0 };
-	sprintf_s(szBuffer, 4096, "hmset user %d %s", getUserId(), jsonstr.c_str());
+	sprintf_s(szBuffer, 4096, "hmset %s %d %s", sUser, getUserId(), jsonstr.c_str());
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
 	return true;
 }
 
@@ -265,7 +271,6 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["lasthost"] = session->getHost();
 
 	root["user"] = userJson;
-
 	return true;
 }
 
@@ -346,4 +351,11 @@ bool Player::onLeavePlayerView(Player* plr)
 
 	//LOG_INFO("[%s] onLeavePlayerView [%s]", plr->getName().c_str(), getName().c_str());
 	return true;
+}
+
+int32 Player::onTimerSaveDB(TimerEvent& e)
+{
+	Dictionary dict;
+	sApp.doPlayerSave(this, dict);
+	return 0;
 }

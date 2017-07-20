@@ -443,17 +443,17 @@ void Application::addSessionMessage(uint32 msgId)
 
 int32 Application::onClose(CmdEvent& e)
 {
-	std::map<uint32, Player*>& mapPlayer = GetModule(WorldModule)->getMapPlayer();
-	while (mapPlayer.size() > 0)
+	std::map<uint32, Player*> mapPlayer = GetModule(WorldModule)->getMapPlayer();
+	for (auto& itr : mapPlayer)
 	{
-		auto itr = mapPlayer.begin();
-		if (itr == mapPlayer.end())
-			continue;
+		Player* plr = itr.second;
+		Session* session = plr->getSession();
 
-		Player* plr = itr->second;
-		doSessionLeaveWorld(plr->getSession());
+		NetSessionLeaveNotify nfy;
+		if (session == NULL) continue;
+		session->sendPacketToWorld(nfy);
+		//doSessionLeaveWorld(plr->getSession());
 	}
-
 	return 0;
 }
 

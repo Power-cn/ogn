@@ -77,7 +77,7 @@ bool FriendsModule::MutualBindFriend(Player* tar, Player* frd)
 	if (tar->getUserId() == frd->getUserId()) return false;
 	if (!AddFriend(tar->getUserId(), frd))
 		return false;
-	return AddFriend(frd->getUserId(), tar);
+	return AddFriend(frd->getUserId(), tar) != NULL;
 }
 
 bool FriendsModule::MutualDebindFriend(uint32 tarUserId, uint32 frdUserId)

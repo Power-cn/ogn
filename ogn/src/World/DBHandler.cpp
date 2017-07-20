@@ -82,7 +82,14 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 
 		DBRoleInfo& info = res->roleInfos[0];
 		player->setUserId(info.id);
+		player->setName(info.name);
+		player->SetOnlineTimer(DateTime::Now());
+
 		sWorld.addPlayerToUserId(player);
+
+		char szBuffer[256] = { 0 };
+		sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, player->getName().c_str(), player->getUserId());
+		sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
 		Dictionary dict;
 		if (info.property.getWPostion() <= 0)

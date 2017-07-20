@@ -13,10 +13,7 @@ writeOverlapped()
 Socket::~Socket(void)
 {
 	SAFE_DELETE(readStream);
-
-	if (mSocketId != INVALID_SOCKET && mSocketId != 0)
-		closesocket(mSocketId);
-	mSocketId = 0;
+	SAFE_SOCKET(mSocketId);
 	while (sendQueue.size())
 	{
 		StreamBuffer packet = sendQueue.front();

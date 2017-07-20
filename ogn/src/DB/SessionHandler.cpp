@@ -18,6 +18,7 @@ SessionHandler::~SessionHandler()
 int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
 {
 	LOG_INFO("sessionId %0.16llx enter world", session->getSessionId());
+
 	return 0;
 }
 
@@ -36,7 +37,7 @@ int SessionHandler::onNetLoginReq(Session* session, NetLoginReq* req)
 	account.user = req->user;
 	uint32 queryCount = 0;
 	NetLoginRes res;
-    const int8* err =	INSTANCE(Application).getDBConnector()->doQuery(account, &account, queryCount, "user", "");
+    const int8* err = INSTANCE(Application).getDBConnector()->doQuery(account, &account, queryCount, "user", "");
 	do 
 	{
 		if (err)
@@ -108,8 +109,6 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			uint32 t1 = DateTime::GetNowAppUS() - t0;
 
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] insert role[%s] time:[%d]", req->user.c_str(), role.name.c_str(), t1);
-
-
 		}
 	} while (false);
 

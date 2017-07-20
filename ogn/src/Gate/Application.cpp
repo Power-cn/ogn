@@ -83,6 +83,11 @@ bool Application::sendBufferToWorld(int8* data, int32 count, Session* tar)
 
 int Application::onGateAccept(SocketEvent& e)
 {
+	if (worldServer == NULL) {
+		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
+		return 0;
+	}
+
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("Gate");
 
 	uint64 sessionId = ((uint64)cf.Port << 32) | ++Session::sId;
@@ -102,6 +107,11 @@ int Application::onGateAccept(SocketEvent& e)
 
 int Application::onGateRecv(SocketEvent& e)
 {
+	if (worldServer == NULL) {
+		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
+		return 0;
+	}
+
 	Session* session = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
 	if (session == NULL)
 	{
@@ -117,7 +127,6 @@ int Application::onGateRecv(SocketEvent& e)
 	out.setRPostion(rpos);
 	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "session:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
-
 
 	/*
 	*********** ½âÃÜ ***********
@@ -135,7 +144,7 @@ int Application::onGateExit(SocketEvent& e)
 	if (!session)
 		return 0;
 
-	LOG_INFO("sessionId %0.16llx exit", session->getSessionId());
+	LOG_INFO("sessionId %0.16llx leave", session->getSessionId());
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, session);
@@ -193,28 +202,21 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, session);
-	LOG_INFO("sessionId %0.16llx leave", session->getSessionId());
-
 	INSTANCE(Network).addCloseSocket(gateServer, session->getSocketId());
-	INSTANCE(SessionManager).removeSessionBySocket(session->getSocketId());
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
 	return 0;
 }
 
 int Application::onWorldExit(SocketEvent& e)
 {
-	std::map<uint64, Session*>&  mapSession = INSTANCE(SessionManager).getMapSession();
-	while (mapSession.size() > 0)
+	worldServer = NULL;
+	std::map<uint64, Session*>  mapSession = INSTANCE(SessionManager).getMapSession();
+	for (auto& itr : mapSession)
 	{
-		auto itr = mapSession.begin();
-		Session* session = itr->second;
+		Session* session = itr.second;
 		INSTANCE(Network).addCloseSocket(gateServer, session->getSocketId());
-		INSTANCE(SessionManager).removeSessionBySocket(session->getSocketId());
-		INSTANCE(SessionManager).removeSession(session->getSessionId());
 	}
 
 	LOG_DEBUG(LogSystem::csl_color_red, "world exit");
-	worldServer = NULL;
 	return 0;
 }
 
