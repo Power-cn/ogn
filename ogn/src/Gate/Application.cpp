@@ -84,7 +84,7 @@ bool Application::sendBufferToWorld(int8* data, int32 count, Session* tar)
 int Application::onGateAccept(SocketEvent& e)
 {
 	if (worldServer == NULL) {
-		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
+		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
 	}
 
@@ -108,14 +108,14 @@ int Application::onGateAccept(SocketEvent& e)
 int Application::onGateRecv(SocketEvent& e)
 {
 	if (worldServer == NULL) {
-		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
+		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
 	}
 
 	Session* session = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
 	if (session == NULL)
 	{
-		INSTANCE(Network).addCloseSocket((SocketListener*)e.targetDispatcher, e.socket->getSocketId());
+		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
 	}
 
@@ -202,7 +202,7 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, session);
-	INSTANCE(Network).addCloseSocket(gateServer, session->getSocketId());
+	INSTANCE(Network).closesocket(session->getSocketId());
 	return 0;
 }
 
@@ -213,7 +213,7 @@ int Application::onWorldExit(SocketEvent& e)
 	for (auto& itr : mapSession)
 	{
 		Session* session = itr.second;
-		INSTANCE(Network).addCloseSocket(gateServer, session->getSocketId());
+		INSTANCE(Network).closesocket(session->getSocketId());
 	}
 
 	LOG_DEBUG(LogSystem::csl_color_red, "world exit");

@@ -17,7 +17,7 @@ public:
 public:
 	SocketListener* listen(int16 port, const std::string host = "");
 	SocketClient* connect(const std::string& host, int16 port);
-	void addCloseSocket(SocketAngent* angent, int32 socketId);
+	void closesocket(int32 socketId);
 protected:
 	virtual Socket* newSocket();
 	virtual SocketClient* newSocketClient();

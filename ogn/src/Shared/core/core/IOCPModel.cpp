@@ -15,15 +15,29 @@ IOCPModel::IOCPModel(Network* network)
 
 IOCPModel::~IOCPModel()
 {
-	PostQueuedCompletionStatus(mIOCP, 0, 0, NULL);
+	for (uint32 i = 0; i < mWorkerThreadsCount; ++i)
+	{
+		PostQueuedCompletionStatus(mIOCP, 0, 0, NULL);
+		delete mWorkerThreads[i];
+	}
+	mWorkerThreads.clear();
+	mNetwork = NULL;
 }
 
 SocketListener* IOCPModel::listen(const std::string& host, short port)
 {
 	uint32 socketId = WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
 	SocketListener* listener = mNetwork->newSocketListener();
+	
+	Socket* socket = mNetwork->newSocket();
+	socket->angent = listener;
+	socket->network = mNetwork;
+
+	socket->setSocketId(socketId);
+	listener->setSocket(socket);
 	listener->setSocketId(socketId);
-	CreateIoCompletionPort((HANDLE)socketId, mIOCP, (ULONG_PTR)listener, 0);
+
+	CreateIoCompletionPort((HANDLE)socketId, mIOCP, (ULONG_PTR)socketId, 0);
 
 	SOCKADDR_IN& addr = listener->getSockaddr();
 	memset(&addr, 0, sizeof(addr));
@@ -51,6 +65,7 @@ SocketListener* IOCPModel::listen(const std::string& host, short port)
 	{
 		PostAccept(listener);
 	}
+	mNetwork->AddSocket(socket);
 	mNetwork->AddListener(listener);
 	return listener;
 }
@@ -83,7 +98,11 @@ SocketClient* IOCPModel::connect(const std::string& host, short port)
 	WSAIoctl(socketId, SIO_GET_EXTENSION_FUNCTION_POINTER,
 		&guidConnectEx, sizeof(guidConnectEx), &client->mPfn, sizeof(client->mPfn),
 		&dwBytes, NULL, NULL);
-	PostConnect(client);
+	if (!PostConnect(client))
+	{
+		delete client;
+		return NULL;
+	}
 
 	mNetwork->AddClient(client);
 
@@ -106,10 +125,14 @@ bool IOCPModel::loop()
 		mQueueEvent.pop();
 		mMutex.unlock();
 
+		
+		Socket* socket = mNetwork->FindSocket(response.socketId);
+		if (socket == NULL) continue;
 		response.ioOverlapped->dwBytesTransferred = response.BytesTransferred;
 		response.ioOverlapped->dwResult = response.result;
 		IO_OVERLAPPED* ioOverlapped = response.ioOverlapped;
-		SocketAngent* angent = response.angent;
+		SocketAngent* angent = socket->angent;
+
 		switch (response.ioOverlapped->ioState)
 		{
 		case IOState_Accept:
@@ -130,8 +153,8 @@ bool IOCPModel::loop()
 	while (mQueueClose.size() > 0)
 	{
 		auto itr = mQueueClose.begin();
-
-		DoExit(mNetwork->FindSocket(itr->first));
+		uint32 socketId = (*itr);
+		DoExit(mNetwork->FindSocket(socketId));
 		mQueueClose.erase(itr);
 	}
 	return true;
@@ -167,20 +190,14 @@ void IOCPModel::postSendEncode(Socket* socket, void* dataBuffer, int dataCount)
 
 }
 
-void IOCPModel::PostAccept(SocketListener* listener)
+bool IOCPModel::PostAccept(SocketListener* listener)
 {
 	Socket* socket = mNetwork->newSocket();
 	socket->angent = listener;
 	socket->network = mNetwork;
 	uint32 socketId = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	socket->setSocketId(socketId);
-
-	//setsockopt(socketId,
-	//	SOL_SOCKET,
-	//	SO_UPDATE_ACCEPT_CONTEXT,
-	//	(char *)&sListenSocket,
-	//	sizeof(sListenSocket));
-
+	socket->postCount++;
 
 	LPFN_ACCEPTEX pfn = listener->mPfn;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
@@ -207,24 +224,24 @@ void IOCPModel::PostAccept(SocketListener* listener)
 
 	if (!ret && WSA_IO_PENDING != WSAGetLastError())
 	{
-		//cerr << "lpfnAcceptEx failed with error code: " << WSAGetLastError() << endl;
-		int err = WSAGetLastError();
 		delete socket;
-		return;
+		return false;
 	}
 
 	mNetwork->AddSocket(socket);
+	return true;
 }
 
-void IOCPModel::PostConnect(SocketClient* client)
+bool IOCPModel::PostConnect(SocketClient* client)
 {
 	Socket* socket = mNetwork->newSocket();
 	socket->angent = client;
 	socket->network = mNetwork;
 	socket->setSocketId(client->getSocketId());
 	client->setSocket(socket);
+	socket->postCount++;
 
-	CreateIoCompletionPort((HANDLE)socket->getSocketId(), mIOCP, (ULONG_PTR)client, 0);
+	CreateIoCompletionPort((HANDLE)socket->getSocketId(), mIOCP, (ULONG_PTR)socket->getSocketId(), 0);
 
 	LPFN_CONNECTEX pfn = client->mPfn;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
@@ -245,28 +262,19 @@ void IOCPModel::PostConnect(SocketClient* client)
 		&dwBytesSent,							// [out] 发送了多少个字节，这里不用
 		&ioOverlapped.overlapped);				// [in]
 	DWORD dwError = WSAGetLastError();
-	if (ERROR_IO_PENDING != dwError)
+	if (!bResult && ERROR_IO_PENDING != dwError)
 	{
-		int err = WSAGetLastError();
 		delete socket;
-		return;
+		return false;
 	}
 
 	std::string host = Shared::inet_ntoa(&addr.sin_addr.s_addr);
 	socket->setHost(host);
-
-
-	//DWORD dwFlag = 0, dwTrans = 0;
-
-	//if (!WSAGetOverlappedResult(client->socketId, &ioOverlapped.overlapped, &dwTrans, TRUE, &dwFlag))
-	//{
-	//	printf("等待异步结果失败\r\n");
-	//	return;
-	//}
 	mNetwork->AddSocket(socket);
+	return true;
 }
 
-void IOCPModel::PostRead(Socket* socket)
+bool IOCPModel::PostRead(Socket* socket)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
 	memset(&ioOverlapped.overlapped, 0, sizeof(OVERLAPPED));
@@ -274,30 +282,28 @@ void IOCPModel::PostRead(Socket* socket)
 	ioOverlapped.wBuffer.buf = ioOverlapped.dataBuffer;
 	ioOverlapped.wBuffer.len = ioOverlapped.dataBufferCount;
 	DWORD dwBufferCount = 1, dwRecvBytes = 0, Flags = 0;
+	socket->postCount++;
+
 	int result = WSARecv(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, &Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
 	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
-		PushQueueClose(socket->angent, socket->getSocketId());
+		PushQueueClose(socket->getSocketId());
+		return false;
 	}
-
-	//if (ERROR_IO_PENDING != dwError)
-	//{
-	//	int err = WSAGetLastError();
-	//	delete socket;
-	//	return;
-	//}
+	return true;
 }
 
-void IOCPModel::PostWrite(Socket* socket)
+bool IOCPModel::PostWrite(Socket* socket)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 	ioOverlapped.socket = socket;
 	socket->startSend = false;
-
+	socket->postCount++;
 	std::queue<StreamBuffer>& sendQueue = socket->sendQueue;
 
 	ioOverlapped.wBuffer.buf = ioOverlapped.dataBuffer;
-	if (sendQueue.size() <= 0) return;
+	if (sendQueue.size() <= 0) return false;
+
 	DWORD dwBufferCount = 1, dwRecvBytes = 0, Flags = 0;
 	char* wBuffer = ioOverlapped.dataBuffer;
 	int sendSize = 0;
@@ -320,17 +326,19 @@ void IOCPModel::PostWrite(Socket* socket)
 	int result = WSASend(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
 	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
-		PushQueueClose(socket->angent, socket->getSocketId());
+		PushQueueClose(socket->getSocketId());
+		return false;
 	}
-
+	return true;
 }
 
 void IOCPModel::DoAccept(uint32 socketId, Socket* socket)
 {
+	socket->postCount--;
 	SocketListener* listener = mNetwork->FindListener(socketId);
 	if (listener == NULL)  return;
-	CreateIoCompletionPort((HANDLE)socket->getSocketId(), mIOCP, (ULONG_PTR)listener, 0);
-
+	CreateIoCompletionPort((HANDLE)socket->getSocketId(), mIOCP, (ULONG_PTR)socket->getSocketId(), 0);
+	
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
 
 	SOCKADDR_IN* remote = NULL;
@@ -363,6 +371,7 @@ void IOCPModel::DoAccept(uint32 socketId, Socket* socket)
 
 void IOCPModel::DoConnect(uint32 socketId, Socket* socket)
 {
+	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
 	SocketAngent* angent = socket->angent;
 
@@ -377,10 +386,11 @@ void IOCPModel::DoConnect(uint32 socketId, Socket* socket)
 
 void IOCPModel::DoRead(Socket* socket)
 {
+	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
 	if (ioOverlapped.dwBytesTransferred <= 0)
 	{
-		PushQueueClose(socket->angent, socket->getSocketId());
+		PushQueueClose(socket->getSocketId());
 		return;
 	}
 
@@ -390,10 +400,11 @@ void IOCPModel::DoRead(Socket* socket)
 
 void IOCPModel::DoWrite(Socket* socket)
 {
+	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 	if (ioOverlapped.dwBytesTransferred <= 0)
 	{
-		PushQueueClose(socket->angent, socket->getSocketId());
+		PushQueueClose(socket->getSocketId());
 		return;
 	}
 	mNetwork->OnSend(socket);
@@ -414,35 +425,32 @@ void IOCPModel::PushQueueResponse(QueueResponse& response)
 	mMutex.unlock();
 }
 
-void IOCPModel::PushQueueClose(SocketAngent* angent, uint32 socketId)
+void IOCPModel::PushQueueClose(uint32 socketId)
 {
 	auto itr = mQueueClose.find(socketId);
 	if (itr != mQueueClose.end()) return;
 	uint32 tSocketId = socketId;
 	SAFE_SOCKET(tSocketId);
-	mQueueClose.insert(std::make_pair(socketId, angent));
+	mQueueClose.insert(socketId);
 }
 
 void IOCPModel::WorkerThread()
 {
-	DWORD CompleteBytes = 0;
-
-	DWORD dwKey = 0;
-
 	while (true)
 	{
 		OVERLAPPED* overlapped = NULL;
 		IO_OVERLAPPED* ioOverlapped = NULL;
-		BOOL bRet = false;
+		BOOL dwResult = false;
 		DWORD dwBytesTransferred = 0;
-		Socket* socketptr = NULL;
 		SocketAngent* angent = NULL;
-		bRet = GetQueuedCompletionStatus(mIOCP, &dwBytesTransferred, (PULONG_PTR)&angent, &overlapped, INFINITE);
+		uint32 socketId = 0;
+
+		dwResult = GetQueuedCompletionStatus(mIOCP, &dwBytesTransferred, (PULONG_PTR)&socketId, &overlapped, INFINITE);
 		ioOverlapped = (IO_OVERLAPPED*)CONTAINING_RECORD(overlapped, IO_OVERLAPPED, overlapped);
 		QueueResponse response;
 		response.ioOverlapped = ioOverlapped;
-		response.angent = angent;
-		response.result = bRet;
+		response.socketId = socketId;
+		response.result = dwResult;
 		response.BytesTransferred = dwBytesTransferred;
 		PushQueueResponse(response);
 	}

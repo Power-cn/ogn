@@ -49,9 +49,9 @@ SocketClient* Network::connect(const std::string& host, int16 port)
 	return mIOCPModel->connect(host, port);
 }
 
-void Network::addCloseSocket(SocketAngent* angent, int32 socketId)
+void Network::closesocket(int32 socketId)
 {
-	mIOCPModel->PushQueueClose(angent, socketId);
+	mIOCPModel->PushQueueClose(socketId);
 }
 
 Socket* Network::newSocket()
@@ -184,7 +184,7 @@ void Network::OnRecv(Socket* socket)
 
 	if (readBuffer->get_space_length() <= 0)
 	{
-		addCloseSocket(angent, socket->getSocketId());
+		this->closesocket(socket->getSocketId());
 		// 读取数据的环形缓冲不已满;
 		LOG_ERROR("readBuffer full");
 		return;
@@ -192,7 +192,7 @@ void Network::OnRecv(Socket* socket)
 
 	if (readBuffer->get_space_length() < (uint32)ioOverlapped.dwBytesTransferred)
 	{
-		addCloseSocket(angent, socket->getSocketId());
+		this->closesocket(socket->getSocketId());
 		LOG_ERROR("readBuffer data not enough");
 		return;
 	}
@@ -215,7 +215,7 @@ void Network::OnRecv(Socket* socket)
 
 					if (len > PACKET_MAX_LENGTH)
 					{
-						addCloseSocket(socket->angent, socket->getSocketId());
+						this->closesocket(socket->getSocketId());
 						return;
 					}
 
@@ -232,7 +232,7 @@ void Network::OnRecv(Socket* socket)
 				}
 				else
 				{
-					addCloseSocket(angent, socket->getSocketId());
+					this->closesocket(socket->getSocketId());
 					return;
 				}
 			}

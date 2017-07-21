@@ -46,13 +46,15 @@ private:
 	void setHost(const std::string& host) { mIP = host; }
 	void setPort(short port) { mPort = port; }
 public:
-	Network*						network;
+	Network*						network = NULL;
+	SocketAngent*					angent = NULL;
+public:
 	CircularBuffer*					readStream;
 	IO_OVERLAPPED					readOverlapped;
 	IO_OVERLAPPED					writeOverlapped;
-	SocketAngent*					angent = NULL;
 	std::queue<StreamBuffer>		sendQueue;
 	bool							startSend = false;
+	uint32							postCount = 0;
 protected:
 	int32							mSocketId;
 	std::string						mIP;
