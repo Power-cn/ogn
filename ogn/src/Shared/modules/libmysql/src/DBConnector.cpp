@@ -3,12 +3,12 @@
 
 DBConnector::DBConnector()
 {
-	mMysql = new MYSQL;
 }
 
 DBConnector::~DBConnector()
 {
-	delete mMysql;
+	if (mMysql)
+		mysql_close(mMysql);
 }
 
 bool DBConnector::connect(const std::string& host, const std::string& user, const std::string& password, const std::string& name, int16 port)
@@ -22,14 +22,15 @@ bool DBConnector::connect(const std::string& host, const std::string& user, cons
 	//_threader = new Threader;
 	//_threader->create(this, (Threader::ThreadCallBack)(&DBConnector::threaderRun));
 	//_threader->create(this);
-	mysql_init(mMysql);
+	mMysql = new MYSQL;
+	mMysql = mysql_init(mMysql);
 
-#ifdef WIN64
-	mysql_options4(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312", "gb2312");
-#else
+//#ifdef WIN64
+//	mysql_options4(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312", "gb2312");
+//#else
 	mysql_options(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312");
-#endif // WIN64
-
+//#endif // WIN64
+//
 	my_bool reconnect = true;
 	mysql_options(mMysql, MYSQL_OPT_RECONNECT, &reconnect);
 	if (!mysql_real_connect(mMysql, mHost.c_str(), mUser.c_str(), mPassword.c_str(), mName.c_str(), mPort, NULL, 0))
