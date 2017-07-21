@@ -16,7 +16,30 @@
 #include "SessionManager.h"
 
 
-#ifdef WIN32
+#ifndef LINUX
+
+
+#ifdef WIN64
+
+#ifdef _DEBUG
+
+
+#pragma comment(lib, "hiredis64_d.lib")
+#pragma comment(lib, "Shared64_d.lib")
+#pragma comment(lib, "lua64_d.lib")
+#pragma comment(lib, "luabind64_d.lib")
+
+
+#else
+
+#pragma comment(lib, "hiredis64.lib")
+#pragma comment(lib, "Shared64.lib")
+#pragma comment(lib, "lua64.lib")
+#pragma comment(lib, "luabind64.lib")
+
+#endif // DEBUG
+
+#else
 
 #ifdef _DEBUG
 
@@ -25,7 +48,6 @@
 #pragma comment(lib, "lua_d.lib")
 #pragma comment(lib, "luabind_d.lib")
 #pragma comment(lib, "python/python36_d.lib")
-
 #else
 
 #pragma comment(lib, "hiredis.lib")
@@ -33,10 +55,12 @@
 #pragma comment(lib, "lua.lib")
 #pragma comment(lib, "luabind.lib")
 #pragma comment(lib, "python/python36.lib")
-
 #endif // DEBUG
 
 #endif
+
+#endif // !LINUX
+
 
 #include "protocols/protocols.h"
 

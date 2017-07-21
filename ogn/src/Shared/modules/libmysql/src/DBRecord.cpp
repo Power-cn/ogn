@@ -228,7 +228,7 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 	char cmd_where_[SQL_CMD_COUNT] = { 0 };
 	char str_value_[SQL_CMD_COUNT] = { 0 };
 	bool all_return = return_record_names.length() == 0 ? true : false;
-	size_t where_length_ = 0;
+	uint32 where_length_ = 0;
 	for (int i = 0; i < descriptor.recordCount; ++i)
 	{
 		FieldDescriptor& record = descriptor.records[i];
@@ -244,7 +244,7 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 		if (HasRecord(compare_record_names, record.field))
 		{
 			char value_[SQL_CMD_COUNT] = { 0 };
-			size_t value_size_ = 0;
+			uint32 value_size_ = 0;
 			GetRecordValue(mysql, query_record, record, SQL_CMD_COUNT, value_, value_size_);
 			if (!cmd_where_[0])
 			{
@@ -289,10 +289,10 @@ bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, size_t& size, DBRecord& insert_
 
 	char insert_value_[SQL_CMD_COUNT] = { 0 };
 	char insert_coumns_[SQL_CMD_COUNT] = { 0 };
-	size_t insert_value_size_ = 0;
+	uint32 insert_value_size_ = 0;
 
 	char value_str[SQL_CMD_COUNT] = { 0 };
-	size_t value_str_size_ = 0;
+	uint32 value_str_size_ = 0;
 
 	bool empty_compare = compare_record_names.length() == 0 ? true : false;
 	
@@ -354,13 +354,13 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 	int8 set_value_[SQL_CMD_COUNT] = { 0 };
 	int8 cmd_where_[SQL_CMD_COUNT] = { 0 };
 
-	size_t where_size_ = 0;
-	size_t set_size_ = 0;
+	uint32 where_size_ = 0;
+	uint32 set_size_ = 0;
 
 	for (int32 i = 0; i < descriptor.recordCount; ++i)
 	{
 		int8 value_[SQL_CMD_COUNT] = { 0 };
-		size_t value_size_ = 0;
+		uint32 value_size_ = 0;
 		FieldDescriptor& record = descriptor.records[i];
 
 		if (HasRecord(update_record_names, record.field))

@@ -11,11 +11,29 @@
 #include "Utils.h"
 
 
-#ifdef WIN32
+//#pragma comment(lib, "libevent/libevent.lib")
+//#pragma comment(lib, "libevent/libevent_core.lib")
+//#pragma comment(lib, "libevent/libevent_extras.lib")
+
+
+
+#ifndef LINUX
+
 #pragma comment(lib, "ws2_32.lib")
-#pragma comment(lib, "libevent/libevent.lib")
-#pragma comment(lib, "libevent/libevent_core.lib")
-#pragma comment(lib, "libevent/libevent_extras.lib")
+
+#ifdef WIN64
+
+#ifdef _DEBUG
+
+#pragma comment(lib, "Shared64_d.lib")
+
+#else
+
+#pragma comment(lib, "Shared64.lib")
+
+#endif // DEBUG
+
+#else
 
 #ifdef _DEBUG
 
@@ -28,3 +46,5 @@
 #endif // DEBUG
 
 #endif
+
+#endif // !LINUX

@@ -23,11 +23,20 @@ bool DBConnector::connect(const std::string& host, const std::string& user, cons
 	//_threader->create(this, (Threader::ThreadCallBack)(&DBConnector::threaderRun));
 	//_threader->create(this);
 	mysql_init(mMysql);
+
+#ifdef WIN64
+	mysql_options4(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312", "gb2312");
+#else
 	mysql_options(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312");
+#endif // WIN64
+
 	my_bool reconnect = true;
 	mysql_options(mMysql, MYSQL_OPT_RECONNECT, &reconnect);
 	if (!mysql_real_connect(mMysql, mHost.c_str(), mUser.c_str(), mPassword.c_str(), mName.c_str(), mPort, NULL, 0))
+	{
+		const char* err = mysql_error(mMysql);
 		return false;
+	}
 
 	//mysql_query(sql_account, "set character set'gbk'");
 	//mysql_query(sql_account, "set names'gbk'");
@@ -252,7 +261,7 @@ void DBConnector::process()
 int8* DBConnector::doQuery(const DBRecord& query_record, DBRecord* result_records, uint32& result_count, const uint32 result_max_count /*= 0*/)
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
-	size_t sql_size_ = 0;
+	uint32 sql_size_ = 0;
 	if (!GetQuerySqlCmd(mMysql, sql_cmd_, sql_size_, (DBRecord&)query_record, result_records, result_max_count, NULL, NULL))
 	{
 		return "";
@@ -263,7 +272,7 @@ int8* DBConnector::doQuery(const DBRecord& query_record, DBRecord* result_record
 int8* DBConnector::doQuery(const DBRecord& query_record, DBRecord* result_records, uint32& result_count, const std::string& compare_record_names, const std::string& return_record_names, int32 result_max_count /* = 0 */)
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
-	size_t sql_size_ = 0;
+	uint32 sql_size_ = 0;
 	GetQuerySqlCmd(mMysql, sql_cmd_, sql_size_, (DBRecord&)query_record, result_records, result_max_count, compare_record_names.c_str(), return_record_names.c_str());
 	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))
 	{
@@ -334,7 +343,7 @@ int8* DBConnector::doQuery(const DBRecord& query_record, const std::string& sql_
 			return (int8*)err;
 	}
 
-	size_t num_rows_ = (size_t)mysql_num_rows(result_);
+	uint32 num_rows_ = (size_t)mysql_num_rows(result_);
 	if (result_max_count && num_rows_ > result_max_count)
 	{
 		num_rows_ = result_max_count;
@@ -344,7 +353,7 @@ int8* DBConnector::doQuery(const DBRecord& query_record, const std::string& sql_
 	{
 		const TableDescriptor& descriptor_ = *((DBRecord&)query_record).getDescriptor();
 		MYSQL_ROW row_ = 0;
-		for (size_t index_ = 0; index_ < num_rows_; ++index_)
+		for (uint32 index_ = 0; index_ < num_rows_; ++index_)
 		{
 			if (!(row_ = mysql_fetch_row(result_)))
 			{
@@ -420,7 +429,7 @@ int8* DBConnector::doUpdate(const DBRecord& update_record, const std::string& sq
 int8* DBConnector::doDelete(const DBRecord& delete_record, const std::string& compare_record_names, uint32& update_rows)
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
-	size_t size_ = 0;
+	uint32 size_ = 0;
 
 	if (!GetDeleteSqlCmd(mMysql, sql_cmd_, size_, (DBRecord&)delete_record, compare_record_names))
 		return "";

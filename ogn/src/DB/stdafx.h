@@ -1,4 +1,7 @@
+#pragma once
+
 #include "Shared.hpp"
+
 
 #include "ConfigManager.h"
 #include "Entity.h"
@@ -13,20 +16,40 @@
 #include "SessionHandler.h"
 
 
-#ifdef WIN32
 
-#pragma comment(lib, "libmysql/libmysql.lib")
+#ifndef LINUX
 
-#ifdef _DEBUG
 
-#pragma comment(lib, "mysql_d.lib")
-#pragma comment(lib, "Shared_d.lib")
+#ifdef WIN64
+
+	#ifdef _DEBUG
+
+		#pragma comment(lib, "libmysql/libmysqld.lib")
+		#pragma comment(lib, "mysql64_d.lib")
+		#pragma comment(lib, "Shared64_d.lib")
+
+	#else
+		#pragma comment(lib, "libmysql/libmysql.lib")
+
+		#pragma comment(lib, "mysql64.lib")
+		#pragma comment(lib, "Shared64.lib")
+
+	#endif // DEBUG
 
 #else
 
-#pragma comment(lib, "mysql.lib")
-#pragma comment(lib, "Shared.lib")
+	#ifdef _DEBUG
 
-#endif // DEBUG
+	#pragma comment(lib, "mysql_d.lib")
+	#pragma comment(lib, "Shared_d.lib")
+
+	#else
+
+	#pragma comment(lib, "mysql.lib")
+	#pragma comment(lib, "Shared.lib")
+
+	#endif // DEBUG
 
 #endif
+
+#endif // !LINUX
