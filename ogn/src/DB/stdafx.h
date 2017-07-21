@@ -24,12 +24,12 @@
 
 	#ifdef _DEBUG
 
-		#pragma comment(lib, "libmysql/libmysqld.lib")
+		#pragma comment(lib, "libmysql/libmysql64.lib")
 		#pragma comment(lib, "mysql64_d.lib")
 		#pragma comment(lib, "Shared64_d.lib")
 
 	#else
-		#pragma comment(lib, "libmysql/libmysql.lib")
+		#pragma comment(lib, "libmysql/libmysql64.lib")
 
 		#pragma comment(lib, "mysql64.lib")
 		#pragma comment(lib, "Shared64.lib")
@@ -37,7 +37,7 @@
 	#endif // DEBUG
 
 #else
-
+	#pragma comment(lib, "libmysql/libmysql.lib")
 	#ifdef _DEBUG
 
 	#pragma comment(lib, "mysql_d.lib")
