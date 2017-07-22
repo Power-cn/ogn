@@ -11,17 +11,20 @@ DBConnector::~DBConnector()
 	if (mMysql)
 		mysql_close(mMysql);
 	delete mMysql;
+	mMysql = NULL;
 }
 
 bool DBConnector::connect(const std::string& host, const std::string& user, const std::string& password, const std::string& name, int16 port)
 {
+	SAFE_DELETE(mMysql);
+	mMysql = new MYSQL;
+
 	mHost = host;
 	mUser = user;
 	mPassword = password;
 	mName = name;
 	mPort = port;
 
-	mMysql = new MYSQL;
 	mMysql = mysql_init(mMysql);
 
 	mysql_options(mMysql, MYSQL_SET_CHARSET_NAME, "gb2312");

@@ -71,21 +71,21 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>../../lib</OutDir>
-    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
     <TargetName>$(ProjectName)_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>../../lib</OutDir>
-    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>../../lib</OutDir>
-    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
     <TargetName>$(ProjectName)64_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>../../lib</OutDir>
-    <IntDir>../../obj/$(ProjectName)/$(Configuration)\</IntDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
     <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
