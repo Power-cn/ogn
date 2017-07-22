@@ -162,6 +162,7 @@
     <LinkIncremental>true</LinkIncremental>
     <OutDir>../../bin/$(ProjectName)/</OutDir>
     <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+    <TargetName>$(ProjectName)64_d</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
@@ -172,6 +173,7 @@
     <LinkIncremental>false</LinkIncremental>
     <OutDir>../../bin/$(ProjectName)/</OutDir>
     <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+    <TargetName>$(ProjectName)64</TargetName>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
