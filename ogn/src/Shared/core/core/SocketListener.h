@@ -11,6 +11,7 @@ public:
 	Socket* addSocket(Socket* sock);
 	void delSocket(int32 socketId);
 	Socket* getSocket(int32 socketId);
+	std::map<int32, Socket*>& getSockets() { return mSockets; }
 	void clearSocket();
 	void sendPacket(Socket* socket, Packet& packet);
 	void sendPacket(int32 socketId, Packet& packet);

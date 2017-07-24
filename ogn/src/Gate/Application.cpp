@@ -4,7 +4,10 @@ Application::Application():
 gateServer(NULL),
 worldServer(NULL)
 {
-
+	mTime = 0.0;
+	mDelay = 0.0;
+	mFPSTimer = 0.0;
+	mFPS = 0;
 }
 Application::~Application()
 {
@@ -34,6 +37,21 @@ bool Application::Initialize()
 
 bool Application::Update()
 {
+	mDelay = DateTime::GetNowAppUS() - mTime;
+	mTotalTime += mDelay;
+	mFPSTimer += mDelay;
+	mTime = DateTime::GetNowAppUS();
+	mFPS++;
+	if (mFPSTimer >= 1.0)
+	{
+		static char szBuffer[256] = { 0 };
+		sprintf_s(szBuffer, 256, "Gate:FPS:%d Player:%d", mFPS, gateServer->getSockets().size());
+		Shared::setConsoleTitle(szBuffer);
+		//LOG_INFO("FPS:%d", mFPS);
+		mFPS = 0;
+		mFPSTimer = 0.0;
+	}
+
 	INSTANCE(Network).update(0.f, 0.f);
 	if (!worldServer)
 	{

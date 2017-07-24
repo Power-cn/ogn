@@ -61,6 +61,7 @@ int SocketHandler::onExit(SocketEvent& e)
 
 int SocketHandler::onException(SocketEvent& e)
 {
+	LOG_ERROR(__FUNCTION__);
 	return 0;
 }
 
@@ -72,7 +73,10 @@ void SocketHandler::createRobot()
 	std::pair<std::string, std::string>& pa = mUsers.front();
 	LOG_INFO("createRobot: %s", pa.first.c_str());
 
-	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("OGN");
+	int32 idx = rand() % 4;
+	char szBuf[32] = { 0 };
+	sprintf_s(szBuf, 32, "Gate%d", idx);
+	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);
 	mListSocketClient.push_back(client);

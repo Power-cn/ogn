@@ -6,7 +6,6 @@ Application::Application()
 	mDelay = 0.0;
 	mFPSTimer = 0.0;
 	mFPS = 0;
-
 }
 Application::~Application()
 {

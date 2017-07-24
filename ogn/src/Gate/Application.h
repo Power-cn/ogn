@@ -32,5 +32,10 @@ protected:
 protected:
 	SocketListener* gateServer;
 	SocketClient* worldServer;
+	float64 mTime;
+	float64 mDelay;
+	float64 mTotalTime;
+	int32 mFPS;
+	float64 mFPSTimer;
 private:
 };
