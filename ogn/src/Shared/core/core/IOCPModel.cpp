@@ -46,8 +46,18 @@ SocketListener* IOCPModel::listen(const std::string& host, short port)
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
 	addr.sin_port = htons(port);
 
-	::bind(socketId, (SOCKADDR*)&addr, sizeof(addr));
-	::listen(socketId, 5);
+	if (0 != ::bind(socketId, (SOCKADDR*)&addr, sizeof(addr)))
+	{
+		delete listener;
+		delete socket;
+		return NULL;
+	}
+	if (0 != ::listen(socketId, 5))
+	{
+		delete listener;
+		delete socket;
+		return NULL;
+	}
 
 	GUID guidAcceptEx = WSAID_ACCEPTEX;
 	DWORD dwBytes = 0;

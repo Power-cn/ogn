@@ -70,10 +70,10 @@ void LuaEngine::reloadScript()
 {
 	clearScript();
 
-	loadScript("./config/script/global.lua");
-	loadScript("./config/script/player.lua");
-	loadScript("./config/script/gm.lua");
-	loadScript("./config/script/team.lua");
+	loadScript("../config/cfg/script/global.lua");
+	loadScript("../config/cfg/script/player.lua");
+	loadScript("../config/cfg/script/gm.lua");
+	loadScript("../config/cfg/script/team.lua");
 
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

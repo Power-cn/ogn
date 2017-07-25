@@ -14,15 +14,15 @@ ConfigManager::~ConfigManager()
 
 bool ConfigManager::reloadConfig()
 {
-	loadConfig("./config.json");
-	loadMsgConfig("./config/msg.json");
-	loadMapJson("./config/map.json");
-	loadCharJson("./config/character.json");
-	loadNpcJson("./config/npc.json");
-	loadPropertyJson("./config/property.json");
-	loadRobotJson("./config/robot.json");
-	loadTaskJson("./config/task.json");
-	loadTaskStepJson("./config/taskStep.json");
+	loadConfig("../config/config.json");
+	loadMsgConfig("../config/cfg/msg.json");
+	loadMapJson("../config/cfg/map.json");
+	loadCharJson("../config/cfg/character.json");
+	loadNpcJson("../config/cfg/npc.json");
+	loadPropertyJson("../config/cfg/property.json");
+	loadRobotJson("../config/cfg/robot.json");
+	loadTaskJson("../config/cfg/task.json");
+	loadTaskStepJson("../config/cfg/taskStep.json");
 	LOG_DEBUG(LogSystem::csl_color_green, "Load Config success");
 	return true;
 }

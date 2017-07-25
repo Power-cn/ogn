@@ -39,8 +39,10 @@ bool Application::Initialize()
 
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("DB");
 	dbServer = INSTANCE(Network).listen(cf.Port);
-	if (!dbServer)
+	if (!dbServer) {
+		LOG_ERROR("DB listen Port:%d fial", cf.Port);
 		return false;
+	}
 
 	LOG_DEBUG(LogSystem::csl_color_green, "DB listen Port:%d success", cf.Port);
 

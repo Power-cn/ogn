@@ -22,8 +22,10 @@ bool Application::Initialize()
 
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("Gate");
 	gateServer = INSTANCE(Network).listen(cf.Port);
-	if (!gateServer)
+	if (!gateServer) {
+		LOG_ERROR("Gate listen Port:%d fial", cf.Port);
 		return false;
+	}
 
 	LOG_DEBUG(LogSystem::csl_color_green, "Gate listen Port:%d success", cf.Port);
 

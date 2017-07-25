@@ -67,8 +67,10 @@ bool Application::Initialize()
 
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("World");
 	worldServer = INSTANCE(Network).listen(cf.Port);
-	IF_FALSE(!worldServer)
+	IF_FALSE(!worldServer) {
+		LOG_ERROR("World listen Port:%d fial", cf.Port);
 		return false;
+	}
 
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
