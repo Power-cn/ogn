@@ -440,7 +440,6 @@ void IOCPModel::PushQueueClose(uint32 socketId)
 	auto itr = mQueueClose.find(socketId);
 	if (itr != mQueueClose.end()) return;
 	uint32 tSocketId = socketId;
-	SAFE_SOCKET(tSocketId);
 	mQueueClose.insert(socketId);
 }
 
