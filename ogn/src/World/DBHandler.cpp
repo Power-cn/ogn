@@ -99,6 +99,8 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 
 		INSTANCE(Application).onLoad(player, dict);
 		INSTANCE(Application).onEnterWorld(player, dict);
+		return 0;
 	}
+	LOG_ERROR("create character fail");
 	return 0;
 }

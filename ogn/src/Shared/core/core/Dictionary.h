@@ -17,7 +17,7 @@ public:
 	Variant* GetVariant(const Variant& key);
 	void Clear();
 	const std::map<Variant, Variant>& MapVariant() const { return mMapVariant; }
-	uint32 GetCount() { return mMapVariant.size(); }
+	uint32 GetCount() { return (uint32)mMapVariant.size(); }
 protected:
 	std::map<Variant, Variant> mMapVariant;
 protected:

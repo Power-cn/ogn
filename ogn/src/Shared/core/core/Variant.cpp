@@ -7,7 +7,7 @@
 Variant::Variant(void):
 mType(TypeNone)
 {
-	memset(&mValue, sizeof(mValue), 0);
+	mValue = { 0 };
 }
 
 Variant::Variant(const char* value)
@@ -20,7 +20,7 @@ Variant::Variant(const char* value)
 
 Variant::Variant(const BinaryStream& value)
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeMemory;
 	mValue.value_bytes = new BinaryStream();
 	mValue.value_bytes->WriteBytes(value.getPtr(), value.getWPostion());
@@ -28,7 +28,7 @@ Variant::Variant(const BinaryStream& value)
 
 Variant::Variant(int8* value, int32 length)
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeMemory;
 	mValue.value_bytes = new BinaryStream();
 	mValue.value_bytes->WriteBytes(value, length);
@@ -36,49 +36,51 @@ Variant::Variant(int8* value, int32 length)
 
 Variant::~Variant(void)
 {
-	if (mType == TypeMemory)
+	if (mType == TypeMemory) {
 		delete mValue.value_bytes;
+		mValue.value_bytes = NULL;
+	}
 	reset();
 }
 
 Variant::Variant( const Variant& other )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = other.mType;
 	copyValue(other.mValue, mValue, mType);
 }
 
 Variant::Variant( const bool value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeBoolean;
 	mValue.value_bool = value;
 }
 
 Variant::Variant( const int8 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeInt8;
 	mValue.value_char = value;
 }
 
 Variant::Variant( const uint8 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeUint8;
 	mValue.value_uchar = value;
 }
 
 Variant::Variant( const int16 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeInt16;
 	mValue.value_short = value;
 }
 
 Variant::Variant( const uint16 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeUint16;
 	mValue.value_ushort = value;
 }
@@ -86,49 +88,49 @@ Variant::Variant( const uint16 value )
 
 Variant::Variant( const int32 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeInt32;
 	mValue.value_int = value;
 }
 
 Variant::Variant( const uint32 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeUint32;
 	mValue.value_uint = value;
 }
 
 Variant::Variant( const int64 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeInt64;
 	mValue.value_int64 = value;
 }
 
 Variant::Variant( const uint64 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeUint64;
 	mValue.value_uint64 = value;
 }
 
 Variant::Variant( const float32 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeFloat32;
 	mValue.value_float = value;
 }
 
 Variant::Variant( const float64 value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeFloat64;
 	mValue.value_double = value;
 }
 
 Variant::Variant(const std::string& value)
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypeString;
 	int len = value.length() + 1;
 	mValue.value_str = new char[len];
@@ -137,7 +139,7 @@ Variant::Variant(const std::string& value)
 
 Variant::Variant( const void* value )
 {
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 	mType = TypePointer;
 	mValue.value_pointer = (void*)value;
 }
@@ -611,10 +613,11 @@ void Variant::reset()
 {
 	char* str = mValue.value_str;
 	BinaryStream* bytes = mValue.value_bytes;
-	memset(&mValue, 0, sizeof(mValue));
+	mValue = { 0 };
 
-	if (mType == TypeString)
+	if (mType == TypeString) {
 		delete[] str;
+	}
 
 	if (mType == TypeMemory) {
 		if (bytes) {

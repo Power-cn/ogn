@@ -386,7 +386,7 @@ int8* DBConnector::doInsert(const DBRecord& insert_record, const std::string& co
 	}
 
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
-	size_t size_ = 0;
+	uint32 size_ = 0;
 
 	if (!GetInsertSqlCmd(mMysql, sql_cmd_, size_, (DBRecord&)insert_record, compare_record_names.c_str()))
 		return "error get insert sql cmd .";

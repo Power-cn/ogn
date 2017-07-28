@@ -86,7 +86,7 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 
 			strcpy_s(valuestr + valuesize, valuestrlength - valuesize, "\'");
 			valuesize++;
-			for (size_t i = 1; i < valuesize - 1; i++)
+			for (uint32 i = 1; i < valuesize - 1; i++)
 			{
 				if (valuestr[i] == '\'' || valuestr[i] == '\\')
 				{
@@ -283,7 +283,7 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 	return true;
 }
 
-bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, size_t& size, DBRecord& insert_record, const std::string& compare_record_names)
+bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names)
 {
 	const TableDescriptor& descriptor = *insert_record.getDescriptor();
 

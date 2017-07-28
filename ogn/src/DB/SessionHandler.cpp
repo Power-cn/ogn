@@ -43,15 +43,21 @@ int SessionHandler::onNetLoginReq(Session* session, NetLoginReq* req)
 		if (err)
 		{
 			res.result = 1;
-			break;
+			LOG_ERROR(err);
+			session->sendPacketToWorld(res);
+			return 0;
 		}
 		if (queryCount == 0)
 		{
 			account.user = req->user;
 			account.createTime = DateTime::Now();
 			err = INSTANCE(Application).getDBConnector()->doInsert(account, "", "user");
-			if (err)
+			if (err) {
+				res.result = 1;
 				LOG_ERROR(err);
+				session->sendPacketToWorld(res);
+				return 0;
+			}
 		}
 	} while (false);
 
@@ -80,7 +86,11 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 	do
 	{
 		if (err)
-			break;
+		{
+			LOG_ERROR(err);
+			session->sendPacketToWorld(res);
+			return 0;
+		}
 		res.accountId = req->accountId;
 
 		if (queryCount > 0)
@@ -99,7 +109,13 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			role.accountId = req->accountId;
 			role.name = req->user;
 			role.createTime = DateTime::Now();
-			INSTANCE(Application).getDBConnector()->doInsert(role, "", "name");
+			char* err = INSTANCE(Application).getDBConnector()->doInsert(role, "", "name");
+			if (err)
+			{
+				LOG_ERROR(err);
+				session->sendPacketToWorld(res);
+				return 0;
+			}
 
 			DBRoleInfo info;
 			info.id = role.id;

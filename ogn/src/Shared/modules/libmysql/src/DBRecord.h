@@ -126,6 +126,6 @@ public:\
 void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
 void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
 bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& query_record, DBRecord* result_records, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
-bool GetInsertSqlCmd(void* mysql, char* sql_cmd, size_t& size, DBRecord& insert_record, const std::string& compare_record_names);
+bool GetInsertSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names);
 bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names);
 bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names);
