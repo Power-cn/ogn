@@ -6,6 +6,8 @@
 #include <luabind/luabind.hpp>
 //////////////////////////////////////////////////////////////////////////
 
+#include "protocols/protocols.h"
+
 #include "ConfigManager.h"
 #include "Property.h"
 #include "Entity.h"
@@ -62,7 +64,6 @@
 #endif // !LINUX
 
 
-#include "protocols/protocols.h"
 
 #include "MsgCode.h"
 #include "RedisDef.h"

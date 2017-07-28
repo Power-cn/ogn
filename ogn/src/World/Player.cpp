@@ -117,6 +117,42 @@ void Player::onCreate()
 	LuaEngine::executeScript(this, "player", "onCreate");
 }
 
+void Player::DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo)
+{
+	Dictionary aPropertyDict;
+
+	uint32 charId = INSTANCE(ConfigManager).getCharJsonRandId();
+	float32 fSpeed = 0.f;
+	uint32 MaxHp = 0;
+	uint32 MaxMp = 0;
+
+	CharJson* charJson = INSTANCE(ConfigManager).getCharJson(charId);
+	if (charJson) {
+		setSex(charJson->Sex);
+		PropertyJson* propertyJson = INSTANCE(ConfigManager).getPropertyJson(charJson->PropertyId);
+		if (propertyJson) {
+			fSpeed = propertyJson->Speed;
+			MaxHp = propertyJson->MaxHp;
+			MaxMp = propertyJson->MaxMp;
+		}
+	}
+
+	aPropertyDict.Add(ep_name, dbRoleInfo.name);
+	aPropertyDict.Add(ep_CharId, charId);
+	aPropertyDict.Add(ep_mapId, (uint32)1);
+	aPropertyDict.Add(ep_speed, fSpeed);
+	aPropertyDict.Add(ep_posX, (int32)0);
+	aPropertyDict.Add(ep_posY, (int32)0);
+	aPropertyDict.Add(ep_dirPos, (int8)D_UP);
+	aPropertyDict.Add(ep_Level, (uint8)1);
+	aPropertyDict.Add(ep_Hp, MaxHp);
+	aPropertyDict.Add(ep_Mp, MaxMp);
+
+	BinaryStream bytes;
+	bytes << aPropertyDict;
+	dict.Add("Property", bytes);
+}
+
 bool Player::onSaveBegin(Dictionary& dict)
 {
 	Json::Value& root = GetJson();
@@ -127,17 +163,7 @@ bool Player::onSaveBegin(Dictionary& dict)
 bool Player::onSave(Dictionary& dict)
 {
 	onSavejson(dict);
-	dict.Add(ep_name, getName());
-	dict.Add(ep_CharId, getCharId());
-	dict.Add(ep_mapId, getMapId());
-	dict.Add(ep_speed, getSpeed());
-	dict.Add(ep_posX, getCellX());
-	dict.Add(ep_posY, getCellY());
-	dict.Add(ep_dirPos, getDirPosition());
-
-	dict.Add(ep_Level, INSTANCE(PropertyHelper).getLevel(this));
-	dict.Add(ep_Hp, INSTANCE(PropertyHelper).getHp(this));
-	dict.Add(ep_Mp, INSTANCE(PropertyHelper).getMp(this));
+	onSaveProperty(dict);
 
 	LOG_DEBUG(LogSystem::csl_color_green, "onSave[%s]", getName().c_str());
 	for (auto itr : dict.MapVariant())
@@ -162,51 +188,7 @@ bool Player::onSaveEnd(Dictionary& dict)
 bool Player::onLoad(Dictionary& dict)
 {
 	onLoadJson(dict);
-
-	if (dict.ContainsKey(ep_name))
-		setName(dict[ep_name].valueString());
-
-	if (dict.ContainsKey(ep_CharId))
-		setCharId(dict[ep_CharId].valueUint32());
-
-	//if (dict.ContainsKey(ep_mapId))
-	//{
-	//	int32 mapId = dict[ep_mapId].valueUint32();
-	//	Map* m = GetModule(MapModule)->getMapByMapId(mapId);
-	//	if (m)
-	//		setMap(m);
-	//}
-	if (dict.ContainsKey(ep_speed))
-		setSpeed(dict[ep_speed].valueFloat32());
-
-	if (dict.ContainsKey(ep_posX))
-	{
-		setCellX(dict[ep_posX].valueInt32());
-		setCellTarX(getCellX());
-	}
-
-	if (dict.ContainsKey(ep_posY))
-	{
-		setCellY(dict[ep_posY].valueInt32());
-		setCellTarY(getCellY());
-	}
-
-	if (dict.ContainsKey(ep_dirPos))
-		setDirPosition(dict[ep_dirPos].valueInt8());
-
-	if (dict.ContainsKey(ep_Level))
-		INSTANCE(PropertyHelper).setLevel(this, dict[ep_Level].valueUint8());
-
-	if (dict.ContainsKey(ep_Hp))
-		INSTANCE(PropertyHelper).setHp(this, dict[ep_Hp].valueUint32());
-
-	if (dict.ContainsKey(ep_Mp))
-		INSTANCE(PropertyHelper).setMp(this, dict[ep_Mp].valueUint32());
-
-	INSTANCE(PropertyHelper).setMaxHp(this, INSTANCE(PropertyHelper).CalculateMaxHp(this));
-	INSTANCE(PropertyHelper).setMaxMp(this, INSTANCE(PropertyHelper).CalculateMaxMp(this));
-	INSTANCE(PropertyHelper).setAttack(this, INSTANCE(PropertyHelper).CalculateAttack(this));
-	INSTANCE(PropertyHelper).setDefense(this, INSTANCE(PropertyHelper).CalculateDefense(this));
+	onLoadProperty(dict);
 
 	LOG_DEBUG(LogSystem::csl_color_green, "onLoad[%s]", getName().c_str());
 	for (auto itr : dict.MapVariant())
@@ -250,6 +232,34 @@ bool Player::onLoadJson(Json::Value& root)
 	return true;
 }
 
+bool Player::onLoadProperty(Dictionary& dict)
+{
+	Variant* varBytes = dict.GetVariant("Property");
+	if (varBytes == NULL) return true;
+	BinaryStream bytes = (BinaryStream&)varBytes->valueBytes();
+	Dictionary aProperyDict;
+	bytes >> aProperyDict;
+
+	setName(aProperyDict[ep_name].valueString());
+	setCharId(aProperyDict[ep_CharId].valueUint32());
+	setSpeed(aProperyDict[ep_speed].valueFloat32());
+	setCellX(aProperyDict[ep_posX].valueInt32());
+	setCellTarX(getCellX());
+	setCellY(aProperyDict[ep_posY].valueInt32());
+	setCellTarY(getCellY());
+	setDirPosition(aProperyDict[ep_dirPos].valueInt8());
+
+	INSTANCE(PropertyHelper).setLevel(this, aProperyDict[ep_Level].valueUint8());
+	INSTANCE(PropertyHelper).setHp(this, aProperyDict[ep_Hp].valueUint32());
+	INSTANCE(PropertyHelper).setMp(this, aProperyDict[ep_Mp].valueUint32());
+
+	INSTANCE(PropertyHelper).setMaxHp(this, INSTANCE(PropertyHelper).CalculateMaxHp(this));
+	INSTANCE(PropertyHelper).setMaxMp(this, INSTANCE(PropertyHelper).CalculateMaxMp(this));
+	INSTANCE(PropertyHelper).setAttack(this, INSTANCE(PropertyHelper).CalculateAttack(this));
+	INSTANCE(PropertyHelper).setDefense(this, INSTANCE(PropertyHelper).CalculateDefense(this));
+	return true;
+}
+
 bool Player::onSavejson(Dictionary& dict)
 {
 	Json::Value& root = GetJson();
@@ -267,10 +277,30 @@ bool Player::onSavejson(Json::Value& root)
 	Json::Value userJson;
 	userJson["userId"] = getUserId();
 	userJson["test"] = "test";
+	userJson["online"] = GetOfflineTimer();
 	userJson["offline"] = GetOfflineTimer();
 	userJson["lasthost"] = session->getHost();
-
 	root["user"] = userJson;
+	return true;
+}
+
+bool Player::onSaveProperty(Dictionary& dict)
+{
+	Dictionary aProperyDict;
+	aProperyDict.Add(ep_name, getName());
+	aProperyDict.Add(ep_CharId, getCharId());
+	aProperyDict.Add(ep_mapId, getMapId());
+	aProperyDict.Add(ep_speed, getSpeed());
+	aProperyDict.Add(ep_posX, getCellX());
+	aProperyDict.Add(ep_posY, getCellY());
+	aProperyDict.Add(ep_dirPos, getDirPosition());
+	aProperyDict.Add(ep_Level, INSTANCE(PropertyHelper).getLevel(this));
+	aProperyDict.Add(ep_Hp, INSTANCE(PropertyHelper).getHp(this));
+	aProperyDict.Add(ep_Mp, INSTANCE(PropertyHelper).getMp(this));
+
+	BinaryStream bytes;
+	bytes << aProperyDict;
+	dict.Add("Property", bytes);
 	return true;
 }
 

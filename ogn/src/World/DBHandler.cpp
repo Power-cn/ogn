@@ -93,32 +93,10 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 
 		Dictionary dict;
 		if (info.property.getWPostion() <= 0)
-		{
-			dict[ep_name] = info.name;
-			uint32 charId = INSTANCE(ConfigManager).getCharJsonRandId();
-			dict[ep_CharId] = (uint32)charId;
-			dict[ep_mapId] = (uint32)1;
-			dict[ep_posX] = (int32)0;
-			dict[ep_posY] = (int32)0;
-			dict[ep_dirPos] = (int8)D_UP;
-			dict[ep_Level] = (uint8)1;
+			player->DoCreateCharacter(dict, info);
+		else
+			info.property >> dict;
 
-			CharJson* charJson = INSTANCE(ConfigManager).getCharJson(charId);
-			if (charJson)
-			{
-				player->setSex(charJson->Sex);
-				PropertyJson* propertyJson = INSTANCE(ConfigManager).getPropertyJson(charJson->PropertyId);
-				if (propertyJson)
-				{
-					dict[ep_speed] = propertyJson->Speed;
-					dict[ep_Hp] = propertyJson->MaxHp;
-					dict[ep_Mp] = propertyJson->MaxMp;
-				}
-			}
-
-			player->onCreate();
-		}
-		info.property >> dict;
 		INSTANCE(Application).onLoad(player, dict);
 		INSTANCE(Application).onEnterWorld(player, dict);
 	}

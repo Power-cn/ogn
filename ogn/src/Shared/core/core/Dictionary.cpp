@@ -1,4 +1,5 @@
 #include "Shared.hpp"
+static Variant sVar;
 Dictionary::Dictionary()
 {
 
@@ -59,7 +60,11 @@ Variant* Dictionary::GetVariant(const Variant& key)
 
 Variant& Dictionary::operator[](const Variant& key)
 {
-	return mMapVariant[key];
+	auto itr = mMapVariant.find(key);
+	if (itr != mMapVariant.end())
+		return itr->second;
+	sVar.reset();
+	return sVar;
 }
 
 void Dictionary::Clear()
@@ -69,7 +74,7 @@ void Dictionary::Clear()
 
 bool Dictionary::operator >> (BinaryStream& bytes)
 {
-	CHECK_RETURN(bytes << mMapVariant.size(), false);
+	CHECK_RETURN(bytes << (uint32)mMapVariant.size(), false);
 	for (auto itr : mMapVariant)
 	{
 		CHECK_RETURN(bytes << itr.first, false);
@@ -80,9 +85,9 @@ bool Dictionary::operator >> (BinaryStream& bytes)
 
 bool Dictionary::operator << (BinaryStream& bytes)
 {
-	int32 count = 0;
+	uint32 count = 0;
 	CHECK_RETURN(bytes >> count, false);
-	for (int32 i = 0; i < count; ++i)
+	for (uint32 i = 0; i < count; ++i)
 	{
 		Variant key;
 		Variant value;

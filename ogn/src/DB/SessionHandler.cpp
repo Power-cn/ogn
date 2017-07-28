@@ -48,6 +48,7 @@ int SessionHandler::onNetLoginReq(Session* session, NetLoginReq* req)
 		if (queryCount == 0)
 		{
 			account.user = req->user;
+			account.createTime = DateTime::Now();
 			err = INSTANCE(Application).getDBConnector()->doInsert(account, "", "user");
 			if (err)
 				LOG_ERROR(err);
@@ -97,6 +98,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 		{
 			role.accountId = req->accountId;
 			role.name = req->user;
+			role.createTime = DateTime::Now();
 			INSTANCE(Application).getDBConnector()->doInsert(role, "", "name");
 
 			DBRoleInfo info;

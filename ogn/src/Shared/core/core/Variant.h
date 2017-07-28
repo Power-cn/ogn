@@ -25,6 +25,7 @@ union ValueUnion
 
 class Variant
 {
+	friend class Dictionary;
 public:
 	enum
 	{

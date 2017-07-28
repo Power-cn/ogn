@@ -609,16 +609,18 @@ const BinaryStream& Variant::valueBytes()
 
 void Variant::reset()
 {
-	if (mType == TypeString)
-	{
-		delete[] mValue.value_str;
-		mValue.value_str = 0;
-	}
+	char* str = mValue.value_str;
+	BinaryStream* bytes = mValue.value_bytes;
+	memset(&mValue, 0, sizeof(mValue));
 
-	if (mType == TypeMemory)
-	{
-		if (mValue.value_bytes)
-			mValue.value_bytes->Clear();
+	if (mType == TypeString)
+		delete[] str;
+
+	if (mType == TypeMemory) {
+		if (bytes) {
+			bytes->Clear();
+			mValue.value_bytes = bytes;
+		}
 	}
 }
 

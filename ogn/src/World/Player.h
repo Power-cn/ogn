@@ -39,6 +39,7 @@ public:
 	Json::Value& GetJson();
 public:
 	void onCreate();
+	void DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo);
 public:
 	virtual void sendPacket(Packet& packet);
 	virtual void sendBuffer(void* data, int32 count);
@@ -55,9 +56,11 @@ public:
 	bool onSaveEnd(Dictionary& dict);
 protected:
 	bool onLoadJson(Dictionary& dict);
+	bool onLoadProperty(Dictionary& dict);
 	bool onSavejson(Dictionary& dict);
 	bool onLoadJson(Json::Value& root);
 	bool onSavejson(Json::Value& root);
+	bool onSaveProperty(Dictionary& dict);
 protected:
 	virtual bool onEnterMap();
 	virtual bool onLeaveMap();

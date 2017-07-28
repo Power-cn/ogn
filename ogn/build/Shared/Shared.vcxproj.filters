@@ -16,220 +16,77 @@
     <Filter Include="core">
       <UniqueIdentifier>{c40dd5af-9cb7-4bcc-bb77-d62bd5b38d1d}</UniqueIdentifier>
     </Filter>
-    <Filter Include="math">
-      <UniqueIdentifier>{4c2f9769-af0a-4270-9bc2-ac9649ccf736}</UniqueIdentifier>
-    </Filter>
     <Filter Include="json">
       <UniqueIdentifier>{f5f785eb-08ce-45a1-ab91-5f23b3e4e652}</UniqueIdentifier>
     </Filter>
     <Filter Include="zlib">
       <UniqueIdentifier>{64b2b2e9-f7dd-4959-8390-267c613c3e9a}</UniqueIdentifier>
     </Filter>
+    <Filter Include="math">
+      <UniqueIdentifier>{714fdc55-abe5-47f6-9947-459a8514744d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\Shared\core\core\Astar.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\BinaryStream.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Bit.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\BlockStream.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\CircularBuffer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\CmdDispatcher.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Compression.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\conio.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\DateTime.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Dictionary.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\dump.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Event.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\EventDispatcher.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\EventListener.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\List.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log_console_outpter.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log_file_outputer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log_outputer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log_system.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\log_win_outputer.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Mutex.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Network.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Object.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Packet.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\PacketManager.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\RedisProxy.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Reference.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\RTTI.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Shared.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Socket.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\SocketAngent.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\SocketClient.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\SocketEvent.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Status.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Threader.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\ThreaderPool.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\TimerDispatcher.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\Variant.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\BinaryUtils.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\MathUtils.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\Point2.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\Rectangle.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\Vector2.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\Vector3.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\math\Vector4.cpp">
-      <Filter>math</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_reader.cpp">
+    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_batchallocator.h">
       <Filter>json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_value.cpp">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_tool.h">
       <Filter>json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_writer.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\adler32.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\crc32.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\compress.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\deflate.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\crc32.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\gzguts.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\deflate.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\inffast.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\gzclose.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\inffixed.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\gzlib.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\inflate.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\gzread.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\inftrees.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\gzwrite.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\trees.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\infback.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\zconf.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\inffast.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\zlib.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\inflate.c">
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\zlib\zutil.h">
       <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\inftrees.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\trees.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\uncompr.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\zlib\zutil.c">
-      <Filter>zlib</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\SocketListener.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
-  </ItemGroup>
-  <ItemGroup>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector3.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\Vector4.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\BinaryUtils.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\MathUtils.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\Point2.h">
+      <Filter>math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\math\Rectangle.h">
+      <Filter>math</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\Astar.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -273,6 +130,9 @@
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\EventRegister.h">
+      <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h">
       <Filter>core</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\List.h">
@@ -347,6 +207,9 @@
     <ClInclude Include="..\..\src\Shared\core\core\SocketEvent.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\SocketListener.h">
+      <Filter>core</Filter>
+    </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\Status.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -362,93 +225,219 @@
     <ClInclude Include="..\..\src\Shared\core\core\Variant.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\BinaryUtils.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\MathUtils.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\Point2.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\Rectangle.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\Vector2.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\Vector3.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\math\Vector4.h">
-      <Filter>math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_batchallocator.h">
-      <Filter>json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_tool.h">
-      <Filter>json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\crc32.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\deflate.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\gzguts.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\inffast.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\inffixed.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\inflate.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\inftrees.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\trees.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\zconf.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\zlib.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\zlib\zutil.h">
-      <Filter>zlib</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\SocketListener.h">
-      <Filter>core</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
   </ItemGroup>
   <ItemGroup>
+    <None Include="..\..\src\Shared\core\json\src\lib_json\json_valueiterator.inl">
+      <Filter>json</Filter>
+    </None>
     <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalarray.inl">
       <Filter>json</Filter>
     </None>
     <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalmap.inl">
       <Filter>json</Filter>
     </None>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\json_valueiterator.inl">
-      <Filter>json</Filter>
-    </None>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\sconscript">
-      <Filter>json</Filter>
-    </None>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\version.h.in">
-      <Filter>json</Filter>
-    </None>
   </ItemGroup>
   <ItemGroup>
-    <Text Include="..\..\src\Shared\core\json\src\lib_json\CMakeLists.txt">
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_reader.cpp">
       <Filter>json</Filter>
-    </Text>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_value.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_writer.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\adler32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\compress.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\crc32.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\deflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzclose.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzlib.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzread.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\gzwrite.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\infback.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\inffast.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\inflate.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\inftrees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\trees.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\uncompr.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\zlib\zutil.c">
+      <Filter>zlib</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector2.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector3.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\Vector4.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\BinaryUtils.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\MathUtils.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\Point2.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\math\Rectangle.cpp">
+      <Filter>math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Astar.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\BinaryStream.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Bit.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\BlockStream.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\CircularBuffer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\CmdDispatcher.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Compression.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\conio.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\DateTime.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Dictionary.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\dump.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Event.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\EventDispatcher.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\EventListener.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\List.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log_console_outpter.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log_file_outputer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log_outputer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log_system.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\log_win_outputer.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Mutex.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Network.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Object.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Packet.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\PacketManager.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\RedisProxy.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Reference.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\RTTI.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Shared.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Socket.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\SocketAngent.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\SocketClient.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\SocketEvent.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\SocketListener.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Status.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Threader.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\ThreaderPool.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\TimerDispatcher.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\Variant.cpp">
+      <Filter>core</Filter>
+    </ClCompile>
   </ItemGroup>
 </Project>
