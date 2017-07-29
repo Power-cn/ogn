@@ -109,7 +109,7 @@
 #define sApp INSTANCE(Application)
 #define sPacketMgr INSTANCE(PacketManager)
 #define sCfgMgr INSTANCE(ConfigManager)
-#define sSessionMgr INSTANCE(SessionManager)
+#define sSsnMgr INSTANCE(SessionManager)
 #define sRedisProxy INSTANCE(RedisProxy)
 
 #define sWorld (*GetModule(WorldModule))

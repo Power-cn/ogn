@@ -71,12 +71,12 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
 	if (res->result == 0)
 	{
-		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accountId:%d instanceId:%d", res->accountInfo.user.c_str(), res->accountInfo.id, res->instanceId);
+		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accountId:%d guid:%llu", res->accountInfo.user.c_str(), res->accountInfo.id, res->guid);
 		NetPingNotify nfy;
 		nfy.time = GetTickCount();
 		robot->sendPacket(nfy);
 
-		robot->mInstanceId = res->instanceId;
+		robot->mGuid = res->guid;
 		robot->mAccountId = res->accountInfo.id;
 		robot->mIsLogin = true;
 
@@ -117,7 +117,7 @@ int RobotManager::onNetEntityLeaveMapNotify(Robot* robot, NetEntityLeaveMapNotif
 
 int RobotManager::onNetPlayerEnterViewNotify(Robot* robot, NetPlayerEnterViewNotify* nfy)
 {
-	if (nfy->guid == robot->mInstanceId)
+	if (nfy->guid == robot->mGuid)
 	{
 		LOG_INFO("entity %s instanceId:%d enter %s view", nfy->name.c_str(), nfy->guid, robot->user.c_str());
 

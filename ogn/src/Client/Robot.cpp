@@ -44,7 +44,7 @@ int32 Robot::onTimerSyncPos(TimerEvent& e)
 	if (mSendPos.x != mPosX || mSendPos.y - mPosY)
 	{
 		NetEntityMoveNotify nfy;
-		nfy.guid = mInstanceId;
+		nfy.guid = mGuid;
 		nfy.x = mPosX;
 		nfy.y = mPosY;
 		nfy.startDir = mDirPosition;
@@ -97,7 +97,7 @@ void Robot::update(float32 time, float32 delay)
 				if (mPoints.size() > 0)
 				{
 					NetEntityMoveToNotify nfy;
-					nfy.guid = mInstanceId;
+					nfy.guid = mGuid;
 					nfy.x = pt.x;
 					nfy.y = pt.y;
 					sendPacket(nfy);

@@ -11,6 +11,7 @@ public:
 	SessionManager();
 	~SessionManager();
 	Session* createSession(Socket* s, uint64 sessionId = 0);
+	Session* newSession(Socket* s, uint64 ssnId = 0);
 	Session* getSession(uint64 sessionId);
 	Session* addSession(Session* session);
 	void removeSession(uint64 sessionId);

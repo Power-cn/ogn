@@ -112,10 +112,7 @@ int32 Application::onDBRecv(SocketEvent& e)
 	{
 		if (session == NULL && msgId == ID_NetSessionEnterNotify)
 		{
-			session = INSTANCE(SessionManager).createSession(e.socket, sessionId);
-			if (session == NULL)
-				return 0;
-
+			session = INSTANCE(SessionManager).newSession(e.socket, sessionId);
 			INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), session);
 		}
 
@@ -142,10 +139,9 @@ int32 Application::onDBRecv(SocketEvent& e)
 		return 0;
 	NetSessionLeaveNotify nfy;
 	session->sendPacketToWorld(nfy);
-	LOG_DEBUG(LogSystem::csl_color_red, "sessionId %0.16llx packet error leave world", session->getSessionId());
+	LOG_DEBUG(LogSystem::csl_color_red, "ssnId %0.16llx packet error leave world", session->getSessionId());
 
 	INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), session);
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
 	return 0;
 }
 
@@ -160,9 +156,7 @@ int32 Application::onDBExit(SocketEvent& e)
 		for (auto session : copySetSession)
 		{
 			INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), session);
-			INSTANCE(SessionManager).removeSession(session->getSessionId());
 		}
 	}
-
 	return 0;
 }

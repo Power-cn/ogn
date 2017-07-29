@@ -17,17 +17,16 @@ SessionHandler::~SessionHandler()
 
 int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("sessionId %0.16llx enter world", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx enter world", session->getSessionId());
 
 	return 0;
 }
 
-int SessionHandler::onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy)
+int SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy)
 {
-	LOG_INFO("sessionId %0.16llx leave world", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave world", ssn->getSessionId());
 
-	INSTANCE(SessionManager).removeSessionsBySocket(session->getSocketId(), session);
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
+	INSTANCE(SessionManager).removeSessionsBySocket(ssn->getSocketId(), ssn);
 	return 0;
 }
 

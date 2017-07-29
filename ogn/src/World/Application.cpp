@@ -238,7 +238,7 @@ void Application::sendPacketToDB(Packet& packet, Session* session)
 
 void Application::doSessionLeaveWorld(Session* session)
 {
-	LOG_INFO("sessionId %0.16llx leave world", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave world", session->getSessionId());
 	Player* plr = session->getPlayer();
 	if (plr)
 	{

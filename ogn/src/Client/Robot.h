@@ -17,7 +17,7 @@ protected:
 	void getPoint();
 public:
 	Socket* mSocket;
-	int32	mInstanceId;
+	Guid	mGuid;
 	int32   mAccountId;
 	bool	mIsLogin;
 	bool	mInMap;

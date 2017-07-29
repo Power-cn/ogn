@@ -21,7 +21,7 @@ SessionHandler::~SessionHandler()
 
 int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("sessionId %0.16llx [%s] enter world", session->getSessionId(), nfy->host.c_str());
+	LOG_INFO("ssnId %0.16llx [%s] enter world", session->getSessionId(), nfy->host.c_str());
 	session->setHost(nfy->host);
 	session->sendPacketToTarget(*nfy, INSTANCE(Application).getDBServer()->getSocket());
 	return 0;

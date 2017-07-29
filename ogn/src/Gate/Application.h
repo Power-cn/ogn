@@ -30,6 +30,8 @@ protected:
 	int onWorldExit(SocketEvent& e);
 	int onWorldException(SocketEvent& e);
 protected:
+	uint64 MakeSsnId();
+protected:
 	SocketListener* gateServer;
 	SocketClient* worldServer;
 	float64 mTime;

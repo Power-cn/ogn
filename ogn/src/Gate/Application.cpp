@@ -106,12 +106,8 @@ int Application::onGateAccept(SocketEvent& e)
 	if (worldServer == NULL) {
 		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
-	}
-
-	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("Gate");
-
-	uint64 sessionId = ((uint64)cf.Port << 32) | ++Session::sId;
-	Session* session = INSTANCE(SessionManager).createSession(e.socket, sessionId);
+	}	
+	Session* session = INSTANCE(SessionManager).createSession(e.socket, MakeSsnId());
 	if (!session)
 		return 0;
 	session = INSTANCE(SessionManager).addSessionBySocket(e.socket->getSocketId(), session);
@@ -120,7 +116,7 @@ int Application::onGateAccept(SocketEvent& e)
 
 	NetSessionEnterNotify nfy;
 	nfy.host = e.socket->getIP();
-	LOG_INFO("sessionId %0.16llx [%s] accept", session->getSessionId(), e.socket->getIP());
+	LOG_INFO("ssnId %0.16llx [%s] accept", session->getSessionId(), e.socket->getIP());
 	sendPacketToWorld(nfy, session);
 	return 0;
 }
@@ -145,7 +141,7 @@ int Application::onGateRecv(SocketEvent& e)
 	int32 rpos = out.getWPostion();
 	CHECK_RETURN(out >> msgId, 0);
 	out.setRPostion(rpos);
-	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "session:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
+	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
 
 	/*
@@ -164,7 +160,7 @@ int Application::onGateExit(SocketEvent& e)
 	if (!session)
 		return 0;
 
-	LOG_INFO("sessionId %0.16llx leave", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave", session->getSessionId());
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, session);
@@ -199,7 +195,7 @@ int Application::onWorldRecv(SocketEvent& e)
 			break;
 
 #ifdef _DEBUG
-		DEBUG_DEBUG(LogSystem::csl_color_yellow, "session:%0.16llx s to c %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
+		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
 #endif // DEBUG
 
 		if (msgId == ID_NetSessionLeaveNotify)
@@ -245,4 +241,11 @@ int Application::onWorldException(SocketEvent& e)
 	LOG_DEBUG(LogSystem::csl_color_red, "world not exist");
 	worldServer = NULL;
 	return 0;
+}
+
+uint64 Application::MakeSsnId()
+{
+	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("Gate");
+	uint64 ssnId = ((uint64)cf.Port << 32) | ++Session::sId;
+	return ssnId;
 }
