@@ -66,15 +66,17 @@ void Player::sendPacketToMap(Packet& packet)
 
 void Player::sendPacketToWorld(Packet& packet)
 {
-	if (GetModule(WorldModule) == NULL)
-		return;
-
-	GetModule(WorldModule)->sendPacketToAll(packet);
+	sWorld.sendPacketToAll(packet);
 }
 
 void Player::sendPacketToTeam(Packet& packet)
 {
-	GetModule(TeamModule)->sendPacketToTeam(packet, this);
+	sTeam.sendPacketToTeam(packet, this);
+}
+
+void Player::sendPacketToRoom(Packet& packet)
+{
+	sRoom.sendPacketToTeam(packet, this);
 }
 
 void Player::sendPacketToTarget(Packet& packet, Entity* tar)
@@ -92,6 +94,11 @@ void Player::sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams /*
 	LOG_INFO("%s: %s", getName().c_str(), INSTANCE(ConfigManager).getMsg(msgId).c_str());
 
 	sendPacket(nfy);
+}
+
+void Player::sendPacketToMsg(EnumChannel ec, const std::string& msg)
+{
+	sWorld.sendPacketToMsg(ec, msg, this);
 }
 
 void Player::bindSession(Session* session)

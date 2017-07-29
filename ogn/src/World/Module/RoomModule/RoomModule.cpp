@@ -11,6 +11,13 @@ RoomModule::~RoomModule()
 
 }
 
+void RoomModule::sendPacketToTeam(Packet& packet, Player* player)
+{
+	Room* aRoom = FindPlayerRoom(player->getUserId());
+	if (aRoom == NULL) return;
+	aRoom->sendPacketToAll(packet);
+}
+
 Room* RoomModule::Create(Player* aPlr)
 {
 	if (FindPlayerRoom(aPlr->getUserId())) return NULL;
@@ -81,6 +88,8 @@ bool RoomModule::EnterRoom(Room* aRoom, Player* aPlr)
 		if (aSndPlr == NULL) continue;
 		aSndPlr->sendPacket(nfy);
 	}
+
+	OnEnter(aRoom, aPlr->getUserId());
 	return true;
 }
 
@@ -110,6 +119,8 @@ bool RoomModule::LeaveRoom(Room* aRoom, uint32 userId)
 	aRoom->DoLeave(userId);
 	RemovePlayerRoom(userId);
 	
+	OnLeave(aRoom, userId);
+
 	if (aRoom->GetRoomPlayerCount() <= 0)
 		RemoveRoom(aRoom->GetInsId());
 	return true;
@@ -134,6 +145,7 @@ bool RoomModule::ChangeMaster(Room* aRoom, uint32 oldUserId, uint32 newUserId)
 	res.roomId = aRoom->GetInsId();
 	res.masterUserId = newRoomPlayer->mUserId;
 	aRoom->sendPacketToAll(res);
+	OnChangeMaster(aRoom, oldUserId, newUserId);
 	return true;
 }
 
@@ -181,6 +193,104 @@ void RoomModule::RemoveRoom(uint32 roomId)
 		delete itr->second;
 		mMapRoom.erase(itr);
 	}
+}
+
+void RoomModule::DoCreateRoom(Player* aPlr)
+{
+	Room* aRoom = sRoom.FindPlayerRoom(aPlr->getUserId());
+	if (aRoom)
+	{
+		//
+		return;
+	}
+
+	aRoom = sRoom.Create(aPlr);
+	sRoom.EnterRoom(aRoom, aPlr);
+}
+
+void RoomModule::DoEnterRoom(Player* aPlr, uint32 roomId)
+{
+	Room* aRoom = FindRoom(roomId);
+	if (aRoom == NULL)
+	{
+		// 房间不存在
+		return;
+	}
+
+	aRoom = sRoom.FindPlayerRoom(aPlr->getUserId());
+	if (aRoom)
+	{
+		// 已经有房间
+		return;
+	}
+
+	sRoom.EnterRoom(aRoom, aPlr);
+}
+
+void RoomModule::DoLeaveRoom(Player* aPlr, uint32 roomId)
+{
+	Room* aRoom = sRoom.FindRoom(roomId);
+	if (aRoom == NULL)
+	{
+		// 房间不存在
+		return;
+	}
+
+	sRoom.LeaveRoom(aRoom, aPlr->getUserId());
+}
+
+void RoomModule::DoChangeRoomMaster(Player* aPlr, uint32 roomId, uint32 newUserId)
+{
+	Room* aRoom = sRoom.FindRoom(roomId);
+	if (aRoom == NULL)
+	{
+		// 房间不存在
+		return ;
+	}
+	sRoom.ChangeMaster(aRoom, aPlr->getUserId(), newUserId);
+}
+
+void RoomModule::DoRoomList(Player* aPlr, uint32 start, uint32 count)
+{
+	NetRoomListRes res;
+
+	std::udmap<uint32, Room*>& mapRooms = sRoom.GetMapRoom();
+	uint32 idx = 0;
+	for (auto& itr : mapRooms)
+	{
+		if (idx >= start)
+		{
+			Room* aRoom = itr.second;
+			if (aRoom == NULL) {
+				idx++;
+				continue;
+			}
+
+			RoomInfo info;
+			*aRoom >> info;
+			res.roomInfoInfos.push_back(info);
+			if ((uint32)res.roomInfoInfos.size() >= count)
+				break;
+		}
+		idx++;
+	}
+
+	aPlr->sendPacket(res);
+}
+
+void RoomModule::OnEnter(Room* aRoom, uint32 userId)
+{
+	LuaEngine::executeScript("room", "OnEnter", aRoom->GetInsId(), userId);
+}
+
+void RoomModule::OnLeave(Room* aRoom, uint32 userId)
+{
+	LuaEngine::executeScript("room", "OnLeave", aRoom->GetInsId(), userId);
+}
+
+void RoomModule::OnChangeMaster(Room* aRoom, uint32 oldUserId, uint32 newUserId)
+{
+	LuaEngine::executeScript("room", "OnChangeMaster", aRoom->GetInsId(), oldUserId, newUserId);
 }
 
 bool RoomModule::Initialize()

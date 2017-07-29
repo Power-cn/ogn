@@ -2,9 +2,9 @@
 
 WarHandler::WarHandler()
 {
-	RegisterEventProcess(GetWorldServer(), ID_NetEntityAttackNotify, &WarHandler::onNetEntityAttackNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetEntityFollowNotify, &WarHandler::onNetEntityFollowNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetEntityCancelFollowNotify, &WarHandler::onNetEntityCancelFollowNotify, this);
+	RegWorldEvent(ID_NetEntityAttackNotify, &WarHandler::onNetEntityAttackNotify, this);
+	RegWorldEvent(ID_NetEntityFollowNotify, &WarHandler::onNetEntityFollowNotify, this);
+	RegWorldEvent(ID_NetEntityCancelFollowNotify, &WarHandler::onNetEntityCancelFollowNotify, this);
 }
 
 int32 WarHandler::onNetEntityAttackNotify(Player* player, NetEntityAttackNotify* nfy)

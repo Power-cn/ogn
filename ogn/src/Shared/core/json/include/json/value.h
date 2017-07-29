@@ -232,6 +232,7 @@ namespace Json {
       Int asInt() const;
       UInt asUInt() const;
       double asDouble() const;
+	  float asFloat() const;
       bool asBool() const;
 
       bool isNull() const;
@@ -444,7 +445,6 @@ namespace Json {
 # endif
       CommentInfo *comments_;
    };
-
 
    /** \brief Experimental and untested: represents an element of the "path" to access a node.
     */

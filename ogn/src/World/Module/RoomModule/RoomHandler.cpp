@@ -6,63 +6,36 @@ RoomHandler::RoomHandler()
 	RegWorldEvent(ID_NetEnterRoomReq, &RoomHandler::onNetEnterRoomReq, this);
 	RegWorldEvent(ID_NetLeaveRoomReq, &RoomHandler::onNetLeaveRoomReq, this);
 	RegWorldEvent(ID_NetChangeRoomMasterReq, &RoomHandler::onNetChangeRoomMasterReq, this);
+	RegWorldEvent(ID_NetRoomListReq, &RoomHandler::onNetRoomListReq, this);
 }
 
 int32 RoomHandler::onNetCreateRoomReq(Player* aPlr, NetCreateRoomReq* req)
 {
-	Room* aRoom = sRoom.FindPlayerRoom(aPlr->getUserId());
-	if (aRoom)
-	{
-		//
-		return 0;
-	}
-
-	aRoom = sRoom.Create(aPlr);
-	sRoom.EnterRoom(aRoom, aPlr);
+	sRoom.DoCreateRoom(aPlr);
 	return 0;
 }
 
 int32 RoomHandler::onNetEnterRoomReq(Player* aPlr, NetEnterRoomReq* req)
 {
-	Room* aRoom = sRoom.FindRoom(req->roomId);
-	if (aRoom == NULL)
-	{
-		 // 房间不存在
-		return 0;
-	}
-
-	aRoom = sRoom.FindPlayerRoom(aPlr->getUserId());
-	if (aRoom)
-	{
-		// 已经有房间
-		return 0;
-	}
-
-	sRoom.EnterRoom(aRoom, aPlr);
+	sRoom.DoEnterRoom(aPlr, req->roomId);
 	return 0;
 }
 
 int32 RoomHandler::onNetLeaveRoomReq(Player* aPlr, NetLeaveRoomReq* req)
 {
-	Room* aRoom = sRoom.FindRoom(req->roomId);
-	if (aRoom == NULL)
-	{
-		// 房间不存在
-		return 0;
-	}
-
-	sRoom.LeaveRoom(aRoom, aPlr->getUserId());
+	sRoom.DoLeaveRoom(aPlr, req->roomId);
+	
 	return 0;
 }
 
 int32 RoomHandler::onNetChangeRoomMasterReq(Player* aPlr, NetChangeRoomMasterReq* req)
 {
-	Room* aRoom = sRoom.FindRoom(req->roomId);
-	if (aRoom == NULL)
-	{
-		// 房间不存在
-		return 0;
-	}
-	sRoom.ChangeMaster(aRoom, aPlr->getUserId(), req->userId);
+	sRoom.DoChangeRoomMaster(aPlr, req->roomId, req->userId);
+	return 0;
+}
+
+int32 RoomHandler::onNetRoomListReq(Player* aPlr, NetRoomListReq* req)
+{
+	sRoom.DoRoomList(aPlr, req->start, req->count);
 	return 0;
 }

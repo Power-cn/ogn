@@ -24,19 +24,23 @@ public:
 	~Player();
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
+
 	void setSession(Session* s) { session = s; }
-	Session* getSession() { return session; }
 	void setAccountId(uint32 plrId) { accountId = plrId; }
-	uint32 getAccountId() { return accountId; }
-	uint32 getUserId() { return userId; }
 	void setUserId(uint32 rId) { userId = rId; }
 	void bindSession(Session* session);
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
-	const std::string& getUser() { return user; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
+
+	uint32 getAccountId() { return accountId; }
+	uint32 getUserId() { return userId; }
+
+	const std::string& getUser() { return user; }
+
 	UserStatus GetStatus() { return mUserStatus; }
 	Json::Value& GetJson();
+	Session* getSession() { return session; }
 public:
 	void onCreate();
 	void DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo);
@@ -47,8 +51,10 @@ public:
 	virtual void sendPacketToMap(Packet& packet);
 	virtual void sendPacketToWorld(Packet& packet);
 	virtual void sendPacketToTeam(Packet& packet);
+	virtual void sendPacketToRoom(Packet& packet);
 	virtual void sendPacketToTarget(Packet& packet, Entity* tar);
 	virtual void sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams = NULL);
+	virtual void sendPacketToMsg(EnumChannel ec, const std::string& msg);
 public:
 	bool onLoad(Dictionary& dict);
 	bool onSaveBegin(Dictionary& dict);
@@ -74,10 +80,11 @@ protected:
 protected:
 	int32 onTimerSaveDB(TimerEvent& e);
 public:
-	uint32 GetOnlineTimer() { return mOnlineTimer; }
 	void SetOnlineTimer(uint32 t) { mOnlineTimer = t; }
-	uint32 GetOfflineTimer() { return mOfflineTimer; }
 	void SetOfflineTimer(uint32 t) { mOfflineTimer = t; }
+
+	uint32 GetOnlineTimer() { return mOnlineTimer; }
+	uint32 GetOfflineTimer() { return mOfflineTimer; }
 protected:
 	uint32	mOnlineTimer;
 	uint32	mOfflineTimer;

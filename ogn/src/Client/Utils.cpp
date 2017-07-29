@@ -3,16 +3,16 @@
 Point2 Utils::Vector2ToPoint2(Vector2 pos, float32 w, float32 h)
 {
 	Point2 pt = { 0 };
-	pt.x = -pos.y / h;
-	pt.y = pos.x / w;
+	pt.x = (int32)(-pos.y / h);
+	pt.y = (int32)(pos.x / w);
 	return pt;
 }
 
 Point2 Utils::Vector2ToPoint2(float x, float y, float32 w, float32 h)
 {
 	Point2 pt = {0};
-	pt.x = -y / h;
-	pt.y = x / w;
+	pt.x = (int32)(-y / h);
+	pt.y = (int32)(x / w);
 	return pt;
 }
 

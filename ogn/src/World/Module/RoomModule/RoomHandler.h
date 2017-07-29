@@ -9,5 +9,6 @@ protected:
 	int32 onNetEnterRoomReq(Player* aPlr, NetEnterRoomReq* req);
 	int32 onNetLeaveRoomReq(Player* aPlr, NetLeaveRoomReq* req);
 	int32 onNetChangeRoomMasterReq(Player* aPlr, NetChangeRoomMasterReq* req);
+	int32 onNetRoomListReq(Player* aPlr, NetRoomListReq* req);
 private:
 };

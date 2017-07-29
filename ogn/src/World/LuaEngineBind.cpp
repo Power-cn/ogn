@@ -22,7 +22,8 @@ void LuaScript::bindScript()
 			luabind::def("luaPlayerToEntity", &luaPlayerToEntity),
 			luabind::def("luaNpcToEntity", &luaNpcToEntity),
 			luabind::def("luaPropertyHelper", &luaPropertyHelper),
-			luabind::def("luaWorld", &luaWorld)
+			luabind::def("luaWorld", &luaWorld),
+			luabind::def("luaRoom", &luaRoom)
 			//luabind::def("TestFunc", &TestFunc)
 		];
 
@@ -36,10 +37,16 @@ void LuaScript::bindScript()
 			.def("Serialize", &Object::operator<<)
 			.def("Deserialize", &Object::operator>>)
 			,
-			luabind::class_<Entity>("Entity"),
+			luabind::class_<Entity>("Entity")
+			.def("getGuid", &Player::getGuid)
+			,
 			luabind::class_<Player>("Player")
+			.def("getGuid", &Player::getGuid)
+			.def("getUserId", &Player::getUserId)
+			.def("getName", &Player::getName)
 			.def("onCreate", &Player::onCreate)
 			,
+
 			luabind::class_<Npc>("Npc"),
 			luabind::class_<PropertyHelper>("PropertyHelper")
 			.def("setMaxHp", &PropertyHelper::setMaxHp)
@@ -52,6 +59,46 @@ void LuaScript::bindScript()
 			.def("getPlayerByName", &WorldModule::getPlayerByName)
 			.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
 			,
+
+			luabind::class_<RoomPlayer>("RoomPlayer")
+			.def_readonly("mPlayer", &RoomPlayer::mPlayer)
+			.def_readonly("mUserId", &RoomPlayer::mUserId)
+			.def_readonly("mInsId", &RoomPlayer::mInsId)
+			.def_readonly("mName", &RoomPlayer::mName)
+			.def_readonly("mState", &RoomPlayer::mState)
+			,
+
+			luabind::class_<Room>("Room")
+			.def("sendPacketToAll", &Room::sendPacketToAll)
+			.def("RemovePlayer", &Room::RemovePlayer)
+			.def("SetMaster", &Room::SetMaster)
+			.def("SetPassword", &Room::SetPassword)
+			.def("SetName", &Room::SetName)
+
+			.def("Serialize", &Room::operator >>)
+			.def("DoLeave",(bool(Player::*)(Player*)) &Room::DoLeave)
+			.def("DoLeave", (bool(Player::*)(uint32)) &Room::DoLeave)
+			.def("IsFull", &Room::IsFull)
+
+			.def("GetInsId", &Room::GetInsId)
+			.def("GetMaxCount", &Room::GetMaxCount)
+			.def("GetRoomPlayerCount", &Room::GetRoomPlayerCount)
+
+			.def("DoEnter", &Room::DoEnter)
+			.def("FindPlayer", &Room::FindPlayer)
+			.def("AddPlayer", &Room::AddPlayer)
+			.def("GetRoomPlayer", &Room::GetRoomPlayer)
+			.def("GetMaster", &Room::GetMaster)
+			,
+
+			luabind::class_<RoomModule>("RoomModule")
+			.def("DoCreateRoom", &RoomModule::DoCreateRoom)
+			.def("DoEnterRoom", &RoomModule::DoEnterRoom)
+			.def("DoLeaveRoom", &RoomModule::DoLeaveRoom)
+			.def("DoChangeRoomMaster", &RoomModule::DoChangeRoomMaster)
+			.def("DoRoomList", &RoomModule::DoRoomList)
+			,
+
 			luabind::class_<LUATest>("LUATest")
 			.def_readonly("a", &LUATest::a)
 			.def("TestFunc", &LUATest::TestFunc)

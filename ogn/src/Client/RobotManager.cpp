@@ -2,6 +2,7 @@
 
 RobotManager::RobotManager()
 {
+	mCurRobot = NULL;
 	mCell = 0.5f;
 	mMapData = new char[100 * 100];
 	memset(mMapData, 0, 100 * 100);
@@ -18,6 +19,10 @@ RobotManager::RobotManager()
 	addEventListener(ID_NetEntityPropertyNotify, (EventCallbackProcess)&RobotManager::onNetEntityPropertyNotify, this);
 
 	addEventListener(ID_NetChatMsgNotify, (EventCallbackProcess)&RobotManager::onNetChatMsgNotify, this);
+
+
+	INSTANCE(CmdDispatcher);
+	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
 }
 
 RobotManager::~RobotManager()
@@ -52,6 +57,7 @@ Robot* RobotManager::getRobat(Socket* socket)
 
 void RobotManager::update(float32 time, float32 delay)
 {
+	INSTANCE(CmdDispatcher).update(time, delay);
 	for (auto itr : mMapSocketRobat)
 	{
 		itr.second->update(time, delay);
@@ -71,6 +77,13 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
 	if (res->result == 0)
 	{
+		NetFirst nFirst;
+
+		uint32 length = 1024 * 7;
+		char* datas = new char[length];
+		nFirst.sbytes.WriteBytes(datas, length);
+		robot->sendPacket(nFirst);
+
 		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accountId:%d guid:%llu", res->accountInfo.user.c_str(), res->accountInfo.id, res->guid);
 		NetPingNotify nfy;
 		nfy.time = GetTickCount();
@@ -94,7 +107,7 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		//msgNfy.channelType = 1;
 		//robot->sendPacket(msgNfy);
 
-		INSTANCE(SocketHandler).createRobot();
+		//INSTANCE(SocketHandler).createRobot();
 	}
 	else
 	{
@@ -166,5 +179,19 @@ int RobotManager::onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotif
 int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 {
 	LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(),nfy->from.c_str(), nfy->chatMsg.c_str());
+	return 0;
+}
+
+int32 RobotManager::onGmCmd(CmdEvent& e)
+{
+	std::vector<std::string>& params = e.cmdExecute->params;
+	NetGmMsg msg;
+	msg.name = params.size() >= 1 ? params[0] : "";
+	for (uint32 i = 1; i < e.cmdExecute->params.size(); ++i)
+	{
+		msg.gmParams.push_back(e.cmdExecute->params[i]);
+	}
+	if (mCurRobot == NULL) return 0;
+	mCurRobot->sendPacket(msg);
 	return 0;
 }

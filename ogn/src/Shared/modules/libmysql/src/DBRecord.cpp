@@ -32,48 +32,48 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 
 	case Variant::TypeBoolean:
 		sprintf_s(valuestr, valuestrlength, "%s", (dataptr[0] != 0) ? "TRUE" : "FALSE");
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 
 	case Variant::TypeInt8:
 		sprintf_s(valuestr, valuestrlength, "%ld", cast_value(dataptr, int8));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeUint8:
 		sprintf_s(valuestr, valuestrlength, "%lu", cast_value(dataptr, uint8));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeInt16:
 		sprintf_s(valuestr, valuestrlength, "%ld", cast_value(dataptr, int16));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeUint16:
 		sprintf_s(valuestr, valuestrlength, "%lu", cast_value(dataptr, uint16));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeInt32:
 		sprintf_s(valuestr, valuestrlength, "%ld", cast_value(dataptr, int32));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeUint32:
 		sprintf_s(valuestr, valuestrlength, "%lu", cast_value(dataptr, uint32));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeInt64:
 		sprintf_s(valuestr, valuestrlength, "%lld", cast_value(dataptr, int64));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeUint64:
 		sprintf_s(valuestr, valuestrlength, "%llu", cast_value(dataptr, uint64));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeFloat32:
 		sprintf_s(valuestr, valuestrlength, "%f", cast_value(dataptr, float));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeFloat64:
 		sprintf_s(valuestr, valuestrlength, "%f", cast_value(dataptr, double));
-		valuesize = strlen(valuestr);
+		valuesize = (uint32)strlen(valuestr);
 		break;
 	case Variant::TypeString: {
 			std::string* str = (std::string*)dataptr;
@@ -82,7 +82,7 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 			valuesize++;
 
 			strcpy_s(valuestr + valuesize, valuestrlength - valuesize, str->c_str());
-			valuesize += str->length();
+			valuesize += (uint32)str->length();
 
 			strcpy_s(valuestr + valuesize, valuestrlength - valuesize, "\'");
 			valuesize++;
@@ -113,7 +113,7 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 				tm plt;
 				localtime_s(&plt, &t);
 				strftime(valuestr, valuestrlength, "'%Y-%m-%d %H:%M:%S'", &plt);
-				valuesize = strlen(valuestr);
+				valuesize = (uint32)strlen(valuestr);
 			}
 		}
 		break;
@@ -249,12 +249,12 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 			if (!cmd_where_[0])
 			{
 				sprintf_s(cmd_where_, SQL_CMD_COUNT, "where %s=", record.field);
-				where_length_ = strlen(cmd_where_);
+				where_length_ = (uint32)strlen(cmd_where_);
 			}
 			else
 			{
 				sprintf_s(cmd_where_ + where_length_, SQL_CMD_COUNT - where_length_, " and %s=", record.field);
-				where_length_ += (strlen(" and ") + strlen(record.field) + strlen("="));
+				where_length_ += ((uint32)strlen(" and ") + (uint32)strlen(record.field) + (uint32)strlen("="));
 			}
 
 			memcpy(cmd_where_ + where_length_, value_, value_size_);
@@ -268,16 +268,16 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 
 	sprintf_s(sql_cmd, SQL_CMD_COUNT, "%s from %s ", cmd_select_, descriptor.tableName);
 
-	size_ = strlen(sql_cmd) + where_length_;
+	size_ = (uint32)strlen(sql_cmd) + where_length_;
 
-	memcpy(sql_cmd + strlen(sql_cmd), cmd_where_, where_length_);
+	memcpy(sql_cmd + (uint32)strlen(sql_cmd), cmd_where_, where_length_);
 
 	if (result_max_count > 0)
 	{
 		char limit_[64] = { 0 };
 		sprintf_s(limit_, 64, " limit %d", result_max_count);
-		memcpy(sql_cmd + size_, limit_, strlen(limit_));
-		size_ += strlen(limit_);
+		memcpy(sql_cmd + size_, limit_, (uint32)strlen(limit_));
+		size_ += (uint32)strlen(limit_);
 	}
 	sql_cmd[size_] = 0;
 	return true;
@@ -313,17 +313,17 @@ bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_
 		if (!insert_coumns_[0])
 			sprintf_s(insert_coumns_, SQL_CMD_COUNT, " (%s", record.field);
 		else
-			sprintf_s(insert_coumns_ + strlen(insert_coumns_), SQL_CMD_COUNT - strlen(insert_coumns_), " ,%s", record.field);
+			sprintf_s(insert_coumns_ + (uint32)strlen(insert_coumns_), SQL_CMD_COUNT - strlen(insert_coumns_), " ,%s", record.field);
 
 		if (!insert_value_[0])
 		{
 			sprintf_s(insert_value_, SQL_CMD_COUNT, " value (");
-			insert_value_size_ = strlen(insert_value_);
+			insert_value_size_ = (uint32)strlen(insert_value_);
 		}
 		else
 		{
 			sprintf_s(insert_value_ + insert_value_size_, SQL_CMD_COUNT - insert_value_size_, ", ");
-			insert_value_size_ += strlen(", ");
+			insert_value_size_ += (uint32)strlen(", ");
 		}
 
 		GetRecordValue(mysql, insert_record, record, SQL_CMD_COUNT, value_str, value_str_size_);
@@ -331,13 +331,13 @@ bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_
 		memcpy_s(insert_value_ + insert_value_size_, SQL_CMD_COUNT, value_str, value_str_size_);
 		insert_value_size_ += value_str_size_;
 	}
-	memcpy(insert_coumns_ + strlen(insert_coumns_), ")\0", 2);
+	memcpy(insert_coumns_ + (uint32)strlen(insert_coumns_), ")\0", 2);
 
 	memcpy(insert_value_ + insert_value_size_, ")", 1);
 	insert_value_size_ += 1;
 
 	sprintf_s(sql_cmd, SQL_CMD_COUNT, "insert %s %s", descriptor.tableName, insert_coumns_);
-	size = strlen(sql_cmd);
+	size = (uint32)strlen(sql_cmd);
 
 	memcpy(sql_cmd + size, insert_value_, insert_value_size_);
 	size += insert_value_size_;
@@ -370,12 +370,12 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 			if (!set_value_[0])
 			{
 				sprintf_s(set_value_, SQL_CMD_COUNT, " set %s=", record.field);
-				set_size_ = strlen(set_value_);
+				set_size_ = (uint32)strlen(set_value_);
 			}
 			else
 			{
 				sprintf_s(set_value_ + set_size_, SQL_CMD_COUNT - set_size_, ", %s=", record.field);
-				set_size_ += (strlen(", =") + strlen(record.field));
+				set_size_ += ((uint32)strlen(", =") + (uint32)strlen(record.field));
 			}
 
 			memcpy(set_value_ + set_size_, value_, value_size_);
@@ -389,12 +389,12 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 			if (!cmd_where_[0])
 			{
 				sprintf_s(cmd_where_, SQL_CMD_COUNT, " where %s=", record.field);
-				where_size_ = strlen(cmd_where_);
+				where_size_ = (uint32)strlen(cmd_where_);
 			}
 			else
 			{
 				sprintf_s(cmd_where_ + where_size_, SQL_CMD_COUNT - where_size_, " and %s=", record.field);
-				where_size_ += (strlen(" and ") + strlen(record.field) + strlen("="));
+				where_size_ += ((uint32)strlen(" and ") + (uint32)strlen(record.field) + (uint32)strlen("="));
 			}
 
 			memcpy(cmd_where_ + where_size_, value_, value_size_);
@@ -407,7 +407,7 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 		return false;
 
 	sprintf_s(sql_cmd, SQL_CMD_COUNT, "update %s", descriptor.tableName);
-	size = strlen(sql_cmd);
+	size = (uint32)strlen(sql_cmd);
 
 	memcpy(sql_cmd + size, set_value_, set_size_);
 	size += set_size_;
@@ -440,12 +440,12 @@ bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_
 			if (!cmd_where_[0])
 			{
 				sprintf_s(cmd_where_, SQL_CMD_COUNT, " where %s=", record.field);
-				where_size_ = strlen(cmd_where_);
+				where_size_ = (uint32)strlen(cmd_where_);
 			}
 			else
 			{
 				sprintf_s(cmd_where_ + where_size_, SQL_CMD_COUNT - where_size_, " and %s=", record.field);
-				where_size_ += (strlen(" and ") + strlen(record.field) + strlen("="));
+				where_size_ += ((uint32)strlen(" and ") + (uint32)strlen(record.field) + (uint32)strlen("="));
 			}
 
 			memcpy(cmd_where_ + where_size_, value_, value_size_);
@@ -458,7 +458,7 @@ bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_
 		return false;
 
 	sprintf_s(sql_cmd, SQL_CMD_COUNT, "delete from %s", descriptor.tableName);
-	size = strlen(sql_cmd);
+	size = (uint32)strlen(sql_cmd);
 
 	memcpy(sql_cmd + size, cmd_where_, where_size_);
 	size += where_size_;

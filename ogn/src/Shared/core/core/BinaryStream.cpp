@@ -125,7 +125,6 @@ void BinaryStream::resize(int32 size)
 	memcpy(data, mBytes, getWPostion());
 	if (mIsDel)
 		SAFE_DELETE_ARRAY(mBytes);
-
 	mIsDel = true;
 	mBytes = data;
 }

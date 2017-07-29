@@ -387,21 +387,25 @@ public class NetFirst : Packet
 {
 	public NetFirst():base((int)PACKET_ID_ENUM.ID_NetFirst)
 	{
+sbytes = new BinaryStream();
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
+bytes.Write(sbytes);
 
 		return true;
 	}
 
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
+bytes.Read(sbytes);
 
 		return true;
 	}
 
+public BinaryStream sbytes;
 
 }
 public class NetSessionEnterNotify : Packet

@@ -51,8 +51,8 @@
 #define _CRT_SECURE_NO_DEPRECATE 1
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
 #pragma warning(disable:4251)
-#define hash_stdext std
-#define umap unordered_map
+#define stdext std
+#define udmap unordered_map
 // include
 
 #include <winsock2.h>
@@ -90,7 +90,7 @@ typedef double							float64;
 #include<netdb.h>
 #include <pthread.h>
 
-#define hash_stdext __gnu_cxx
+#define stdext __gnu_cxx
 
 typedef int8_t							int8;
 typedef int16_t							int16;
@@ -224,6 +224,8 @@ namespace Shared
 
 	void srand(uint32 seed);
 	void Sleep(uint32 milliseconds);
+	// BKDR Hash Function
+	uint32 BKDRHash(const char* str);
 };
 
 //

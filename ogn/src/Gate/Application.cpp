@@ -8,6 +8,7 @@ worldServer(NULL)
 	mDelay = 0.0;
 	mFPSTimer = 0.0;
 	mFPS = 0;
+	mGateIdx = 0;
 }
 Application::~Application()
 {
@@ -27,7 +28,11 @@ bool Application::Initialize()
 		return false;
 	}
 
-	LOG_DEBUG(LogSystem::csl_color_green, "Gate listen Port:%d success", cf.Port);
+	char szBuffer[128];
+	sprintf_s(szBuffer, 128, "%s%d", cf.Host.c_str(), cf.Port);
+	mGateIdx = Shared::BKDRHash(szBuffer);
+
+	LOG_DEBUG(LogSystem::csl_color_green, "Gate listen Port:%d Idx:%d success", cf.Port, mGateIdx);
 
 	gateServer->addEventListener(SocketEvent::ACCEPT, (EventCallback)&Application::onGateAccept, this);
 	gateServer->addEventListener(SocketEvent::RECV, (EventCallback)&Application::onGateRecv, this);
@@ -245,7 +250,6 @@ int Application::onWorldException(SocketEvent& e)
 
 uint64 Application::MakeSsnId()
 {
-	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("Gate");
-	uint64 ssnId = ((uint64)cf.Port << 32) | ++Session::sId;
+	uint64 ssnId = ((uint64)mGateIdx << 32) | ++Session::sId;
 	return ssnId;
 }

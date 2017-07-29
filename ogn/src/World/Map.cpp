@@ -184,11 +184,11 @@ void Map::removeEntity(Guid guid)
 bool Map::checkUnitView(Entity* entity, Entity* target)
 {
 	Vector2 v0;
-	v0.x = entity->getCellX();
-	v0.y = entity->getCellY();
+	v0.x = (float32)entity->getCellX();
+	v0.y = (float32)entity->getCellY();
 	Vector2 v1;
-	v1.x = target->getCellX();
-	v1.y = target->getCellY();
+	v1.x = (float32)target->getCellX();
+	v1.y = (float32)target->getCellY();
 	if (Vector2::Distance(v0, v1) <= 28.f)
 		return true;
 	return false;

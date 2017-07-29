@@ -35,3 +35,8 @@ WorldModule* luaWorld()
 {
 	return &sWorld;
 }
+
+RoomModule* luaRoom()
+{
+	return &sRoom;
+}

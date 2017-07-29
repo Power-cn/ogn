@@ -256,6 +256,9 @@ void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* sel
 	case EC_TEAM:
 		self->sendPacketToTeam(packet);
 		break;
+	case EC_ROOM:
+		self->sendPacketToRoom(packet);
+		break;
 	case EC_TARGET:
 		Player* tarPlr = GetModule(WorldModule)->getPlayerByName(tar.c_str());
 		if (tarPlr == NULL)

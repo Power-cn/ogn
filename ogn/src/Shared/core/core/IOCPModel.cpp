@@ -26,7 +26,7 @@ IOCPModel::~IOCPModel()
 
 SocketListener* IOCPModel::listen(const std::string& host, short port)
 {
-	uint32 socketId = WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
+	uint32 socketId = (uint32)WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
 	SocketListener* listener = mNetwork->newSocketListener();
 	
 	Socket* socket = mNetwork->newSocket();
@@ -82,7 +82,7 @@ SocketListener* IOCPModel::listen(const std::string& host, short port)
 
 SocketClient* IOCPModel::connect(const std::string& host, short port)
 {
-	uint32 socketId = WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
+	uint32 socketId = (uint32)WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
 
 	SocketClient* client = mNetwork->newSocketClient();
 	client->setSocketId(socketId);
@@ -125,7 +125,7 @@ bool IOCPModel::loop()
 	while (true)
 	{
 		mMutex.lock();
-		int queueSize = mQueueEvent.size();
+		uint32 queueSize = (uint32)mQueueEvent.size();
 		mMutex.unlock();
 		if (queueSize <= 0)
 			break;
@@ -184,6 +184,13 @@ void IOCPModel::postSend(Socket* socket, void* dataBuffer, int dataCount)
 
 	StreamBuffer packet;
 	packet.length = dataCount + sizeof(int);
+	if (packet.length > PACKET_MAX_LENGTH)
+	{
+		LOG_ERROR("send max length:%d", PACKET_MAX_LENGTH);
+		PushQueueClose(socket->getSocketId());
+		return;
+	}
+
 	packet.buffer = new int8[packet.length];
 
 	BinaryStream in(packet.buffer, packet.length);
@@ -205,7 +212,7 @@ bool IOCPModel::PostAccept(SocketListener* listener)
 	Socket* socket = mNetwork->newSocket();
 	socket->angent = listener;
 	socket->network = mNetwork;
-	uint32 socketId = WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
+	uint32 socketId = (uint32)WSASocket(AF_INET, SOCK_STREAM, IPPROTO_TCP, 0, 0, WSA_FLAG_OVERLAPPED);
 	socket->setSocketId(socketId);
 	socket->postCount++;
 
@@ -320,13 +327,20 @@ bool IOCPModel::PostWrite(Socket* socket)
 	while (sendQueue.size() > 0)
 	{
 		StreamBuffer& packet = sendQueue.front();
-		if (sendSize + packet.length > ioOverlapped.dataBufferCount)
+		if (sendSize + packet.length > ioOverlapped.dataBufferCount) {
+			LOG_ERROR("send buffer  is not enough!");
 			break;
+		}
 
 		memcpy(wBuffer + sendSize, packet.buffer, packet.length);
 		sendSize += packet.length;
 		sendQueue.pop();
 		delete[] packet.buffer;
+	}
+	if (sendSize == 0)
+	{
+		PushQueueClose(socket->getSocketId());
+		return false;
 	}
 	socket->startSend = true;
 

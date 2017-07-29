@@ -27,25 +27,28 @@ public:
 	Room();
 	~Room();
 	void sendPacketToAll(Packet& packet);
-	bool operator >> (RoomInfo& info);
-
-	uint32 GetInsId() { return mId; }
-	const std::string& GetName() { return mName; }
-	uint32 GetMaxCount() { return mMaxCount; }
-
-	RoomPlayer* DoEnter(Player* aPlr, bool isMaster = false);
-	bool DoLeave(Player* aPlr);
-	bool DoLeave(uint32 userId);
-	RoomPlayer* FindPlayer(uint32 userId);
 	void RemovePlayer(uint32 userId);
-	RoomPlayer* AddPlayer(RoomPlayer* roomPlr);
-	uint32 GetRoomPlayerCount() { return (uint32)mRoomPlayers.size(); }
-	RoomPlayer* GetRoomPlayer(uint32 idx);
-	bool IsFull();
-	RoomPlayer* GetMaster() { return mMaster; }
 	void SetMaster(RoomPlayer* master) { mMaster = master; }
 	void SetPassword(const std::string& password) { mPassword = password; }
+	void SetName(const std::string& name) { mName = name; }
+
+	bool operator >> (RoomInfo& info);
+	bool DoLeave(Player* aPlr);
+	bool DoLeave(uint32 userId);
+	bool IsFull();
+
+	uint32 GetInsId() { return mId; }
+	uint32 GetMaxCount() { return mMaxCount; }
+	uint32 GetRoomPlayerCount() { return (uint32)mRoomPlayers.size(); }
+
+	RoomPlayer* DoEnter(Player* aPlr, bool isMaster = false);
+	RoomPlayer* FindPlayer(uint32 userId);
+	RoomPlayer* AddPlayer(RoomPlayer* roomPlr);
+	RoomPlayer* GetRoomPlayer(uint32 idx);
+	RoomPlayer* GetMaster() { return mMaster; }
+	
 	const std::string& GetPassword() { return mPassword; }
+	const std::string& GetName() { return mName; }
 protected:
 	uint32									mId;
 	RoomPlayer*								mMaster;

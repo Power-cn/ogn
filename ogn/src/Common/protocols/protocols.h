@@ -313,18 +313,22 @@ public:
 	NetFirst():
 	Packet(ID_NetFirst) {
 
+
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << sbytes);
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> sbytes);
 
 		return true;
 	}
 public:
+BinaryStream sbytes;
 
 };
 

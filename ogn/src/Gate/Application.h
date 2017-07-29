@@ -39,5 +39,6 @@ protected:
 	float64 mTotalTime;
 	int32 mFPS;
 	float64 mFPSTimer;
+	uint32 mGateIdx;
 private:
 };

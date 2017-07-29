@@ -7,6 +7,7 @@ class Player;
 class Npc;
 class PropertyHelper;
 class WorldModule;
+class RoomModule;
 
 Object* luaObject();
 Entity* luaEntity();
@@ -16,3 +17,4 @@ Entity* luaPlayerToEntity(Player* player);
 Entity* luaNpcToEntity(Npc* npc);
 PropertyHelper* luaPropertyHelper();
 WorldModule* luaWorld();
+RoomModule* luaRoom();

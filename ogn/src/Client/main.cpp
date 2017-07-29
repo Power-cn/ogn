@@ -12,6 +12,10 @@ void main()
 	double time = DateTime::GetNowAppUS();
 	double delay = 0.0;
 	double pingTime = 0.0;
+
+
+
+
 	while (1)
 	{
 		delay = DateTime::GetNowAppUS() - time;

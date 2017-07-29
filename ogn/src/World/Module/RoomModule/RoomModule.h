@@ -8,6 +8,8 @@ public:
 	virtual ~RoomModule();
 
 public:
+	void sendPacketToTeam(Packet& packet, Player* player);
+
 	Room* Create(Player* aPlr);
 	void Remove(uint32 roomId);
 	void Remove(Room* aRoom);
@@ -24,6 +26,18 @@ public:
 	Room* FindRoom(uint32 roomId);
 	Room* AddRoom(Room* aRoom);
 	void RemoveRoom(uint32 roomId);
+
+	std::udmap<uint32, Room*>& GetMapRoom() { return mMapRoom; }
+public:
+	void DoCreateRoom(Player* aPlr);
+	void DoEnterRoom(Player* aPlr, uint32 roomId);
+	void DoLeaveRoom(Player* aPlr, uint32 roomId);
+	void DoChangeRoomMaster(Player* aPlr, uint32 roomId, uint32 newUserId);
+	void DoRoomList(Player* aPlr, uint32 start, uint32 count);
+protected:
+	void OnEnter(Room* aRoom, uint32 userId);
+	void OnLeave(Room* aRoom, uint32 userId);
+	void OnChangeMaster(Room* aRoom, uint32 oldUserId, uint32 newUserId);
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
@@ -34,7 +48,6 @@ protected:
 protected:
 	void ClearRoom();
 protected:
-	std::umap<uint32, Room*>	mMapRoo;
-	std::map<uint32, Room*>		mMapRoom;
-	std::map<uint32, Room*>		mMapPlayerRoom;
+	std::udmap<uint32, Room*>		mMapRoom;
+	std::map<uint32, Room*>			mMapPlayerRoom;
 };

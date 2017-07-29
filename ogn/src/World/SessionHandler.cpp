@@ -2,16 +2,10 @@
 
 SessionHandler::SessionHandler()
 {
-	if (GetWorldServer() == NULL)
-	{
-		LOG_ERROR("GetWorldServer() == NULL");
-		return;
-	}
-
-	RegisterEventProcess(GetWorldServer(), ID_NetSessionEnterNotify, &SessionHandler::onNetSessionEnterNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetSessionLeaveNotify, &SessionHandler::onNetSessionLeaveNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetLoginReq, &SessionHandler::onNetLoingReq, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetPingNotify, &SessionHandler::onNetPingNotify, this);
+	RegWorldEvent(ID_NetSessionEnterNotify, &SessionHandler::onNetSessionEnterNotify, this);
+	RegWorldEvent(ID_NetSessionLeaveNotify, &SessionHandler::onNetSessionLeaveNotify, this);
+	RegWorldEvent(ID_NetLoginReq, &SessionHandler::onNetLoingReq, this);
+	RegWorldEvent(ID_NetPingNotify, &SessionHandler::onNetPingNotify, this);
 }
 
 SessionHandler::~SessionHandler()

@@ -80,7 +80,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 	uint32 queryCount = 0;
 	int32 maxCount = 1;
 	NetQueryRoleRes res;
-	uint32 t0 = DateTime::GetNowAppUS();
+	uint32 t0 = (uint32)DateTime::GetNowAppUS();
 	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, &role, queryCount, "accountId", "", maxCount);
 	do
 	{
@@ -100,7 +100,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			info.name = role.name;
 			info.property.WriteBytes(role.property.getPtr(), role.property.getWPostion());
 			res.roleInfos.push_back(info);
-			uint32 t1 = DateTime::GetNowAppUS() - t0;
+			uint32 t1 = (uint32)DateTime::GetNowAppUS() - t0;
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role[%s] time:[%d]", req->user.c_str(), role.name.c_str(), t1);
 		}
 		else
@@ -123,7 +123,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			info.property.WriteBytes(role.property.getPtr(), role.property.getWPostion());
 			res.roleInfos.push_back(info);
 
-			uint32 t1 = DateTime::GetNowAppUS() - t0;
+			uint32 t1 = (uint32)DateTime::GetNowAppUS() - t0;
 
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] insert role[%s] time:[%d]", req->user.c_str(), role.name.c_str(), t1);
 		}

@@ -20,9 +20,12 @@ protected:
 	int onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotify* nfy);
 	int onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy);
 protected:
+	int32 onGmCmd(CmdEvent& e);
+protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;
 public:
+	Robot*							mCurRobot;
 	char*			mMapData;
 	float			mCell;
 };

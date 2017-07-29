@@ -156,6 +156,11 @@ EntitySet* Entity::getView()
 	return mMap->getEntityView(getInstanceId());
 }
 
+uint32 Entity::getViewCount()
+{
+	return getView() ? (uint32)getView()->size() : 0;
+}
+
 uint32 Entity::getMapId()
 {
 	return mMap ? mMap->getMapId() : 0;
@@ -305,7 +310,7 @@ int32 Entity::onTimerCheckView(TimerEvent& e)
 
 		if (s1 >= 0.01)
 		{
-			int32 c = getView() ? getView()->size() : 0;
+			int32 c = getViewCount();
 			LOG_ERROR("[%s] %0.3f viewCount:%d", this->getName().c_str(), s1, c);
 		}
 		mCheckView = false;

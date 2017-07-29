@@ -128,7 +128,7 @@ void ConfigManager::loadMapJson(const std::string& path)
 
 		mapJson.Row = v["Row"].asUInt();
 		mapJson.Col = v["Col"].asUInt();
-		mapJson.Cell = v["Cell"].asDouble();
+		mapJson.Cell = v["Cell"].asFloat();
 		mapJson.LogicRow = v["LogicRow"].asUInt();
 		mapJson.LogicCol = v["LogicCol"].asUInt();
 		mapJson.ViewCell = v["ViewCell"].asUInt();

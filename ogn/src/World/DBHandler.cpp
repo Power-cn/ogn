@@ -12,13 +12,8 @@ DBHandler::~DBHandler()
 
 void DBHandler::doRegister()
 {
-	if (GetDBServer() == NULL)
-	{
-		LOG_ERROR("GetDBServer() == NULL");
-		return;
-	}
-	RegisterEventProcess(GetDBServer(), ID_NetLoginRes, &DBHandler::onNetNetLoginRes, this);
-	RegisterEventProcess(GetDBServer(), ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
+	RegDBEvent(ID_NetLoginRes, &DBHandler::onNetNetLoginRes, this);
+	RegDBEvent(ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
 }
 
 int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)

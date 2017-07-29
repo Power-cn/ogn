@@ -55,6 +55,7 @@
   <protocol>
 
     <element id="ID_NetFirst" name="NetFirst" >
+      <member type="Stream" name="sbytes" />
     </element>
     
     <element id="ID_NetSessionEnterNotify" name="NetSessionEnterNotify" >

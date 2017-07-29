@@ -2,22 +2,19 @@
 
 PlayerHandler::PlayerHandler()
 {
-	if (GetWorldServer() == NULL)
-	{
-		LOG_ERROR("GetWorldServer() == NULL");
-		return;
-	}
+	RegWorldEvent(ID_NetFirst, &PlayerHandler::onNetFirst, this);
+	RegWorldEvent(ID_NetChatMsgNotify, &PlayerHandler::onNetChatMsgNotify, this);
+	RegWorldEvent(ID_NetGmMsg, &PlayerHandler::onNetGmMsg, this);
+	RegWorldEvent(ID_NetEntityMoveToNotify, &PlayerHandler::onNetEntityMoveToNotify, this);
+	RegWorldEvent(ID_NetEntityMoveNotify, &PlayerHandler::onNetEntityMoveNotify, this);
+	RegWorldEvent(ID_NetOrganizeTeamReq, &PlayerHandler::onNetOrganizeTeamReq, this);
+	RegWorldEvent(ID_NetAgreeTeamReq, &PlayerHandler::onNetAgreeTeamReq, this);
+	RegWorldEvent(ID_NetTeamListReq, &PlayerHandler::onNetTeamListReq, this);
+}
 
-	INSTANCE(WarHandler);
-	INSTANCE(RoomHandler);
-	
-	RegisterEventProcess(GetWorldServer(), ID_NetChatMsgNotify, &PlayerHandler::onNetChatMsgNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetGmMsg, &PlayerHandler::onNetGmMsg, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetEntityMoveToNotify, &PlayerHandler::onNetEntityMoveToNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetEntityMoveNotify, &PlayerHandler::onNetEntityMoveNotify, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetOrganizeTeamReq, &PlayerHandler::onNetOrganizeTeamReq, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetAgreeTeamReq, &PlayerHandler::onNetAgreeTeamReq, this);
-	RegisterEventProcess(GetWorldServer(), ID_NetTeamListReq, &PlayerHandler::onNetTeamListReq, this);
+int32 PlayerHandler::onNetFirst(Player* player, NetFirst* nfy)
+{
+	return 0;
 }
 
 int32 PlayerHandler::onNetChatMsgNotify(Player* player, NetChatMsgNotify* nfy)
@@ -27,12 +24,14 @@ int32 PlayerHandler::onNetChatMsgNotify(Player* player, NetChatMsgNotify* nfy)
 	return 0;
 }
 
-int32 PlayerHandler::onNetGmMsg(Player* player, NetGmMsg* msg)
+int32 PlayerHandler::onNetGmMsg(Player* aPlr, NetGmMsg* msg)
 {
 	std::string p1 = msg->gmParams.size() >= 1 ? msg->gmParams[0] : "";
 	std::string p2 = msg->gmParams.size() >= 2 ? msg->gmParams[1] : "";
 	std::string p3 = msg->gmParams.size() >= 3 ? msg->gmParams[2] : "";
-	LuaEngine::executeScript(player, "gm", "GmCmd", msg->name, p1, p2, p3);
+	LuaEngine::executeScript(aPlr, "gm", "GmCmd", msg->name, p1, p2, p3);
+
+	LOG_DEBUG(LogSystem::csl_color_green, "[%s] GmCmd:%s %s %s %s", aPlr->getName(),msg->name.c_str(), p1.c_str(), p2.c_str(), p3.c_str());
 	return 0;
 }
 

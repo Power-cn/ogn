@@ -7,7 +7,7 @@
 //////////////////////////////////////////////////////////////////////////
 
 #include "protocols/protocols.h"
-
+#include "Channel.h"
 #include "ConfigManager.h"
 #include "Property.h"
 #include "Entity.h"
@@ -70,7 +70,6 @@
 #include "LuaEngine.h"
 #include "LuaScriptEngine.h"
 
-#include "Channel.h"
 #include "Map.h"
 #include "Team.h"
 #include "Item.h"
@@ -113,7 +112,9 @@
 #define sRedisProxy INSTANCE(RedisProxy)
 
 #define sWorld (*GetModule(WorldModule))
+#define sTeam (*GetModule(TeamModule))
 #define sFriends (*GetModule(FriendsModule))
 #define sRoom (*GetModule(RoomModule))
 
+#define RegDBEvent(id, cb, thisObject) RegisterEventProcess(GetDBServer(), id, cb, thisObject)
 #define RegWorldEvent(id, cb, thisObject) RegisterEventProcess((GetWorldServer()), id, cb, thisObject)

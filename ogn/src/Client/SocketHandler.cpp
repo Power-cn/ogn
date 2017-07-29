@@ -21,7 +21,9 @@ int SocketHandler::onConnect(SocketEvent& e)
 	std::pair<std::string, std::string>& pa = mUsers.front();
 	robot->doLogin(pa.first, pa.second);
 	mUsers.pop();
-
+	if (!INSTANCE(RobotManager).mCurRobot) {
+		INSTANCE(RobotManager).mCurRobot = robot;
+	}
 	return 0;
 }
 

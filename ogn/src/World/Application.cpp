@@ -76,6 +76,8 @@ bool Application::Initialize()
 
 	INSTANCE(SessionHandler);
 	INSTANCE(PlayerHandler);
+	INSTANCE(WarHandler);
+	INSTANCE(RoomHandler);
 
 	LOG_DEBUG(LogSystem::csl_color_green, "World listen Port:%d success", cf.Port);
 
@@ -121,7 +123,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, GetModule(WorldModule)->getPlayerCount());
+		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, sWorld.getPlayerCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;
@@ -299,46 +301,47 @@ int Application::onWorldRecv(SocketEvent& e)
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	do 
 	{
-		if (session == NULL && msgId == ID_NetSessionEnterNotify)
-		{
-			session = INSTANCE(SessionManager).createSession(e.socket, sessionId);
-			if (session == NULL)
-				return 0;
 
-			INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), session);
-		}
-
+	if (session == NULL && msgId == ID_NetSessionEnterNotify)
+	{
+		session = INSTANCE(SessionManager).createSession(e.socket, sessionId);
 		if (session == NULL)
-			break;
+			return 0;
 
-		Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
-		if (pack == NULL) break;
+		INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), session);
+	}
 
-		if ((out >> (*pack)) == false)
-		{
-			LOG_ERROR("packet errer");
-			INSTANCE(PacketManager).Free(pack);
-			break;
-		}
+	if (session == NULL)
+		break;
 
-		if (checkSessionMessage(msgId))
-		{
-			if (worldServer->dispatch(pack->getMsgId(), session, pack) == 0)
-				LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
-		}
-		else
-		{
-			Player* plr = session->getPlayer();
-			if (plr) {
-				if (worldServer->dispatch(pack->getMsgId(), plr, pack) == 0)
-					LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
-			}
-			else {
-				LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
-			}
-		}
+	Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
+	if (pack == NULL) break;
+
+	if ((out >> (*pack)) == false)
+	{
+		LOG_ERROR("packet errer");
 		INSTANCE(PacketManager).Free(pack);
-		return 0;
+		break;
+	}
+
+	if (checkSessionMessage(msgId))
+	{
+		if (worldServer->dispatch(pack->getMsgId(), session, pack) == 0)
+			LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+	}
+	else
+	{
+		Player* plr = session->getPlayer();
+		if (plr) {
+			if (worldServer->dispatch(pack->getMsgId(), plr, pack) == 0)
+				LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+		}
+		else {
+			LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+		}
+	}
+	INSTANCE(PacketManager).Free(pack);
+	return 0;
 	} while (false);
 
 	if (session == NULL)
@@ -386,26 +389,27 @@ int Application::onDBRecv(SocketEvent & e)
 	if (!session) return 0;
 
 	Player* player = session->getPlayer();
-
 	if (!player && msgId != ID_NetLoginRes) return 0;
 
 	do
 	{
-		Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
-		if (pack == NULL) break;
 
-		if ((out >> (*pack)) == false)
-		{
-			LOG_ERROR("pack->deSerialize(out)");
-			INSTANCE(PacketManager).Free(pack);
-			break;
-		}
+	Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
+	if (pack == NULL) break;
 
-		if (dbServer->dispatch(pack->getMsgId(), session, pack) == 0)
-			LOG_WARN("[%d] not register func");
-
+	if ((out >> (*pack)) == false)
+	{
+		LOG_ERROR("pack->deSerialize(out)");
 		INSTANCE(PacketManager).Free(pack);
-		return 0;
+		break;
+	}
+
+	if (dbServer->dispatch(pack->getMsgId(), session, pack) == 0)
+		LOG_WARN("[%d] not register func");
+
+	INSTANCE(PacketManager).Free(pack);
+	return 0;
+
 	} while (false);
 
 	if (session == NULL)
@@ -512,6 +516,7 @@ void Application::OnInitialize()
 	LuaEngine::SetInt32("global", "EC_MAP", EnumChannel::EC_MAP);
 	LuaEngine::SetInt32("global", "EC_VIEW", EnumChannel::EC_VIEW);
 	LuaEngine::SetInt32("global", "EC_TEAM", EnumChannel::EC_TEAM);
+	LuaEngine::SetInt32("global", "EC_ROOM", EnumChannel::EC_ROOM);
 	LuaEngine::SetInt32("global", "EC_TARGET", EnumChannel::EC_TARGET);
 
 	//LuaEngine::executeScript("team", "onEnterTeam", "sdfsdfsdfdsf");
