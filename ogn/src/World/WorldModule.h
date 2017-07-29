@@ -38,7 +38,7 @@ public:
 	Npc* getNpcByGuid(Guid guid);
 	void removeNpc(uint32 npcId);
 	void removeNpc(Npc* npc);
-	int32 getPlayerCount() { return mMapPlayer.size(); }
+	uint32 getPlayerCount() { return (uint32)mMapPlayer.size(); }
 	std::map<uint32, Player*>& getMapPlayer() { return mMapPlayer; }
 protected:
 	std::map<Guid, Entity*>						mMapEntity;

@@ -9,6 +9,7 @@ PlayerHandler::PlayerHandler()
 	}
 
 	INSTANCE(WarHandler);
+	INSTANCE(RoomHandler);
 	
 	RegisterEventProcess(GetWorldServer(), ID_NetChatMsgNotify, &PlayerHandler::onNetChatMsgNotify, this);
 	RegisterEventProcess(GetWorldServer(), ID_NetGmMsg, &PlayerHandler::onNetGmMsg, this);

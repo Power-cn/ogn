@@ -33,6 +33,7 @@ bool DBConnector::connect(const std::string& host, const std::string& user, cons
 	if (!mysql_real_connect(mMysql, mHost.c_str(), mUser.c_str(), mPassword.c_str(), mName.c_str(), mPort, NULL, 0))
 		return false;
 
+	
 	//mysql_query(sql_account, "set character set'gbk'");
 	//mysql_query(sql_account, "set names'gbk'");
 	//mysql_set_character_set(sql_account, "set character set'gbk'");
@@ -439,6 +440,10 @@ int8* DBConnector::doDelete(const DBRecord& delete_record, const std::string& co
 
 void DBConnector::update(float time, float delay)
 {
+	//if (mysql_ping(mMysql)) {
+	//	connect(mHost, mUser, mPassword, mName, mPort);
+	//}
+
 	//process();
 	if (completeQueryQueue.size() > 0)
 	{

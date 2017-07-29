@@ -2,9 +2,9 @@
 
 LuaScript::LuaScript(const std::string& path)
 {
-	int32 spos = path.find_last_of("/");
+	uint32 spos = (uint32)path.find_last_of("/");
 	spos++;
-	int32 epos = path.find_last_of(".");
+	uint32 epos = (uint32)path.find_last_of(".");
 	mName = path.substr(spos, epos - spos);
 
 	mLuaState = luaL_newstate();

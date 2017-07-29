@@ -36,6 +36,9 @@
     <ClCompile Include="..\..\src\World\Module.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp" />
     <ClCompile Include="..\..\src\World\Module\WarModule\War.cpp" />
@@ -74,6 +77,9 @@
     <ClInclude Include="..\..\src\World\Module.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h" />
     <ClInclude Include="..\..\src\World\Module\WarModule\War.h" />

@@ -1,0 +1,13 @@
+#pragma once
+
+class RoomHandler : public Object
+{
+public:
+	RoomHandler();
+protected:
+	int32 onNetCreateRoomReq(Player* aPlr, NetCreateRoomReq* req);
+	int32 onNetEnterRoomReq(Player* aPlr, NetEnterRoomReq* req);
+	int32 onNetLeaveRoomReq(Player* aPlr, NetLeaveRoomReq* req);
+	int32 onNetChangeRoomMasterReq(Player* aPlr, NetChangeRoomMasterReq* req);
+private:
+};

@@ -437,6 +437,11 @@ std::string Shared::GetDirectory()
 	return std::string(path);
 }
 
+void Shared::CreateDirectory(const std::string& dir)
+{
+	_mkdir(dir.c_str());
+}
+
 void Shared::GetDirectoryFiles(const std::string& path, std::vector<std::string>& files, const std::string slash /*= "/"*/)
 {
 	long hFile = 0;

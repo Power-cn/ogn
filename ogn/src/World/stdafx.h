@@ -92,6 +92,10 @@
 #include "./Module/FriendsModule/Friends.h"
 #include "./Module/FriendsModule/FriendsModule.h"
 
+#include "./Module/RoomModule/RoomHandler.h"
+#include "./Module/RoomModule/Room.h"
+#include "./Module/RoomModule/RoomModule.h"
+
 #include "Utils.h"
 #include "DBHandler.h"
 #include "PlayerHandler.h"
@@ -110,3 +114,6 @@
 
 #define sWorld (*GetModule(WorldModule))
 #define sFriends (*GetModule(FriendsModule))
+#define sRoom (*GetModule(RoomModule))
+
+#define RegWorldEvent(id, cb, thisObject) RegisterEventProcess((GetWorldServer()), id, cb, thisObject)

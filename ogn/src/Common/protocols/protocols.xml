@@ -33,6 +33,22 @@
       <member type="int32" name="leaderInsId" />
       <member type="vector" name="teamEntityInfos" element="TeamEntityInfo" />
     </element>
+
+    <element name="RoomPlayerInfo" parent="object">
+      <member type="string" name="name" />
+      <member type="uint32" name="userId" />
+      <member type="uint64" name="insId" />
+      <member type="uint8" name="state" />
+    </element>
+    
+    <element name="RoomInfo" parent="object">
+      <member type="uint32" name="roomId" />
+      <member type="uint32" name="masterUserId" />
+      <member type="string" name="password" />
+      <member type="string" name="name" />
+      <member type="uint32" name="maxCount" />
+      <member type="vector" name="roomPlayerInfos" element="RoomPlayerInfo" />
+    </element>
     
   </class>
 
@@ -59,7 +75,7 @@
 
     <element id="ID_NetLoginRes" name="NetLoginRes" >
       <member type="int32" name="result" comment="0.成功 1.帐号或密码错误 2.此号在异地登陆, 被强制踢下线 3.重复登陆" />
-      <member type="int32" name="instanceId" />
+      <member type="int64" name="guid" />
       <member type="DBAccountInfo" name="accountInfo" />
     </element>
 
@@ -80,35 +96,35 @@
     </element>
 
     <element id="ID_NetPropertyReq" name="NetPropertyReq" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
     </element>
     
     <element id="ID_NetPropertyRes" name="NetPropertyRes" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="BinaryStream" name="property" />
     </element>
 
     <element id="ID_NetEntityPropertyNotify" name="NetEntityPropertyNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="BinaryStream" name="property" />
     </element>
 
     <element id="ID_NetEntityEnterMapNotify" name="NetEntityEnterMapNotify" >
       <member type="string" name="name" />
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="mapInsId" />
       <member type="int32" name="mapId" />
     </element>
     
     <element id="ID_NetEntityLeaveMapNotify" name="NetEntityLeaveMapNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="mapInsId" />
       <member type="int32" name="mapId" />
     </element>
 
     <element id="ID_NetPlayerEnterViewNotify" name="NetPlayerEnterViewNotify" >
       <member type="string" name="name" />
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="entityType" />
       <member type="int32" name="mapId" />
       <member type="int32" name="charId" comment="角色ID" />
@@ -119,13 +135,13 @@
     </element>
 
     <element id="ID_NetPlayerLeaveViewNotify" name="NetPlayerLeaveViewNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="mapId" />
     </element>
 
     <element id="ID_NetNpcEnterViewNotify" name="NetNpcEnterViewNotify" >
       <member type="string" name="name" />
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="entityType" />
       <member type="int32" name="mapId" />
       <member type="int32" name="npcId" comment="npcId" />
@@ -136,36 +152,36 @@
     </element>
 
     <element id="ID_NetNpcLeaveViewNotify" name="NetNpcLeaveViewNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="mapId" />
     </element>
 
     <element id="ID_NetEntityMoveNotify" name="NetEntityMoveNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int8" name="startDir" />
       <member type="int32" name="x" />
       <member type="int32" name="y" />
     </element>
     
     <element id="ID_NetEntityMoveToNotify" name="NetEntityMoveToNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int32" name="x" />
       <member type="int32" name="y" />
     </element>
 
     <element id="ID_NetEntityAttackNotify" name="NetEntityAttackNotify" >
-      <member type="int32" name="guid" />
+      <member type="int64" name="guid" />
       <member type="int8" name="index" />
-      <member type="int32" name="tarGuid" />
+      <member type="int64" name="tarGuid" />
       <member type="int8" name="dirPos" />
     </element>
     
     <element id="ID_NetEntityFollowNotify" name="NetEntityFollowNotify" >
-      <member type="int32" name="tarGuid" />
+      <member type="int64" name="tarGuid" />
     </element>
 
     <element id="ID_NetEntityCancelFollowNotify" name="NetEntityCancelFollowNotify" >
-      <member type="int32" name="tarGuid" />
+      <member type="int64" name="tarGuid" />
     </element>
     
     <element id="ID_NetChatMsgNotify" name="NetChatMsgNotify" >
@@ -205,6 +221,56 @@
     
     <element id="ID_NetTeamListRes" name="NetTeamListRes" >
       <member type="vector" name="teamInfos" element="TeamInfo" />
+    </element>
+
+    <element id="ID_NetCreateRoomReq" name="NetCreateRoomReq" >
+      <member type="string" name="name" />
+    </element>
+
+    <element id="ID_NetCreateRoomRes" name="NetCreateRoomRes" >
+      <member type="RoomInfo" name="roomInfo" />
+    </element>
+
+    <element id="ID_NetEnterRoomReq" name="NetEnterRoomReq" >
+      <member type="uint32" name="roomId" />
+      <member type="string" name="password" />
+    </element>
+
+    <element id="ID_NetEnterRoomRes" name="NetEnterRoomRes" >
+      <member type="RoomInfo" name="roomInfo" />
+    </element>
+
+    <element id="ID_NetEnterRoomNotify" name="NetEnterRoomNotify" >
+      <member type="uint32" name="roomId" />
+      <member type="RoomPlayerInfo" name="roomPlayerInfo" />
+    </element>
+
+    <element id="ID_NetLeaveRoomReq" name="NetLeaveRoomReq" >
+      <member type="uint32" name="roomId" />
+    </element>
+
+    <element id="ID_NetLeaveRoomRes" name="NetLeaveRoomRes" >
+      <member type="uint32" name="roomId" />
+      <member type="uint32" name="userId" />
+    </element>
+
+    <element id="ID_NetChangeRoomMasterReq" name="NetChangeRoomMasterReq" >
+      <member type="uint32" name="roomId" />
+      <member type="uint32" name="userId" />
+    </element>
+
+    <element id="ID_NetChangeRoomMasterRes" name="NetChangeRoomMasterRes" >
+      <member type="uint32" name="roomId" />
+      <member type="uint32" name="masterUserId" />
+    </element>
+
+    <element id="ID_NetRoomListReq" name="NetRoomListReq" >
+      <member type="uint32" name="start" />
+      <member type="uint32" name="count" />
+    </element>
+
+    <element id="ID_NetRoomListRes" name="NetRoomListRes" >
+      <member type="vector" name="roomInfoInfos" element="RoomInfo" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

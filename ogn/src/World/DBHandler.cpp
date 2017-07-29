@@ -66,7 +66,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 	req.user = player->getUser();
 	req.roleCount = 1;
 	session->sendPacketToTarget(req, INSTANCE(Application).getDBServer()->getSocket());
-	res->instanceId = player->getInstanceId();
+	res->guid = player->getInstanceId();
 	player->sendPacket(*res);
 	return 0;
 }

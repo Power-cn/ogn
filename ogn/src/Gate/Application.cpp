@@ -47,7 +47,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "Gate:FPS:%d Player:%d", mFPS, gateServer->getSockets().size());
+		sprintf_s(szBuffer, 256, "Gate:FPS:%d Player:%d", mFPS, gateServer->getSocketCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;

@@ -1,8 +1,15 @@
 #include "Shared.hpp"
 
-LogFileOutputer::LogFileOutputer(const std::string& path)
+LogFileOutputer::LogFileOutputer()
 {
-	m_path = path;
+	tm plt;
+	time_t t = time(NULL);
+	localtime_s(&plt, &t);
+	strftime(mBuffer, 256, "%Y_%m_%d_%H_%M_%S", &plt);
+	mFirstPath = mBuffer;
+	mIdx = 1;
+	sprintf_s(mBuffer, 256, "log/%s_%d.log", mFirstPath.c_str(), mIdx);
+	Shared::CreateDirectory("log");
 }
 
 LogFileOutputer::~LogFileOutputer(void)
@@ -11,37 +18,12 @@ LogFileOutputer::~LogFileOutputer(void)
 
 void LogFileOutputer::Outputer(const char* content, int color /* = 0 */, int level /* = logLevel_info */)
 {
-	FILE* file = NULL;
-	fopen_s(&file, m_path.c_str(), "a");
-	char temp[40];
-	switch (level)
-	{
-	case logLevel_info:
-		sprintf_s(temp, "INFO:  ");
-		break;
-	case logLevel_warn:
-		sprintf_s(temp, "WARN:  ");
-		break;
-	case logLevel_error:
-		sprintf_s(temp, "ERROR: ");
-		break;
-	case logLevel_debug:
-		sprintf_s(temp, "DEBUG: ");
-		break;
-	}
-	if (file)
-	{
-		fwrite(temp, strlen(temp), 1, file);
-
-		std::string str("%Y-%m-%d %H:%M:%S ");
-		DateTime::Now(str);
-		if (str.length() > 0)
-		{
-			fwrite(str.c_str(), str.length(), 1, file);
-		}
-
-		fwrite(content, strlen(content), 1, file);
-		fwrite((void*)"\r\n", 2, 1, file);
-		fclose(file);
-	}
+	sprintf_s(mBuffer, 256, "log/%s_%d.log", mFirstPath.c_str(), mIdx);
+	FILE* file = fopen(mBuffer, "a");
+	int32 err = GetLastError();
+	if (file == NULL) return;
+	fwrite(content, strlen(content), 1, file);
+	if (Shared::GetFileLength(file) > 1024 * 1024)
+		mIdx++;
+	fclose(file);
 }

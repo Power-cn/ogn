@@ -36,6 +36,17 @@ ID_NetAgreeTeamReq,
 ID_NetTeamInfoRes,
 ID_NetTeamListReq,
 ID_NetTeamListRes,
+ID_NetCreateRoomReq,
+ID_NetCreateRoomRes,
+ID_NetEnterRoomReq,
+ID_NetEnterRoomRes,
+ID_NetEnterRoomNotify,
+ID_NetLeaveRoomReq,
+ID_NetLeaveRoomRes,
+ID_NetChangeRoomMasterReq,
+ID_NetChangeRoomMasterRes,
+ID_NetRoomListReq,
+ID_NetRoomListRes,
 ID_NetEnd,
 
 }
@@ -75,6 +86,17 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAgreeTeamReq, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetTeamInfoRes, "NetTeamInfoRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetTeamListReq, "NetTeamListReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetTeamListRes, "NetTeamListRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateRoomReq, "NetCreateRoomReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateRoomRes, "NetCreateRoomRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnterRoomReq, "NetEnterRoomReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnterRoomRes, "NetEnterRoomRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnterRoomNotify, "NetEnterRoomNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLeaveRoomReq, "NetLeaveRoomReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLeaveRoomRes, "NetLeaveRoomRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterReq, "NetChangeRoomMasterReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterRes, "NetChangeRoomMasterRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomListReq, "NetRoomListReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomListRes, "NetRoomListRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -266,6 +288,101 @@ public int leaderInsId;
 public List<TeamEntityInfo> teamEntityInfos;
 
 }
+public class RoomPlayerInfo : Header
+{
+	public RoomPlayerInfo()
+	{
+name = "";
+userId = 0;
+insId = 0;
+state = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(name);
+bytes.Write(userId);
+bytes.Write(insId);
+bytes.Write(state);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref name);
+bytes.Read(ref userId);
+bytes.Read(ref insId);
+bytes.Read(ref state);
+
+		return true;
+	}
+
+public string name;
+public uint userId;
+public ulong insId;
+public sbyte state;
+
+}
+public class RoomInfo : Header
+{
+	public RoomInfo()
+	{
+roomId = 0;
+masterUserId = 0;
+password = "";
+name = "";
+maxCount = 0;
+roomPlayerInfos = new List<RoomPlayerInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(masterUserId);
+bytes.Write(password);
+bytes.Write(name);
+bytes.Write(maxCount);
+int roomPlayerInfos_TEMP = roomPlayerInfos.Count;
+bytes.Write(roomPlayerInfos_TEMP);
+for (int i = 0; i < roomPlayerInfos_TEMP; ++i)
+{
+	bytes.Write(roomPlayerInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(ref masterUserId);
+bytes.Read(ref password);
+bytes.Read(ref name);
+bytes.Read(ref maxCount);
+int roomPlayerInfos_TEMP = 0;
+bytes.Read(ref roomPlayerInfos_TEMP);
+for (int i = 0; i < roomPlayerInfos_TEMP; ++i)
+{
+	RoomPlayerInfo info_roomPlayerInfos;
+	info_roomPlayerInfos = new RoomPlayerInfo();
+	bytes.Read(info_roomPlayerInfos);
+	roomPlayerInfos.Add(info_roomPlayerInfos);
+}
+
+		return true;
+	}
+
+public uint roomId;
+public uint masterUserId;
+public string password;
+public string name;
+public uint maxCount;
+public List<RoomPlayerInfo> roomPlayerInfos;
+
+}
 public class NetFirst : Packet
 {
 	public NetFirst():base((int)PACKET_ID_ENUM.ID_NetFirst)
@@ -392,7 +509,7 @@ public class NetLoginRes : Packet
 	public NetLoginRes():base((int)PACKET_ID_ENUM.ID_NetLoginRes)
 	{
 result = 0;
-instanceId = 0;
+guid = 0;
 accountInfo = new DBAccountInfo();
 
 	}
@@ -400,7 +517,7 @@ accountInfo = new DBAccountInfo();
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
 bytes.Write(result);
-bytes.Write(instanceId);
+bytes.Write(guid);
 bytes.Write(accountInfo);
 
 		return true;
@@ -409,14 +526,14 @@ bytes.Write(accountInfo);
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
 bytes.Read(ref result);
-bytes.Read(ref instanceId);
+bytes.Read(ref guid);
 bytes.Read(accountInfo);
 
 		return true;
 	}
 
 public int result;
-public int instanceId;
+public long guid;
 public DBAccountInfo accountInfo;
 
 }
@@ -559,7 +676,7 @@ bytes.Read(ref guid);
 		return true;
 	}
 
-public int guid;
+public long guid;
 
 }
 public class NetPropertyRes : Packet
@@ -587,7 +704,7 @@ bytes.Read(property);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public BinaryStream property;
 
 }
@@ -616,7 +733,7 @@ bytes.Read(property);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public BinaryStream property;
 
 }
@@ -652,7 +769,7 @@ bytes.Read(ref mapId);
 	}
 
 public string name;
-public int guid;
+public long guid;
 public int mapInsId;
 public int mapId;
 
@@ -685,7 +802,7 @@ bytes.Read(ref mapId);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public int mapInsId;
 public int mapId;
 
@@ -737,7 +854,7 @@ bytes.Read(ref dir);
 	}
 
 public string name;
-public int guid;
+public long guid;
 public int entityType;
 public int mapId;
 public int charId;
@@ -772,7 +889,7 @@ bytes.Read(ref mapId);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public int mapId;
 
 }
@@ -823,7 +940,7 @@ bytes.Read(ref dir);
 	}
 
 public string name;
-public int guid;
+public long guid;
 public int entityType;
 public int mapId;
 public int npcId;
@@ -858,7 +975,7 @@ bytes.Read(ref mapId);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public int mapId;
 
 }
@@ -893,7 +1010,7 @@ bytes.Read(ref y);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public byte startDir;
 public int x;
 public int y;
@@ -927,7 +1044,7 @@ bytes.Read(ref y);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public int x;
 public int y;
 
@@ -963,9 +1080,9 @@ bytes.Read(ref dirPos);
 		return true;
 	}
 
-public int guid;
+public long guid;
 public byte index;
-public int tarGuid;
+public long tarGuid;
 public byte dirPos;
 
 }
@@ -991,7 +1108,7 @@ bytes.Read(ref tarGuid);
 		return true;
 	}
 
-public int tarGuid;
+public long tarGuid;
 
 }
 public class NetEntityCancelFollowNotify : Packet
@@ -1016,7 +1133,7 @@ bytes.Read(ref tarGuid);
 		return true;
 	}
 
-public int tarGuid;
+public long tarGuid;
 
 }
 public class NetChatMsgNotify : Packet
@@ -1267,6 +1384,318 @@ for (int i = 0; i < teamInfos_TEMP; ++i)
 	}
 
 public List<TeamInfo> teamInfos;
+
+}
+public class NetCreateRoomReq : Packet
+{
+	public NetCreateRoomReq():base((int)PACKET_ID_ENUM.ID_NetCreateRoomReq)
+	{
+name = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(name);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref name);
+
+		return true;
+	}
+
+public string name;
+
+}
+public class NetCreateRoomRes : Packet
+{
+	public NetCreateRoomRes():base((int)PACKET_ID_ENUM.ID_NetCreateRoomRes)
+	{
+roomInfo = new RoomInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(roomInfo);
+
+		return true;
+	}
+
+public RoomInfo roomInfo;
+
+}
+public class NetEnterRoomReq : Packet
+{
+	public NetEnterRoomReq():base((int)PACKET_ID_ENUM.ID_NetEnterRoomReq)
+	{
+roomId = 0;
+password = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(password);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(ref password);
+
+		return true;
+	}
+
+public uint roomId;
+public string password;
+
+}
+public class NetEnterRoomRes : Packet
+{
+	public NetEnterRoomRes():base((int)PACKET_ID_ENUM.ID_NetEnterRoomRes)
+	{
+roomInfo = new RoomInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(roomInfo);
+
+		return true;
+	}
+
+public RoomInfo roomInfo;
+
+}
+public class NetEnterRoomNotify : Packet
+{
+	public NetEnterRoomNotify():base((int)PACKET_ID_ENUM.ID_NetEnterRoomNotify)
+	{
+roomId = 0;
+roomPlayerInfo = new RoomPlayerInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(roomPlayerInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(roomPlayerInfo);
+
+		return true;
+	}
+
+public uint roomId;
+public RoomPlayerInfo roomPlayerInfo;
+
+}
+public class NetLeaveRoomReq : Packet
+{
+	public NetLeaveRoomReq():base((int)PACKET_ID_ENUM.ID_NetLeaveRoomReq)
+	{
+roomId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+
+		return true;
+	}
+
+public uint roomId;
+
+}
+public class NetLeaveRoomRes : Packet
+{
+	public NetLeaveRoomRes():base((int)PACKET_ID_ENUM.ID_NetLeaveRoomRes)
+	{
+roomId = 0;
+userId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(userId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(ref userId);
+
+		return true;
+	}
+
+public uint roomId;
+public uint userId;
+
+}
+public class NetChangeRoomMasterReq : Packet
+{
+	public NetChangeRoomMasterReq():base((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterReq)
+	{
+roomId = 0;
+userId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(userId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(ref userId);
+
+		return true;
+	}
+
+public uint roomId;
+public uint userId;
+
+}
+public class NetChangeRoomMasterRes : Packet
+{
+	public NetChangeRoomMasterRes():base((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterRes)
+	{
+roomId = 0;
+masterUserId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomId);
+bytes.Write(masterUserId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref roomId);
+bytes.Read(ref masterUserId);
+
+		return true;
+	}
+
+public uint roomId;
+public uint masterUserId;
+
+}
+public class NetRoomListReq : Packet
+{
+	public NetRoomListReq():base((int)PACKET_ID_ENUM.ID_NetRoomListReq)
+	{
+start = 0;
+count = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(start);
+bytes.Write(count);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref start);
+bytes.Read(ref count);
+
+		return true;
+	}
+
+public uint start;
+public uint count;
+
+}
+public class NetRoomListRes : Packet
+{
+	public NetRoomListRes():base((int)PACKET_ID_ENUM.ID_NetRoomListRes)
+	{
+roomInfoInfos = new List<RoomInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+int roomInfoInfos_TEMP = roomInfoInfos.Count;
+bytes.Write(roomInfoInfos_TEMP);
+for (int i = 0; i < roomInfoInfos_TEMP; ++i)
+{
+	bytes.Write(roomInfoInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+int roomInfoInfos_TEMP = 0;
+bytes.Read(ref roomInfoInfos_TEMP);
+for (int i = 0; i < roomInfoInfos_TEMP; ++i)
+{
+	RoomInfo info_roomInfoInfos;
+	info_roomInfoInfos = new RoomInfo();
+	bytes.Read(info_roomInfoInfos);
+	roomInfoInfos.Add(info_roomInfoInfos);
+}
+
+		return true;
+	}
+
+public List<RoomInfo> roomInfoInfos;
 
 }
 public class NetEnd : Packet

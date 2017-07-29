@@ -52,7 +52,7 @@
 #define _CRT_SECURE_COPP_OVERLOAD_STANDARD_NAMES 1
 #pragma warning(disable:4251)
 #define hash_stdext std
-
+#define umap unordered_map
 // include
 
 #include <winsock2.h>
@@ -216,6 +216,7 @@ namespace Shared
 
 	void SetDirectory(const std::string& dir);
 	std::string GetDirectory();
+	void CreateDirectory(const std::string& dir);
 	void GetDirectoryFiles(const std::string& path, std::vector<std::string>& files, const std::string slash = "/");
 	void Clipboard(const std::string& str);
 	int32 GetFileLength(FILE* fp);

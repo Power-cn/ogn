@@ -4,11 +4,13 @@
 class LogFileOutputer : public LogOutputer
 {
 public:
-	LogFileOutputer(const std::string& path);
+	LogFileOutputer();
 	~LogFileOutputer(void);
 public:
 	virtual void Outputer(const char* content, int color, int level);
 protected:
-	std::string						m_path;
+	int32							mIdx;
+	std::string						mFirstPath;
+	char							mBuffer[256];
 };
 

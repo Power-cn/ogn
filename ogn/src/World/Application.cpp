@@ -88,6 +88,7 @@ bool Application::Initialize()
 	addModule(new TeamModule);
 	addModule(new WarModule);
 	addModule(new FriendsModule);
+	addModule(new RoomModule);
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 
@@ -120,7 +121,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "FPS:%d Player:%d", mFPS, GetModule(WorldModule)->getPlayerCount());
+		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, GetModule(WorldModule)->getPlayerCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;

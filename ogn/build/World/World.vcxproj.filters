@@ -61,6 +61,9 @@
     <Filter Include="Module\FriendsModule">
       <UniqueIdentifier>{0a2a4552-bef4-442b-b090-64412b72a96d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\RoomModule">
+      <UniqueIdentifier>{5db9781f-9036-4509-bfb2-33a00420abeb}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -161,6 +164,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp">
       <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp">
+      <Filter>Module\RoomModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -271,6 +283,15 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Common\RedisDef.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h">
+      <Filter>Module\RoomModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
