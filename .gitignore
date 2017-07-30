@@ -13,6 +13,10 @@
 *.log
 *.tlog
 *.lastbuildstate
+*.ipdb
+*.lib
+*.exe
+*.pdb
 
 # Compiled Dynamic libraries
 *.so
