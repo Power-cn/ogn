@@ -6,3 +6,8 @@ GameModle::GameModle():
 mInsId(++sId)
 {
 }
+
+GameModle::~GameModle()
+{
+
+}
