@@ -33,6 +33,7 @@
     <ClInclude Include="..\..\..\src\Client\SocketHandler.h" />
     <ClInclude Include="..\..\..\src\Client\stdafx.h" />
     <ClInclude Include="..\..\..\src\Client\Utils.h" />
+    <ClInclude Include="..\..\..\src\Common\Channel.h" />
     <ClInclude Include="..\..\..\src\Common\MsgCode.h" />
     <ClInclude Include="..\..\..\src\Common\protocols\protocols.h" />
   </ItemGroup>

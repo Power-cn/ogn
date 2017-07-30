@@ -18,10 +18,10 @@ RegGm(
 name = "test";
 fun=function (player, s1, s2, s3)
 	local entity = luaEntity();
-	local propertyHelper = luaPropertyHelper();
-	if propertyHelper == nil then
+	local property = luaProperty();
+	if property == nil then
 	end
-	propertyHelper:setMaxHp(entity, 1);
+	property:setMaxHp(entity, 1);
 end
 });
 

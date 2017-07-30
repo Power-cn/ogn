@@ -1,26 +1,16 @@
 
 dofile("../config/cfg/script/global.lua");
 
-function onEnterTeam(plrName)
-	print(plrName);
-	local sWorld = luaWorld();
-	print(plrName);
-	if sWorld==nil then
-		print("sWorld==nil");
-		return 0;
-	end
-	sWorld:getPlayerToUserId(1);
-	print(plrName);
-	sWorld:sendPacketToMsg(EC_WORLD, "asdfsadfsdfsdf", nil);
-	print(plrName);
+function OnEnter(teamId, userId)
+
 	return 0;
 end
 
-function onLeaveTeam(plrName)
-	print(plrName);
+function onLeave(teamId, userId)
+
 	return 0;
 end
 
-function onChangeLeader(oldName, newName)
+function onChangeLeader(teamId, oldUserId, newUserId)
 	return 0;
 end

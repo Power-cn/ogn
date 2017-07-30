@@ -64,6 +64,9 @@
     <Filter Include="Module\RoomModule">
       <UniqueIdentifier>{5db9781f-9036-4509-bfb2-33a00420abeb}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\GameModule">
+      <UniqueIdentifier>{da9d63f7-ab6e-4e54-b1ae-84b031edb429}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -75,26 +78,11 @@
     <ClCompile Include="..\..\src\World\SessionManager.cpp">
       <Filter>Session</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\World\Map.cpp">
-      <Filter>Module\MapModule\map</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\MapModule.cpp">
-      <Filter>Module\MapModule</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\DBHandler.cpp">
       <Filter>Handler</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\World\SessionHandler.cpp">
       <Filter>Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\PlayerHandler.cpp">
-      <Filter>Handler</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\TeamModule.cpp">
-      <Filter>Module\TeamModule</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\Team.cpp">
-      <Filter>Module\TeamModule\team</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\World\BackpackModule.cpp">
       <Filter>Module\BackpackModule</Filter>
@@ -110,18 +98,6 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module.cpp">
       <Filter>Module</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\WorldModule.cpp">
-      <Filter>Module\WorldModule</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\Entity.cpp">
-      <Filter>Module\WorldModule\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\Player.cpp">
-      <Filter>Module\WorldModule\Entity</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\Npc.cpp">
-      <Filter>Module\WorldModule\Entity\npc</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\Common\Utils.cpp">
       <Filter>Common</Filter>
@@ -174,6 +150,42 @@
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp">
       <Filter>Module\RoomModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\Team.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamHandler.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamModule.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\Game.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp">
+      <Filter>Module\MapModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp">
+      <Filter>Module\MapModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\WorldModule.cpp">
+      <Filter>Module\WorldModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Player.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Entity.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Npc.cpp">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\PlayerHandler.cpp">
+      <Filter>Module\WorldModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -185,12 +197,6 @@
     <ClInclude Include="..\..\src\World\stdafx.h">
       <Filter>头文件</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\World\Map.h">
-      <Filter>Module\MapModule\map</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\MapModule.h">
-      <Filter>Module\MapModule</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Common\protocols\protocols.h">
       <Filter>Common</Filter>
     </ClInclude>
@@ -199,18 +205,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\SessionHandler.h">
       <Filter>Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\PlayerHandler.h">
-      <Filter>Handler</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\TeamModule.h">
-      <Filter>Module\TeamModule</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Team.h">
-      <Filter>Module\TeamModule\team</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Channel.h">
-      <Filter>Module</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\World\BackpackModule.h">
       <Filter>Module\BackpackModule</Filter>
@@ -229,18 +223,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module.h">
       <Filter>Module</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\WorldModule.h">
-      <Filter>Module\WorldModule</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Entity.h">
-      <Filter>Module\WorldModule\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Player.h">
-      <Filter>Module\WorldModule\Entity</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Npc.h">
-      <Filter>Module\WorldModule\Entity\npc</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Common\Utils.h">
       <Filter>Common</Filter>
@@ -292,6 +274,45 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h">
       <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\Team.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamHandler.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamModule.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\Game.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MapModule\Map.h">
+      <Filter>Module\MapModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h">
+      <Filter>Module\MapModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\WorldModule.h">
+      <Filter>Module\WorldModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Player.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Entity.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Npc.h">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\PlayerHandler.h">
+      <Filter>Module\WorldModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Channel.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
