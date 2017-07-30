@@ -13,7 +13,7 @@ mType(TypeNone)
 Variant::Variant(const char* value)
 {
 	mType = TypeString;
-	int len = strlen(value) + 1;
+	uint32 len = (uint32)strlen(value) + 1;
 	mValue.value_str = new char[len];
 	strcpy_s(mValue.value_str, len, value);
 }
@@ -132,7 +132,7 @@ Variant::Variant(const std::string& value)
 {
 	mValue = { 0 };
 	mType = TypeString;
-	int len = value.length() + 1;
+	uint32 len = (uint32)value.length() + 1;
 	mValue.value_str = new char[len];
 	strcpy_s(mValue.value_str, len, value.c_str());
 }
@@ -256,7 +256,7 @@ Variant& Variant::operator=(const std::string& value)
 {
 	reset();
 	mType = TypeString;
-	int len = value.length() + 1;
+	uint32 len = (uint32)value.length() + 1;
 	mValue.value_str = new char[len];
 	strcpy_s(mValue.value_str, len, value.c_str());
 

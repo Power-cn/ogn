@@ -10,9 +10,6 @@
 #include "Channel.h"
 #include "ConfigManager.h"
 #include "Property.h"
-#include "Entity.h"
-#include "Player.h"
-#include "Npc.h"
 
 #include "Session.h"
 #include "SessionManager.h"
@@ -70,20 +67,25 @@
 #include "LuaEngine.h"
 #include "LuaScriptEngine.h"
 
-#include "Map.h"
-#include "Team.h"
 #include "Item.h"
 #include "Backpack.h"
 
 #include "Module.h"
-#include "WorldModule.h"
-#include "MapModule.h"
-#include "TeamModule.h"
 #include "ItemModule.h"
 #include "BackpackModule.h"
 
 #include "BackpackModule.h"
 #include "ItemModule.h"
+
+
+#include "./Module/WorldModule/Entity.h"
+#include "./Module/WorldModule/Player.h"
+#include "./Module/WorldModule/Npc.h"
+#include "./Module/WorldModule/PlayerHandler.h"
+#include "./Module/WorldModule/WorldModule.h"
+
+#include "./Module/MapModule/Map.h"
+#include "./Module/MapModule/MapModule.h"
 #include "./Module/WarModule/Skill.h"
 #include "./Module/WarModule/EntityStatus.h"
 #include "./Module/WarModule/War.h"
@@ -91,13 +93,17 @@
 #include "./Module/FriendsModule/Friends.h"
 #include "./Module/FriendsModule/FriendsModule.h"
 
+#include "./Module/TeamModule/TeamHandler.h"
+#include "./Module/TeamModule/Team.h"
+#include "./Module/TeamModule/TeamModule.h"
 #include "./Module/RoomModule/RoomHandler.h"
 #include "./Module/RoomModule/Room.h"
 #include "./Module/RoomModule/RoomModule.h"
+#include "./Module/GameModule/Game.h"
+#include "./Module/GameModule/GameModule.h"
 
 #include "Utils.h"
 #include "DBHandler.h"
-#include "PlayerHandler.h"
 #include "SessionHandler.h"
 #include "./Handler/WarHandler.h"
 #include "RedisProxy.h"
@@ -112,6 +118,7 @@
 #define sRedisProxy INSTANCE(RedisProxy)
 
 #define sWorld (*GetModule(WorldModule))
+#define sMap (*GetModule(MapModule))
 #define sTeam (*GetModule(TeamModule))
 #define sFriends (*GetModule(FriendsModule))
 #define sRoom (*GetModule(RoomModule))

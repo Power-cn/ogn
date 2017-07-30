@@ -75,8 +75,9 @@ bool Application::Initialize()
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
 	INSTANCE(SessionHandler);
-	INSTANCE(PlayerHandler);
+	//INSTANCE(PlayerHandler);
 	INSTANCE(WarHandler);
+	INSTANCE(TeamHandler);
 	INSTANCE(RoomHandler);
 
 	LOG_DEBUG(LogSystem::csl_color_green, "World listen Port:%d success", cf.Port);
@@ -91,6 +92,7 @@ bool Application::Initialize()
 	addModule(new WarModule);
 	addModule(new FriendsModule);
 	addModule(new RoomModule);
+
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 
@@ -249,7 +251,7 @@ void Application::doSessionLeaveWorld(Session* session)
 		doPlayerSave(plr, dict);
 
 		onLeaveWorld(plr, dict);
-		GetModule(WorldModule)->removePlayer(plr->getAccountId());
+		GetModule(WorldModule)->removePlayer(plr->getAccId());
 	}
 
 	NetSessionLeaveNotify nfy;
@@ -273,10 +275,10 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 
 	NetQueryRoleRes res;
 	DBRoleInfo info;
-	info.accountId = plr->getAccountId();
+	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
 	info.property.WriteBytes(stream.getPtr(), stream.getWPostion());
-	res.accountId = plr->getAccountId();
+	res.accountId = plr->getAccId();
 	res.roleInfos.push_back(info);
 	sendPacketToDB(res, session);
 }
@@ -518,6 +520,14 @@ void Application::OnInitialize()
 	LuaEngine::SetInt32("global", "EC_TEAM", EnumChannel::EC_TEAM);
 	LuaEngine::SetInt32("global", "EC_ROOM", EnumChannel::EC_ROOM);
 	LuaEngine::SetInt32("global", "EC_TARGET", EnumChannel::EC_TARGET);
+	int32 testint = 0;
+	testint = LuaEngine::GetInt32("global", "EC_WORLD");
+	testint = LuaEngine::GetInt32("global", "EC_MAP");
+	testint = LuaEngine::GetInt32("global", "EC_VIEW");
+	testint = LuaEngine::GetInt32("global", "EC_TEAM");
+	testint = LuaEngine::GetInt32("global", "EC_ROOM");
+	testint = LuaEngine::GetInt32("global", "EC_TARGET");
+
 
 	//LuaEngine::executeScript("team", "onEnterTeam", "sdfsdfsdfdsf");
 }

@@ -67,7 +67,7 @@ void LogSystem::info(const char* formt, ...)
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
-	st.context += "[INFO ]";
+	st.context += "[INFOR]";
 	st.context += m_buffer;
 	st.level = logLevel_info;
 	st.color = 0;
@@ -87,7 +87,7 @@ void LogSystem::warn(const char* formt, ...)
 	st.context = "[";
 	st.context += now_time;
 	st.context += "]";
-	st.context += "[WARN ]";
+	st.context += "[WARNI]";
 	st.context += m_buffer;
 	st.level = logLevel_warn;
 	st.color = 0;

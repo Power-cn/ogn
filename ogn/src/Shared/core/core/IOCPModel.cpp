@@ -40,7 +40,7 @@ SocketListener* IOCPModel::listen(const std::string& host, short port)
 	CreateIoCompletionPort((HANDLE)socketId, mIOCP, (ULONG_PTR)socketId, 0);
 
 	SOCKADDR_IN& addr = listener->getSockaddr();
-	memset(&addr, 0, sizeof(addr));
+	addr = {};
 
 	addr.sin_family = AF_INET;
 	addr.sin_addr.s_addr = htonl(INADDR_ANY);
@@ -218,7 +218,7 @@ bool IOCPModel::PostAccept(SocketListener* listener)
 
 	LPFN_ACCEPTEX pfn = listener->mPfn;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
-	memset(&ioOverlapped.overlapped, 0, sizeof(OVERLAPPED));
+	ioOverlapped.overlapped = {};
 	ioOverlapped.socket = socket;
 	ioOverlapped.ioState = IOState_Accept;
 	ioOverlapped.wBuffer.buf = ioOverlapped.dataBuffer;
@@ -262,7 +262,7 @@ bool IOCPModel::PostConnect(SocketClient* client)
 
 	LPFN_CONNECTEX pfn = client->mPfn;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
-	memset(&ioOverlapped.overlapped, 0, sizeof(OVERLAPPED));
+	ioOverlapped.overlapped = {};
 	ioOverlapped.socket = socket;
 	ioOverlapped.ioState = IOState_Connect;
 
@@ -294,7 +294,7 @@ bool IOCPModel::PostConnect(SocketClient* client)
 bool IOCPModel::PostRead(Socket* socket)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
-	memset(&ioOverlapped.overlapped, 0, sizeof(OVERLAPPED));
+	ioOverlapped.overlapped = {};
 	ioOverlapped.ioState = IOState_Recv;
 	ioOverlapped.wBuffer.buf = ioOverlapped.dataBuffer;
 	ioOverlapped.wBuffer.len = ioOverlapped.dataBufferCount;
@@ -343,8 +343,7 @@ bool IOCPModel::PostWrite(Socket* socket)
 		return false;
 	}
 	socket->startSend = true;
-
-	memset(&ioOverlapped.overlapped, 0, sizeof(OVERLAPPED));
+	ioOverlapped.overlapped = {};
 	ioOverlapped.wBuffer.len = sendSize;
 	ioOverlapped.ioState = IOState_Send;
 	int result = WSASend(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, Flags, &ioOverlapped.overlapped, NULL);

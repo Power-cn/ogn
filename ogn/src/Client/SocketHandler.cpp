@@ -23,6 +23,7 @@ int SocketHandler::onConnect(SocketEvent& e)
 	mUsers.pop();
 	if (!INSTANCE(RobotManager).mCurRobot) {
 		INSTANCE(RobotManager).mCurRobot = robot;
+		mCreate = false;
 	}
 	return 0;
 }
@@ -57,6 +58,7 @@ int SocketHandler::onExit(SocketEvent& e)
 {
 	INSTANCE(RobotManager).removeRobat(e.socket);
 	clients.erase(e.socket->getSocketId());
+	INSTANCE(RobotManager).mCurRobot = NULL;
 	LOG_ERROR("onExit");
 	return 0;
 }
@@ -64,6 +66,9 @@ int SocketHandler::onExit(SocketEvent& e)
 int SocketHandler::onException(SocketEvent& e)
 {
 	LOG_ERROR(__FUNCTION__);
+	delete e.targetDispatcher;
+
+	createRobot();
 	return 0;
 }
 
@@ -71,7 +76,7 @@ void SocketHandler::createRobot()
 {
 	if (mUsers.size() <= 0)
 		return;
-
+	mCreate = true;
 	std::pair<std::string, std::string>& pa = mUsers.front();
 	LOG_INFO("createRobot: %s", pa.first.c_str());
 

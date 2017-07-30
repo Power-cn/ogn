@@ -12,9 +12,11 @@ public:
 	int onException(SocketEvent& e);
 public:
 	void createRobot();
+
 public:
 	std::map<int32, Socket*> clients;
 	std::vector<SocketClient*>		mListSocketClient;
 	std::queue<std::pair<std::string, std::string>> mUsers;
 	int32	mIndex;
+	bool	mCreate = false;
 };

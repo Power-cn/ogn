@@ -30,6 +30,8 @@ ID_NetEntityFollowNotify,
 ID_NetEntityCancelFollowNotify,
 ID_NetChatMsgNotify,
 ID_NetResponseMsgNotify,
+ID_NetCreateTeamReq,
+ID_NetCreateTeamRes,
 ID_NetOrganizeTeamReq,
 ID_NetOrganizeTeamRes,
 ID_NetAgreeTeamReq,
@@ -80,6 +82,8 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEntityFollowNotif
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEntityCancelFollowNotify, "NetEntityCancelFollowNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChatMsgNotify, "NetChatMsgNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetResponseMsgNotify, "NetResponseMsgNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateTeamReq, "NetCreateTeamReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateTeamRes, "NetCreateTeamRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetOrganizeTeamReq, "NetOrganizeTeamReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetOrganizeTeamRes, "NetOrganizeTeamRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAgreeTeamReq, "NetAgreeTeamReq");
@@ -1221,6 +1225,52 @@ for (int i = 0; i < msgParams_TEMP; ++i)
 
 public int msgId;
 public List<string> msgParams;
+
+}
+public class NetCreateTeamReq : Packet
+{
+	public NetCreateTeamReq():base((int)PACKET_ID_ENUM.ID_NetCreateTeamReq)
+	{
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+
+}
+public class NetCreateTeamRes : Packet
+{
+	public NetCreateTeamRes():base((int)PACKET_ID_ENUM.ID_NetCreateTeamRes)
+	{
+teamInfo = new TeamInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(teamInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(teamInfo);
+
+		return true;
+	}
+
+public TeamInfo teamInfo;
 
 }
 public class NetOrganizeTeamReq : Packet

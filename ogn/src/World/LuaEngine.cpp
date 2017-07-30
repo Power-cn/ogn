@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-LuaScript::LuaScript(const std::string& path)
+LuaScript::LuaScript(cstring& path)
 {
 	uint32 spos = (uint32)path.find_last_of("/");
 	spos++;
@@ -38,7 +38,7 @@ LuaScript::~LuaScript()
 }
 
 
-bool LuaScript::loadScript(const std::string& path)
+bool LuaScript::loadScript(cstring& path)
 {
 	if (luaL_dofile(mLuaState, path.c_str()))
 	{
@@ -62,7 +62,7 @@ LuaEngine::~LuaEngine()
 	clearScript();
 }
 
-LuaScript* LuaEngine::loadScript(const std::string& path)
+LuaScript* LuaEngine::loadScript(cstring& path)
 {
 	LuaScript* luaScript = new LuaScript(path);
 	mMapLuaScript.insert(std::make_pair(luaScript->getName(), luaScript));
@@ -71,7 +71,7 @@ LuaScript* LuaEngine::loadScript(const std::string& path)
 
 
 
-LuaScript* LuaEngine::getScript(const std::string& name)
+LuaScript* LuaEngine::getScript(cstring& name)
 {
 	auto itr = mMapLuaScript.find(name);
 	if (itr != mMapLuaScript.end())
@@ -90,7 +90,7 @@ void LuaEngine::clearScript()
 	}
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, int32 p1)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1)
 {
 	sCurrentObject = object;
 
@@ -116,7 +116,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2)
 {
 	sCurrentObject = object;
 
@@ -142,7 +142,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
 {
 	sCurrentObject = object;
 
@@ -168,7 +168,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
 {
 	sCurrentObject = object;
 
@@ -194,7 +194,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1)
 {
 	sCurrentObject = object;
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
@@ -219,7 +219,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2)
 {
 	sCurrentObject = object;
 
@@ -245,7 +245,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
 {
 	sCurrentObject = object;
 
@@ -271,7 +271,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
 {
 	sCurrentObject = object;
 
@@ -297,7 +297,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, const std::string& name, const std::string& func)
+uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func)
 {
 	sCurrentObject = object;
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
@@ -322,7 +322,7 @@ uint32 LuaEngine::executeScript(Object* object, const std::string& name, const s
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -346,7 +346,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -370,7 +370,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -394,7 +394,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -418,7 +418,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -442,7 +442,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -466,7 +466,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -490,7 +490,7 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4)
+uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -514,40 +514,40 @@ uint32 LuaEngine::executeScript(const std::string& name, const std::string& func
 	return 0;
 }
 
-int32 LuaEngine::GetInt32(const std::string& name, const std::string& field)
+int32 LuaEngine::GetInt32(cstring& name, cstring& field)
 {
 	int32 ret = 0;
 	GetValue<int32>(name, field, ret);
 	return ret;
 }
 
-bool LuaEngine::SetInt32(const std::string& name, const std::string& field, const int32 value)
+bool LuaEngine::SetInt32(cstring& name, cstring& field, const int32 value)
 {
 	SetValue<int32>(name, field, value);
 	return true;
 }
 
-float64 LuaEngine::GetFloat64(const std::string& name, const std::string& field)
+float64 LuaEngine::GetFloat64(cstring& name, cstring& field)
 {
 	float64 ret = 0;
 	GetValue<float64>(name, field, ret);
 	return ret;
 }
 
-bool LuaEngine::SetFloat64(const std::string& name, const std::string& field, const float64 value)
+bool LuaEngine::SetFloat64(cstring& name, cstring& field, const float64 value)
 {
 	SetValue<float64>(name, field, value);
 	return true;
 }
 
-std::string LuaEngine::GetString(const std::string& name, const std::string& field)
+std::string LuaEngine::GetString(cstring& name, cstring& field)
 {
 	std::string ret = "";
 	GetValue<std::string>(name, field, ret);
 	return ret;
 }
 
-bool LuaEngine::SetString(const std::string& name, const std::string& field, const std::string& value)
+bool LuaEngine::SetString(cstring& name, cstring& field, cstring& value)
 {
 	SetValue<std::string>(name, field, value);
 	return true;

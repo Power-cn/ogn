@@ -4,8 +4,9 @@
 enum RoomPlayerState
 {
 	RPS_None = 0,
-	RPS_Observed,
-
+	RPS_Ready,				// 准备
+	RPS_Game,				// 游戏中
+	RPS_Observed,			// 观战中
 };
 
 class RoomPlayer

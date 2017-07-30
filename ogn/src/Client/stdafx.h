@@ -2,6 +2,7 @@
 
 #include "Shared.hpp"
 #include "protocols/protocols.h"
+#include "Channel.h"
 #include "Property.h"
 #include <windows.h>
 #include "ConfigManager.h"

@@ -13,8 +13,8 @@ Object* luaObject();
 Entity* luaEntity();
 Player* luaPlayer();
 
-Entity* luaPlayerToEntity(Player* player);
-Entity* luaNpcToEntity(Npc* npc);
-PropertyHelper* luaPropertyHelper();
+Entity* luaPlrToEnt(Player* player);
+Entity* luaNpcToEnt(Npc* npc);
+PropertyHelper* luaProperty();
 WorldModule* luaWorld();
 RoomModule* luaRoom();

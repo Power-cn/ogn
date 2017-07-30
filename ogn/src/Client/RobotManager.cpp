@@ -57,6 +57,13 @@ Robot* RobotManager::getRobat(Socket* socket)
 
 void RobotManager::update(float32 time, float32 delay)
 {
+	if (INSTANCE(SocketHandler).mCreate == false)
+	{
+		if (mCurRobot == NULL)
+		{
+			INSTANCE(SocketHandler).createRobot();
+		}
+	}
 	INSTANCE(CmdDispatcher).update(time, delay);
 	for (auto itr : mMapSocketRobat)
 	{
@@ -77,18 +84,18 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
 	if (res->result == 0)
 	{
-		NetFirst nFirst;
+		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accountInfo.user.c_str(), res->accountInfo.id, res->guid);
 
+		/*
+		NetFirst nFirst;
 		uint32 length = 1024 * 7;
 		char* datas = new char[length];
 		nFirst.sbytes.WriteBytes(datas, length);
 		robot->sendPacket(nFirst);
 
-		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accountId:%d guid:%llu", res->accountInfo.user.c_str(), res->accountInfo.id, res->guid);
 		NetPingNotify nfy;
 		nfy.time = GetTickCount();
 		robot->sendPacket(nfy);
-
 		robot->mGuid = res->guid;
 		robot->mAccountId = res->accountInfo.id;
 		robot->mIsLogin = true;
@@ -99,6 +106,7 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		msg.gmParams.push_back("p2");
 		msg.gmParams.push_back("p3");
 		robot->sendPacket(msg);
+		*/
 
 		//NetChatMsgNotify msgNfy;
 		//char szBuffer[256] = { 0 };
@@ -178,7 +186,18 @@ int RobotManager::onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotif
 
 int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 {
-	LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(),nfy->from.c_str(), nfy->chatMsg.c_str());
+	switch (nfy->channelType)
+	{
+	case EC_ROOM:
+		LOG_DEBUG(LogSystem::csl_color_green, "·¿¼äÆµµÀ:%s", nfy->chatMsg.c_str());
+		break;
+	case EC_TARGET:
+		LOG_DEBUG(LogSystem::csl_color_green, "from:%s %s", nfy->from.c_str(), nfy->chatMsg.c_str());
+		break;
+	default:
+		LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(), nfy->from.c_str(), nfy->chatMsg.c_str());
+		break;
+	}
 	return 0;
 }
 

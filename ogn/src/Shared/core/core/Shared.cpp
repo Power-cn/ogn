@@ -470,7 +470,7 @@ void Shared::Clipboard(const std::string& str)
 	if (!OpenClipboard(NULL))
 		return;
 	//  注意 selStr 是你要复制到剪切板的字符串， 这里只做 声明用;
-	int nCount = str.size();
+	uint32 nCount = (uint32)str.size();
 	HGLOBAL hGlobalMem = GlobalAlloc(GMEM_MOVEABLE, (nCount + 1) * sizeof(TCHAR));
 	if (!hGlobalMem)
 	{

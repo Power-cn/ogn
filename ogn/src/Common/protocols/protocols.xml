@@ -197,6 +197,14 @@
       <member type="int32" name="msgId" />
       <member type="vector" name="msgParams" element="string" />
     </element>
+
+    <element id="ID_NetCreateTeamReq" name="NetCreateTeamReq" >
+    </element>
+
+    <element id="ID_NetCreateTeamRes" name="NetCreateTeamRes" >
+      <member type="TeamInfo" name="teamInfo" />
+    </element>
+
     
     <element id="ID_NetOrganizeTeamReq" name="NetOrganizeTeamReq" >
       <member type="string" name="name" />
@@ -272,6 +280,22 @@
 
     <element id="ID_NetRoomListRes" name="NetRoomListRes" >
       <member type="vector" name="roomInfoInfos" element="RoomInfo" />
+    </element>
+
+    <element id="ID_NetRoomReadyReq" name="NetRoomReadyReq" >
+      <member type="uint8" name="isReady" comment="0.取消准备1.准备" />
+    </element>
+
+    <element id="ID_NetRoomReadyRes" name="NetRoomReadyRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
+      <member type="uint8" name="isReady" comment="0.取消准备1.准备" />
+    </element>
+
+    <element id="ID_NetRoomStartGameReq" name="NetRoomStartGameReq" >
+    </element>
+
+    <element id="ID_NetRoomStartGameRes" name="NetRoomStartGameRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

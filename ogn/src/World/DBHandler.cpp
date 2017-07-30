@@ -48,7 +48,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 		}
 
 		player = new Player;
-		player->setAccountId(res->accountInfo.id);
+		player->setAccId(res->accountInfo.id);
 		player->setUser(res->accountInfo.user);
 		player->setName(res->accountInfo.user);
 		player->bindSession(session);
@@ -57,7 +57,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 	} while (false);
 
 	NetQueryRoleReq req;
-	req.accountId = player->getAccountId();
+	req.accountId = player->getAccId();
 	req.user = player->getUser();
 	req.roleCount = 1;
 	session->sendPacketToTarget(req, INSTANCE(Application).getDBServer()->getSocket());
@@ -83,7 +83,7 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 		sWorld.addPlayerToUserId(player);
 
 		char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, player->getName().c_str(), player->getUserId());
+		sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, player->getName(), player->getUserId());
 		sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
 		Dictionary dict;

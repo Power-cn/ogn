@@ -26,6 +26,8 @@ ID_NetEntityFollowNotify,
 ID_NetEntityCancelFollowNotify,
 ID_NetChatMsgNotify,
 ID_NetResponseMsgNotify,
+ID_NetCreateTeamReq,
+ID_NetCreateTeamRes,
 ID_NetOrganizeTeamReq,
 ID_NetOrganizeTeamRes,
 ID_NetAgreeTeamReq,
@@ -1114,6 +1116,50 @@ std::vector<std::string> msgParams;
 
 };
 
+class NetCreateTeamReq : public Packet {
+public:
+	NetCreateTeamReq():
+	Packet(ID_NetCreateTeamReq) {
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+
+		return true;
+	}
+public:
+
+};
+
+class NetCreateTeamRes : public Packet {
+public:
+	NetCreateTeamRes():
+	Packet(ID_NetCreateTeamRes) {
+teamInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << teamInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> teamInfo);
+
+		return true;
+	}
+public:
+TeamInfo teamInfo;
+
+};
+
 class NetOrganizeTeamReq : public Packet {
 public:
 	NetOrganizeTeamReq():
@@ -1617,6 +1663,8 @@ REGISTER_PACKET_HELPER(ID_NetEntityFollowNotify, NetEntityFollowNotify);
 REGISTER_PACKET_HELPER(ID_NetEntityCancelFollowNotify, NetEntityCancelFollowNotify);
 REGISTER_PACKET_HELPER(ID_NetChatMsgNotify, NetChatMsgNotify);
 REGISTER_PACKET_HELPER(ID_NetResponseMsgNotify, NetResponseMsgNotify);
+REGISTER_PACKET_HELPER(ID_NetCreateTeamReq, NetCreateTeamReq);
+REGISTER_PACKET_HELPER(ID_NetCreateTeamRes, NetCreateTeamRes);
 REGISTER_PACKET_HELPER(ID_NetOrganizeTeamReq, NetOrganizeTeamReq);
 REGISTER_PACKET_HELPER(ID_NetOrganizeTeamRes, NetOrganizeTeamRes);
 REGISTER_PACKET_HELPER(ID_NetAgreeTeamReq, NetAgreeTeamReq);

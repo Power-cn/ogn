@@ -23,6 +23,7 @@ Room* RoomModule::Create(Player* aPlr)
 	if (FindPlayerRoom(aPlr->getUserId())) return NULL;
 	Room* aRoom = new Room();
 	AddRoom(aRoom);
+	OnCreate(aRoom, aPlr->getUserId());
 	return aRoom;
 }
 
@@ -116,11 +117,11 @@ bool RoomModule::LeaveRoom(Room* aRoom, uint32 userId)
 	res.roomId = aRoom->GetInsId();
 	res.userId = userId;
 	aRoom->sendPacketToAll(res);
-	aRoom->DoLeave(userId);
-	RemovePlayerRoom(userId);
-	
+
 	OnLeave(aRoom, userId);
 
+	aRoom->DoLeave(userId);
+	RemovePlayerRoom(userId);
 	if (aRoom->GetRoomPlayerCount() <= 0)
 		RemoveRoom(aRoom->GetInsId());
 	return true;
@@ -157,11 +158,11 @@ Room* RoomModule::FindPlayerRoom(uint32 userId)
 	return NULL;
 }
 
-Room* RoomModule::AddPlayerRoom(uint32 userId, Room* rm)
+Room* RoomModule::AddPlayerRoom(uint32 userId, Room* aRoom)
 {
 	if (FindPlayerRoom(userId)) return NULL;
-	mMapPlayerRoom[userId] = rm;
-	return rm;
+	mMapPlayerRoom[userId] = aRoom;
+	return aRoom;
 }
 
 void RoomModule::RemovePlayerRoom(uint32 userId)
@@ -182,7 +183,7 @@ Room* RoomModule::FindRoom(uint32 roomId)
 Room* RoomModule::AddRoom(Room* aRoom)
 {
 	if (FindRoom(aRoom->GetInsId())) return NULL;
-	mMapPlayerRoom[aRoom->GetInsId()] = aRoom;
+	mMapRoom[aRoom->GetInsId()] = aRoom;
 	return aRoom;
 }
 
@@ -276,6 +277,11 @@ void RoomModule::DoRoomList(Player* aPlr, uint32 start, uint32 count)
 	}
 
 	aPlr->sendPacket(res);
+}
+
+void RoomModule::OnCreate(Room* aRoom, uint32 userId)
+{
+	LuaEngine::executeScript("room", "OnCreate", aRoom->GetInsId(), userId);
 }
 
 void RoomModule::OnEnter(Room* aRoom, uint32 userId)

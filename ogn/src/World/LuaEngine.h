@@ -18,11 +18,11 @@ namespace luabind
 class LuaScript
 {
 public:
-	LuaScript(const std::string& path);
+	LuaScript(cstring& path);
 	~LuaScript();
-	bool loadScript(const std::string& path);
+	bool loadScript(cstring& path);
 	void bindScript();
-	const std::string& getName() { return mName; }
+	cstring& getName() { return mName; }
 	lua_State* getLuaState() { return mLuaState; }
 protected:
 	lua_State* mLuaState;
@@ -37,39 +37,39 @@ public:
 	~LuaEngine();
 	void reloadScript();
 protected:
-	LuaScript* loadScript(const std::string& path);
-	LuaScript* getScript(const std::string& name);
+	LuaScript* loadScript(cstring& path);
+	LuaScript* getScript(cstring& name);
 	void clearScript();
 public:
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, int32 p1);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3);
-	static uint32 executeScript(Object* object, const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4);
-	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1);
-	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2);
-	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3);
-	static uint32 executeScript(const std::string& name, const std::string& func, const std::string& p1, const std::string& p2, const std::string& p3, const std::string& p4);
-	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1);
-	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2);
-	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3);
-	static uint32 executeScript(const std::string& name, const std::string& func, int32 p1, int32 p2, int32 p3, int32 p4);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
+	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
+	static uint32 executeScript(cstring& name, cstring& func, cstring& p1);
+	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2);
+	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
+	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
+	static uint32 executeScript(cstring& name, cstring& func, int32 p1);
+	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2);
+	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
+	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
 
 
-	static int32 GetInt32(const std::string& name, const std::string& field);
-	static bool SetInt32(const std::string& name, const std::string& field, const int32 value);
-	static float64 GetFloat64(const std::string& name, const std::string& field);
-	static bool SetFloat64(const std::string& name, const std::string& field, const float64 value);
-	static std::string GetString(const std::string& name, const std::string& field);
-	static bool SetString(const std::string& name, const std::string& field, const std::string& value);
+	static int32 GetInt32(cstring& name, cstring& field);
+	static bool SetInt32(cstring& name, cstring& field, const int32 value);
+	static float64 GetFloat64(cstring& name, cstring& field);
+	static bool SetFloat64(cstring& name, cstring& field, const float64 value);
+	static std::string GetString(cstring& name, cstring& field);
+	static bool SetString(cstring& name, cstring& field, cstring& value);
 
 
 	template<class T>
-	static bool GetValue(const std::string& name, const std::string& field, T& ret)
+	static bool GetValue(cstring& name, cstring& field, T& ret)
 	{
 		LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 		if (!luaScript)	return false;
@@ -95,7 +95,7 @@ public:
 	}
 
 	template<class T>
-	static bool SetValue(const std::string& name, const std::string& field, const T& ret) {
+	static bool SetValue(cstring& name, cstring& field, const T& ret) {
 
 		LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 		if (!luaScript)	return false;

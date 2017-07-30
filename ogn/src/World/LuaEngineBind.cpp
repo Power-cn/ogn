@@ -19,9 +19,9 @@ void LuaScript::bindScript()
 			luabind::def("luaObject", &luaObject),
 			luabind::def("luaEntity", &luaEntity),
 			luabind::def("luaPlayer", &luaPlayer),
-			luabind::def("luaPlayerToEntity", &luaPlayerToEntity),
-			luabind::def("luaNpcToEntity", &luaNpcToEntity),
-			luabind::def("luaPropertyHelper", &luaPropertyHelper),
+			luabind::def("luaPlrToEnt", &luaPlrToEnt),
+			luabind::def("luaNpcToEnt", &luaNpcToEnt),
+			luabind::def("luaProperty", &luaProperty),
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom)
 			//luabind::def("TestFunc", &TestFunc)
@@ -45,6 +45,7 @@ void LuaScript::bindScript()
 			.def("getUserId", &Player::getUserId)
 			.def("getName", &Player::getName)
 			.def("onCreate", &Player::onCreate)
+			.def("sendPacketToMsg", &Player::sendPacketToMsg)
 			,
 
 			luabind::class_<Npc>("Npc"),
@@ -55,9 +56,16 @@ void LuaScript::bindScript()
 			.def("sendPacketToAll", &WorldModule::sendPacketToAll)
 			.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
 			.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
+
 			.def("getEntityByName", &WorldModule::getEntityByName)
+			.def("getEntity", &WorldModule::getEntity)
+
 			.def("getPlayerByName", &WorldModule::getPlayerByName)
+			.def("getPlayerByGuid", &WorldModule::getPlayerByGuid)
+			.def("getPlayer", &WorldModule::getPlayer)
 			.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
+
+			.def("getPlayerCount", &WorldModule::getPlayerCount)
 			,
 
 			luabind::class_<RoomPlayer>("RoomPlayer")
@@ -89,6 +97,8 @@ void LuaScript::bindScript()
 			.def("AddPlayer", &Room::AddPlayer)
 			.def("GetRoomPlayer", &Room::GetRoomPlayer)
 			.def("GetMaster", &Room::GetMaster)
+			.def("GetPassword", &Room::GetPassword)
+			.def("GetName", &Room::GetName)
 			,
 
 			luabind::class_<RoomModule>("RoomModule")
@@ -117,10 +127,17 @@ void LuaEngine::reloadScript()
 {
 	clearScript();
 
-	loadScript("../config/cfg/script/global.lua");
-	loadScript("../config/cfg/script/player.lua");
-	loadScript("../config/cfg/script/gm.lua");
-	loadScript("../config/cfg/script/team.lua");
+	std::vector<std::string> files;
+	Shared::GetDirectoryFiles("../config/cfg/script", files);
+	for (std::string& path : files)
+	{
+		loadScript(path);
+	}
+	//loadScript("../config/cfg/script/global.lua");
+	//loadScript("../config/cfg/script/player.lua");
+	//loadScript("../config/cfg/script/gm.lua");
+	//loadScript("../config/cfg/script/team.lua");
+	//loadScript("../config/cfg/script/room.lua");
 
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

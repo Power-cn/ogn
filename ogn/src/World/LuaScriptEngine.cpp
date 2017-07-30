@@ -16,17 +16,17 @@ Player* luaPlayer()
 	return (Player*)LuaEngine::sCurrentObject;
 }
 
-Entity* luaPlayerToEntity(Player* player)
+Entity* luaPlrToEnt(Player* player)
 {
 	return player;
 }
 
-Entity* luaNpcToEntity(Npc* npc)
+Entity* luaNpcToEnt(Npc* npc)
 {
 	return npc;
 }
 
-PropertyHelper* luaPropertyHelper()
+PropertyHelper* luaProperty()
 {
 	return &INSTANCE(PropertyHelper);
 }

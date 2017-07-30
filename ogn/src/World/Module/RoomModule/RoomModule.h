@@ -20,7 +20,7 @@ public:
 	bool ChangeMaster(Room* aRoom, uint32 oldUserId, uint32 newUserId);
 
 	Room* FindPlayerRoom(uint32 userId);
-	Room* AddPlayerRoom(uint32 userId, Room* rm);
+	Room* AddPlayerRoom(uint32 userId, Room* aRoom);
 	void RemovePlayerRoom(uint32 userId);
 
 	Room* FindRoom(uint32 roomId);
@@ -35,6 +35,7 @@ public:
 	void DoChangeRoomMaster(Player* aPlr, uint32 roomId, uint32 newUserId);
 	void DoRoomList(Player* aPlr, uint32 start, uint32 count);
 protected:
+	void OnCreate(Room* aRoom, uint32 userId);
 	void OnEnter(Room* aRoom, uint32 userId);
 	void OnLeave(Room* aRoom, uint32 userId);
 	void OnChangeMaster(Room* aRoom, uint32 oldUserId, uint32 newUserId);
