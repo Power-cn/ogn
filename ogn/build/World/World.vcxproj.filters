@@ -186,6 +186,9 @@
     <ClCompile Include="..\..\src\World\Module\WorldModule\PlayerHandler.cpp">
       <Filter>Module\WorldModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -313,6 +316,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Channel.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h">
+      <Filter>Module\GameModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
