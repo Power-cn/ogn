@@ -49,6 +49,17 @@
       <member type="uint32" name="maxCount" />
       <member type="vector" name="roomPlayerInfos" element="RoomPlayerInfo" />
     </element>
+
+    <element name="GameEntityInfo" parent="object">
+      <member type="uint32" name="userId" />
+      <member type="vector" name="pokers" element="uint8" />
+    </element>
+
+    <element name="GameGoldenFlowerInfo" parent="object">
+      <member type="uint32" name="insId" />
+      <member type="uint32" name="roomId" />
+      <member type="vector" name="gameEntInfos" element="GameEntityInfo" />
+    </element>
     
   </class>
 
@@ -297,6 +308,10 @@
 
     <element id="ID_NetRoomStartGameRes" name="NetRoomStartGameRes" >
       <member type="uint8" name="result" comment="0.失败1.成功" />
+    </element>
+
+    <element id="ID_NetGameStartNotify" name="NetGameStartNotify" >
+      <member type="GameGoldenFlowerInfo" name="info" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

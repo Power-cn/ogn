@@ -67,20 +67,25 @@ GameModle* GameModule::AddPlrGameModle(uint32 userId, GameModle* aGameModle)
 {
 	auto itr = mMapPlrGameModle.find(userId);
 	if (itr != mMapPlrGameModle.end())
-	{
+		return NULL;
 
-	}
-	return NULL;
+	mMapPlrGameModle[userId] = aGameModle;
+	return aGameModle;
 }
 
 GameModle* GameModule::FindPlrGameModule(uint32 userId)
 {
+	auto itr = mMapPlrGameModle.find(userId);
+	if (itr != mMapPlrGameModle.end())
+		return itr->second;
 	return NULL;
 }
 
-void GameModule::DelPlrGameModule(uint32 insId)
+void GameModule::DelPlrGameModule(uint32 userId)
 {
-
+	auto itr = mMapPlrGameModle.find(userId);
+	if (itr != mMapPlrGameModle.end())
+		mMapPlrGameModle.erase(itr);
 }
 
 bool GameModule::DoStartGame(Room* aRoom)
@@ -90,8 +95,27 @@ bool GameModule::DoStartGame(Room* aRoom)
 	{
 		RoomPlayer* aRoomPlayer = aRoom->GetRoomPlayer(i);
 		if (aRoomPlayer == NULL) continue;
-
+		if (aRoomPlayer->GetState() != RPS_Game) continue;
+		
+		GameEntity* aGameEnt = new GameEntity;
+		aGameEnt->userId = aRoomPlayer->mUserId;
+		aGame->AddGameEnt(aGameEnt);
+		AddPlrGameModle(aRoomPlayer->mUserId, aGame);
 	}
+	AddGameModle(aGame);
+
+	for (uint8 k = 0; k < MAX_UNIT_POKER_COUNT; ++k)
+	{
+		for (uint32 i = 0; i < aGame->GetGameEntCount(); ++i)
+		{
+			GameEntity* aGameEnt = aGame->GetGameEnt(i);
+			aGameEnt->poker.push_back(aGame->DoDealPoker());
+		}
+	}
+
+	NetGameStartNotify nfy;
+	*aGame >> nfy.info;
+	aRoom->sendPacketToAll(nfy);
 	return true;
 }
 

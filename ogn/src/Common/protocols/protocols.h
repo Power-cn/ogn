@@ -49,6 +49,7 @@ ID_NetRoomReadyReq,
 ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
+ID_NetGameStartNotify,
 ID_NetEnd,
 
 };
@@ -311,6 +312,84 @@ std::string password;
 std::string name;
 uint32 maxCount;
 std::vector<RoomPlayerInfo> roomPlayerInfos;
+
+};
+
+class GameEntityInfo : public Object {
+public:
+	GameEntityInfo() {
+userId = 0;
+
+
+	}
+
+	bool operator >> (BinaryStream& bytes) {
+CHECK(bytes << userId);
+uint32 pokers_Size = (uint32)pokers.size();
+bytes << pokers_Size;
+for (uint32 pokers_i = 0; pokers_i < pokers_Size; ++pokers_i) {
+	bytes << pokers[pokers_i];
+}
+
+		return true;
+	}
+
+	bool operator << (BinaryStream& bytes) {
+CHECK(bytes >> userId);
+uint32 pokers_Size = 0;
+bytes >> pokers_Size;
+for (uint32 pokers_i = 0; pokers_i < pokers_Size; ++pokers_i) {
+	uint8 pokers_info;
+	bytes >> pokers_info;
+	pokers.push_back(pokers_info);
+}
+
+		return true;
+	}
+public:
+uint32 userId;
+std::vector<uint8> pokers;
+
+};
+
+class GameGoldenFlowerInfo : public Object {
+public:
+	GameGoldenFlowerInfo() {
+insId = 0;
+roomId = 0;
+
+
+	}
+
+	bool operator >> (BinaryStream& bytes) {
+CHECK(bytes << insId);
+CHECK(bytes << roomId);
+uint32 gameEntInfos_Size = (uint32)gameEntInfos.size();
+bytes << gameEntInfos_Size;
+for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
+	bytes << gameEntInfos[gameEntInfos_i];
+}
+
+		return true;
+	}
+
+	bool operator << (BinaryStream& bytes) {
+CHECK(bytes >> insId);
+CHECK(bytes >> roomId);
+uint32 gameEntInfos_Size = 0;
+bytes >> gameEntInfos_Size;
+for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
+	GameEntityInfo gameEntInfos_info;
+	bytes >> gameEntInfos_info;
+	gameEntInfos.push_back(gameEntInfos_info);
+}
+
+		return true;
+	}
+public:
+uint32 insId;
+uint32 roomId;
+std::vector<GameEntityInfo> gameEntInfos;
 
 };
 
@@ -1720,6 +1799,30 @@ uint8 result;
 
 };
 
+class NetGameStartNotify : public Packet {
+public:
+	NetGameStartNotify():
+	Packet(ID_NetGameStartNotify) {
+info;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << info);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> info);
+
+		return true;
+	}
+public:
+GameGoldenFlowerInfo info;
+
+};
+
 class NetEnd : public Packet {
 public:
 	NetEnd():
@@ -1790,4 +1893,5 @@ REGISTER_PACKET_HELPER(ID_NetRoomReadyReq, NetRoomReadyReq);
 REGISTER_PACKET_HELPER(ID_NetRoomReadyRes, NetRoomReadyRes);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameReq, NetRoomStartGameReq);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameRes, NetRoomStartGameRes);
+REGISTER_PACKET_HELPER(ID_NetGameStartNotify, NetGameStartNotify);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

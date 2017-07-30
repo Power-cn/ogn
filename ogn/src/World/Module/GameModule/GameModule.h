@@ -19,7 +19,7 @@ public:
 
 	GameModle* AddPlrGameModle(uint32 userId, GameModle* aGameModle);
 	GameModle* FindPlrGameModule(uint32 userId);
-	void DelPlrGameModule(uint32 insId);
+	void DelPlrGameModule(uint32 userId);
 
 public:
 	bool DoStartGame(Room* aRoom);

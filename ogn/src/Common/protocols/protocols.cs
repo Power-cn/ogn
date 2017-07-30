@@ -53,6 +53,7 @@ ID_NetRoomReadyReq,
 ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
+ID_NetGameStartNotify,
 ID_NetEnd,
 
 }
@@ -109,6 +110,7 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyReq, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyRes, "NetRoomReadyRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq, "NetRoomStartGameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes, "NetRoomStartGameRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameStartNotify, "NetGameStartNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -393,6 +395,94 @@ public string password;
 public string name;
 public uint maxCount;
 public List<RoomPlayerInfo> roomPlayerInfos;
+
+}
+public class GameEntityInfo : Header
+{
+	public GameEntityInfo()
+	{
+userId = 0;
+pokers = new List<sbyte>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(userId);
+int pokers_TEMP = pokers.Count;
+bytes.Write(pokers_TEMP);
+for (int i = 0; i < pokers_TEMP; ++i)
+{
+	bytes.Write(pokers[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref userId);
+int pokers_TEMP = 0;
+bytes.Read(ref pokers_TEMP);
+for (int i = 0; i < pokers_TEMP; ++i)
+{
+	sbyte info_pokers;
+	info_pokers = 0;
+	bytes.Read(ref info_pokers);
+	pokers.Add(info_pokers);
+}
+
+		return true;
+	}
+
+public uint userId;
+public List<sbyte> pokers;
+
+}
+public class GameGoldenFlowerInfo : Header
+{
+	public GameGoldenFlowerInfo()
+	{
+insId = 0;
+roomId = 0;
+gameEntInfos = new List<GameEntityInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(insId);
+bytes.Write(roomId);
+int gameEntInfos_TEMP = gameEntInfos.Count;
+bytes.Write(gameEntInfos_TEMP);
+for (int i = 0; i < gameEntInfos_TEMP; ++i)
+{
+	bytes.Write(gameEntInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref insId);
+bytes.Read(ref roomId);
+int gameEntInfos_TEMP = 0;
+bytes.Read(ref gameEntInfos_TEMP);
+for (int i = 0; i < gameEntInfos_TEMP; ++i)
+{
+	GameEntityInfo info_gameEntInfos;
+	info_gameEntInfos = new GameEntityInfo();
+	bytes.Read(info_gameEntInfos);
+	gameEntInfos.Add(info_gameEntInfos);
+}
+
+		return true;
+	}
+
+public uint insId;
+public uint roomId;
+public List<GameEntityInfo> gameEntInfos;
 
 }
 public class NetFirst : Packet
@@ -1862,6 +1952,31 @@ bytes.Read(ref result);
 	}
 
 public sbyte result;
+
+}
+public class NetGameStartNotify : Packet
+{
+	public NetGameStartNotify():base((int)PACKET_ID_ENUM.ID_NetGameStartNotify)
+	{
+info = new GameGoldenFlowerInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(info);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(info);
+
+		return true;
+	}
+
+public GameGoldenFlowerInfo info;
 
 }
 public class NetEnd : Packet
