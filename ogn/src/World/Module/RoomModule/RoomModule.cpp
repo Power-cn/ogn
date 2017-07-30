@@ -279,6 +279,54 @@ void RoomModule::DoRoomList(Player* aPlr, uint32 start, uint32 count)
 	aPlr->sendPacket(res);
 }
 
+void RoomModule::DoRoomReady(Player* aPlr, uint8 isReady)
+{
+	NetRoomReadyRes res;
+	Room* aRoom = FindPlayerRoom(aPlr->getUserId());
+	if (aRoom == NULL) {
+		goto fial;
+	}
+	RoomPlayer* aRoomPlayer = aRoom->FindPlayer(aPlr->getUserId());
+	if (aRoomPlayer == NULL) {
+		goto fial;
+	}
+	if (aRoomPlayer->GetState() != RPS_None) {
+		goto fial;
+	}
+
+	aRoomPlayer->SetState(RPS_Ready);
+	res.userId = aPlr->getUserId();
+	res.result = NResultSuccess;
+	res.isReady = aRoomPlayer->GetState();
+	aRoom->sendPacketToAll(res);
+	return;
+fial:
+	res.result = NResultFail;
+	aPlr->sendPacket(res);
+}
+
+void RoomModule::DoRoomStartGame(Player* aPlr)
+{
+	NetRoomStartGameRes res;
+	Room* aRoom = FindPlayerRoom(aPlr->getUserId());
+	if (aRoom == NULL) {
+		goto fial;
+	}
+
+	if (!aRoom->IsCanStart())
+	{
+		goto fial;
+	}
+
+	res.result = NResultSuccess;
+	aRoom->sendPacketToAll(res);
+
+	sGame.DoStartGame(aRoom);
+fial:
+	res.result = NResultFail;
+	aPlr->sendPacket(res);
+}
+
 void RoomModule::OnCreate(Room* aRoom, uint32 userId)
 {
 	LuaEngine::executeScript("room", "OnCreate", aRoom->GetInsId(), userId);

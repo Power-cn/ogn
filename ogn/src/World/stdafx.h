@@ -100,6 +100,7 @@
 #include "./Module/RoomModule/Room.h"
 #include "./Module/RoomModule/RoomModule.h"
 #include "./Module/GameModule/Game.h"
+#include "./Module/GameModule/GameGoldenFlower.h"
 #include "./Module/GameModule/GameModule.h"
 
 #include "Utils.h"
@@ -122,6 +123,7 @@
 #define sTeam (*GetModule(TeamModule))
 #define sFriends (*GetModule(FriendsModule))
 #define sRoom (*GetModule(RoomModule))
+#define sGame (*GetModule(GameModule))
 
 #define RegDBEvent(id, cb, thisObject) RegisterEventProcess(GetDBServer(), id, cb, thisObject)
 #define RegWorldEvent(id, cb, thisObject) RegisterEventProcess((GetWorldServer()), id, cb, thisObject)

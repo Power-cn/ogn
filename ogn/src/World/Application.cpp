@@ -75,7 +75,7 @@ bool Application::Initialize()
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
 	INSTANCE(SessionHandler);
-	//INSTANCE(PlayerHandler);
+	INSTANCE(PlayerHandler);
 	INSTANCE(WarHandler);
 	INSTANCE(TeamHandler);
 	INSTANCE(RoomHandler);
@@ -92,7 +92,7 @@ bool Application::Initialize()
 	addModule(new WarModule);
 	addModule(new FriendsModule);
 	addModule(new RoomModule);
-
+	addModule(new GameModule);
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 

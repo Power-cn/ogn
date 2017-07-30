@@ -121,6 +121,29 @@ bool Room::IsFull()
 	return false;
 }
 
+bool Room::IsCanStart()
+{
+	for (RoomPlayer* aRoomPlayer:mRoomPlayers) {
+
+		if (aRoomPlayer->GetState() == RPS_Ready) continue;
+		if (aRoomPlayer->GetState() == RPS_None) {
+
+			return false;
+		}
+	}
+	return true;
+}
+
+bool Room::DoAllStart()
+{
+	for (RoomPlayer* aRoomPlayer : mRoomPlayers) {
+		if (aRoomPlayer->GetState() == RPS_Ready) {
+			aRoomPlayer->SetState(RPS_Game);
+		}
+	}
+	return true;
+}
+
 bool RoomPlayer::operator<<(RoomPlayerInfo& info)
 {
 	return true;

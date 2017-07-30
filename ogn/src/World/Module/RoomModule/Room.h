@@ -1,7 +1,7 @@
 #pragma once
 
 
-enum RoomPlayerState
+enum RoomPlayerState :  char
 {
 	RPS_None = 0,
 	RPS_Ready,				// ×¼±¸
@@ -17,6 +17,9 @@ public:
 	Guid			mInsId = 0;
 	std::string		mName;
 	uint8			mState = RPS_None;
+
+	RoomPlayerState GetState() { return (RoomPlayerState)mState; }
+	void SetState(RoomPlayerState rps) { mState = rps; }
 public:
 	bool operator << (RoomPlayerInfo& info);
 	bool operator >> (RoomPlayerInfo& info);
@@ -37,6 +40,8 @@ public:
 	bool DoLeave(Player* aPlr);
 	bool DoLeave(uint32 userId);
 	bool IsFull();
+	bool IsCanStart();
+	bool DoAllStart();
 
 	uint32 GetInsId() { return mId; }
 	uint32 GetMaxCount() { return mMaxCount; }
@@ -50,6 +55,7 @@ public:
 	
 	const std::string& GetPassword() { return mPassword; }
 	const std::string& GetName() { return mName; }
+
 protected:
 	uint32									mId;
 	RoomPlayer*								mMaster;

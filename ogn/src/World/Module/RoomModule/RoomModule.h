@@ -34,6 +34,8 @@ public:
 	void DoLeaveRoom(Player* aPlr, uint32 roomId);
 	void DoChangeRoomMaster(Player* aPlr, uint32 roomId, uint32 newUserId);
 	void DoRoomList(Player* aPlr, uint32 start, uint32 count);
+	void DoRoomReady(Player* aPlr, uint8 isReady);
+	void DoRoomStartGame(Player* aPlr);
 protected:
 	void OnCreate(Room* aRoom, uint32 userId);
 	void OnEnter(Room* aRoom, uint32 userId);

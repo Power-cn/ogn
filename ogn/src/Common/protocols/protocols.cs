@@ -49,6 +49,10 @@ ID_NetChangeRoomMasterReq,
 ID_NetChangeRoomMasterRes,
 ID_NetRoomListReq,
 ID_NetRoomListRes,
+ID_NetRoomReadyReq,
+ID_NetRoomReadyRes,
+ID_NetRoomStartGameReq,
+ID_NetRoomStartGameRes,
 ID_NetEnd,
 
 }
@@ -101,6 +105,10 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterR
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeRoomMasterRes, "NetChangeRoomMasterRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomListReq, "NetRoomListReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomListRes, "NetRoomListRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyReq, "NetRoomReadyReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyRes, "NetRoomReadyRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq, "NetRoomStartGameReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes, "NetRoomStartGameRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -1750,6 +1758,110 @@ for (int i = 0; i < roomInfoInfos_TEMP; ++i)
 	}
 
 public List<RoomInfo> roomInfoInfos;
+
+}
+public class NetRoomReadyReq : Packet
+{
+	public NetRoomReadyReq():base((int)PACKET_ID_ENUM.ID_NetRoomReadyReq)
+	{
+isReady = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(isReady);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref isReady);
+
+		return true;
+	}
+
+public sbyte isReady;
+
+}
+public class NetRoomReadyRes : Packet
+{
+	public NetRoomReadyRes():base((int)PACKET_ID_ENUM.ID_NetRoomReadyRes)
+	{
+userId = 0;
+result = 0;
+isReady = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(userId);
+bytes.Write(result);
+bytes.Write(isReady);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref userId);
+bytes.Read(ref result);
+bytes.Read(ref isReady);
+
+		return true;
+	}
+
+public uint userId;
+public sbyte result;
+public sbyte isReady;
+
+}
+public class NetRoomStartGameReq : Packet
+{
+	public NetRoomStartGameReq():base((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq)
+	{
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+
+}
+public class NetRoomStartGameRes : Packet
+{
+	public NetRoomStartGameRes():base((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes)
+	{
+result = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+
+		return true;
+	}
+
+public sbyte result;
 
 }
 public class NetEnd : Packet

@@ -45,6 +45,10 @@ ID_NetChangeRoomMasterReq,
 ID_NetChangeRoomMasterRes,
 ID_NetRoomListReq,
 ID_NetRoomListRes,
+ID_NetRoomReadyReq,
+ID_NetRoomReadyRes,
+ID_NetRoomStartGameReq,
+ID_NetRoomStartGameRes,
 ID_NetEnd,
 
 };
@@ -1616,6 +1620,106 @@ std::vector<RoomInfo> roomInfoInfos;
 
 };
 
+class NetRoomReadyReq : public Packet {
+public:
+	NetRoomReadyReq():
+	Packet(ID_NetRoomReadyReq) {
+isReady = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << isReady);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> isReady);
+
+		return true;
+	}
+public:
+uint8 isReady;
+
+};
+
+class NetRoomReadyRes : public Packet {
+public:
+	NetRoomReadyRes():
+	Packet(ID_NetRoomReadyRes) {
+userId = 0;
+result = 0;
+isReady = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << userId);
+CHECK(bytes << result);
+CHECK(bytes << isReady);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> userId);
+CHECK(bytes >> result);
+CHECK(bytes >> isReady);
+
+		return true;
+	}
+public:
+uint32 userId;
+uint8 result;
+uint8 isReady;
+
+};
+
+class NetRoomStartGameReq : public Packet {
+public:
+	NetRoomStartGameReq():
+	Packet(ID_NetRoomStartGameReq) {
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+
+		return true;
+	}
+public:
+
+};
+
+class NetRoomStartGameRes : public Packet {
+public:
+	NetRoomStartGameRes():
+	Packet(ID_NetRoomStartGameRes) {
+result = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+
+		return true;
+	}
+public:
+uint8 result;
+
+};
+
 class NetEnd : public Packet {
 public:
 	NetEnd():
@@ -1682,4 +1786,8 @@ REGISTER_PACKET_HELPER(ID_NetChangeRoomMasterReq, NetChangeRoomMasterReq);
 REGISTER_PACKET_HELPER(ID_NetChangeRoomMasterRes, NetChangeRoomMasterRes);
 REGISTER_PACKET_HELPER(ID_NetRoomListReq, NetRoomListReq);
 REGISTER_PACKET_HELPER(ID_NetRoomListRes, NetRoomListRes);
+REGISTER_PACKET_HELPER(ID_NetRoomReadyReq, NetRoomReadyReq);
+REGISTER_PACKET_HELPER(ID_NetRoomReadyRes, NetRoomReadyRes);
+REGISTER_PACKET_HELPER(ID_NetRoomStartGameReq, NetRoomStartGameReq);
+REGISTER_PACKET_HELPER(ID_NetRoomStartGameRes, NetRoomStartGameRes);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

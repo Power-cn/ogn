@@ -10,5 +10,7 @@ protected:
 	int32 onNetLeaveRoomReq(Player* aPlr, NetLeaveRoomReq* req);
 	int32 onNetChangeRoomMasterReq(Player* aPlr, NetChangeRoomMasterReq* req);
 	int32 onNetRoomListReq(Player* aPlr, NetRoomListReq* req);
+	int32 onNetRoomReadyReq(Player* aPlr, NetRoomReadyReq* req);
+	int32 onNetRoomStartGameReq(Player* aPlr, NetRoomStartGameReq* req);
 private:
 };
