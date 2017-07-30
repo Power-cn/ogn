@@ -17,6 +17,7 @@
 *.lib
 *.exe
 *.pdb
+*.config
 
 # Compiled Dynamic libraries
 *.so
