@@ -157,6 +157,13 @@ bool Room::DoAllStart()
 	return true;
 }
 
+bool Room::IsCanAdd(Player* aPlr)
+{
+	if (IsFull())
+		return false;
+	return true;
+}
+
 void Room::OnCreate(uint32 userId)
 {
 	LuaEngine::executeScript(sScriptRoom, "OnCreate", GetInsId(), userId);

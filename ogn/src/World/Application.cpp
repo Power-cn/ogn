@@ -252,7 +252,10 @@ void Application::doSessionLeaveWorld(Session* session)
 		doPlayerSave(plr, dict);
 
 		onLeaveWorld(plr, dict);
-		GetModule(WorldModule)->removePlayer(plr->getAccId());
+
+		//GetModule(WorldModule)->removePlayer(plr->getAccId());
+		plr->SetOnline(false);
+		plr->unbindSession();
 	}
 
 	NetSessionLeaveNotify nfy;
@@ -260,8 +263,8 @@ void Application::doSessionLeaveWorld(Session* session)
 	sendPacketToDB(nfy, session);
 	session->sendPacketToWorld(nfy);
 
-	INSTANCE(SessionManager).removeSessionsBySocket(session->getSocketId(), session);
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
+	sSsnMgr.removeSessionsBySocket(session->getSocketId(), session);
+	sSsnMgr.removeSession(session->getSessionId());
 }
 
 void Application::doPlayerSave(Player* plr, Dictionary& bytes)

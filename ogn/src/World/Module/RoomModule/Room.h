@@ -44,6 +44,7 @@ public:
 	bool IsFull();
 	bool IsCanStart();
 	bool DoAllStart();
+	bool IsCanAdd(Player* aPlr);
 
 	uint32 GetInsId() { return mId; }
 	uint32 GetMaxCount() { return mMaxCount; }

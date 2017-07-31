@@ -26,7 +26,7 @@ public:
 	Room* FindRoom(uint32 roomId);
 	Room* AddRoom(Room* aRoom);
 	void RemoveRoom(uint32 roomId);
-
+	uint32 GetRoomCount() { return (uint32)mMapRoom.size(); }
 	std::udmap<uint32, Room*>& GetMapRoom() { return mMapRoom; }
 public:
 	void DoCreateRoom(Player* aPlr);
@@ -51,6 +51,7 @@ protected:
 	RoomMatch* FindRoomMatch(uint32 userId);
 	RoomMatch* AddRoomMatch(RoomMatch& rMatch);
 	void DelRoomMatch(uint32 userId);
+	void MatchUpdate();
 protected:
 	std::udmap<uint32, Room*>			mMapRoom;
 	std::map<uint32, Room*>				mMapPlayerRoom;

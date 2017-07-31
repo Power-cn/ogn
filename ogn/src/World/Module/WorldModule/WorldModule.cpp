@@ -231,6 +231,19 @@ void WorldModule::removeNpc(Npc* npc)
 	removeEntity(npc->getGuid());
 }
 
+bool WorldModule::ChangeName(Entity* ent, cstring& sname)
+{
+	auto itr = mMapNameEntity.find(ent->getName());
+	if (itr != mMapNameEntity.end())
+	{
+		return false;
+		mMapNameEntity.erase(itr);
+		ent->setName(sname);
+		mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
+	}
+	return true;
+}
+
 void WorldModule::sendPacketToAll(Packet& packet)
 {
 	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };

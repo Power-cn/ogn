@@ -19,6 +19,7 @@ protected:
 	Session*			session;
 	UserStatus			mUserStatus;
 	Json::Value			mJson;
+	bool				mOnline;
 public:
 	Player();
 	~Player();
@@ -32,6 +33,10 @@ public:
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
+
+	bool CanLeave();
+	bool GetOnline() { return mOnline; }
+	void SetOnline(bool isOnline) { mOnline = isOnline; }
 
 	uint32 getAccId() { return accountId; }
 	uint32 getUserId() { return userId; }

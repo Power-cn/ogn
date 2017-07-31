@@ -89,3 +89,21 @@ fun=function (player, s1, s2, s3)
 	luaRoom:DoRoomStartGame(player);
 end
 });
+
+RegGm(
+{
+name = "clroom";
+fun=function (player, s1, s2, s3)
+	local luaRoom = luaRoom();
+	luaRoom:DoRoomClose(player);
+end
+});
+
+RegGm(
+{
+name = "auroom";
+fun=function (player, s1, s2, s3)
+	local luaRoom = luaRoom();
+	luaRoom:DoAutoMatch(player);
+end
+});

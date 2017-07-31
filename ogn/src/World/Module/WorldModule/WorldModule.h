@@ -25,6 +25,7 @@ public:
 	void removeNpc(uint32 npcId);
 	void removeNpc(Npc* npc);
 
+	bool ChangeName(Entity* ent, cstring& sname);
 	Entity* addEntity(Entity* ent);
 	Entity* getEntityByName(const std::string& name);
 	Entity* getEntity(Guid guid);

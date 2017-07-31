@@ -7,6 +7,7 @@ mJson()
 {
 	mOnlineTimer = 0;
 	mOfflineTimer = 0;
+	mOnline = false;
 }
 
 Player::~Player()
@@ -112,6 +113,11 @@ void Player::unbindSession()
 	if (session)
 		session->setPlayer(NULL);
 	setSession(NULL);
+}
+
+bool Player::CanLeave()
+{
+	return true;
 }
 
 Json::Value& Player::GetJson()

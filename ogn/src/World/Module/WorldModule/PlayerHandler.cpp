@@ -14,6 +14,16 @@ int32 PlayerHandler::onNetFirst(Player* player, NetFirst* nfy)
 	return 0;
 }
 
+int32 PlayerHandler::onNetChangeNameReq(Player* player, NetChangeNameReq* req)
+{
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hget %s %s", sNameToUserId, req->newName.c_str);
+	std::vector<std::string> parstr;
+	parstr.push_back(Shared::int32tostr(player->getUserId()));
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&PlayerHandler::OnRedisFindName, this);
+	return 0;
+}
+
 int32 PlayerHandler::onNetChatMsgNotify(Player* player, NetChatMsgNotify* nfy)
 {
 	nfy->from = player->getName();
@@ -63,5 +73,10 @@ int32 PlayerHandler::onNetEntityMoveToNotify(Player* player, NetEntityMoveToNoti
 	player->setCellTarY(nfy->y);
 	player->sendPacketToView(*nfy);
 	player->MoveTo();
+	return 0;
+}
+
+int32 PlayerHandler::OnRedisFindName(RedisEvent& e)
+{
 	return 0;
 }

@@ -67,11 +67,15 @@ bool RoomModule::EnterRoom(Room* aRoom, Player* aPlr, bool isMaster /* = false *
 		return false;
 	if (aRoom->FindPlayer(aPlr->getUserId()))
 		return false;
-	AddPlayerRoom(aPlr->getUserId(), aRoom);
+	if (!aRoom->IsCanAdd(aPlr))
+	{
+		return false;
+	}
 	RoomPlayer* curPlayer = aRoom->DoEnter(aPlr, isMaster);
 	if (curPlayer == NULL)
 		return false;
 
+	AddPlayerRoom(aPlr->getUserId(), aRoom);
 	NetEnterRoomRes res;
 	(*aRoom) >> res.roomInfo;
 	aPlr->sendPacket(res);
@@ -388,6 +392,8 @@ void RoomModule::DoAutoMatch(Player* aPlr)
 	}
 	RoomMatch rMatch;
 	rMatch.userId = aPlr->getUserId();
+	rMatch.stateTime = DateTime::Now();
+	AddRoomMatch(rMatch);
 }
 
 bool RoomModule::Initialize()
@@ -397,6 +403,7 @@ bool RoomModule::Initialize()
 
 bool RoomModule::Update(float time, float delay)
 {
+	MatchUpdate();
 	return true;
 }
 
@@ -450,6 +457,35 @@ void RoomModule::DelRoomMatch(uint32 userId)
 		if (userId == (*itr).userId)
 		{
 			mLstAutoMatch.erase(itr);
+			break;
+		}
+	}
+}
+
+void RoomModule::MatchUpdate()
+{
+	if (mLstAutoMatch.size() == 0) return;
+
+	RoomMatch rMatch = mLstAutoMatch.front();
+	mLstAutoMatch.pop_front();
+	Player* aPlr = sWorld.getPlayerToUserId(rMatch.userId);
+	if (aPlr == NULL) return;
+
+	if (GetRoomCount() == 0)
+	{
+		DoCreateRoom(aPlr);
+	}
+	else
+	{
+		for (auto& itr : mMapRoom)
+		{
+			Room* aRoom = itr.second;
+			if (aRoom == NULL) continue;
+
+			if (!aRoom->IsCanAdd(aPlr))
+				continue;
+			DoEnterRoom(aPlr, aRoom->GetInsId());
+			DoRoomReady(aPlr, RPS_Ready);
 			break;
 		}
 	}
