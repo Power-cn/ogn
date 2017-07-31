@@ -29,89 +29,114 @@ void LuaScript::bindScript()
 
 	luabind::module(mLuaState)
 		[
-			luabind::class_<BinaryStream>("BinaryStream")
-			,
-			luabind::class_<Guid>("Guid")
-			,
-			luabind::class_<Object>("Object")
-			.def("Serialize", &Object::operator<<)
-			.def("Deserialize", &Object::operator>>)
-			,
-			luabind::class_<Entity>("Entity")
-			.def("getGuid", &Player::getGuid)
-			,
-			luabind::class_<Player>("Player")
-			.def("getGuid", &Player::getGuid)
-			.def("getUserId", &Player::getUserId)
-			.def("getName", &Player::getName)
-			.def("onCreate", &Player::onCreate)
-			.def("sendPacketToMsg", &Player::sendPacketToMsg)
-			,
 
-			luabind::class_<Npc>("Npc"),
-			luabind::class_<PropertyHelper>("PropertyHelper")
-			.def("setMaxHp", &PropertyHelper::setMaxHp)
-			,
-			luabind::class_<WorldModule>("WorldModule")
-			.def("sendPacketToAll", &WorldModule::sendPacketToAll)
-			.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
-			.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
+		luabind::class_<BinaryStream>("BinaryStream")
+		,
+		luabind::class_<Guid>("Guid")
+		,
+		luabind::class_<Object>("Object")
+		.def("Serialize", &Object::operator<<)
+		.def("Deserialize", &Object::operator >> )
+		,
+		luabind::class_<Entity>("Entity")
+		.def("getGuid", &Player::getGuid)
+		,
+		luabind::class_<Player>("Player")
+		.def("getGuid", &Player::getGuid)
+		.def("getUserId", &Player::getUserId)
+		.def("getName", &Player::getName)
+		.def("onCreate", &Player::onCreate)
+		.def("sendPacketToMsg", &Player::sendPacketToMsg)
+		,
 
-			.def("getEntityByName", &WorldModule::getEntityByName)
-			.def("getEntity", &WorldModule::getEntity)
+		luabind::class_<Npc>("Npc"),
+		luabind::class_<PropertyHelper>("PropertyHelper")
+		.def("setMaxHp", &PropertyHelper::setMaxHp)
+		,
+		luabind::class_<WorldModule>("WorldModule")
+		.def("sendPacketToAll", &WorldModule::sendPacketToAll)
+		.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
+		.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
 
-			.def("getPlayerByName", &WorldModule::getPlayerByName)
-			.def("getPlayerByGuid", &WorldModule::getPlayerByGuid)
-			.def("getPlayer", &WorldModule::getPlayer)
-			.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
+		.def("getEntityByName", &WorldModule::getEntityByName)
+		.def("getEntity", &WorldModule::getEntity)
 
-			.def("getPlayerCount", &WorldModule::getPlayerCount)
-			,
+		.def("getPlayerByName", &WorldModule::getPlayerByName)
+		.def("getPlayerByGuid", &WorldModule::getPlayerByGuid)
+		.def("getPlayer", &WorldModule::getPlayer)
+		.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
 
-			luabind::class_<RoomPlayer>("RoomPlayer")
-			.def_readonly("mPlayer", &RoomPlayer::mPlayer)
-			.def_readonly("mUserId", &RoomPlayer::mUserId)
-			.def_readonly("mInsId", &RoomPlayer::mInsId)
-			.def_readonly("mName", &RoomPlayer::mName)
-			.def_readonly("mState", &RoomPlayer::mState)
-			,
+		.def("getPlayerCount", &WorldModule::getPlayerCount)
+		,
 
-			luabind::class_<Room>("Room")
-			.def("sendPacketToAll", &Room::sendPacketToAll)
-			.def("RemovePlayer", &Room::RemovePlayer)
-			.def("SetMaster", &Room::SetMaster)
-			.def("SetPassword", &Room::SetPassword)
-			.def("SetName", &Room::SetName)
+		luabind::class_<RoomPlayer>("RoomPlayer")
+		.def_readonly("mPlayer", &RoomPlayer::mPlayer)
+		.def_readonly("mUserId", &RoomPlayer::mUserId)
+		.def_readonly("mInsId", &RoomPlayer::mInsId)
+		.def_readonly("mName", &RoomPlayer::mName)
+		.def_readonly("mState", &RoomPlayer::mState)
+		,
 
-			.def("Serialize", &Room::operator >>)
-			.def("DoLeave",(bool(Player::*)(Player*)) &Room::DoLeave)
-			.def("DoLeave", (bool(Player::*)(uint32)) &Room::DoLeave)
-			.def("IsFull", &Room::IsFull)
+		luabind::class_<Room>("Room")
+		.def("sendPacketToAll", &Room::sendPacketToAll)
+		.def("RemovePlayer", &Room::RemovePlayer)
+		.def("SetMaster", &Room::SetMaster)
+		.def("SetPassword", &Room::SetPassword)
+		.def("SetName", &Room::SetName)
 
-			.def("GetInsId", &Room::GetInsId)
-			.def("GetMaxCount", &Room::GetMaxCount)
-			.def("GetRoomPlayerCount", &Room::GetRoomPlayerCount)
+		.def("Serialize", &Room::operator >> )
+		.def("DoLeave", (bool(Player::*)(Player*)) &Room::DoLeave)
+		.def("DoLeave", (bool(Player::*)(uint32)) &Room::DoLeave)
+		.def("IsFull", &Room::IsFull)
 
-			.def("DoEnter", &Room::DoEnter)
-			.def("FindPlayer", &Room::FindPlayer)
-			.def("AddPlayer", &Room::AddPlayer)
-			.def("GetRoomPlayer", &Room::GetRoomPlayer)
-			.def("GetMaster", &Room::GetMaster)
-			.def("GetPassword", &Room::GetPassword)
-			.def("GetName", &Room::GetName)
-			,
+		.def("GetInsId", &Room::GetInsId)
+		.def("GetMaxCount", &Room::GetMaxCount)
+		.def("GetRoomPlayerCount", &Room::GetRoomPlayerCount)
 
-			luabind::class_<RoomModule>("RoomModule")
-			.def("DoCreateRoom", &RoomModule::DoCreateRoom)
-			.def("DoEnterRoom", &RoomModule::DoEnterRoom)
-			.def("DoLeaveRoom", &RoomModule::DoLeaveRoom)
-			.def("DoChangeRoomMaster", &RoomModule::DoChangeRoomMaster)
-			.def("DoRoomList", &RoomModule::DoRoomList)
-			,
+		.def("DoEnter", &Room::DoEnter)
+		.def("FindPlayer", &Room::FindPlayer)
+		.def("AddPlayer", &Room::AddPlayer)
+		.def("GetRoomPlayer", &Room::GetRoomPlayer)
+		.def("GetMaster", &Room::GetMaster)
+		.def("GetPassword", &Room::GetPassword)
+		.def("GetName", &Room::GetName)
+		,
 
-			luabind::class_<LUATest>("LUATest")
-			.def_readonly("a", &LUATest::a)
-			.def("TestFunc", &LUATest::TestFunc)
+		luabind::class_<RoomModule>("RoomModule")
+		.def("DoCreateRoom", &RoomModule::DoCreateRoom)
+		.def("DoEnterRoom", &RoomModule::DoEnterRoom)
+		.def("DoLeaveRoom", &RoomModule::DoLeaveRoom)
+		.def("DoChangeRoomMaster", &RoomModule::DoChangeRoomMaster)
+		.def("DoRoomList", &RoomModule::DoRoomList)
+		,
+
+		luabind::class_<GameEntity>("GameEntity")
+		.def_readonly("userId", &GameEntity::userId)
+		.def("ToString", &GameEntity::ToString)
+		.def("GetPoker", &GameEntity::GetPoker)
+		,
+
+		luabind::class_<GameModle>("GameModle")
+		.def("GetInsId", &GameModle::GetInsId)
+		,
+		luabind::class_<GameGoldenFlower>("GameGoldenFlower")
+		.def("GetGameEnt", &GameGoldenFlower::GetGameEnt)
+		.def("FindGameEnt", &GameGoldenFlower::FindGameEnt)
+		.def("GetPlrInx", &GameGoldenFlower::GetPlrInx)
+		.def("GetGameEntCount", &GameGoldenFlower::GetGameEntCount)
+		.def("ToString", &GameGoldenFlower::ToString)
+		,
+
+		luabind::class_<GameModule>("GameModule")
+		.def("FindGameModule", &GameModule::FindGameModule)
+		.def("FindPlrGameModule", &GameModule::FindPlrGameModule)
+		.def("DoStartGame", &GameModule::DoStartGame)
+		,
+
+		luabind::class_<LUATest>("LUATest")
+		.def_readonly("a", &LUATest::a)
+		.def("TestFunc", &LUATest::TestFunc)
+
 		];
 }
 //template < class ValueWrapper>

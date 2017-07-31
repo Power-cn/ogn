@@ -35,6 +35,7 @@ public:
 	void SetMaster(RoomPlayer* master) { mMaster = master; }
 	void SetPassword(const std::string& password) { mPassword = password; }
 	void SetName(const std::string& name) { mName = name; }
+	void SetGameInsId(uint32 insId) { mGameInsId = insId; }
 
 	bool operator >> (RoomInfo& info);
 	bool DoLeave(Player* aPlr);
@@ -46,6 +47,7 @@ public:
 	uint32 GetInsId() { return mId; }
 	uint32 GetMaxCount() { return mMaxCount; }
 	uint32 GetRoomPlayerCount() { return (uint32)mRoomPlayers.size(); }
+	uint32 GetGameInsId() { return mGameInsId; }
 
 	RoomPlayer* DoEnter(Player* aPlr, bool isMaster = false);
 	RoomPlayer* FindPlayer(uint32 userId);
@@ -63,5 +65,6 @@ protected:
 	std::string								mPassword;
 	uint32									mMaxCount;			// 房间最多人数
 	std::vector<RoomPlayer*>				mRoomPlayers;
+	uint32									mGameInsId;			// 当前游戏ID
 private:
 };

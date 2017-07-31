@@ -91,6 +91,8 @@ void GameModule::DelPlrGameModule(uint32 userId)
 bool GameModule::DoStartGame(Room* aRoom)
 {
 	GameGoldenFlower* aGame = new GameGoldenFlower;
+	aRoom->SetGameInsId(aGame->GetInsId());
+
 	for (uint32 i = 0; i < aRoom->GetRoomPlayerCount(); ++i)
 	{
 		RoomPlayer* aRoomPlayer = aRoom->GetRoomPlayer(i);
@@ -116,6 +118,11 @@ bool GameModule::DoStartGame(Room* aRoom)
 	NetGameStartNotify nfy;
 	*aGame >> nfy.info;
 	aRoom->sendPacketToAll(nfy);
+	return true;
+}
+
+bool GameModule::DoStopGame()
+{
 	return true;
 }
 

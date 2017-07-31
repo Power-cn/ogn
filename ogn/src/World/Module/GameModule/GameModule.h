@@ -23,6 +23,7 @@ public:
 
 public:
 	bool DoStartGame(Room* aRoom);
+	bool DoStopGame();
 protected:
 	std::map<uint32, GameModle*>				mMapGameModle;
 	std::map<uint32, GameModle*>				mMapPlrGameModle;

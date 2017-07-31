@@ -123,14 +123,20 @@ bool Room::IsFull()
 
 bool Room::IsCanStart()
 {
+	uint32 canStart = 0;
 	for (RoomPlayer* aRoomPlayer:mRoomPlayers) {
 
-		if (aRoomPlayer->GetState() == RPS_Ready) continue;
+		if (aRoomPlayer->GetState() == RPS_Ready) {
+			canStart++;
+			continue;
+		}
 		if (aRoomPlayer->GetState() == RPS_None) {
-
 			return false;
 		}
 	}
+	// 一个人不能开始
+	if (canStart < 2)
+		return false;
 	return true;
 }
 
