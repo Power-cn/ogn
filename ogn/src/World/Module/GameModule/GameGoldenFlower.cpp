@@ -8,17 +8,16 @@ mRoomId(0)
 
 GameGoldenFlower::~GameGoldenFlower()
 {
-	for (GameEntity* aGameEnt:mLstGameEntity)
-	{
-		delete aGameEnt;
-	}
-	mLstGameEntity.clear();
+
 }
 
 bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 {
 	info.insId = GetInsId();
 	info.roomId = GetRoomId();
+	info.bankerUserId = GetBanker();
+	info.curSpeakUserId = GetCurSpeak();
+	info.speakTime = GetSpeakTime();
 	for (GameEntity* aGameEnt : mLstGameEntity)
 	{
 		GameEntityInfo entInfo;
@@ -26,46 +25,6 @@ bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 		info.gameEntInfos.push_back(entInfo);
 	}
 	return true;
-}
-
-GameEntity* GameGoldenFlower::AddGameEnt(GameEntity* aGameEnt)
-{
-	mLstGameEntity.push_back(aGameEnt);
-	return aGameEnt;
-}
-
-GameEntity* GameGoldenFlower::GetGameEnt(uint32 idx)
-{
-	if (idx < mLstGameEntity.size())
-		return mLstGameEntity[idx];
-	return NULL;
-}
-
-GameEntity* GameGoldenFlower::FindGameEnt(uint32 userId)
-{
-	for (GameEntity* aGameEnt : mLstGameEntity)
-	{
-		if (aGameEnt->userId == userId)
-		{
-			return aGameEnt;
-		}
-	}
-	return NULL;
-}
-
-void GameGoldenFlower::DelGameEnt(uint32 userId)
-{
-	for (auto itr = mLstGameEntity.begin();
-		 itr != mLstGameEntity.end();
-		 ++itr)
-	{
-		if ((*itr)->userId == userId)
-		{
-			delete (*itr);
-			mLstGameEntity.erase(itr);
-			return;
-		}
-	}
 }
 
 void GameGoldenFlower::DoShuffle()
@@ -97,6 +56,16 @@ void GameGoldenFlower::DoCutPoker()
 
 uint32 GameGoldenFlower::GetNextSpeakPlr()
 {
+	int32 idx = GetPlrInx(mCurSpeakUserId);
+	if (idx >= 0 && idx < GetGameEntCount())
+	{
+		idx++;
+		if (idx >= GetGameEntCount())
+			idx = 0;
+		GameEntity* aGameEnt =  GetGameEnt(idx);
+		if (aGameEnt)
+			return aGameEnt->userId;
+	}
 	return 0;
 }
 
@@ -113,7 +82,9 @@ int32 GameGoldenFlower::GetPlrInx(uint32 userId)
 std::string GameGoldenFlower::ToString()
 {
 	std::string str;
-
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "ID:%d rID:%d Banker:%d sID:%d sTime:%ds\n", GetInsId(), GetRoomId(), GetBanker(), GetCurSpeak(), GetSpeakTime());
+	str += szBuffer;
 	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
 	{
 		str += mLstGameEntity[i]->ToString();
@@ -121,6 +92,30 @@ std::string GameGoldenFlower::ToString()
 	}
 
 	return str;
+}
+
+bool GameGoldenFlower::OnStart()
+{
+	LuaEngine::executeScript(GetScript(), "OnStart", GetInsId());
+	return true;
+}
+
+bool GameGoldenFlower::OnClose()
+{
+	LuaEngine::executeScript(GetScript(), "OnClose", GetInsId());
+	return true;
+}
+
+bool GameGoldenFlower::OnEnter(GameEntity* aGameEnt)
+{
+	LuaEngine::executeScript(GetScript(), "OnEnter", GetInsId(), aGameEnt->userId);
+	return true;
+}
+
+bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
+{
+	LuaEngine::executeScript(GetScript(), "OnLeave", GetInsId(), aGameEnt->userId);
+	return true;
 }
 
 GameEntity::GameEntity()

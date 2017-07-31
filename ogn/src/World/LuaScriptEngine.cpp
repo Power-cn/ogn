@@ -26,6 +26,16 @@ Entity* luaNpcToEnt(Npc* npc)
 	return npc;
 }
 
+GameGoldenFlower* luaGoldenFlower(uint32 insId)
+{
+	return (GameGoldenFlower*)sGame.FindGameModule(insId);
+}
+
+GameGoldenFlower* luaPlrGoldenFlower(uint32 userId)
+{
+	return (GameGoldenFlower*)sGame.FindPlrGameModule(userId);
+}
+
 PropertyHelper* luaProperty()
 {
 	return &INSTANCE(PropertyHelper);

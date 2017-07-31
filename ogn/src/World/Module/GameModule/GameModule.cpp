@@ -88,6 +88,14 @@ void GameModule::DelPlrGameModule(uint32 userId)
 		mMapPlrGameModle.erase(itr);
 }
 
+GameEntity* GameModule::FindPlrGameEnt(uint32 userId)
+{
+	GameModle* aGameModule = FindPlrGameModule(userId);
+	if (aGameModule == NULL)
+		return NULL;
+	return aGameModule->FindGameEnt(userId);
+}
+
 bool GameModule::DoStartGame(Room* aRoom)
 {
 	GameGoldenFlower* aGame = new GameGoldenFlower;
@@ -115,6 +123,15 @@ bool GameModule::DoStartGame(Room* aRoom)
 		}
 	}
 
+	aGame->OnStart();
+	for (uint32 i = 0; i < aGame->GetGameEntCount(); ++i)
+	{
+		GameEntity* aGameEnt = aGame->GetGameEnt(i);
+		if (aGameEnt)
+		{
+			aGame->OnEnter(aGameEnt);
+		}
+	}
 	NetGameStartNotify nfy;
 	*aGame >> nfy.info;
 	aRoom->sendPacketToAll(nfy);

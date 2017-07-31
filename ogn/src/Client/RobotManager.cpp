@@ -23,6 +23,7 @@ RobotManager::RobotManager()
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
+	INSTANCE(CmdDispatcher).addEventListener("login", (EventCallback)&RobotManager::onLogin, this);
 }
 
 RobotManager::~RobotManager()
@@ -212,5 +213,13 @@ int32 RobotManager::onGmCmd(CmdEvent& e)
 	}
 	if (mCurRobot == NULL) return 0;
 	mCurRobot->sendPacket(msg);
+	return 0;
+}
+
+int32 RobotManager::onLogin(CmdEvent& e)
+{
+	std::string user = e.cmdExecute->params[0];
+	INSTANCE(SocketHandler).PushUser(user);
+	INSTANCE(SocketHandler).createRobot();
 	return 0;
 }

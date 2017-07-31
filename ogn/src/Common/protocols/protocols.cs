@@ -445,6 +445,9 @@ public class GameGoldenFlowerInfo : Header
 	{
 insId = 0;
 roomId = 0;
+bankerUserId = 0;
+curSpeakUserId = 0;
+speakTime = 0;
 gameEntInfos = new List<GameEntityInfo>();
 
 	}
@@ -453,6 +456,9 @@ gameEntInfos = new List<GameEntityInfo>();
 	{
 bytes.Write(insId);
 bytes.Write(roomId);
+bytes.Write(bankerUserId);
+bytes.Write(curSpeakUserId);
+bytes.Write(speakTime);
 int gameEntInfos_TEMP = gameEntInfos.Count;
 bytes.Write(gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -467,6 +473,9 @@ for (int i = 0; i < gameEntInfos_TEMP; ++i)
 	{
 bytes.Read(ref insId);
 bytes.Read(ref roomId);
+bytes.Read(ref bankerUserId);
+bytes.Read(ref curSpeakUserId);
+bytes.Read(ref speakTime);
 int gameEntInfos_TEMP = 0;
 bytes.Read(ref gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -482,6 +491,9 @@ for (int i = 0; i < gameEntInfos_TEMP; ++i)
 
 public uint insId;
 public uint roomId;
+public uint bankerUserId;
+public uint curSpeakUserId;
+public uint speakTime;
 public List<GameEntityInfo> gameEntInfos;
 
 }

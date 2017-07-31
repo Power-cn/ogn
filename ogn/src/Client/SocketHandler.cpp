@@ -4,14 +4,14 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	for (auto itr : mapRobotJson)
-	{
-		RobotJson& robotJson = itr.second;
-		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	}
+	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	//for (auto itr : mapRobotJson)
+	//{
+	//	RobotJson& robotJson = itr.second;
+	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	//}
 
-	createRobot();
+	//createRobot();
 }
 
 int SocketHandler::onConnect(SocketEvent& e)
@@ -93,4 +93,9 @@ void SocketHandler::createRobot()
 	client->addEventListener(SocketEvent::RECV, (EventCallback)&SocketHandler::onRecv, this);
 	client->addEventListener(SocketEvent::EXIT, (EventCallback)&SocketHandler::onExit, this);
 	client->addEventListener(SocketEvent::EXCEPTION, (EventCallback)&SocketHandler::onException, this);
+}
+
+void SocketHandler::PushUser(cstring& user)
+{
+	mUsers.push(std::make_pair(user, ""));
 }

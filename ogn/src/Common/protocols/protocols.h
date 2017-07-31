@@ -357,6 +357,9 @@ public:
 	GameGoldenFlowerInfo() {
 insId = 0;
 roomId = 0;
+bankerUserId = 0;
+curSpeakUserId = 0;
+speakTime = 0;
 
 
 	}
@@ -364,6 +367,9 @@ roomId = 0;
 	bool operator >> (BinaryStream& bytes) {
 CHECK(bytes << insId);
 CHECK(bytes << roomId);
+CHECK(bytes << bankerUserId);
+CHECK(bytes << curSpeakUserId);
+CHECK(bytes << speakTime);
 uint32 gameEntInfos_Size = (uint32)gameEntInfos.size();
 bytes << gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -376,6 +382,9 @@ for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInf
 	bool operator << (BinaryStream& bytes) {
 CHECK(bytes >> insId);
 CHECK(bytes >> roomId);
+CHECK(bytes >> bankerUserId);
+CHECK(bytes >> curSpeakUserId);
+CHECK(bytes >> speakTime);
 uint32 gameEntInfos_Size = 0;
 bytes >> gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -389,6 +398,9 @@ for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInf
 public:
 uint32 insId;
 uint32 roomId;
+uint32 bankerUserId;
+uint32 curSpeakUserId;
+uint32 speakTime;
 std::vector<GameEntityInfo> gameEntInfos;
 
 };

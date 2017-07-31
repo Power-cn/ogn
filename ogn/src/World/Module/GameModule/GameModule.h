@@ -13,14 +13,15 @@ protected:
 	virtual bool onEnterWorld(Player* player, Dictionary& dict);
 	virtual bool onLeaveWorld(Player* player, Dictionary& dict);
 public:
-	GameModle* AddGameModle(GameModle* aGameModle);
 	GameModle* FindGameModule(uint32 insId);
-	void DelGameModule(uint32 insId);
-
-	GameModle* AddPlrGameModle(uint32 userId, GameModle* aGameModle);
 	GameModle* FindPlrGameModule(uint32 userId);
-	void DelPlrGameModule(uint32 userId);
+	GameEntity* FindPlrGameEnt(uint32 userId);
 
+	GameModle* AddGameModle(GameModle* aGameModle);
+	GameModle* AddPlrGameModle(uint32 userId, GameModle* aGameModle);
+
+	void DelGameModule(uint32 insId);
+	void DelPlrGameModule(uint32 userId);
 public:
 	bool DoStartGame(Room* aRoom);
 	bool DoStopGame();

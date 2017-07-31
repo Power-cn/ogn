@@ -12,7 +12,7 @@ public:
 	int onException(SocketEvent& e);
 public:
 	void createRobot();
-
+	void PushUser(cstring& user);
 public:
 	std::map<int32, Socket*> clients;
 	std::vector<SocketClient*>		mListSocketClient;

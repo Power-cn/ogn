@@ -24,35 +24,40 @@ protected:
 */
 class GameGoldenFlower : public GameModle
 {
+	friend class GameModule;
 public:
 	GameGoldenFlower();
 	~GameGoldenFlower();
 	bool operator >> (GameGoldenFlowerInfo& info);
 
-	GameEntity* AddGameEnt(GameEntity* aGameEnt);
-	GameEntity* GetGameEnt(uint32 idx);
-	GameEntity* FindGameEnt(uint32 userId);
-
-	void DelGameEnt(uint32 userId);
-	void DoShuffle();
-	uint8 DoDealPoker();
-	void DoCutPoker();
+	void DoShuffle();			// 洗
+	void DoCutPoker();			// 切
 	void SetRoomId(uint32 roomId) { mRoomId = roomId; }
 	void SetBanker(uint32 userId) { mBankerUserId = userId; }
 	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
+	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }
 
-	uint32 GetNextSpeakPlr();
+	uint8 DoDealPoker();		// 发
+
 	int32 GetPlrInx(uint32 userId);
+	uint32 GetNextSpeakPlr();
+	uint32 GetBanker() { return mBankerUserId; }
+	uint32 GetCurSpeak() { return mCurSpeakUserId; }
 	uint32 GetRoomId() { return mRoomId; }
-	uint32 GetGameEntCount() { return (uint32)mLstGameEntity.size(); }
+	uint32 GetSpeakTime() { return mSpeakTime; }
 
-	std::string ToString();
+	virtual std::string ToString();
+protected:
+	virtual bool OnStart();
+	virtual bool OnClose();
+	virtual bool OnEnter(GameEntity* aGameEnt);
+	virtual bool OnLeave(GameEntity* aGameEnt);
 protected:
 	uint32							mRoomId;
 	uint8							mPoker[MAX_POKER_COUNT];
 	std::queue<uint8>				mCurPoker;				// 没有使用
 	std::queue<uint8>				mOpenPoker;				// 已经使用
-	std::vector<GameEntity*>		mLstGameEntity;
 	uint32							mBankerUserId;			// 庄家
 	uint32							mCurSpeakUserId;		// 当前说话的人
+	uint32							mSpeakTime;				// 说话剩余时间秒
 };

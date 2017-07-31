@@ -21,6 +21,7 @@ protected:
 	int onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy);
 protected:
 	int32 onGmCmd(CmdEvent& e);
+	int32 onLogin(CmdEvent& e);
 protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;

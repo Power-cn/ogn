@@ -1,17 +1,5 @@
 #include "stdafx.h"
 
-class LUATest
-{
-public:
-	int32 a;
-	int32 b;
-
-	void TestFunc(std::string a)
-	{
-		LOG_ERROR(a.c_str());
-	}
-};
-
 void LuaScript::bindScript()
 {
 	luabind::module(mLuaState)
@@ -22,6 +10,8 @@ void LuaScript::bindScript()
 			luabind::def("luaPlrToEnt", &luaPlrToEnt),
 			luabind::def("luaNpcToEnt", &luaNpcToEnt),
 			luabind::def("luaProperty", &luaProperty),
+			luabind::def("luaGoldenFlower", &luaGoldenFlower),
+			luabind::def("luaPlrGoldenFlower", &luaPlrGoldenFlower),
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom)
 			//luabind::def("TestFunc", &TestFunc)
@@ -108,6 +98,8 @@ void LuaScript::bindScript()
 		.def("DoLeaveRoom", &RoomModule::DoLeaveRoom)
 		.def("DoChangeRoomMaster", &RoomModule::DoChangeRoomMaster)
 		.def("DoRoomList", &RoomModule::DoRoomList)
+		.def("DoRoomReady", &RoomModule::DoRoomReady)
+		.def("DoRoomStartGame", &RoomModule::DoRoomStartGame)
 		,
 
 		luabind::class_<GameEntity>("GameEntity")
@@ -130,13 +122,9 @@ void LuaScript::bindScript()
 		luabind::class_<GameModule>("GameModule")
 		.def("FindGameModule", &GameModule::FindGameModule)
 		.def("FindPlrGameModule", &GameModule::FindPlrGameModule)
+		.def("FindPlrGameEnt", &GameModule::FindPlrGameEnt)
 		.def("DoStartGame", &GameModule::DoStartGame)
-		,
-
-		luabind::class_<LUATest>("LUATest")
-		.def_readonly("a", &LUATest::a)
-		.def("TestFunc", &LUATest::TestFunc)
-
+		
 		];
 }
 //template < class ValueWrapper>

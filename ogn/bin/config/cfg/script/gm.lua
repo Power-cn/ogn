@@ -71,3 +71,21 @@ fun=function (player, s1, s2, s3)
 	luaRoom:DoRoomList(player, tonumber(s1), tonumber(s2));
 end
 });
+
+RegGm(
+{
+name = "reroom";
+fun=function (player, s1, s2, s3)
+	local luaRoom = luaRoom();
+	luaRoom:DoRoomReady(player, tonumber(s1));
+end
+});
+
+RegGm(
+{
+name = "sgroom";
+fun=function (player, s1, s2, s3)
+	local luaRoom = luaRoom();
+	luaRoom:DoRoomReady(player);
+end
+});

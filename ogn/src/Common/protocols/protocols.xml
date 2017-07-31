@@ -58,6 +58,9 @@
     <element name="GameGoldenFlowerInfo" parent="object">
       <member type="uint32" name="insId" />
       <member type="uint32" name="roomId" />
+      <member type="uint32" name="bankerUserId" />
+      <member type="uint32" name="curSpeakUserId" />
+      <member type="uint32" name="speakTime" />
       <member type="vector" name="gameEntInfos" element="GameEntityInfo" />
     </element>
     
