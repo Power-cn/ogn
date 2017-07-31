@@ -178,24 +178,24 @@ TeamEntity* Team::ChooseLeader()
 
 bool Team::OnCreate(uint32 userId)
 {
-	LuaEngine::executeScript(GetScript(), "OnCreate", getId(), userId);
+	LuaEngine::executeScript(sScriptTeam, "OnCreate", getId(), userId);
 	return true;
 }
 
 bool Team::OnEnter(uint32 userId)
 {
-	LuaEngine::executeScript(GetScript(), "OnEnter", getId(), userId);
+	LuaEngine::executeScript(sScriptTeam, "OnEnter", getId(), userId);
 	return true;
 }
 
 bool Team::OnLeave(uint32 userId)
 {
-	LuaEngine::executeScript(GetScript(), "OnLeave", getId(), userId);
+	LuaEngine::executeScript(sScriptTeam, "OnLeave", getId(), userId);
 	return true;
 }
 
 bool Team::OnChangeLeader(uint32 oldUserId, uint32 newUserId)
 {
-	LuaEngine::executeScript(GetScript(), "OnChangeLeader", getId(), oldUserId, newUserId);
+	LuaEngine::executeScript(sScriptTeam, "OnChangeLeader", getId(), oldUserId, newUserId);
 	return true;
 }

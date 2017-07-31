@@ -46,7 +46,7 @@ GameModle* GameModule::AddGameModle(GameModle* aGameModle)
 	return aGameModle;
 }
 
-GameModle* GameModule::FindGameModule(uint32 insId)
+GameModle* GameModule::FindGameModle(uint32 insId)
 {
 	auto itr = mMapGameModle.find(insId);
 	if (itr != mMapGameModle.end())
@@ -54,7 +54,7 @@ GameModle* GameModule::FindGameModule(uint32 insId)
 	return NULL;
 }
 
-void GameModule::DelGameModule(uint32 insId)
+void GameModule::DelGameModle(uint32 insId)
 {
 	auto itr = mMapGameModle.find(insId);
 	if (itr != mMapGameModle.end()){
@@ -73,7 +73,17 @@ GameModle* GameModule::AddPlrGameModle(uint32 userId, GameModle* aGameModle)
 	return aGameModle;
 }
 
-GameModle* GameModule::FindPlrGameModule(uint32 userId)
+GameModle* GameModule::AddRoomGameModle(uint32 roomId, GameModle* aGameModle)
+{
+	auto itr = mMapRoomGameModle.find(roomId);
+	if (itr != mMapRoomGameModle.end())
+		return NULL;
+
+	mMapRoomGameModle[roomId] = aGameModle;
+	return aGameModle;
+}
+
+GameModle* GameModule::FindPlrGameModle(uint32 userId)
 {
 	auto itr = mMapPlrGameModle.find(userId);
 	if (itr != mMapPlrGameModle.end())
@@ -81,16 +91,31 @@ GameModle* GameModule::FindPlrGameModule(uint32 userId)
 	return NULL;
 }
 
-void GameModule::DelPlrGameModule(uint32 userId)
+void GameModule::DelPlrGameModle(uint32 userId)
 {
 	auto itr = mMapPlrGameModle.find(userId);
 	if (itr != mMapPlrGameModle.end())
 		mMapPlrGameModle.erase(itr);
 }
 
+void GameModule::DelRoomGameModle(uint32 roomId)
+{
+	auto itr = mMapRoomGameModle.find(roomId);
+	if (itr != mMapRoomGameModle.end())
+		mMapRoomGameModle.erase(itr);
+}
+
+GameModle* GameModule::FindRoomGameModle(uint32 roomId)
+{
+	auto itr = mMapRoomGameModle.find(roomId);
+	if (itr != mMapRoomGameModle.end())
+		return itr->second;
+	return NULL;
+}
+
 GameEntity* GameModule::FindPlrGameEnt(uint32 userId)
 {
-	GameModle* aGameModule = FindPlrGameModule(userId);
+	GameModle* aGameModule = FindPlrGameModle(userId);
 	if (aGameModule == NULL)
 		return NULL;
 	return aGameModule->FindGameEnt(userId);
@@ -98,8 +123,19 @@ GameEntity* GameModule::FindPlrGameEnt(uint32 userId)
 
 bool GameModule::DoStartGame(Room* aRoom)
 {
+	if (FindRoomGameModle(aRoom->GetInsId()))
+	{
+		// 当前房间在游戏中
+		return false;
+	}
+
 	GameGoldenFlower* aGame = new GameGoldenFlower;
+	AddGameModle(aGame);
+
+	aGame->DoShuffle();
+	aGame->SetRoomId(aRoom->GetInsId());
 	aRoom->SetGameInsId(aGame->GetInsId());
+	aRoom->DoAllStart();
 
 	for (uint32 i = 0; i < aRoom->GetRoomPlayerCount(); ++i)
 	{
@@ -112,7 +148,6 @@ bool GameModule::DoStartGame(Room* aRoom)
 		aGame->AddGameEnt(aGameEnt);
 		AddPlrGameModle(aRoomPlayer->mUserId, aGame);
 	}
-	AddGameModle(aGame);
 
 	for (uint8 k = 0; k < MAX_UNIT_POKER_COUNT; ++k)
 	{
@@ -138,8 +173,37 @@ bool GameModule::DoStartGame(Room* aRoom)
 	return true;
 }
 
-bool GameModule::DoStopGame()
+bool GameModule::DoCloseGame(uint32 roomId)
 {
+	GameModle* aGameModle = FindRoomGameModle(roomId);
+	if (aGameModle == NULL)
+	{
+		LOG_ERROR("%d 房间没有开始游戏", roomId);
+		return false;
+	}
+	std::queue<uint32> delQueue;
+	for (uint32 i = 0; i < aGameModle->GetGameEntCount(); ++i)
+	{
+		GameEntity* aGameEnt = aGameModle->GetGameEnt(i);
+		if (aGameEnt)
+		{
+			aGameModle->OnLeave(aGameEnt);
+			delQueue.push(aGameEnt->userId);
+		}
+	}
+
+	aGameModle->OnClose();
+
+	while (delQueue.size())
+	{
+		uint32 userId = delQueue.front();
+		delQueue.pop();
+
+		DelPlrGameModle(userId);
+		aGameModle->DelGameEnt(userId);
+	}
+	DelRoomGameModle(roomId);
+	DelGameModle(aGameModle->GetInsId());
 	return true;
 }
 

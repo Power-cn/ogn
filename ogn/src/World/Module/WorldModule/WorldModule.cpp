@@ -247,6 +247,9 @@ void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* sel
 	case EC_WORLD:
 		self->sendPacketToWorld(packet);
 		break;
+	case EC_SYSTEM:
+		self->sendPacket(packet);
+		break;
 	case EC_MAP:
 		self->sendPacketToMap(packet);
 		break;

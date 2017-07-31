@@ -26,14 +26,24 @@ Entity* luaNpcToEnt(Npc* npc)
 	return npc;
 }
 
+Player* luaFindPlrByUserId(uint32 userId)
+{
+	return sWorld.getPlayerToUserId(userId);
+}
+
+GameModle* luaToGameModle(GameGoldenFlower* aGame)
+{
+	return (GameModle*)aGame;
+}
+
 GameGoldenFlower* luaGoldenFlower(uint32 insId)
 {
-	return (GameGoldenFlower*)sGame.FindGameModule(insId);
+	return (GameGoldenFlower*)sGame.FindGameModle(insId);
 }
 
 GameGoldenFlower* luaPlrGoldenFlower(uint32 userId)
 {
-	return (GameGoldenFlower*)sGame.FindPlrGameModule(userId);
+	return (GameGoldenFlower*)sGame.FindPlrGameModle(userId);
 }
 
 PropertyHelper* luaProperty()
@@ -49,4 +59,9 @@ WorldModule* luaWorld()
 RoomModule* luaRoom()
 {
 	return &sRoom;
+}
+
+GameModule* luaGame()
+{
+	return &sGame;
 }

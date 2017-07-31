@@ -86,6 +86,6 @@ RegGm(
 name = "sgroom";
 fun=function (player, s1, s2, s3)
 	local luaRoom = luaRoom();
-	luaRoom:DoRoomReady(player);
+	luaRoom:DoRoomStartGame(player);
 end
 });

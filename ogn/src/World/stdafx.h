@@ -63,6 +63,7 @@
 
 
 #include "MsgCode.h"
+#include "ConstDef.h"
 #include "RedisDef.h"
 #include "LuaEngine.h"
 #include "LuaScriptEngine.h"
@@ -96,6 +97,7 @@
 #include "./Module/TeamModule/TeamHandler.h"
 #include "./Module/TeamModule/Team.h"
 #include "./Module/TeamModule/TeamModule.h"
+#include "./Module/RoomModule/RoomMatch.h"
 #include "./Module/RoomModule/RoomHandler.h"
 #include "./Module/RoomModule/Room.h"
 #include "./Module/RoomModule/RoomModule.h"

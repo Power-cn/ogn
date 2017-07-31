@@ -3,7 +3,7 @@
 
 enum RoomPlayerState :  char
 {
-	RPS_None = 0,
+	RPS_None = 0,			// 正常
 	RPS_Ready,				// 准备
 	RPS_Game,				// 游戏中
 	RPS_Observed,			// 观战中
@@ -27,6 +27,7 @@ public:
 
 class Room
 {
+	friend class RoomModule;
 public:
 	Room();
 	~Room();
@@ -54,12 +55,19 @@ public:
 	RoomPlayer* AddPlayer(RoomPlayer* roomPlr);
 	RoomPlayer* GetRoomPlayer(uint32 idx);
 	RoomPlayer* GetMaster() { return mMaster; }
-	
+	Player* GetMasterPlayer() { return mMaster ? mMaster->mPlayer : NULL; }
 	const std::string& GetPassword() { return mPassword; }
 	const std::string& GetName() { return mName; }
-
+protected:
+	void OnCreate(uint32 userId);
+	void OnClose();
+	void OnEnter(uint32 userId);
+	void OnLeave(uint32 userId);
+	void OnChangeMaster(uint32 oldUserId, uint32 newUserId);
+	void OnChangeState(uint32 userId, uint8 oldState, uint8 state);
 protected:
 	uint32									mId;
+	std::string								mScript;
 	RoomPlayer*								mMaster;
 	std::string								mName;
 	std::string								mPassword;

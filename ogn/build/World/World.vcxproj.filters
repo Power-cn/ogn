@@ -189,6 +189,9 @@
     <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp">
       <Filter>Module\GameModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -319,6 +322,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h">
       <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\ConstDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h">
+      <Filter>Module\RoomModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

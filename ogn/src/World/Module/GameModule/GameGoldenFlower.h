@@ -32,18 +32,15 @@ public:
 
 	void DoShuffle();			// 洗
 	void DoCutPoker();			// 切
-	void SetRoomId(uint32 roomId) { mRoomId = roomId; }
 	void SetBanker(uint32 userId) { mBankerUserId = userId; }
 	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
 	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }
 
 	uint8 DoDealPoker();		// 发
 
-	int32 GetPlrInx(uint32 userId);
 	uint32 GetNextSpeakPlr();
 	uint32 GetBanker() { return mBankerUserId; }
 	uint32 GetCurSpeak() { return mCurSpeakUserId; }
-	uint32 GetRoomId() { return mRoomId; }
 	uint32 GetSpeakTime() { return mSpeakTime; }
 
 	virtual std::string ToString();
@@ -53,7 +50,6 @@ protected:
 	virtual bool OnEnter(GameEntity* aGameEnt);
 	virtual bool OnLeave(GameEntity* aGameEnt);
 protected:
-	uint32							mRoomId;
 	uint8							mPoker[MAX_POKER_COUNT];
 	std::queue<uint8>				mCurPoker;				// 没有使用
 	std::queue<uint8>				mOpenPoker;				// 已经使用

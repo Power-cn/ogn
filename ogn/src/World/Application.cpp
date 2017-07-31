@@ -53,6 +53,7 @@ bool Application::Initialize()
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("ref", (EventCallback)&Application::onRefresh, this);
+	INSTANCE(CmdDispatcher).addEventListener("reflua", (EventCallback)&Application::onRefreshLua, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&Application::onClose, this);
 
 	INSTANCE(CmdDispatcher).addEventListener("addfrd", (EventCallback)&Application::onAddFrd, this);
@@ -505,6 +506,12 @@ int32 Application::RedisCallback1(RedisEvent& e)
 int32 Application::onRefresh(CmdEvent& e)
 {
 	INSTANCE(ConfigManager).reloadConfig();
+	INSTANCE(LuaEngine).reloadScript();
+	return 0;
+}
+
+int32 Application::onRefreshLua(CmdEvent& e)
+{
 	INSTANCE(LuaEngine).reloadScript();
 	return 0;
 }

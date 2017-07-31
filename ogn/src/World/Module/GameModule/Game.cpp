@@ -3,9 +3,9 @@
 uint32 GameModle::sId = 0;
 
 GameModle::GameModle():
-mInsId(++sId)
+mInsId(++sId),
+mRoomId(0)
 {
-	mScript = "game";
 }
 
 GameModle::~GameModle()
@@ -67,4 +67,14 @@ std::string GameModle::ToString()
 		str += "\n";
 	}
 	return str;
+}
+
+int32 GameModle::GetPlrInx(uint32 userId)
+{
+	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
+	{
+		if (mLstGameEntity[i]->userId == userId)
+			return i;
+	}
+	return -1;
 }

@@ -1,9 +1,10 @@
 #include "stdafx.h"
 
-GameGoldenFlower::GameGoldenFlower():
-mRoomId(0)
+GameGoldenFlower::GameGoldenFlower()
 {
-
+	mBankerUserId = 0;
+	mCurSpeakUserId = 0;
+	mSpeakTime = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
@@ -69,16 +70,6 @@ uint32 GameGoldenFlower::GetNextSpeakPlr()
 	return 0;
 }
 
-int32 GameGoldenFlower::GetPlrInx(uint32 userId)
-{
-	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
-	{
-		if (mLstGameEntity[i]->userId == userId)
-			return i;
-	}
-	return -1;
-}
-
 std::string GameGoldenFlower::ToString()
 {
 	std::string str;
@@ -96,25 +87,25 @@ std::string GameGoldenFlower::ToString()
 
 bool GameGoldenFlower::OnStart()
 {
-	LuaEngine::executeScript(GetScript(), "OnStart", GetInsId());
+	LuaEngine::executeScript(sScriptGame, "OnStart", GetInsId());
 	return true;
 }
 
 bool GameGoldenFlower::OnClose()
 {
-	LuaEngine::executeScript(GetScript(), "OnClose", GetInsId());
+	LuaEngine::executeScript(sScriptGame, "OnClose", GetInsId());
 	return true;
 }
 
 bool GameGoldenFlower::OnEnter(GameEntity* aGameEnt)
 {
-	LuaEngine::executeScript(GetScript(), "OnEnter", GetInsId(), aGameEnt->userId);
+	LuaEngine::executeScript(sScriptGame, "OnEnter", GetInsId(), aGameEnt->userId);
 	return true;
 }
 
 bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
 {
-	LuaEngine::executeScript(GetScript(), "OnLeave", GetInsId(), aGameEnt->userId);
+	LuaEngine::executeScript(sScriptGame, "OnLeave", GetInsId(), aGameEnt->userId);
 	return true;
 }
 

@@ -189,6 +189,9 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 {
 	switch (nfy->channelType)
 	{
+	case EC_SYSTEM:
+		LOG_DEBUG(LogSystem::csl_color_green, "系统频道:%s", nfy->chatMsg.c_str());
+		break;
 	case EC_ROOM:
 		LOG_DEBUG(LogSystem::csl_color_green, "房间频道:%s", nfy->chatMsg.c_str());
 		break;

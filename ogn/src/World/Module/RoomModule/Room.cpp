@@ -130,7 +130,12 @@ bool Room::IsCanStart()
 			canStart++;
 			continue;
 		}
-		if (aRoomPlayer->GetState() == RPS_None) {
+		if (aRoomPlayer == GetMaster() && aRoomPlayer->GetState() == RPS_None)
+		{
+			canStart++;
+			continue;
+		}
+		if (aRoomPlayer->GetState() == RPS_None && aRoomPlayer != GetMaster()) {
 			return false;
 		}
 	}
@@ -144,10 +149,42 @@ bool Room::DoAllStart()
 {
 	for (RoomPlayer* aRoomPlayer : mRoomPlayers) {
 		if (aRoomPlayer->GetState() == RPS_Ready) {
+			uint8 lastState = aRoomPlayer->GetState();
 			aRoomPlayer->SetState(RPS_Game);
+			OnChangeState(aRoomPlayer->mUserId, lastState, aRoomPlayer->GetState());
 		}
 	}
 	return true;
+}
+
+void Room::OnCreate(uint32 userId)
+{
+	LuaEngine::executeScript(sScriptRoom, "OnCreate", GetInsId(), userId);
+}
+
+void Room::OnClose()
+{
+	LuaEngine::executeScript(sScriptRoom, "OnClose", GetInsId());
+}
+
+void Room::OnEnter(uint32 userId)
+{
+	LuaEngine::executeScript(sScriptRoom, "OnEnter", GetInsId(), userId);
+}
+
+void Room::OnLeave(uint32 userId)
+{
+	LuaEngine::executeScript(sScriptRoom, "OnLeave", GetInsId(), userId);
+}
+
+void Room::OnChangeMaster(uint32 oldUserId, uint32 newUserId)
+{
+	LuaEngine::executeScript(sScriptRoom, "OnChangeMaster", GetInsId(), oldUserId, newUserId);
+}
+
+void Room::OnChangeState(uint32 userId, uint8 oldState, uint8 state)
+{
+	LuaEngine::executeScript(sScriptRoom, "OnChangeState", GetInsId(), userId, oldState, state);
 }
 
 bool RoomPlayer::operator<<(RoomPlayerInfo& info)

@@ -8,6 +8,10 @@ function OnCreate(roomId, userId)
 	end
 	return 0;
 end
+function OnClose(roomId)
+
+	return 0;
+end
 
 function OnEnter(roomId, userId)
 	local sWorld = luaWorld();
@@ -33,6 +37,30 @@ function OnChangeMaster(roomId, oldUserId, newUserId)
 	local play = sWorld:getPlayerToUserId(newUserId);
 	if play then
 		play:sendPacketToMsg(EC_ROOM, "["..roomId.."]房间更换房主为["..newUserId.."]");
+	end
+	return 0;
+end
+
+function OnChangeState(roomId, userId, oldState, state)
+	local sWorld = luaWorld();
+	local play = sWorld:getPlayerToUserId(userId);
+	if play then
+		local str = "";
+		if state == RPS_None then
+			str = "取消准备";
+		end
+		
+		if state == RPS_Ready then
+			str = "准备";	
+		end
+		if state == RPS_Game then
+			str = "开始游戏";	
+		end
+		
+		if state == RPS_Observed then
+			str = "观点中";	
+		end
+		play:sendPacketToMsg(EC_ROOM, "房间ID["..roomId.."]玩家ID["..userId.."]"..str);
 	end
 	return 0;
 end
