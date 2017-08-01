@@ -19,8 +19,21 @@ bool WorldModule::Update(float time, float delay)
 {
 	float64 s0 = DateTime::GetNowAppUS();
 
-	for (auto itr : mMapEntity)
-		itr.second->Update(time, delay);
+	std::queue<Entity* > delQueue;
+	for (auto& itr : mMapEntity) {
+		Entity* ent = itr.second;
+		ent->Update(time, delay);
+		if (ent->CanDestroy()) {
+			delQueue.push(ent);
+		}
+	}
+
+	while (delQueue.size() > 0)
+	{
+		Entity* ent = delQueue.front();
+		delQueue.pop();
+
+	}
 
 	float64 s1 = DateTime::GetNowAppUS() - s0;
 	if (s1 >= 0.02f)
@@ -40,24 +53,6 @@ bool WorldModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
 	LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] leave world", player->getName());
 	return true;
-}
-
-Entity* WorldModule::getEntityByName(const std::string& name)
-{
-	auto itr = mMapNameEntity.find(name);
-	if (itr != mMapNameEntity.end())
-		return itr->second;
-
-	return NULL;
-}
-
-Entity* WorldModule::getEntity(Guid guid)
-{	
-	auto itr = mMapEntity.find(guid);
-	if (itr != mMapEntity.end())
-		return itr->second;
-
-	return NULL;
 }
 
 Entity* WorldModule::FindEntByName(cstring& name)
@@ -153,7 +148,7 @@ void WorldModule::removePlayerToUserId(uint32 userId)
 
 Player* WorldModule::FindPlrByName(cstring& name)
 {
-	Entity* entity = getEntityByName(name);
+	Entity* entity = FindEntByName(name);
 	if (entity == NULL)
 		return NULL;
 
@@ -164,7 +159,7 @@ Player* WorldModule::FindPlrByName(cstring& name)
 
 Player* WorldModule::FindPlrByGuid(Guid guid)
 {
-	Entity* entity = getEntity(guid);
+	Entity* entity = FindEntByGuid(guid);
 	if (entity == NULL)
 		return NULL;
 
@@ -211,7 +206,7 @@ Npc* WorldModule::FindNpcByCfgId(uint32 cfgId)
 
 Npc* WorldModule::FindNpcByName(cstring& name)
 {
-	Entity* entity = getEntityByName(name);
+	Entity* entity = FindEntByName(name);
 	if (entity == NULL)
 		return NULL;
 
@@ -222,13 +217,25 @@ Npc* WorldModule::FindNpcByName(cstring& name)
 
 Npc* WorldModule::FindNpcByGuid(Guid guid)
 {
-	Entity* entity = getEntity(guid);
+	Entity* entity = FindEntByGuid(guid);
 	if (entity == NULL)
 		return NULL;
 
 	if (entity->getEntityType() == ET_Npc)
 		return (Npc*)entity;
 	return NULL;
+}
+
+void WorldModule::DestroyEnt(Guid guid)
+{
+	Entity* ent = FindEntByGuid(guid);
+	if (ent == NULL) return;
+	DestroyEnt(ent);
+}
+
+void WorldModule::DestroyEnt(Entity* ent)
+{
+
 }
 
 void WorldModule::removeNpc(uint32 npcId)

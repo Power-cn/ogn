@@ -413,16 +413,16 @@ bool BinaryStream::operator>>(std::string& value)
 	if (size <= 0)
 		return true;
 
-	int8* str = (int8*)malloc(size + 1);
+	char* str = new char[size + 1];
 	if (!ReadBytes(str, size))
 	{
-		free(str);
+		delete[] str;
 		return false;
 	}
 
 	str[size] = 0;
 	value = str;
-	free(str);
+	delete[] str;
 	return true;
 }
 

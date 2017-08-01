@@ -30,6 +30,8 @@ int SocketHandler::onConnect(SocketEvent& e)
 
 int SocketHandler::onRecv(SocketEvent& e)
 {
+	AES aes(sKey);
+	aes.InvCipher(e.data, e.count);
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;
 	int32 rpos = out.getWPostion();

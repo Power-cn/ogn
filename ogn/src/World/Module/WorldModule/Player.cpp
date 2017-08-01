@@ -115,11 +115,6 @@ void Player::unbindSession()
 	setSession(NULL);
 }
 
-bool Player::CanLeave()
-{
-	return true;
-}
-
 Json::Value& Player::GetJson()
 {
 	return mJson;

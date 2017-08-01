@@ -27,6 +27,8 @@ public:
 	virtual void setName(const std::string& name) { mName = name; }
 	void setLine(uint8 l) { mLine = l; }
 	uint8 getLine() { return mLine; }
+	virtual	bool CanDestroy();
+	virtual void SetDestroy(bool isDestroy) { mCanDestroy = isDestroy; }
 public:
 	virtual	void sendPacket(Packet& packet) {}
 	virtual void sendBuffer(void* data, int32 count) {}
@@ -150,6 +152,7 @@ protected:
 	Dictionary								mDictProperty;
 	Dictionary								mDictChangePro;
 	bool									mCheckView;
+	bool									mCanDestroy;
 };
 
 #define EntityGetProperty(tar, class_name) (class_name*)(tar)->getProperty(#class_name)

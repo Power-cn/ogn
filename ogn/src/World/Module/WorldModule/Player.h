@@ -34,7 +34,6 @@ public:
 	void setUser(const std::string& u) { user = u; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
 
-	bool CanLeave();
 	bool GetOnline() { return mOnline; }
 	void SetOnline(bool isOnline) { mOnline = isOnline; }
 

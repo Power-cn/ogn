@@ -28,8 +28,6 @@ public:
 	bool ChangeName(Entity* ent, cstring& sname);
 	Entity* addEntity(Entity* ent);
 
-	Entity* getEntityByName(const std::string& name);
-	Entity* getEntity(Guid guid);
 	Entity* FindEntByName(cstring& name);
 	Entity* FindEntByGuid(Guid guid);
 	
@@ -41,12 +39,14 @@ public:
 	Player* FindPlrByAccId(uint32 accId);
 	Player* FindPlrByUserId(uint32 userId);
 
-
 	Npc* addNpc(Npc* npc);
 	
 	Npc* FindNpcByCfgId(uint32 cfgId);
 	Npc* FindNpcByName(cstring& name);
 	Npc* FindNpcByGuid(Guid guid);
+
+	void DestroyEnt(Guid guid);
+	void DestroyEnt(Entity* ent);
 
 	uint32 GetPlrCount() { return (uint32)mMapPlayer.size(); }
 

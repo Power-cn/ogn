@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Shared\core\aes\AES.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Astar.h" />
     <ClInclude Include="..\..\src\Shared\core\core\BinaryStream.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Bit.h" />
@@ -92,6 +93,7 @@
     <None Include="..\..\src\Shared\core\json\src\lib_json\json_valueiterator.inl" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Shared\core\aes\AES.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Astar.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\BinaryStream.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Bit.cpp" />

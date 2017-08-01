@@ -25,6 +25,9 @@
     <Filter Include="math">
       <UniqueIdentifier>{714fdc55-abe5-47f6-9947-459a8514744d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="aes">
+      <UniqueIdentifier>{3ce025be-8062-46a6-bc29-7d28e27dfc3c}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_batchallocator.h">
@@ -224,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\Variant.h">
       <Filter>core</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\aes\AES.h">
+      <Filter>aes</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -438,6 +444,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\core\Variant.cpp">
       <Filter>core</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\aes\AES.cpp">
+      <Filter>aes</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

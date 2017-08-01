@@ -84,7 +84,7 @@ int32 PlayerHandler::OnRedisFindName(RedisEvent& e)
 	uint32 tarUserId = Shared::strtoint32(sUserId);
 	std::string newName = sName;
 	Player* aPlr = sWorld.FindPlrByUserId(tarUserId);
-	if (aPlr == NULL) return;
+	if (aPlr == NULL) return 0;
 
 	NetChangeNameRes res;
 	Entity* ent = sWorld.FindEntByName(newName);

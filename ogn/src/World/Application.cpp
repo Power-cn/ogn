@@ -325,7 +325,7 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	if ((out >> (*pack)) == false)
 	{
-		LOG_ERROR("packet errer");
+		LOG_ERROR("msg:%s packet errer", INSTANCE(PacketManager).GetName(msgId).c_str());
 		INSTANCE(PacketManager).Free(pack);
 		break;
 	}

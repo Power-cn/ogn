@@ -6,6 +6,7 @@
 #include "Player.h"
 #include "SessionManager.h"
 #include "protocols/protocols.h"
+#include "ConstDef.h"
 #include "Application.h"
 
 #ifndef LINUX
