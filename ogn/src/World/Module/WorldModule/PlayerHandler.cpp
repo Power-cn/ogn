@@ -17,9 +17,10 @@ int32 PlayerHandler::onNetFirst(Player* player, NetFirst* nfy)
 int32 PlayerHandler::onNetChangeNameReq(Player* player, NetChangeNameReq* req)
 {
 	char szBuffer[256] = { 0 };
-	sprintf_s(szBuffer, 256, "hget %s %s", sNameToUserId, req->newName.c_str);
+	sprintf_s(szBuffer, 256, "hget %s %s", sNameToUserId, req->newName.c_str());
 	std::vector<std::string> parstr;
 	parstr.push_back(Shared::int32tostr(player->getUserId()));
+	parstr.push_back(req->newName);
 	sRedisProxy.sendCmd(szBuffer, (EventCallback)&PlayerHandler::OnRedisFindName, this);
 	return 0;
 }
@@ -31,7 +32,7 @@ int32 PlayerHandler::onNetChatMsgNotify(Player* player, NetChatMsgNotify* nfy)
 
 	if (nfy->to != "")
 	{
-		Player* tar = sWorld.getPlayerByName(nfy->to);
+		Player* tar = sWorld.FindPlrByName(nfy->to);
 		if (tar)
 			tarUserId = tar->getUserId();
 	}
@@ -78,5 +79,30 @@ int32 PlayerHandler::onNetEntityMoveToNotify(Player* player, NetEntityMoveToNoti
 
 int32 PlayerHandler::OnRedisFindName(RedisEvent& e)
 {
+	std::string sUserId = e.parstr.size() >= 1 ? e.parstr[0] : "";
+	std::string sName = e.parstr.size() >= 2 ? e.parstr[1] : "";
+	uint32 tarUserId = Shared::strtoint32(sUserId);
+	std::string newName = sName;
+	Player* aPlr = sWorld.FindPlrByUserId(tarUserId);
+	if (aPlr == NULL) return;
+
+	NetChangeNameRes res;
+	Entity* ent = sWorld.FindEntByName(newName);
+	if (ent)
+	{
+		res.result = NResultFail;
+		aPlr->sendPacket(res);
+		return 0;
+	}
+
+	sWorld.ChangeName(aPlr, newName);
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, aPlr->getName(), aPlr->getUserId());
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
+	res.result = NResultSuccess;
+	res.newName = newName;
+	aPlr->sendPacket(res);
+
 	return 0;
 }

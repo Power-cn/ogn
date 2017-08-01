@@ -62,15 +62,15 @@ void LuaScript::bindScript()
 		.def("sendPacketToTarget", &WorldModule::sendPacketToTarget)
 		.def("sendPacketToMsg", &WorldModule::sendPacketToMsg)
 
-		.def("getEntityByName", &WorldModule::getEntityByName)
-		.def("getEntity", &WorldModule::getEntity)
+		.def("FindEntByName", &WorldModule::FindEntByName)
+		.def("FindEntByGuid", &WorldModule::FindEntByGuid)
 
-		.def("getPlayerByName", &WorldModule::getPlayerByName)
-		.def("getPlayerByGuid", &WorldModule::getPlayerByGuid)
-		.def("getPlayer", &WorldModule::getPlayer)
-		.def("getPlayerToUserId", &WorldModule::getPlayerToUserId)
+		.def("FindPlrByName", &WorldModule::FindPlrByName)
+		.def("FindPlrByGuid", &WorldModule::FindPlrByGuid)
+		.def("FindPlrByAccId", &WorldModule::FindPlrByAccId)
+		.def("FindPlrByUserId", &WorldModule::FindPlrByUserId)
 
-		.def("getPlayerCount", &WorldModule::getPlayerCount)
+		.def("GetPlrCount", &WorldModule::GetPlrCount)
 		,
 
 		luabind::class_<RoomPlayer>("RoomPlayer")

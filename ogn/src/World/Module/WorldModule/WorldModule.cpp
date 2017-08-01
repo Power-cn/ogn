@@ -60,6 +60,24 @@ Entity* WorldModule::getEntity(Guid guid)
 	return NULL;
 }
 
+Entity* WorldModule::FindEntByName(cstring& name)
+{
+	auto itr = mMapNameEntity.find(name);
+	if (itr != mMapNameEntity.end())
+		return itr->second;
+
+	return NULL;
+}
+
+Entity* WorldModule::FindEntByGuid(Guid guid)
+{
+	auto itr = mMapEntity.find(guid);
+	if (itr != mMapEntity.end())
+		return itr->second;
+
+	return NULL;
+}
+
 Entity* WorldModule::addEntity(Entity* ent)
 {
 	auto itr = mMapEntity.find(ent->getInstanceId());
@@ -84,37 +102,6 @@ void WorldModule::removeEntity(Entity* ent)
 	mMapEntity.erase(ent->getGuid());
 	mMapNameEntity.erase(ent->getName());
 	delete ent;
-}
-
-Player* WorldModule::getPlayerByName(const std::string& name)
-{
-	Entity* entity = getEntityByName(name);
-	if (entity == NULL)
-		return NULL;
-
-	if (entity->getEntityType() == ET_Player)
-		return (Player*)entity;
-	return NULL;
-}
-
-Player* WorldModule::getPlayerByGuid(Guid guid)
-{
-	Entity* entity = getEntity(guid);
-	if (entity == NULL)
-		return NULL;
-
-	if (entity->getEntityType() == ET_Player)
-		return (Player*)entity;
-	return NULL;
-}
-
-Player* WorldModule::getPlayer(uint32 accountId)
-{
-	auto itr = mMapPlayer.find(accountId);
-	if (itr != mMapPlayer.end())
-		return itr->second;
-
-	return NULL;
 }
 
 Player* WorldModule::addPlayer(Player* plr)
@@ -164,12 +151,43 @@ void WorldModule::removePlayerToUserId(uint32 userId)
 		mMapUserIdPlayer.erase(itr);
 }
 
-Player* WorldModule::getPlayerToUserId(uint32 userId)
+Player* WorldModule::FindPlrByName(cstring& name)
+{
+	Entity* entity = getEntityByName(name);
+	if (entity == NULL)
+		return NULL;
+
+	if (entity->getEntityType() == ET_Player)
+		return (Player*)entity;
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByGuid(Guid guid)
+{
+	Entity* entity = getEntity(guid);
+	if (entity == NULL)
+		return NULL;
+
+	if (entity->getEntityType() == ET_Player)
+		return (Player*)entity;
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByAccId(uint32 accId)
+{
+	auto itr = mMapPlayer.find(accId);
+	if (itr != mMapPlayer.end())
+		return itr->second;
+
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByUserId(uint32 userId)
 {
 	auto itr = mMapUserIdPlayer.find(userId);
 	if (itr != mMapUserIdPlayer.end())
 		return itr->second;
-	return NULL;		
+	return NULL;
 }
 
 Npc* WorldModule::addNpc(Npc* npc)
@@ -183,15 +201,15 @@ Npc* WorldModule::addNpc(Npc* npc)
 	return npc;
 }
 
-Npc* WorldModule::getNpc(uint32 npcId)
+Npc* WorldModule::FindNpcByCfgId(uint32 cfgId)
 {
-	auto itr = mMapNpc.find(npcId);
+	auto itr = mMapNpc.find(cfgId);
 	if (itr != mMapNpc.end())
 		return itr->second;
 	return NULL;
 }
 
-Npc* WorldModule::getNpcByName(const std::string& name)
+Npc* WorldModule::FindNpcByName(cstring& name)
 {
 	Entity* entity = getEntityByName(name);
 	if (entity == NULL)
@@ -202,7 +220,7 @@ Npc* WorldModule::getNpcByName(const std::string& name)
 	return NULL;
 }
 
-Npc* WorldModule::getNpcByGuid(Guid guid)
+Npc* WorldModule::FindNpcByGuid(Guid guid)
 {
 	Entity* entity = getEntity(guid);
 	if (entity == NULL)
@@ -280,7 +298,7 @@ void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* sel
 			self->sendPacket(packet);
 		else
 		{
-			Player* tarPlr = sWorld.getPlayerToUserId(tarUserId);
+			Player* tarPlr = sWorld.FindPlrByUserId(tarUserId);
 			if (tarPlr)
 				tarPlr->sendPacket(packet);
 		}

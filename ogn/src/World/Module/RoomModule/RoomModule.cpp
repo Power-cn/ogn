@@ -89,7 +89,7 @@ bool RoomModule::EnterRoom(Room* aRoom, Player* aPlr, bool isMaster /* = false *
 
 		if (roomPlayer == curPlayer) continue;
 
-		Player* aSndPlr = sWorld.getPlayerToUserId(roomPlayer->mUserId);
+		Player* aSndPlr = sWorld.FindPlrByUserId(roomPlayer->mUserId);
 		if (aSndPlr == NULL) continue;
 		aSndPlr->sendPacket(nfy);
 	}
@@ -468,7 +468,7 @@ void RoomModule::MatchUpdate()
 
 	RoomMatch rMatch = mLstAutoMatch.front();
 	mLstAutoMatch.pop_front();
-	Player* aPlr = sWorld.getPlayerToUserId(rMatch.userId);
+	Player* aPlr = sWorld.FindPlrByUserId(rMatch.userId);
 	if (aPlr == NULL) return;
 
 	if (GetRoomCount() == 0)

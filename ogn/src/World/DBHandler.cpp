@@ -24,7 +24,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 		return 0;
 	}
 
-	Player* player = GetModule(WorldModule)->getPlayer(res->accountInfo.id);
+	Player* player = sWorld.FindPlrByAccId(res->accountInfo.id);
 	do 
 	{
 		if (player)
@@ -70,7 +70,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 
 int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 {
-	Player* player = GetModule(WorldModule)->getPlayer(res->accountId);
+	Player* player = sWorld.FindPlrByAccId(res->accountId);
 	if (!player) return 0;
 
 	if (res->roleInfos.size() == 1)

@@ -28,7 +28,7 @@ Entity* luaNpcToEnt(Npc* npc)
 
 Player* luaFindPlrByUserId(uint32 userId)
 {
-	return sWorld.getPlayerToUserId(userId);
+	return sWorld.FindPlrByUserId(userId);
 }
 
 GameModle* luaToGameModle(GameGoldenFlower* aGame)

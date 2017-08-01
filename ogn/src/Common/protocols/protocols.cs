@@ -13,7 +13,6 @@ ID_NetLoginReq,
 ID_NetLoginRes,
 ID_NetChangeNameReq,
 ID_NetChangeNameRes,
-ID_NetLoginRes,
 ID_NetGmMsg,
 ID_NetQueryRoleReq,
 ID_NetQueryRoleRes,
@@ -73,7 +72,6 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginReq, "NetLog
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginRes, "NetLoginRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameReq, "NetChangeNameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameRes, "NetChangeNameRes");
-PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginRes, "NetLoginRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGmMsg, "NetGmMsg");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetQueryRoleReq, "NetQueryRoleReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetQueryRoleRes, "NetQueryRoleRes");
@@ -713,39 +711,6 @@ bytes.Read(ref newName);
 
 public sbyte result;
 public string newName;
-
-}
-public class NetLoginRes : Packet
-{
-	public NetLoginRes():base((int)PACKET_ID_ENUM.ID_NetLoginRes)
-	{
-result = 0;
-guid = 0;
-accountInfo = new DBAccountInfo();
-
-	}
-
-	protected override bool OnSerialize(BinaryStream bytes)
-	{
-bytes.Write(result);
-bytes.Write(guid);
-bytes.Write(accountInfo);
-
-		return true;
-	}
-
-	protected override bool OnDeserialize(BinaryStream bytes)
-	{
-bytes.Read(ref result);
-bytes.Read(ref guid);
-bytes.Read(accountInfo);
-
-		return true;
-	}
-
-public int result;
-public long guid;
-public DBAccountInfo accountInfo;
 
 }
 public class NetGmMsg : Packet

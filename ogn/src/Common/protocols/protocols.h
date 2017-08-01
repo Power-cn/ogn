@@ -9,7 +9,6 @@ ID_NetLoginReq,
 ID_NetLoginRes,
 ID_NetChangeNameReq,
 ID_NetChangeNameRes,
-ID_NetLoginRes,
 ID_NetGmMsg,
 ID_NetQueryRoleReq,
 ID_NetQueryRoleRes,
@@ -609,38 +608,6 @@ CHECK(bytes >> newName);
 public:
 uint8 result;
 std::string newName;
-
-};
-
-class NetLoginRes : public Packet {
-public:
-	NetLoginRes():
-	Packet(ID_NetLoginRes) {
-result = 0;
-guid = 0;
-accountInfo;
-
-	}
-
-	bool OnSerialize(BinaryStream& bytes) {
-CHECK(bytes << result);
-CHECK(bytes << guid);
-CHECK(bytes << accountInfo);
-
-		return true;
-	}
-
-	bool OnDeserialize(BinaryStream& bytes) {
-CHECK(bytes >> result);
-CHECK(bytes >> guid);
-CHECK(bytes >> accountInfo);
-
-		return true;
-	}
-public:
-int32 result;
-int64 guid;
-DBAccountInfo accountInfo;
 
 };
 
@@ -1952,7 +1919,6 @@ REGISTER_PACKET_HELPER(ID_NetLoginReq, NetLoginReq);
 REGISTER_PACKET_HELPER(ID_NetLoginRes, NetLoginRes);
 REGISTER_PACKET_HELPER(ID_NetChangeNameReq, NetChangeNameReq);
 REGISTER_PACKET_HELPER(ID_NetChangeNameRes, NetChangeNameRes);
-REGISTER_PACKET_HELPER(ID_NetLoginRes, NetLoginRes);
 REGISTER_PACKET_HELPER(ID_NetGmMsg, NetGmMsg);
 REGISTER_PACKET_HELPER(ID_NetQueryRoleReq, NetQueryRoleReq);
 REGISTER_PACKET_HELPER(ID_NetQueryRoleRes, NetQueryRoleRes);

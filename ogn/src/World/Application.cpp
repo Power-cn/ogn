@@ -126,7 +126,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, sWorld.getPlayerCount());
+		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, sWorld.GetPlrCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;
@@ -471,8 +471,8 @@ int32 Application::onClose(CmdEvent& e)
 
 int32 Application::onAddFrd(CmdEvent& e)
 {
-	Player* tar = sWorld.getPlayerByName(e.cmdExecute->params[0]);
-	Player* frd = sWorld.getPlayerByName(e.cmdExecute->params[1]);
+	Player* tar = sWorld.FindPlrByName(e.cmdExecute->params[0]);
+	Player* frd = sWorld.FindPlrByName(e.cmdExecute->params[1]);
 	if (tar && frd)
 	{
 		sFriends.MutualBindFriend(tar, frd);

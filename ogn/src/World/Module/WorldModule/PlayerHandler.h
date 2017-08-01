@@ -2,6 +2,7 @@
 
 
 class Player;
+class RedisEvent;
 
 class PlayerHandler : public Object
 {

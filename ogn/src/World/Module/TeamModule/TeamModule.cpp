@@ -156,7 +156,7 @@ void TeamModule::DoCreateTeamReq(Player* aPlr)
 
 void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 {
-	Player* target = sWorld.getPlayerByName(tarName);
+	Player* target = sWorld.FindPlrByName(tarName);
 	if (!target)
 		return ;
 
@@ -213,7 +213,7 @@ void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 
 void TeamModule::DoAgreeTeamReq(Player* aPlr, cstring& tarName, uint8 isJoin)
 {
-	Player* target = sWorld.getPlayerByName(tarName);
+	Player* target = sWorld.FindPlrByName(tarName);
 	if (!target)
 		return;
 

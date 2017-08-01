@@ -15,7 +15,7 @@ end
 
 function OnEnter(roomId, userId)
 	local sWorld = luaWorld();
-	local play = sWorld:getPlayerToUserId(userId);
+	local play = sWorld:FindPlrByUserId(userId);
 	if play then
 		play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]加入["..roomId.."]房间");
 		
@@ -25,7 +25,7 @@ end
 
 function OnLeave(roomId, userId)
 	local sWorld = luaWorld();
-	local play = sWorld:getPlayerToUserId(userId);
+	local play = sWorld:FindPlrByUserId(userId);
 	if play then
 		play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]离开["..roomId.."]房间");
 	end
@@ -34,7 +34,7 @@ end
 
 function OnChangeMaster(roomId, oldUserId, newUserId)
 	local sWorld = luaWorld();
-	local play = sWorld:getPlayerToUserId(newUserId);
+	local play = sWorld:FindPlrByUserId(newUserId);
 	if play then
 		play:sendPacketToMsg(EC_ROOM, "["..roomId.."]房间更换房主为["..newUserId.."]");
 	end
@@ -43,7 +43,7 @@ end
 
 function OnChangeState(roomId, userId, oldState, state)
 	local sWorld = luaWorld();
-	local play = sWorld:getPlayerToUserId(userId);
+	local play = sWorld:FindPlrByUserId(userId);
 	if play then
 		local str = "";
 		if state == RPS_None then
