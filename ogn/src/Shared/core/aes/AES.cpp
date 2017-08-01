@@ -46,7 +46,9 @@ AES::AES(const char* keystr)
 	}; 
 	memcpy(Sbox, sBox, 256);
 	memcpy(InvSbox, invsBox, 256);
-	int len = strlen(keystr);
+	memset(key, 0, 16);
+
+	int len = (int)strlen(keystr);
 	len = len > 16 ? 16 : len;
 	memcpy(key, keystr, len);
 	KeyExpansion(key, w);
