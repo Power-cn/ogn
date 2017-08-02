@@ -67,6 +67,9 @@
     <Filter Include="Module\GameModule">
       <UniqueIdentifier>{da9d63f7-ab6e-4e54-b1ae-84b031edb429}</UniqueIdentifier>
     </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{b4dd97af-a76c-4b85-a5fe-ac353c372e7d}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -335,5 +338,28 @@
       <Filter>Common</Filter>
     </Xml>
     <Xml Include="..\..\bin\World\config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\config\cfg\script\card.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\game.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\global.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\gm.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\player.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\room.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\team.lua">
+      <Filter>lua</Filter>
+    </None>
   </ItemGroup>
 </Project>

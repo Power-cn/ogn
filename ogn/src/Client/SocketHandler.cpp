@@ -30,13 +30,15 @@ int SocketHandler::onConnect(SocketEvent& e)
 
 int SocketHandler::onRecv(SocketEvent& e)
 {
-	AES aes(sKey);
-	aes.InvCipher(e.data, e.count);
+	//AES aes(sKey);
+	//aes.InvCipher(e.data, e.count);
+	Shared::XOR((char*)e.data, e.count, sKeyXor);
+
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;
-	int32 rpos = out.getWPostion();
+	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
 	if (pack == NULL) return 0;
 

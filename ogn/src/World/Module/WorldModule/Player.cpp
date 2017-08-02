@@ -28,6 +28,12 @@ bool Player::Update(float time, float delay)
 	return true;
 }
 
+bool Player::Destroy()
+{
+	sWorld.removePlayer(getAccId());
+	return true;
+}
+
 void Player::sendPacket(Packet& packet)
 {
 	if (!session)
@@ -55,7 +61,7 @@ void Player::sendPacketToView(Packet& packet)
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
 	for (auto itr : *setEntity)
-		itr->sendBuffer(in.getPtr(), in.getWPostion());
+		itr->sendBuffer(in.datas(), in.wpos());
 }
 
 void Player::sendPacketToMap(Packet& packet)
@@ -102,6 +108,11 @@ void Player::sendPacketToMsg(EnumChannel ec, const std::string& msg)
 	sWorld.sendPacketToMsg((EnumChannel)ec, msg, this);
 }
 
+void Player::sendPacketToMsg(const std::string& msg)
+{
+	sWorld.sendPacketToMsg(EC_TARGET, msg, this);
+}
+
 void Player::bindSession(Session* session)
 {
 	session->setPlayer(this);
@@ -120,13 +131,9 @@ Json::Value& Player::GetJson()
 	return mJson;
 }
 
-void Player::onCreate()
-{
-	LuaEngine::executeScript(this, "player", "onCreate");
-}
-
 void Player::DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo)
 {
+	OnCreate();
 	Dictionary aPropertyDict;
 
 	uint32 charId = INSTANCE(ConfigManager).getCharJsonRandId();
@@ -396,4 +403,24 @@ int32 Player::onTimerSaveDB(TimerEvent& e)
 	Dictionary dict;
 	sApp.doPlayerSave(this, dict);
 	return 0;
+}
+
+void Player::OnCreate()
+{
+	LuaEngine::executeScript(this, sScriptPlayer, "OnCreate");
+}
+
+void Player::OnDispose()
+{
+	LuaEngine::executeScript(this, sScriptPlayer, "OnDispose");
+}
+
+void Player::OnEnter()
+{
+	LuaEngine::executeScript(this, sScriptPlayer, "OnEnter");
+}
+
+void Player::OnLeave()
+{
+	LuaEngine::executeScript(this, sScriptPlayer, "OnLeave");
 }

@@ -22,7 +22,7 @@ public:
 public:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
-	virtual bool Destroy() { return true; }
+	virtual bool Destroy();
 	virtual const char* getName() { return mName.c_str(); }
 	virtual void setName(const std::string& name) { mName = name; }
 	void setLine(uint8 l) { mLine = l; }
@@ -39,6 +39,7 @@ public:
 	virtual void sendPacketToRoom(Packet& packet) {}
 	virtual void sendPacketToTarget(Packet& packet, Entity* tar) {}
 	virtual void sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams = NULL) {}
+	virtual void sendPacketToMsg(const std::string& msg) {}
 	virtual void sendPacketToMsg(EnumChannel ec, const std::string& msg) {}
 	virtual bool changeMapByMapInsId(int32 mapInsId);
 	virtual bool changeMapByMapId(int32 mapId);

@@ -6,8 +6,7 @@ mCount(count),
 mBytes(NULL),
 mWritePosition(0),
 mReadPosition(0),
-mIsDel(false),
-mResize(true)
+mIsDel(false)
 {
 	mIsDel = true;
 	if (mCount <= 0)
@@ -21,8 +20,7 @@ mCount(count),
 mBytes((int8*)ptr),
 mWritePosition(0),
 mReadPosition(0),
-mIsDel(isDel),
-mResize(true)
+mIsDel(isDel)
 {
 
 }
@@ -30,8 +28,7 @@ mResize(true)
 BinaryStream::BinaryStream( const BinaryStream& other ):
 mCount(other.mCount),
 mWritePosition(other.mWritePosition),
-mReadPosition(other.mReadPosition),
-mResize(true)
+mReadPosition(other.mReadPosition)
 {
 	mIsDel = true;
 	mBytes = new int8[mCount];
@@ -40,14 +37,12 @@ mResize(true)
 
 BinaryStream::~BinaryStream(void)
 {
-	if (mIsDel)
-		SAFE_DELETE_ARRAY(mBytes);
+	release();
 }
 
 BinaryStream& BinaryStream::operator=( const BinaryStream& other )
 {
-	if (mIsDel)
-		SAFE_DELETE_ARRAY(mBytes);
+	release();
 	mCount = other.mCount;
 	mWritePosition = other.mWritePosition;
 	mReadPosition = other.mReadPosition;
@@ -58,20 +53,25 @@ BinaryStream& BinaryStream::operator=( const BinaryStream& other )
 	return *this;
 }
 
-void BinaryStream::Clear()
+void BinaryStream::clear()
 {
 	mWritePosition = 0;
 	mReadPosition = 0;
 }
 
-bool BinaryStream::WriteBytes(const void* data, int32 count)
+std::string BinaryStream::toString()
+{
+	for (int32 i = 0; i < wpos(); ++i) {
+
+	}
+	return "Bytes";
+}
+
+bool BinaryStream::write(const void* data, int32 count)
 {
 	if (count <= 0)
 		return false;
-	if (mWritePosition + count > mCount)
-	{
-		if (!mResize)
-			return false;
+	if (mWritePosition + count > mCount) {
 		resize(mWritePosition + count);
 	}
 
@@ -81,7 +81,7 @@ bool BinaryStream::WriteBytes(const void* data, int32 count)
 	return true;
 }
 
-bool BinaryStream::PushBytes(int32 pos, const void* data, int32 count)
+bool BinaryStream::push(int32 pos, const void* data, int32 count)
 {
 	if (count <= 0)
 		return false;
@@ -92,7 +92,7 @@ bool BinaryStream::PushBytes(int32 pos, const void* data, int32 count)
 	return true;		
 }
 
-bool BinaryStream::ReadBytes(void* data, int32 count)
+bool BinaryStream::read(void* data, int32 count)
 {
 	if (count <= 0)
 		return false;
@@ -105,7 +105,7 @@ bool BinaryStream::ReadBytes(void* data, int32 count)
 	return true;
 }
 
-bool BinaryStream::PopBytes(int32 pos, void* data, int32 count)
+bool BinaryStream::pop(int32 pos, void* data, int32 count)
 {
 	if (count <= 0)
 		return false;
@@ -122,11 +122,17 @@ void BinaryStream::resize(int32 size)
 		return;
 	mCount = size;
 	int8* data = new int8[mCount];
-	memcpy(data, mBytes, getWPostion());
-	if (mIsDel)
-		SAFE_DELETE_ARRAY(mBytes);
+	memcpy(data, mBytes, wpos());
+	release();
 	mIsDel = true;
 	mBytes = data;
+}
+
+void BinaryStream::release()
+{
+	if (mIsDel)
+		SAFE_DELETE_ARRAY(mBytes);
+	mBytes = NULL;
 }
 
 bool BinaryStream::operator>>( Variant& value )
@@ -233,14 +239,14 @@ bool BinaryStream::operator<<(const float32& value)
 {
 	float sv = Shared::htonf(value);
 
-	return WriteBytes(&sv, sizeof(value));
+	return write(&sv, sizeof(value));
 }
 
 bool BinaryStream::operator<<( const float64& value )
 {
 	float64 sv = Shared::htond(value);
 
-	return WriteBytes(&sv, sizeof(value));
+	return write(&sv, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const std::string& value)
@@ -248,7 +254,7 @@ bool BinaryStream::operator<<(const std::string& value)
 	int16 size = (int16)value.length();
 	*this << size;
 	if (size > 0)
-		return WriteBytes(value.c_str(), size);
+		return write(value.c_str(), size);
 
 	return true;
 }
@@ -258,14 +264,14 @@ bool BinaryStream::operator<<(const char* value)
 	int16 size = (int16)strlen(value);
 	*this << size;
 	if (size > 0)
-		return WriteBytes(value, size);
+		return write(value, size);
 
 	return true;
 }
 
 bool BinaryStream::operator <<(const int8 value)
 {
-	return WriteBytes(&value, sizeof(value));
+	return write(&value, sizeof(value));
 }
 
 bool BinaryStream::operator<<( const Variant& value )
@@ -320,49 +326,49 @@ bool BinaryStream::operator<<( const Variant& value )
 
 bool BinaryStream::operator<<(const uint8 value)
 {
-	return WriteBytes(&value, sizeof(value));
+	return write(&value, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const int16 value)
 {
 	int16 v = Shared::htons(value);
 	
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const uint16 value)
 {
 	uint16 v = Shared::htons(value);
 	
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const int32 value)
 {
 	int32 v = Shared::htonl(value);
 	
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const uint32 value)
 {
 	uint32 v = Shared::htonl(value);
 	
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const int64 value)
 {
 	int64 v = Shared::htonll(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const uint64 value)
 {
 	uint64 v = Shared::htonll(value);
 	
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BinaryStream::operator<<(const Object& value)
@@ -373,19 +379,19 @@ bool BinaryStream::operator<<(const Object& value)
 
 bool BinaryStream::operator<<(BinaryStream& value)
 {
-	int32 count = value.getWPostion();
+	int32 count = value.wpos();
 	if (!(*this << count))
 		return false;
 
 	if (count <= 0)
 		return true;
 
-	return WriteBytes(value.getPtr(), value.getWPostion());
+	return write(value.datas(), value.wpos());
 }
 
 bool BinaryStream::operator>>( float32& value )
 {
-	if (!ReadBytes(&value, sizeof(float32)))
+	if (!read(&value, sizeof(float32)))
 		return false;
 	
 	float32* v = (float32*)&value;
@@ -395,7 +401,7 @@ bool BinaryStream::operator>>( float32& value )
 
 bool BinaryStream::operator>>(float64& value )
 {
-	if (!ReadBytes(&value, sizeof(float64)))
+	if (!read(&value, sizeof(float64)))
 		return false;
 
 	float64* v = (float64*)&value;
@@ -414,7 +420,7 @@ bool BinaryStream::operator>>(std::string& value)
 		return true;
 
 	char* str = new char[size + 1];
-	if (!ReadBytes(str, size))
+	if (!read(str, size))
 	{
 		delete[] str;
 		return false;
@@ -428,17 +434,17 @@ bool BinaryStream::operator>>(std::string& value)
 
 bool BinaryStream::operator>>(int8& value )
 {
-	return ReadBytes(&value, sizeof(int8));
+	return read(&value, sizeof(int8));
 }
 
 bool BinaryStream::operator>>(uint8& value )
 {
-	return ReadBytes(&value, sizeof(uint8));
+	return read(&value, sizeof(uint8));
 }
 
 bool BinaryStream::operator>>(int16& value )
 {
-	if (!ReadBytes(&value, sizeof(int16)))
+	if (!read(&value, sizeof(int16)))
 		return false;
 	
 	int16* v = (int16*)&value;
@@ -448,7 +454,7 @@ bool BinaryStream::operator>>(int16& value )
 
 bool BinaryStream::operator>>(uint16& value )
 {
-	if (!ReadBytes(&value, sizeof(uint16)))
+	if (!read(&value, sizeof(uint16)))
 		return false;
 
 	uint16* v = (uint16*)&value;
@@ -459,7 +465,7 @@ bool BinaryStream::operator>>(uint16& value )
 
 bool BinaryStream::operator>>( int32& value )
 {
-	if (!ReadBytes(&value, sizeof(int32)))
+	if (!read(&value, sizeof(int32)))
 		return false;
 
 	int32* v = (int32*)&value;
@@ -470,7 +476,7 @@ bool BinaryStream::operator>>( int32& value )
 
 bool BinaryStream::operator>>(uint32& value )
 {
-	if (!ReadBytes(&value, sizeof(uint32)))
+	if (!read(&value, sizeof(uint32)))
 		return false;
 
 	uint32* v = (uint32*)&value;
@@ -481,7 +487,7 @@ bool BinaryStream::operator>>(uint32& value )
 
 bool BinaryStream::operator>>(int64& value )
 {
-	if (!ReadBytes(&value, sizeof(int64)))
+	if (!read(&value, sizeof(int64)))
 		return false;
 
 	int64* v = (int64*)&value;
@@ -492,7 +498,7 @@ bool BinaryStream::operator>>(int64& value )
 
 bool BinaryStream::operator>>( uint64& value )
 {
-	if (!ReadBytes(&value, sizeof(uint64)))
+	if (!read(&value, sizeof(uint64)))
 		return false;
 
 	uint64* v = (uint64*)&value;
@@ -516,13 +522,13 @@ bool BinaryStream::operator>>(BinaryStream& value)
 		return true;
 	
 	int8* bit_data = new int8[bit_size];
-	if (!ReadBytes(bit_data, bit_size))
+	if (!read(bit_data, bit_size))
 	{
 		delete [] bit_data;
 		return false;
 	}
 
-	if (!value.WriteBytes(bit_data, bit_size))
+	if (!value.write(bit_data, bit_size))
 	{
 		delete [] bit_data;
 		return false;

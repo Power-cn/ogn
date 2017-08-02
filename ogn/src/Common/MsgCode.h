@@ -14,6 +14,7 @@ enum MsgCode
 	MC_AgreeAddTeamNotLeader, // 同意申请加入队伍的不是队长;
 	MC_TeamError,
 
+	MC_RoomFull,					// 
 };
 
 enum NetResult

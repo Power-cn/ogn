@@ -65,3 +65,21 @@ GameModule* luaGame()
 {
 	return &sGame;
 }
+
+ConfigManager* luaCfg()
+{
+	return &sCfgMgr;
+}
+
+luabind::object GetTestTable()
+{
+	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(sScriptPlayer);
+
+	luabind::object obj = luabind::newtable(luaScript->getLuaState());
+	for (uint32 i = 1; i <= 10; ++i)
+	{
+		obj[i] = i;
+	}
+	int k = luabind::tablecount(obj);
+	return obj;
+}

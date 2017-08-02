@@ -1,14 +1,7 @@
 #pragma once
 
-#include "Shared.h"
 class Variant;
 class Object;
-
-struct StreamBuffer
-{
-	int8* buffer = 0;
-	int32 length = 0;
-};
 
 class BinaryStream
 {
@@ -18,18 +11,18 @@ public:
 	BinaryStream(const BinaryStream& other);
 	~BinaryStream(void);
 	BinaryStream& operator = (const BinaryStream& other);
-	int32 getCount() const { return mCount; }
-	int32 getWPostion() const { return mWritePosition; }
-	int32 getRPostion() const { return mReadPosition; }
-	void* getPtr() const { return mBytes; }
+	int32 count() const { return mCount; }
+	int32 wpos() const { return mWritePosition; }
+	int32 rpos() const { return mReadPosition; }
+	void* datas() const { return mBytes; }
 
-	void setWPostion(int32 pos) { mWritePosition = pos; }
-	void setRPostion(int32 pos) { mReadPosition = pos; }
-	void setResize(bool v) { mResize = v; }
-	void Clear();
+	void wpos(int32 pos) { mWritePosition = pos; }
+	void rpos(int32 pos) { mReadPosition = pos; }
+	void clear();
+	std::string toString();
 public:
-	bool WriteBytes(const void* data, int32 count);
-	bool PushBytes(int32 pos, const void* data, int32 count);
+	bool write(const void* data, int32 count);
+	bool push(int32 pos, const void* data, int32 count);
 
 	bool operator << (const float32& value);
 	bool operator << (const float64& value);
@@ -47,8 +40,8 @@ public:
 	bool operator << (const Object& value);
 	bool operator << (BinaryStream& value);
 public:
-	bool ReadBytes(void* data, int32 count);
-	bool PopBytes(int32 pos, void* data, int32 count);
+	bool read(void* data, int32 count);
+	bool pop(int32 pos, void* data, int32 count);
 	bool operator >> (float32& value);
 	bool operator >> (float64& value);
 	bool operator >> (std::string& value);
@@ -65,11 +58,11 @@ public:
 	bool operator >> (BinaryStream& value);
 protected:
 	void resize(int32 size);
+	void release();
 protected:
 	char*			mBytes;
 	int32			mCount;
 	int32			mWritePosition;
 	int32			mReadPosition;
 	bool			mIsDel;
-	bool			mResize;
 };

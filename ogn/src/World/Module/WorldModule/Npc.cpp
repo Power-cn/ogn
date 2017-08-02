@@ -11,6 +11,12 @@ Npc::~Npc()
 
 }
 
+bool Npc::Destroy()
+{
+	sWorld.removeNpc(getNpcId());
+	return true;
+}
+
 bool Npc::onEnterMap()
 {
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "npc:%s enter mapId:%d x:%d y:%d", getName(), getMapId(), getCellX(), getCellY());

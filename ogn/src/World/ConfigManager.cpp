@@ -324,6 +324,29 @@ void ConfigManager::loadTaskStepJson(const std::string& path)
 	}
 }
 
+void ConfigManager::loadCardJson(cstring& path)
+{
+	Json::Reader jsonReader;
+	Json::Value jsonRoot;
+
+	if (!loadJson(path, jsonReader, jsonRoot))
+		return;
+
+	mMapCard.clear();
+	Json::Value cf = jsonRoot["config"];
+	for (uint32 i = 0; i < cf.size(); ++i)
+	{
+		Json::Value v = cf[i];
+
+		CardJson cardJson;
+		cardJson.ID = v["ID"].asUInt();
+		cardJson.Number = v["Number"].asUInt();
+		cardJson.Color = v["Color"].asInt();
+		cardJson.Name = v["Name"].asString();
+		mMapCard.insert(std::make_pair(cardJson.ID, cardJson));
+	}
+}
+
 MapJson* ConfigManager::getMapJson(uint32 id)
 {
 	auto itr = mMapMapJson.find(id);
@@ -404,6 +427,15 @@ TaskStepJson* ConfigManager::getTaskStepJson(uint32 id)
 {
 	auto itr = mMapTaskStepJson.find(id);
 	if (itr != mMapTaskStepJson.end())
+		return &itr->second;
+
+	return NULL;
+}
+
+CardJson* ConfigManager::getCardJson(uint32 id)
+{
+	auto itr = mMapCard.find(id);
+	if (itr != mMapCard.end())
 		return &itr->second;
 
 	return NULL;

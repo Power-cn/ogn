@@ -16,7 +16,9 @@ void LuaScript::bindScript()
 			luabind::def("luaProperty", &luaProperty),
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom),
-			luabind::def("luaGame", &luaGame)
+			luabind::def("luaGame", &luaGame),
+			luabind::def("GetTestTable", &GetTestTable),
+			luabind::def("luaCfg", &luaCfg)
 			//luabind::def("TestFunc", &TestFunc)
 		];
 
@@ -39,13 +41,12 @@ void LuaScript::bindScript()
 		luabind::class_<Entity, Object>("Entity")
 		.def(luabind::constructor<>())
 		.def("getGuid", &Player::getGuid)
+		.def("sendPacketToMsg", (void (Player::*)(const std::string&))&Player::sendPacketToMsg)
+		.def("sendPacketToMsg", (void (Player::*)(EnumChannel, const std::string&))&Player::sendPacketToMsg)
 		,
 		luabind::class_<Player, Entity>("Player")
-		.def("getGuid", &Player::getGuid)
 		.def("getUserId", &Player::getUserId)
 		.def("getName", &Player::getName)
-		.def("onCreate", &Player::onCreate)
-		.def("sendPacketToMsg", &Player::sendPacketToMsg)
 		,
 
 		luabind::class_<Npc, Entity>("Npc")
@@ -122,8 +123,9 @@ void LuaScript::bindScript()
 		luabind::class_<GameEntity>("GameEntity")
 		.def_readonly("userId", &GameEntity::userId)
 		.def("ToString", &GameEntity::ToString)
-		.def("GetPoker", &GameEntity::GetPoker)
-		.def("GetPokerCount", &GameEntity::GetPokerCount)
+		.def("GetCardCount", &GameEntity::GetCardCount)
+		.def("GetCard", &GameEntity::GetCard)
+		.def("GetCards", &GameEntity::GetCards)
 		,
 
 		luabind::class_<GameModle>("GameModle")
@@ -150,6 +152,23 @@ void LuaScript::bindScript()
 		.def("FindPlrGameModle", &GameModule::FindPlrGameModle)
 		.def("FindPlrGameEnt", &GameModule::FindPlrGameEnt)
 		.def("DoStartGame", &GameModule::DoStartGame)
+		,
+	
+		luabind::class_<CardJson>("CardJson")
+		.def_readonly("ID", &CardJson::ID)
+		.def_readonly("Number", &CardJson::Number)
+		.def_readonly("Color", &CardJson::Color)
+		.def_readonly("Name", &CardJson::Name)
+		,
+
+		luabind::class_<ConfigManager>("ConfigManager")
+		.def("getCardJson", &ConfigManager::getCardJson)
+		//.def("GetGameEnt", &GameGoldenFlower::GetGameEnt)
+		//.def("FindGameEnt", &GameGoldenFlower::FindGameEnt)
+		//.def("GetPlrInx", &GameGoldenFlower::GetPlrInx)
+		//.def("ToString", &GameGoldenFlower::ToString)
+		//.def("GetGameEntCount", &GameGoldenFlower::GetGameEntCount)
+			
 		
 		];
 }

@@ -384,7 +384,7 @@ LUALIB_API const char *luaL_findtable (lua_State *L, int idx,
 
 /*
 ** {======================================================
-** Generic StreamBuffer manipulation
+** Generic object_bytes manipulation
 ** =======================================================
 */
 

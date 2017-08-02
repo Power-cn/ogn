@@ -30,3 +30,6 @@ PropertyHelper* luaProperty();
 WorldModule* luaWorld();
 RoomModule* luaRoom();
 GameModule* luaGame();
+ConfigManager* luaCfg();
+
+luabind::object GetTestTable();

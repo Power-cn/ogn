@@ -142,8 +142,9 @@ int Application::onGateRecv(SocketEvent& e)
 	/*
 	*********** 解密 ***********
 	*/
-	AES aes(sKey);
-	aes.InvCipher((unsigned char*)e.data, e.count);
+	//AES aes(sKey);
+	//aes.InvCipher((unsigned char*)e.data, e.count);
+	Shared::XOR((char*)e.data, e.count, sKeyXor);
 	sendBufferToWorld((int8*)e.data, e.count, session);
 	/*
 	*********** 解密 ***********
@@ -151,9 +152,9 @@ int Application::onGateRecv(SocketEvent& e)
 #ifdef _DEBUG
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;
-	int32 rpos = out.getWPostion();
+	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
 
@@ -190,9 +191,9 @@ int Application::onWorldRecv(SocketEvent& e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	do
@@ -210,8 +211,9 @@ int Application::onWorldRecv(SocketEvent& e)
 		/*
 		*********** 加密 ***********
 		*/
-		AES aes(sKey);
-		aes.Cipher((unsigned char*)e.data + rpos, packetCount);
+		//AES aes(sKey);
+		//aes.Cipher((unsigned char*)e.data + rpos, packetCount);
+		Shared::XOR((int8*)e.data + rpos, packetCount, sKeyXor);
 		session->sendBuffer((int8*)e.data + rpos, packetCount);
 		/*
 		*********** 加密 ***********

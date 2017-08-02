@@ -354,7 +354,7 @@ void Map::sendPacketToAll(Packet& packet)
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
 	for (auto itr : mMapEntity)
-		itr.second->sendBuffer(in.getPtr(), in.getWPostion());
+		itr.second->sendBuffer(in.datas(), in.wpos());
 }
 
 bool Map::MapCellToMapLogicCell(int32 x, int32 y, int32& outX, int32& outY)

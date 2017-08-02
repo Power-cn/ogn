@@ -10,7 +10,7 @@ class Npc : public Entity
 public:
 	Npc();
 	~Npc();
-
+	virtual bool Destroy();
 	uint32 getNpcId() { return mNpcId; }
 	void setNpcId(uint32 npcId) { mNpcId = npcId; }
 	void setNpcType(uint8 t) { mNpcType = (NpcType)t; }

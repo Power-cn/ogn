@@ -32,7 +32,7 @@ bool WorldModule::Update(float time, float delay)
 	{
 		Entity* ent = delQueue.front();
 		delQueue.pop();
-
+		ent->Destroy();
 	}
 
 	float64 s1 = DateTime::GetNowAppUS() - s0;
@@ -110,9 +110,9 @@ Player* WorldModule::addPlayer(Player* plr)
 	return plr;
 }
 
-void WorldModule::removePlayer(uint32 accountId)
+void WorldModule::removePlayer(uint32 accId)
 {
-	auto itr = mMapPlayer.find(accountId);
+	auto itr = mMapPlayer.find(accId);
 	if (itr == mMapPlayer.end())
 		return;
 
@@ -275,7 +275,7 @@ void WorldModule::sendPacketToAll(Packet& packet)
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
 	for (auto itr : mMapPlayer)
-		itr.second->sendBuffer(in.getPtr(), in.getWPostion());
+		itr.second->sendBuffer(in.datas(), in.wpos());
 }
 
 void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* self, uint32 tarUserId /* = 0 */)

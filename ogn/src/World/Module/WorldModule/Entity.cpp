@@ -49,6 +49,12 @@ bool Entity::Update(float time, float delay)
 	return true;
 }
 
+bool Entity::Destroy()
+{
+	sWorld.removeEntity(getGuid());
+	return true;
+}
+
 bool Entity::CanDestroy()
 {
 	return mCanDestroy;

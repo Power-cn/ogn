@@ -199,6 +199,7 @@ void Application::removeModule(const std::string& name, bool free /* = true */)
 
 bool Application::onEnterWorld(Player* player, Dictionary& dict)
 {
+	player->OnEnter();
 	for (auto itr : mMapModule)
 		itr.second->onEnterWorld(player, dict);
 	return true;
@@ -208,6 +209,7 @@ bool Application::onLeaveWorld(Player* player, Dictionary& dict)
 {
 	for (auto itr : mMapModule)
 		itr.second->onLeaveWorld(player, dict);
+	player->OnLeave();
 	return true;
 }
 
@@ -273,15 +275,14 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	if (session == NULL)
 		return;
 	onSave(plr, bytes);
-	BinaryStream stream;
-	stream.setResize(true);
+	BinaryStream stream(1024);
 	stream << bytes;
 
 	NetQueryRoleRes res;
 	DBRoleInfo info;
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
-	info.property.WriteBytes(stream.getPtr(), stream.getWPostion());
+	info.property.write(stream.datas(), stream.wpos());
 	res.accountId = plr->getAccId();
 	res.roleInfos.push_back(info);
 	sendPacketToDB(res, session);
@@ -301,9 +302,9 @@ int Application::onWorldRecv(SocketEvent& e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	do 
 	{
@@ -388,9 +389,9 @@ int Application::onDBRecv(SocketEvent & e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	if (!session) return 0;
 

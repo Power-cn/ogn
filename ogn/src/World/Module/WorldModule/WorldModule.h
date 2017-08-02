@@ -19,7 +19,7 @@ public:
 public:
 	void removeEntity(Entity* ent);
 	void removeEntity(Guid guid);
-	void removePlayer(uint32 accountId);
+	void removePlayer(uint32 accId);
 	void removePlayer(Player* plr);
 	void removePlayerToUserId(uint32 userId);
 	void removeNpc(uint32 npcId);

@@ -33,12 +33,12 @@ CircularBuffer::~CircularBuffer(void)
 	m_uiWritePos = 0;
 }
 
-char* CircularBuffer::getPtr()
+char* CircularBuffer::datas()
 {
 	return m_pBuffer;
 }
 
-uint32 CircularBuffer::getCount()
+uint32 CircularBuffer::count()
 {
 	return m_uiCount;
 }

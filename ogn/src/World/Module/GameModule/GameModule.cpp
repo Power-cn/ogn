@@ -154,7 +154,7 @@ bool GameModule::DoStartGame(Room* aRoom)
 		for (uint32 i = 0; i < aGame->GetGameEntCount(); ++i)
 		{
 			GameEntity* aGameEnt = aGame->GetGameEnt(i);
-			aGameEnt->poker.push_back(aGame->DoDealPoker());
+			aGameEnt->cards.push_back(aGame->DoDealPoker());
 		}
 	}
 

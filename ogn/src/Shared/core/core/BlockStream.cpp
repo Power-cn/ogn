@@ -57,7 +57,7 @@ BlockStream::~BlockStream()
 	mBlockList = NULL;
 }
 
-bool BlockStream::WriteBytes(void* bytes, int32 count)
+bool BlockStream::write(void* bytes, int32 count)
 {
 	int32 writeableCount = getWriteableCount();
 	if (writeableCount < count)
@@ -104,7 +104,7 @@ bool BlockStream::WriteBytes(void* bytes, int32 count)
 	return true;
 }
 
-bool BlockStream::ReadBytes(void* bytes, int32 count)
+bool BlockStream::read(void* bytes, int32 count)
 {
 	if (getReadableCount() < count)
 		return false;
@@ -163,7 +163,7 @@ void BlockStream::Clear()
 
 bool BlockStream::operator >> (float32& value)
 {
-	if (!ReadBytes(&value, sizeof(float32)))
+	if (!read(&value, sizeof(float32)))
 		return false;
 
 	float32* v = (float32*)&value;
@@ -173,7 +173,7 @@ bool BlockStream::operator >> (float32& value)
 
 bool BlockStream::operator >> (float64& value)
 {
-	if (!ReadBytes(&value, sizeof(float64)))
+	if (!read(&value, sizeof(float64)))
 		return false;
 
 	float64* v = (float64*)&value;
@@ -192,7 +192,7 @@ bool BlockStream::operator >> (std::string& value)
 		return true;
 
 	int8* str = (int8*)malloc(size + 1);
-	if (!ReadBytes(str, size))
+	if (!read(str, size))
 	{
 		free(str);
 		return false;
@@ -206,17 +206,17 @@ bool BlockStream::operator >> (std::string& value)
 
 bool BlockStream::operator >> (int8& value)
 {
-	return ReadBytes(&value, sizeof(int8));
+	return read(&value, sizeof(int8));
 }
 
 bool BlockStream::operator >> (uint8& value)
 {
-	return ReadBytes(&value, sizeof(uint8));
+	return read(&value, sizeof(uint8));
 }
 
 bool BlockStream::operator >> (int16& value)
 {
-	if (!ReadBytes(&value, sizeof(int16)))
+	if (!read(&value, sizeof(int16)))
 		return false;
 
 	int16* v = (int16*)&value;
@@ -226,7 +226,7 @@ bool BlockStream::operator >> (int16& value)
 
 bool BlockStream::operator >> (uint16& value)
 {
-	if (!ReadBytes(&value, sizeof(uint16)))
+	if (!read(&value, sizeof(uint16)))
 		return false;
 
 	uint16* v = (uint16*)&value;
@@ -237,7 +237,7 @@ bool BlockStream::operator >> (uint16& value)
 
 bool BlockStream::operator >> (int32& value)
 {
-	if (!ReadBytes(&value, sizeof(int32)))
+	if (!read(&value, sizeof(int32)))
 		return false;
 
 	int32* v = (int32*)&value;
@@ -248,7 +248,7 @@ bool BlockStream::operator >> (int32& value)
 
 bool BlockStream::operator >> (uint32& value)
 {
-	if (!ReadBytes(&value, sizeof(uint32)))
+	if (!read(&value, sizeof(uint32)))
 		return false;
 
 	uint32* v = (uint32*)&value;
@@ -259,7 +259,7 @@ bool BlockStream::operator >> (uint32& value)
 
 bool BlockStream::operator >> (int64& value)
 {
-	if (!ReadBytes(&value, sizeof(int64)))
+	if (!read(&value, sizeof(int64)))
 		return false;
 
 	int64* v = (int64*)&value;
@@ -270,7 +270,7 @@ bool BlockStream::operator >> (int64& value)
 
 bool BlockStream::operator >> (uint64& value)
 {
-	if (!ReadBytes(&value, sizeof(uint64)))
+	if (!read(&value, sizeof(uint64)))
 		return false;
 
 	uint64* v = (uint64*)&value;
@@ -444,52 +444,52 @@ bool BlockStream::operator<<(const uint64 value)
 {
 	uint64 v = Shared::htonll(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const int64 value)
 {
 	int64 v = Shared::htonll(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const uint32 value)
 {
 	uint32 v = Shared::htonl(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const int32 value)
 {
 	int32 v = Shared::htonl(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const uint16 value)
 {
 	uint16 v = Shared::htons(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const int16 value)
 {
 	int16 v = Shared::htons(value);
 
-	return WriteBytes(&v, sizeof(value));
+	return write(&v, sizeof(value));
 }
 
 bool BlockStream::operator<<(const uint8 value)
 {
-	return WriteBytes((void*)&value, sizeof(value));
+	return write((void*)&value, sizeof(value));
 }
 
 bool BlockStream::operator<<(const int8 value)
 {
-	return WriteBytes((void*)&value, sizeof(value));
+	return write((void*)&value, sizeof(value));
 }
 
 bool BlockStream::operator<<(const std::string& value)
@@ -497,7 +497,7 @@ bool BlockStream::operator<<(const std::string& value)
 	int16 size = (int16)value.length();
 	*this << size;
 	if (size > 0)
-		return WriteBytes((void*)value.c_str(), size);
+		return write((void*)value.c_str(), size);
 
 	return true;
 }
@@ -505,12 +505,12 @@ bool BlockStream::operator<<(const std::string& value)
 bool BlockStream::operator<<(const float64& value)
 {
 	float64 sv = Shared::htond(value);
-	return WriteBytes(&sv, sizeof(value));
+	return write(&sv, sizeof(value));
 }
 
 bool BlockStream::operator<<(const float32& value)
 {
 	float sv = Shared::htonf(value);
-	return WriteBytes(&sv, sizeof(value));
+	return write(&sv, sizeof(value));
 }
 

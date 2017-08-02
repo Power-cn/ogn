@@ -80,7 +80,7 @@ void SocketListener::sendPacketToAll(Packet& packet)
 	static char input[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	in << packet;
-	sendBufferToAll(in.getPtr(), in.getWPostion());
+	sendBufferToAll(in.datas(), in.wpos());
 }
 
 void SocketListener::sendBufferToAll(void* data, int32 count)

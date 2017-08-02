@@ -175,27 +175,27 @@ void IOCPModel::postSend(Socket* socket, Packet& packet)
 	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
-	postSend(socket, in.getPtr(), in.getWPostion());
+	postSend(socket, in.datas(), in.wpos());
 }
 
 void IOCPModel::postSend(Socket* socket, void* dataBuffer, int dataCount)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 
-	StreamBuffer packet;
-	packet.length = dataCount + sizeof(int);
-	if (packet.length > PACKET_MAX_LENGTH)
+	object_bytes packet;
+	packet.len = dataCount + sizeof(int);
+	if (packet.len > PACKET_MAX_LENGTH)
 	{
 		LOG_ERROR("send max length:%d", PACKET_MAX_LENGTH);
 		PushQueueClose(socket->getSocketId());
 		return;
 	}
 
-	packet.buffer = new int8[packet.length];
+	packet.ptr = new int8[packet.len];
 
-	BinaryStream in(packet.buffer, packet.length);
-	in << packet.length;
-	in.WriteBytes(dataBuffer, dataCount);
+	BinaryStream in((void*)packet.ptr, packet.len);
+	in << packet.len;
+	in.write(dataBuffer, dataCount);
 
 	socket->sendQueue.push(packet);
 	if (!socket->startSend)
@@ -316,7 +316,7 @@ bool IOCPModel::PostWrite(Socket* socket)
 	ioOverlapped.socket = socket;
 	socket->startSend = false;
 	socket->postCount++;
-	std::queue<StreamBuffer>& sendQueue = socket->sendQueue;
+	std::queue<object_bytes>& sendQueue = socket->sendQueue;
 
 	ioOverlapped.wBuffer.buf = ioOverlapped.dataBuffer;
 	if (sendQueue.size() <= 0) return false;
@@ -326,16 +326,16 @@ bool IOCPModel::PostWrite(Socket* socket)
 	int sendSize = 0;
 	while (sendQueue.size() > 0)
 	{
-		StreamBuffer& packet = sendQueue.front();
-		if (sendSize + packet.length > ioOverlapped.dataBufferCount) {
+		object_bytes& packet = sendQueue.front();
+		if (sendSize + packet.len > ioOverlapped.dataBufferCount) {
 			LOG_ERROR("send buffer  is not enough!");
 			break;
 		}
 
-		memcpy(wBuffer + sendSize, packet.buffer, packet.length);
-		sendSize += packet.length;
+		memcpy(wBuffer + sendSize, packet.ptr, packet.len);
+		sendSize += packet.len;
 		sendQueue.pop();
-		delete[] packet.buffer;
+		delete[] packet.ptr;
 	}
 	if (sendSize == 0)
 	{

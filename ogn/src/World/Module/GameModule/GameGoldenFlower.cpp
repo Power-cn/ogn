@@ -50,7 +50,7 @@ uint8 GameGoldenFlower::DoDealPoker()
 	return pkr;
 }
 
-void GameGoldenFlower::DoCutPoker()
+void GameGoldenFlower::DoCutCard()
 {
 
 }
@@ -122,7 +122,7 @@ GameEntity::~GameEntity()
 bool GameEntity::operator >> (GameEntityInfo& info)
 {
 	info.userId = userId;
-	info.pokers = poker;
+	info.pokers = cards;
 	return true;
 }
 
@@ -131,16 +131,28 @@ std::string GameEntity::ToString()
 	char szBuff[256] = { 0 };
 	sprintf_s(szBuff, 256, "[%d]", userId);
 	uint32 strLen = (uint32)strlen(szBuff);
-	for (uint32 i = 0; i < poker.size(); ++i)
+	for (uint32 i = 0; i < cards.size(); ++i)
 	{
-		sprintf_s(szBuff + strLen, 256 - strLen, "%d ", poker[i]);
+		sprintf_s(szBuff + strLen, 256 - strLen, "%d ", cards[i]);
 		strLen = (uint32)strlen(szBuff);
 	}
 	return szBuff;
 }
 
-uint32 GameEntity::GetPoker(uint32 idx)
+uint32 GameEntity::GetCard(uint32 idx)
 {
-	if (idx >= poker.size()) return 0;
-	return poker[idx];
+	if (idx >= cards.size()) return 0;
+	return cards[idx];
+}
+
+luabind::object GameEntity::GetCards()
+{
+	LuaScript* luaScript = sLua.getScript(sScriptPlayer);
+	if (luaScript == NULL) return luabind::object();
+
+	luabind::object obj = luabind::newtable(luaScript->getLuaState());
+	for (uint32 i = 0; i < cards.size(); ++i) {
+		obj[i] = cards[i];
+	}
+	return obj;
 }

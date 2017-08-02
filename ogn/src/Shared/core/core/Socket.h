@@ -52,7 +52,7 @@ public:
 	CircularBuffer*					readStream;
 	IO_OVERLAPPED					readOverlapped;
 	IO_OVERLAPPED					writeOverlapped;
-	std::queue<StreamBuffer>		sendQueue;
+	std::queue<object_bytes>		sendQueue;
 	bool							startSend = false;
 	uint32							postCount = 0;
 protected:

@@ -88,7 +88,7 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 		sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
 		Dictionary dict;
-		if (info.property.getWPostion() <= 0)
+		if (info.property.wpos() <= 0)
 			player->DoCreateCharacter(dict, info);
 		else
 			info.property >> dict;

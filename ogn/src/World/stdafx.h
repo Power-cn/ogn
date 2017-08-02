@@ -119,6 +119,7 @@
 #define sCfgMgr INSTANCE(ConfigManager)
 #define sSsnMgr INSTANCE(SessionManager)
 #define sRedisProxy INSTANCE(RedisProxy)
+#define sLua INSTANCE(LuaEngine)
 
 #define sWorld (*GetModule(WorldModule))
 #define sMap (*GetModule(MapModule))

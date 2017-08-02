@@ -116,6 +116,15 @@
       <SubType>Designer</SubType>
     </Xml>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\config\cfg\script\card.lua" />
+    <None Include="..\..\bin\config\cfg\script\game.lua" />
+    <None Include="..\..\bin\config\cfg\script\global.lua" />
+    <None Include="..\..\bin\config\cfg\script\gm.lua" />
+    <None Include="..\..\bin\config\cfg\script\player.lua" />
+    <None Include="..\..\bin\config\cfg\script\room.lua" />
+    <None Include="..\..\bin\config\cfg\script\team.lua" />
+  </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5A2CA0EF-D312-432C-BBB7-848FF027D79F}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>

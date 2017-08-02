@@ -97,6 +97,10 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, in
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
 	lua_State* luaState = luaScript->getLuaState();
+	luabind::object obj;
+	obj[0] = 1;
+	obj[1] = 2;
+
 	if (!luaState) return 0;
 
 	try {

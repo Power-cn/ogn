@@ -38,7 +38,7 @@ void Team::sendPacketToAll(Packet& packet)
 	for (TeamEntity* tEnt : mTeamEntityList)
 	{
 		if (tEnt->getPlayer() && !tEnt->getDel())
-			tEnt->getPlayer()->sendBuffer(in.getPtr(), in.getWPostion());
+			tEnt->getPlayer()->sendBuffer(in.datas(), in.wpos());
 	}
 }
 

@@ -3,6 +3,7 @@
 #define MAX_UNIT_POKER_COUNT 3
 #define MAX_POKER_COUNT 54
 
+
 class GameEntity
 {
 public:
@@ -12,10 +13,11 @@ public:
 public:
 	uint32					userId = 0;
 	uint8					maxCount = MAX_UNIT_POKER_COUNT;
-	std::vector<uint8>		poker;
+	std::vector<uint8>		cards;
 	std::string ToString();
-	uint32 GetPokerCount() { return (uint32)poker.size(); }
-	uint32 GetPoker(uint32 idx);
+	uint32 GetCardCount() { return (uint32)cards.size(); }
+	uint32 GetCard(uint32 idx);
+	luabind::object GetCards();
 protected:
 };
 
@@ -31,7 +33,7 @@ public:
 	bool operator >> (GameGoldenFlowerInfo& info);
 
 	void DoShuffle();			// Ï´
-	void DoCutPoker();			// ÇÐ
+	void DoCutCard();			// ÇÐ
 	void SetBanker(uint32 userId) { mBankerUserId = userId; }
 	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
 	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }

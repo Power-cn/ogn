@@ -196,7 +196,7 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 		LOG_DEBUG(LogSystem::csl_color_green, "·¿¼äÆµµÀ:%s", nfy->chatMsg.c_str());
 		break;
 	case EC_TARGET:
-		LOG_DEBUG(LogSystem::csl_color_green, "from:%s %s", nfy->from.c_str(), nfy->chatMsg.c_str());
+		LOG_DEBUG(LogSystem::csl_color_green, "%s", nfy->chatMsg.c_str());
 		break;
 	default:
 		LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(), nfy->from.c_str(), nfy->chatMsg.c_str());
