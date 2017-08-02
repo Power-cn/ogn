@@ -53,6 +53,7 @@ bool Application::Initialize()
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("ref", (EventCallback)&Application::onRefresh, this);
+	INSTANCE(CmdDispatcher).addEventListener("reflua", (EventCallback)&Application::onRefreshLua, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&Application::onClose, this);
 
 	INSTANCE(CmdDispatcher).addEventListener("addfrd", (EventCallback)&Application::onAddFrd, this);
@@ -125,7 +126,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, sWorld.getPlayerCount());
+		sprintf_s(szBuffer, 256, "World FPS:%d Player:%d", mFPS, sWorld.GetPlrCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;
@@ -198,6 +199,7 @@ void Application::removeModule(const std::string& name, bool free /* = true */)
 
 bool Application::onEnterWorld(Player* player, Dictionary& dict)
 {
+	player->OnEnter();
 	for (auto itr : mMapModule)
 		itr.second->onEnterWorld(player, dict);
 	return true;
@@ -207,6 +209,7 @@ bool Application::onLeaveWorld(Player* player, Dictionary& dict)
 {
 	for (auto itr : mMapModule)
 		itr.second->onLeaveWorld(player, dict);
+	player->OnLeave();
 	return true;
 }
 
@@ -251,7 +254,10 @@ void Application::doSessionLeaveWorld(Session* session)
 		doPlayerSave(plr, dict);
 
 		onLeaveWorld(plr, dict);
-		GetModule(WorldModule)->removePlayer(plr->getAccId());
+
+		//GetModule(WorldModule)->removePlayer(plr->getAccId());
+		plr->SetOnline(false);
+		plr->unbindSession();
 	}
 
 	NetSessionLeaveNotify nfy;
@@ -259,8 +265,8 @@ void Application::doSessionLeaveWorld(Session* session)
 	sendPacketToDB(nfy, session);
 	session->sendPacketToWorld(nfy);
 
-	INSTANCE(SessionManager).removeSessionsBySocket(session->getSocketId(), session);
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
+	sSsnMgr.removeSessionsBySocket(session->getSocketId(), session);
+	sSsnMgr.removeSession(session->getSessionId());
 }
 
 void Application::doPlayerSave(Player* plr, Dictionary& bytes)
@@ -269,15 +275,14 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	if (session == NULL)
 		return;
 	onSave(plr, bytes);
-	BinaryStream stream;
-	stream.setResize(true);
+	BinaryStream stream(1024);
 	stream << bytes;
 
 	NetQueryRoleRes res;
 	DBRoleInfo info;
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
-	info.property.WriteBytes(stream.getPtr(), stream.getWPostion());
+	info.property.write(stream.datas(), stream.wpos());
 	res.accountId = plr->getAccId();
 	res.roleInfos.push_back(info);
 	sendPacketToDB(res, session);
@@ -297,9 +302,9 @@ int Application::onWorldRecv(SocketEvent& e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	do 
 	{
@@ -321,7 +326,7 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	if ((out >> (*pack)) == false)
 	{
-		LOG_ERROR("packet errer");
+		LOG_ERROR("msg:%s packet errer", INSTANCE(PacketManager).GetName(msgId).c_str());
 		INSTANCE(PacketManager).Free(pack);
 		break;
 	}
@@ -384,9 +389,9 @@ int Application::onDBRecv(SocketEvent & e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	if (!session) return 0;
 
@@ -467,8 +472,8 @@ int32 Application::onClose(CmdEvent& e)
 
 int32 Application::onAddFrd(CmdEvent& e)
 {
-	Player* tar = sWorld.getPlayerByName(e.cmdExecute->params[0]);
-	Player* frd = sWorld.getPlayerByName(e.cmdExecute->params[1]);
+	Player* tar = sWorld.FindPlrByName(e.cmdExecute->params[0]);
+	Player* frd = sWorld.FindPlrByName(e.cmdExecute->params[1]);
 	if (tar && frd)
 	{
 		sFriends.MutualBindFriend(tar, frd);
@@ -505,6 +510,12 @@ int32 Application::RedisCallback1(RedisEvent& e)
 int32 Application::onRefresh(CmdEvent& e)
 {
 	INSTANCE(ConfigManager).reloadConfig();
+	INSTANCE(LuaEngine).reloadScript();
+	return 0;
+}
+
+int32 Application::onRefreshLua(CmdEvent& e)
+{
 	INSTANCE(LuaEngine).reloadScript();
 	return 0;
 }

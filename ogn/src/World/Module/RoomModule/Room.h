@@ -3,7 +3,7 @@
 
 enum RoomPlayerState :  char
 {
-	RPS_None = 0,
+	RPS_None = 0,			// 正常
 	RPS_Ready,				// 准备
 	RPS_Game,				// 游戏中
 	RPS_Observed,			// 观战中
@@ -27,6 +27,7 @@ public:
 
 class Room
 {
+	friend class RoomModule;
 public:
 	Room();
 	~Room();
@@ -35,6 +36,7 @@ public:
 	void SetMaster(RoomPlayer* master) { mMaster = master; }
 	void SetPassword(const std::string& password) { mPassword = password; }
 	void SetName(const std::string& name) { mName = name; }
+	void SetGameInsId(uint32 insId) { mGameInsId = insId; }
 
 	bool operator >> (RoomInfo& info);
 	bool DoLeave(Player* aPlr);
@@ -42,26 +44,36 @@ public:
 	bool IsFull();
 	bool IsCanStart();
 	bool DoAllStart();
+	bool IsCanAdd(Player* aPlr);
 
 	uint32 GetInsId() { return mId; }
 	uint32 GetMaxCount() { return mMaxCount; }
 	uint32 GetRoomPlayerCount() { return (uint32)mRoomPlayers.size(); }
+	uint32 GetGameInsId() { return mGameInsId; }
 
 	RoomPlayer* DoEnter(Player* aPlr, bool isMaster = false);
 	RoomPlayer* FindPlayer(uint32 userId);
 	RoomPlayer* AddPlayer(RoomPlayer* roomPlr);
 	RoomPlayer* GetRoomPlayer(uint32 idx);
 	RoomPlayer* GetMaster() { return mMaster; }
-	
+	Player* GetMasterPlayer() { return mMaster ? mMaster->mPlayer : NULL; }
 	const std::string& GetPassword() { return mPassword; }
 	const std::string& GetName() { return mName; }
-
+protected:
+	void OnCreate(uint32 userId);
+	void OnClose();
+	void OnEnter(uint32 userId);
+	void OnLeave(uint32 userId);
+	void OnChangeMaster(uint32 oldUserId, uint32 newUserId);
+	void OnChangeState(uint32 userId, uint8 oldState, uint8 state);
 protected:
 	uint32									mId;
+	std::string								mScript;
 	RoomPlayer*								mMaster;
 	std::string								mName;
 	std::string								mPassword;
 	uint32									mMaxCount;			// 房间最多人数
 	std::vector<RoomPlayer*>				mRoomPlayers;
+	uint32									mGameInsId;			// 当前游戏ID
 private:
 };

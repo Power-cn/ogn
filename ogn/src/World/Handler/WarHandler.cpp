@@ -21,7 +21,7 @@ int32 WarHandler::onNetEntityAttackNotify(Player* player, NetEntityAttackNotify*
 
 int32 WarHandler::onNetEntityFollowNotify(Player* player, NetEntityFollowNotify* nfy)
 {
-	Entity* tar = GetModule(WorldModule)->getEntity(nfy->tarGuid);
+	Entity* tar = sWorld.FindEntByGuid(nfy->tarGuid);
 	if (tar == NULL)
 		return 0;
 	

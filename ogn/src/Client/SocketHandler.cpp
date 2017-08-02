@@ -4,14 +4,14 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	for (auto itr : mapRobotJson)
-	{
-		RobotJson& robotJson = itr.second;
-		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	}
+	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	//for (auto itr : mapRobotJson)
+	//{
+	//	RobotJson& robotJson = itr.second;
+	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	//}
 
-	createRobot();
+	//createRobot();
 }
 
 int SocketHandler::onConnect(SocketEvent& e)
@@ -30,11 +30,15 @@ int SocketHandler::onConnect(SocketEvent& e)
 
 int SocketHandler::onRecv(SocketEvent& e)
 {
+	//AES aes(sKey);
+	//aes.InvCipher(e.data, e.count);
+	Shared::XOR((char*)e.data, e.count, sKeyXor);
+
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;
-	int32 rpos = out.getWPostion();
+	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 	Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
 	if (pack == NULL) return 0;
 
@@ -82,7 +86,7 @@ void SocketHandler::createRobot()
 
 	int32 idx = rand() % 4;
 	char szBuf[32] = { 0 };
-	sprintf_s(szBuf, 32, "Gate%d", idx);
+	sprintf_s(szBuf, 32, "Gate", idx);
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);
@@ -93,4 +97,9 @@ void SocketHandler::createRobot()
 	client->addEventListener(SocketEvent::RECV, (EventCallback)&SocketHandler::onRecv, this);
 	client->addEventListener(SocketEvent::EXIT, (EventCallback)&SocketHandler::onExit, this);
 	client->addEventListener(SocketEvent::EXCEPTION, (EventCallback)&SocketHandler::onException, this);
+}
+
+void SocketHandler::PushUser(cstring& user)
+{
+	mUsers.push(std::make_pair(user, ""));
 }

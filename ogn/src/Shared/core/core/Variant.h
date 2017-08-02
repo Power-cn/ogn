@@ -5,7 +5,19 @@ class BinaryStream;
 #pragma pack(push)
 #pragma pack(1)
 
-union ValueUnion
+struct object_str
+{
+	uint32		len;
+	const char* str;
+};
+
+struct object_bytes
+{
+	uint32				len;
+	const char*			ptr;
+};
+
+union object_union
 {
 	bool				value_bool;
 	int8				value_char;
@@ -22,6 +34,7 @@ union ValueUnion
 	void*				value_pointer;
 	BinaryStream*		value_bytes;
 };
+
 
 class Variant
 {
@@ -42,12 +55,12 @@ public:
 		TypeFloat32,
 		TypeFloat64,
 		TypeString,
+		TypeMemory,
 		TypePointer,
 		TypeDate,
-		TypeMemory,
 	};
 public:
-	static char StringToType(const char* str);
+	static char convert(const char* str);
 	Variant();
 	~Variant(void);
 	Variant(const Variant& other);
@@ -124,10 +137,10 @@ protected:
 	void reset();
 protected:
 
-	ValueUnion			mValue;
-	char				mType;
+	object_union			mValue;
+	char					mType;
 protected:
-	void copyValue(const ValueUnion& src, ValueUnion& des, int8 type);
+	void copyValue(const object_union& src, object_union& dst, int8 type);
 
 };
 

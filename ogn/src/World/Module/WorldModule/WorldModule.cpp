@@ -19,8 +19,21 @@ bool WorldModule::Update(float time, float delay)
 {
 	float64 s0 = DateTime::GetNowAppUS();
 
-	for (auto itr : mMapEntity)
-		itr.second->Update(time, delay);
+	std::queue<Entity* > delQueue;
+	for (auto& itr : mMapEntity) {
+		Entity* ent = itr.second;
+		ent->Update(time, delay);
+		if (ent->CanDestroy()) {
+			delQueue.push(ent);
+		}
+	}
+
+	while (delQueue.size() > 0)
+	{
+		Entity* ent = delQueue.front();
+		delQueue.pop();
+		ent->Destroy();
+	}
 
 	float64 s1 = DateTime::GetNowAppUS() - s0;
 	if (s1 >= 0.02f)
@@ -42,7 +55,7 @@ bool WorldModule::onLeaveWorld(Player* player, Dictionary& dict)
 	return true;
 }
 
-Entity* WorldModule::getEntityByName(const std::string& name)
+Entity* WorldModule::FindEntByName(cstring& name)
 {
 	auto itr = mMapNameEntity.find(name);
 	if (itr != mMapNameEntity.end())
@@ -51,8 +64,8 @@ Entity* WorldModule::getEntityByName(const std::string& name)
 	return NULL;
 }
 
-Entity* WorldModule::getEntity(Guid guid)
-{	
+Entity* WorldModule::FindEntByGuid(Guid guid)
+{
 	auto itr = mMapEntity.find(guid);
 	if (itr != mMapEntity.end())
 		return itr->second;
@@ -86,37 +99,6 @@ void WorldModule::removeEntity(Entity* ent)
 	delete ent;
 }
 
-Player* WorldModule::getPlayerByName(const std::string& name)
-{
-	Entity* entity = getEntityByName(name);
-	if (entity == NULL)
-		return NULL;
-
-	if (entity->getEntityType() == ET_Player)
-		return (Player*)entity;
-	return NULL;
-}
-
-Player* WorldModule::getPlayerByGuid(Guid guid)
-{
-	Entity* entity = getEntity(guid);
-	if (entity == NULL)
-		return NULL;
-
-	if (entity->getEntityType() == ET_Player)
-		return (Player*)entity;
-	return NULL;
-}
-
-Player* WorldModule::getPlayer(uint32 accountId)
-{
-	auto itr = mMapPlayer.find(accountId);
-	if (itr != mMapPlayer.end())
-		return itr->second;
-
-	return NULL;
-}
-
 Player* WorldModule::addPlayer(Player* plr)
 {
 	addEntity(plr);
@@ -128,9 +110,9 @@ Player* WorldModule::addPlayer(Player* plr)
 	return plr;
 }
 
-void WorldModule::removePlayer(uint32 accountId)
+void WorldModule::removePlayer(uint32 accId)
 {
-	auto itr = mMapPlayer.find(accountId);
+	auto itr = mMapPlayer.find(accId);
 	if (itr == mMapPlayer.end())
 		return;
 
@@ -164,12 +146,43 @@ void WorldModule::removePlayerToUserId(uint32 userId)
 		mMapUserIdPlayer.erase(itr);
 }
 
-Player* WorldModule::getPlayerToUserId(uint32 userId)
+Player* WorldModule::FindPlrByName(cstring& name)
+{
+	Entity* entity = FindEntByName(name);
+	if (entity == NULL)
+		return NULL;
+
+	if (entity->getEntityType() == ET_Player)
+		return (Player*)entity;
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByGuid(Guid guid)
+{
+	Entity* entity = FindEntByGuid(guid);
+	if (entity == NULL)
+		return NULL;
+
+	if (entity->getEntityType() == ET_Player)
+		return (Player*)entity;
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByAccId(uint32 accId)
+{
+	auto itr = mMapPlayer.find(accId);
+	if (itr != mMapPlayer.end())
+		return itr->second;
+
+	return NULL;
+}
+
+Player* WorldModule::FindPlrByUserId(uint32 userId)
 {
 	auto itr = mMapUserIdPlayer.find(userId);
 	if (itr != mMapUserIdPlayer.end())
 		return itr->second;
-	return NULL;		
+	return NULL;
 }
 
 Npc* WorldModule::addNpc(Npc* npc)
@@ -183,17 +196,17 @@ Npc* WorldModule::addNpc(Npc* npc)
 	return npc;
 }
 
-Npc* WorldModule::getNpc(uint32 npcId)
+Npc* WorldModule::FindNpcByCfgId(uint32 cfgId)
 {
-	auto itr = mMapNpc.find(npcId);
+	auto itr = mMapNpc.find(cfgId);
 	if (itr != mMapNpc.end())
 		return itr->second;
 	return NULL;
 }
 
-Npc* WorldModule::getNpcByName(const std::string& name)
+Npc* WorldModule::FindNpcByName(cstring& name)
 {
-	Entity* entity = getEntityByName(name);
+	Entity* entity = FindEntByName(name);
 	if (entity == NULL)
 		return NULL;
 
@@ -202,15 +215,27 @@ Npc* WorldModule::getNpcByName(const std::string& name)
 	return NULL;
 }
 
-Npc* WorldModule::getNpcByGuid(Guid guid)
+Npc* WorldModule::FindNpcByGuid(Guid guid)
 {
-	Entity* entity = getEntity(guid);
+	Entity* entity = FindEntByGuid(guid);
 	if (entity == NULL)
 		return NULL;
 
 	if (entity->getEntityType() == ET_Npc)
 		return (Npc*)entity;
 	return NULL;
+}
+
+void WorldModule::DestroyEnt(Guid guid)
+{
+	Entity* ent = FindEntByGuid(guid);
+	if (ent == NULL) return;
+	DestroyEnt(ent);
+}
+
+void WorldModule::DestroyEnt(Entity* ent)
+{
+
 }
 
 void WorldModule::removeNpc(uint32 npcId)
@@ -231,13 +256,26 @@ void WorldModule::removeNpc(Npc* npc)
 	removeEntity(npc->getGuid());
 }
 
+bool WorldModule::ChangeName(Entity* ent, cstring& sname)
+{
+	auto itr = mMapNameEntity.find(ent->getName());
+	if (itr != mMapNameEntity.end())
+	{
+		return false;
+		mMapNameEntity.erase(itr);
+		ent->setName(sname);
+		mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
+	}
+	return true;
+}
+
 void WorldModule::sendPacketToAll(Packet& packet)
 {
 	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
 	for (auto itr : mMapPlayer)
-		itr.second->sendBuffer(in.getPtr(), in.getWPostion());
+		itr.second->sendBuffer(in.datas(), in.wpos());
 }
 
 void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* self, uint32 tarUserId /* = 0 */)
@@ -246,6 +284,9 @@ void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* sel
 	{
 	case EC_WORLD:
 		self->sendPacketToWorld(packet);
+		break;
+	case EC_SYSTEM:
+		self->sendPacket(packet);
 		break;
 	case EC_MAP:
 		self->sendPacketToMap(packet);
@@ -264,7 +305,7 @@ void WorldModule::sendPacketToTarget(EnumChannel ec, Packet& packet, Player* sel
 			self->sendPacket(packet);
 		else
 		{
-			Player* tarPlr = sWorld.getPlayerToUserId(tarUserId);
+			Player* tarPlr = sWorld.FindPlrByUserId(tarUserId);
 			if (tarPlr)
 				tarPlr->sendPacket(packet);
 		}

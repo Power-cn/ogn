@@ -16,9 +16,9 @@ Socket::~Socket(void)
 	SAFE_SOCKET(mSocketId);
 	while (sendQueue.size())
 	{
-		StreamBuffer packet = sendQueue.front();
+		object_bytes packet = sendQueue.front();
 		sendQueue.pop();
-		delete [] packet.buffer;
+		delete [] packet.ptr;
 	}
 	network = NULL;
 }

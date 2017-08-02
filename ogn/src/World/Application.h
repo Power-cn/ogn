@@ -37,6 +37,7 @@ protected:
 	void addSessionMessage(uint32 msgId);
 protected:
 	int32 onRefresh(CmdEvent& e);
+	int32 onRefreshLua(CmdEvent& e);
 	void OnInitialize();
 public:
 	int32 onClose(CmdEvent& e);

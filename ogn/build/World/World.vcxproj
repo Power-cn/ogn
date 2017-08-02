@@ -41,6 +41,7 @@
     <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\TeamModule\Team.cpp" />
     <ClCompile Include="..\..\src\World\Module\TeamModule\TeamHandler.cpp" />
@@ -61,6 +62,7 @@
     <ClCompile Include="..\..\src\World\SessionManager.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Common\ConstDef.h" />
     <ClInclude Include="..\..\src\Common\MsgCode.h" />
     <ClInclude Include="..\..\src\Common\Property.h" />
     <ClInclude Include="..\..\src\Common\protocols\protocols.h" />
@@ -86,6 +88,7 @@
     <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h" />
     <ClInclude Include="..\..\src\World\Module\TeamModule\Team.h" />
     <ClInclude Include="..\..\src\World\Module\TeamModule\TeamHandler.h" />
@@ -112,6 +115,15 @@
     <Xml Include="..\..\src\Common\protocols\protocols.xml">
       <SubType>Designer</SubType>
     </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\config\cfg\script\card.lua" />
+    <None Include="..\..\bin\config\cfg\script\game.lua" />
+    <None Include="..\..\bin\config\cfg\script\global.lua" />
+    <None Include="..\..\bin\config\cfg\script\gm.lua" />
+    <None Include="..\..\bin\config\cfg\script\player.lua" />
+    <None Include="..\..\bin\config\cfg\script\room.lua" />
+    <None Include="..\..\bin\config\cfg\script\team.lua" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{5A2CA0EF-D312-432C-BBB7-848FF027D79F}</ProjectGuid>

@@ -123,8 +123,8 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 			valuestr[valuesize++] = '\'';
 
 			BinaryStream* buffer = (BinaryStream*)dataptr;
-			if (buffer->getWPostion() > 0)
-				valuesize += mysql_real_escape_string(sql, valuestr + valuesize, (char*)buffer->getPtr(), buffer->getWPostion());
+			if (buffer->wpos() > 0)
+				valuesize += mysql_real_escape_string(sql, valuestr + valuesize, (char*)buffer->datas(), buffer->wpos());
 			valuestr[valuesize++] = '\'';
 		}
 		break;
@@ -208,13 +208,13 @@ void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field,
 		break;
 	case Variant::TypeMemory: {
 			BinaryStream* buffer = (BinaryStream*)dataptr;
-			buffer->Clear();
+			buffer->clear();
 			if (!valuestr)
 				break;
 			if (size <= 0)
 				break;
 
-			buffer->WriteBytes(valuestr, size);
+			buffer->write(valuestr, size);
 		}
 		break;
 	}

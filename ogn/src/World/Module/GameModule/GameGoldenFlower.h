@@ -3,6 +3,7 @@
 #define MAX_UNIT_POKER_COUNT 3
 #define MAX_POKER_COUNT 54
 
+
 class GameEntity
 {
 public:
@@ -12,7 +13,11 @@ public:
 public:
 	uint32					userId = 0;
 	uint8					maxCount = MAX_UNIT_POKER_COUNT;
-	std::vector<uint8>		poker;
+	std::vector<uint8>		cards;
+	std::string ToString();
+	uint32 GetCardCount() { return (uint32)cards.size(); }
+	uint32 GetCard(uint32 idx);
+	luabind::object GetCards();
 protected:
 };
 
@@ -21,26 +26,36 @@ protected:
 */
 class GameGoldenFlower : public GameModle
 {
+	friend class GameModule;
 public:
 	GameGoldenFlower();
 	~GameGoldenFlower();
 	bool operator >> (GameGoldenFlowerInfo& info);
 
-	GameEntity* AddGameEnt(GameEntity* aGameEnt);
-	GameEntity* GetGameEnt(uint32 idx);
-	GameEntity* FindGameEnt(uint32 userId);
-	void DelGameEnt(uint32 userId);
-	void DoShuffle();
-	uint8 DoDealPoker();
-	void DoCutPoker();
-	void SetRoomId(uint32 roomId) { mRoomId = roomId; }
-	uint32 GetRoomId() { return mRoomId; }
+	void DoShuffle();			// 洗
+	void DoCutCard();			// 切
+	void SetBanker(uint32 userId) { mBankerUserId = userId; }
+	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
+	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }
 
-	uint32 GetGameEntCount() { return (uint32)mLstGameEntity.size(); }
+	uint8 DoDealPoker();		// 发
+
+	uint32 GetNextSpeakPlr();
+	uint32 GetBanker() { return mBankerUserId; }
+	uint32 GetCurSpeak() { return mCurSpeakUserId; }
+	uint32 GetSpeakTime() { return mSpeakTime; }
+
+	virtual std::string ToString();
 protected:
-	uint32							mRoomId;
+	virtual bool OnStart();
+	virtual bool OnClose();
+	virtual bool OnEnter(GameEntity* aGameEnt);
+	virtual bool OnLeave(GameEntity* aGameEnt);
+protected:
 	uint8							mPoker[MAX_POKER_COUNT];
 	std::queue<uint8>				mCurPoker;				// 没有使用
 	std::queue<uint8>				mOpenPoker;				// 已经使用
-	std::vector<GameEntity*>		mLstGameEntity;
+	uint32							mBankerUserId;			// 庄家
+	uint32							mCurSpeakUserId;		// 当前说话的人
+	uint32							mSpeakTime;				// 说话剩余时间秒
 };

@@ -16,6 +16,7 @@
 #include "CircularBuffer.h"
 #include "BlockStream.h"
 #include "Compression.h"
+#include "../aes/AES.h"
 
 #include "conio.h"
 #include "dump.h"

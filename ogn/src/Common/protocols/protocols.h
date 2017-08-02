@@ -7,6 +7,8 @@ ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
+ID_NetChangeNameReq,
+ID_NetChangeNameRes,
 ID_NetGmMsg,
 ID_NetQueryRoleReq,
 ID_NetQueryRoleRes,
@@ -357,6 +359,9 @@ public:
 	GameGoldenFlowerInfo() {
 insId = 0;
 roomId = 0;
+bankerUserId = 0;
+curSpeakUserId = 0;
+speakTime = 0;
 
 
 	}
@@ -364,6 +369,9 @@ roomId = 0;
 	bool operator >> (BinaryStream& bytes) {
 CHECK(bytes << insId);
 CHECK(bytes << roomId);
+CHECK(bytes << bankerUserId);
+CHECK(bytes << curSpeakUserId);
+CHECK(bytes << speakTime);
 uint32 gameEntInfos_Size = (uint32)gameEntInfos.size();
 bytes << gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -376,6 +384,9 @@ for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInf
 	bool operator << (BinaryStream& bytes) {
 CHECK(bytes >> insId);
 CHECK(bytes >> roomId);
+CHECK(bytes >> bankerUserId);
+CHECK(bytes >> curSpeakUserId);
+CHECK(bytes >> speakTime);
 uint32 gameEntInfos_Size = 0;
 bytes >> gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -389,6 +400,9 @@ for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInf
 public:
 uint32 insId;
 uint32 roomId;
+uint32 bankerUserId;
+uint32 curSpeakUserId;
+uint32 speakTime;
 std::vector<GameEntityInfo> gameEntInfos;
 
 };
@@ -542,6 +556,58 @@ public:
 int32 result;
 int64 guid;
 DBAccountInfo accountInfo;
+
+};
+
+class NetChangeNameReq : public Packet {
+public:
+	NetChangeNameReq():
+	Packet(ID_NetChangeNameReq) {
+newName = "";
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << newName);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> newName);
+
+		return true;
+	}
+public:
+std::string newName;
+
+};
+
+class NetChangeNameRes : public Packet {
+public:
+	NetChangeNameRes():
+	Packet(ID_NetChangeNameRes) {
+result = 0;
+newName = "";
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << newName);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> newName);
+
+		return true;
+	}
+public:
+uint8 result;
+std::string newName;
 
 };
 
@@ -1851,6 +1917,8 @@ REGISTER_PACKET_HELPER(ID_NetSessionLeaveNotify, NetSessionLeaveNotify);
 REGISTER_PACKET_HELPER(ID_NetPingNotify, NetPingNotify);
 REGISTER_PACKET_HELPER(ID_NetLoginReq, NetLoginReq);
 REGISTER_PACKET_HELPER(ID_NetLoginRes, NetLoginRes);
+REGISTER_PACKET_HELPER(ID_NetChangeNameReq, NetChangeNameReq);
+REGISTER_PACKET_HELPER(ID_NetChangeNameRes, NetChangeNameRes);
 REGISTER_PACKET_HELPER(ID_NetGmMsg, NetGmMsg);
 REGISTER_PACKET_HELPER(ID_NetQueryRoleReq, NetQueryRoleReq);
 REGISTER_PACKET_HELPER(ID_NetQueryRoleRes, NetQueryRoleRes);

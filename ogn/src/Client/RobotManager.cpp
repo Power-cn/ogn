@@ -23,6 +23,7 @@ RobotManager::RobotManager()
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
+	INSTANCE(CmdDispatcher).addEventListener("login", (EventCallback)&RobotManager::onLogin, this);
 }
 
 RobotManager::~RobotManager()
@@ -188,11 +189,14 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 {
 	switch (nfy->channelType)
 	{
+	case EC_SYSTEM:
+		LOG_DEBUG(LogSystem::csl_color_green, "系统频道:%s", nfy->chatMsg.c_str());
+		break;
 	case EC_ROOM:
 		LOG_DEBUG(LogSystem::csl_color_green, "房间频道:%s", nfy->chatMsg.c_str());
 		break;
 	case EC_TARGET:
-		LOG_DEBUG(LogSystem::csl_color_green, "from:%s %s", nfy->from.c_str(), nfy->chatMsg.c_str());
+		LOG_DEBUG(LogSystem::csl_color_green, "%s", nfy->chatMsg.c_str());
 		break;
 	default:
 		LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(), nfy->from.c_str(), nfy->chatMsg.c_str());
@@ -212,5 +216,13 @@ int32 RobotManager::onGmCmd(CmdEvent& e)
 	}
 	if (mCurRobot == NULL) return 0;
 	mCurRobot->sendPacket(msg);
+	return 0;
+}
+
+int32 RobotManager::onLogin(CmdEvent& e)
+{
+	std::string user = e.cmdExecute->params[0];
+	INSTANCE(SocketHandler).PushUser(user);
+	INSTANCE(SocketHandler).createRobot();
 	return 0;
 }

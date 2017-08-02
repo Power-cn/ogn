@@ -36,7 +36,18 @@ void Robot::sendPacket(Packet& packet)
 	if (!mSocket)
 		return;
 
-	mSocket->sendPacket(packet);
+	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };
+	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
+	in << packet;
+	//AES aes(sKey);
+	//aes.Cipher(in.datas(), in.wpos());
+	Shared::XOR((char*)in.datas(), in.wpos(), sKeyXor);
+	char* datas = new char[in.wpos()];
+	memcpy(datas, in.datas(), in.wpos());
+	AES aes1(sKey);
+	aes1.InvCipher(datas, in.wpos());
+	mSocket->sendBuffer(in.datas(), in.wpos());
+	//mSocket->sendPacket(packet);
 }
 
 int32 Robot::onTimerSyncPos(TimerEvent& e)

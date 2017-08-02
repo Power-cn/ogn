@@ -8,8 +8,8 @@ public:
 	BlockStream(const BlockStream& other);
 	BlockStream(int8* value, int32 count);
  	virtual ~BlockStream();
-	bool WriteBytes(void* bytes, int32 count);
-	bool ReadBytes(void* bytes, int32 count);
+	bool write(void* bytes, int32 count);
+	bool read(void* bytes, int32 count);
 
 	int32 getReadableCount();
 	int32 getWriteableCount();

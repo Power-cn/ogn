@@ -11,6 +11,8 @@ ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
+ID_NetChangeNameReq,
+ID_NetChangeNameRes,
 ID_NetGmMsg,
 ID_NetQueryRoleReq,
 ID_NetQueryRoleRes,
@@ -68,6 +70,8 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSessionLeaveNotif
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPingNotify, "NetPingNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginReq, "NetLoginReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginRes, "NetLoginRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameReq, "NetChangeNameReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameRes, "NetChangeNameRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGmMsg, "NetGmMsg");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetQueryRoleReq, "NetQueryRoleReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetQueryRoleRes, "NetQueryRoleRes");
@@ -445,6 +449,9 @@ public class GameGoldenFlowerInfo : Header
 	{
 insId = 0;
 roomId = 0;
+bankerUserId = 0;
+curSpeakUserId = 0;
+speakTime = 0;
 gameEntInfos = new List<GameEntityInfo>();
 
 	}
@@ -453,6 +460,9 @@ gameEntInfos = new List<GameEntityInfo>();
 	{
 bytes.Write(insId);
 bytes.Write(roomId);
+bytes.Write(bankerUserId);
+bytes.Write(curSpeakUserId);
+bytes.Write(speakTime);
 int gameEntInfos_TEMP = gameEntInfos.Count;
 bytes.Write(gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -467,6 +477,9 @@ for (int i = 0; i < gameEntInfos_TEMP; ++i)
 	{
 bytes.Read(ref insId);
 bytes.Read(ref roomId);
+bytes.Read(ref bankerUserId);
+bytes.Read(ref curSpeakUserId);
+bytes.Read(ref speakTime);
 int gameEntInfos_TEMP = 0;
 bytes.Read(ref gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -482,6 +495,9 @@ for (int i = 0; i < gameEntInfos_TEMP; ++i)
 
 public uint insId;
 public uint roomId;
+public uint bankerUserId;
+public uint curSpeakUserId;
+public uint speakTime;
 public List<GameEntityInfo> gameEntInfos;
 
 }
@@ -641,6 +657,60 @@ bytes.Read(accountInfo);
 public int result;
 public long guid;
 public DBAccountInfo accountInfo;
+
+}
+public class NetChangeNameReq : Packet
+{
+	public NetChangeNameReq():base((int)PACKET_ID_ENUM.ID_NetChangeNameReq)
+	{
+newName = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(newName);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref newName);
+
+		return true;
+	}
+
+public string newName;
+
+}
+public class NetChangeNameRes : Packet
+{
+	public NetChangeNameRes():base((int)PACKET_ID_ENUM.ID_NetChangeNameRes)
+	{
+result = 0;
+newName = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(newName);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref newName);
+
+		return true;
+	}
+
+public sbyte result;
+public string newName;
 
 }
 public class NetGmMsg : Packet

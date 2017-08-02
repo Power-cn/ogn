@@ -11,6 +11,7 @@ enum UserStatus : uint8
 
 class Player : public Entity
 {
+	friend class Application;
 protected:
 	uint32				accountId;
 	uint32				userId;
@@ -19,12 +20,13 @@ protected:
 	Session*			session;
 	UserStatus			mUserStatus;
 	Json::Value			mJson;
+	bool				mOnline;
 public:
 	Player();
 	~Player();
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
-
+	virtual bool Destroy();
 	void setSession(Session* s) { session = s; }
 	void setAccId(uint32 plrId) { accountId = plrId; }
 	void setUserId(uint32 rId) { userId = rId; }
@@ -32,6 +34,9 @@ public:
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
+
+	bool GetOnline() { return mOnline; }
+	void SetOnline(bool isOnline) { mOnline = isOnline; }
 
 	uint32 getAccId() { return accountId; }
 	uint32 getUserId() { return userId; }
@@ -42,7 +47,6 @@ public:
 	Json::Value& GetJson();
 	Session* getSession() { return session; }
 public:
-	void onCreate();
 	void DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo);
 public:
 	virtual void sendPacket(Packet& packet);
@@ -54,6 +58,7 @@ public:
 	virtual void sendPacketToRoom(Packet& packet);
 	virtual void sendPacketToTarget(Packet& packet, Entity* tar);
 	virtual void sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams = NULL);
+	virtual void sendPacketToMsg(const std::string& msg);
 	virtual void sendPacketToMsg(EnumChannel ec, const std::string& msg);
 public:
 	bool onLoad(Dictionary& dict);
@@ -79,6 +84,11 @@ protected:
 	virtual bool onLeavePlayerView(Player* plr);
 protected:
 	int32 onTimerSaveDB(TimerEvent& e);
+protected:
+	void OnCreate();
+	void OnDispose();
+	void OnEnter();
+	void OnLeave();
 public:
 	void SetOnlineTimer(uint32 t) { mOnlineTimer = t; }
 	void SetOfflineTimer(uint32 t) { mOfflineTimer = t; }

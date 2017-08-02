@@ -28,6 +28,6 @@ float32 Point2::distance(const Point2& other) const
 
 float32 Point2::length() const
 {
-	Vector2 v0(x, y);
+	Vector2 v0((float32)x, (float32)y);
 	return v0.length();
 }

@@ -1,24 +1,24 @@
 #include "stdafx.h"
 
-GameGoldenFlower::GameGoldenFlower():
-mRoomId(0)
+GameGoldenFlower::GameGoldenFlower()
 {
-
+	mBankerUserId = 0;
+	mCurSpeakUserId = 0;
+	mSpeakTime = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
 {
-	for (GameEntity* aGameEnt:mLstGameEntity)
-	{
-		delete aGameEnt;
-	}
-	mLstGameEntity.clear();
+
 }
 
 bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 {
 	info.insId = GetInsId();
 	info.roomId = GetRoomId();
+	info.bankerUserId = GetBanker();
+	info.curSpeakUserId = GetCurSpeak();
+	info.speakTime = GetSpeakTime();
 	for (GameEntity* aGameEnt : mLstGameEntity)
 	{
 		GameEntityInfo entInfo;
@@ -28,55 +28,12 @@ bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 	return true;
 }
 
-GameEntity* GameGoldenFlower::AddGameEnt(GameEntity* aGameEnt)
-{
-	mLstGameEntity.push_back(aGameEnt);
-	return aGameEnt;
-}
-
-GameEntity* GameGoldenFlower::GetGameEnt(uint32 idx)
-{
-	if (idx < mLstGameEntity.size())
-		return mLstGameEntity[idx];
-	return NULL;
-}
-
-GameEntity* GameGoldenFlower::FindGameEnt(uint32 userId)
-{
-	for (GameEntity* aGameEnt : mLstGameEntity)
-	{
-		if (aGameEnt->userId == userId)
-		{
-			return aGameEnt;
-		}
-	}
-	return NULL;
-}
-
-void GameGoldenFlower::DelGameEnt(uint32 userId)
-{
-	for (auto itr = mLstGameEntity.begin();
-		 itr != mLstGameEntity.end();
-		 ++itr)
-	{
-		if ((*itr)->userId == userId)
-		{
-			delete (*itr);
-			mLstGameEntity.erase(itr);
-			return;
-		}
-	}
-}
-
 void GameGoldenFlower::DoShuffle()
 {
-	for (uint32 i = 0; i < MAX_POKER_COUNT; ++i)
-	{
+	for (uint32 i = 0; i < MAX_POKER_COUNT; ++i) {
 		mPoker[i] = i + 1;
 	}
-
 	uint32 curSize = MAX_POKER_COUNT;
-
 	while (curSize > 0)
 	{
 		uint32 idx = rand() % curSize;
@@ -93,9 +50,63 @@ uint8 GameGoldenFlower::DoDealPoker()
 	return pkr;
 }
 
-void GameGoldenFlower::DoCutPoker()
+void GameGoldenFlower::DoCutCard()
 {
 
+}
+
+uint32 GameGoldenFlower::GetNextSpeakPlr()
+{
+	int32 idx = GetPlrInx(mCurSpeakUserId);
+	if (idx >= 0 && idx < GetGameEntCount())
+	{
+		idx++;
+		if (idx >= GetGameEntCount())
+			idx = 0;
+		GameEntity* aGameEnt =  GetGameEnt(idx);
+		if (aGameEnt)
+			return aGameEnt->userId;
+	}
+	return 0;
+}
+
+std::string GameGoldenFlower::ToString()
+{
+	std::string str;
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "ID:%d rID:%d Banker:%d sID:%d sTime:%ds\n", GetInsId(), GetRoomId(), GetBanker(), GetCurSpeak(), GetSpeakTime());
+	str += szBuffer;
+	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
+	{
+		str += mLstGameEntity[i]->ToString();
+		str += "\n";
+	}
+
+	return str;
+}
+
+bool GameGoldenFlower::OnStart()
+{
+	LuaEngine::executeScript(sScriptGame, "OnStart", GetInsId());
+	return true;
+}
+
+bool GameGoldenFlower::OnClose()
+{
+	LuaEngine::executeScript(sScriptGame, "OnClose", GetInsId());
+	return true;
+}
+
+bool GameGoldenFlower::OnEnter(GameEntity* aGameEnt)
+{
+	LuaEngine::executeScript(sScriptGame, "OnEnter", GetInsId(), aGameEnt->userId);
+	return true;
+}
+
+bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
+{
+	LuaEngine::executeScript(sScriptGame, "OnLeave", GetInsId(), aGameEnt->userId);
+	return true;
 }
 
 GameEntity::GameEntity()
@@ -111,6 +122,37 @@ GameEntity::~GameEntity()
 bool GameEntity::operator >> (GameEntityInfo& info)
 {
 	info.userId = userId;
-	info.pokers = poker;
+	info.pokers = cards;
 	return true;
+}
+
+std::string GameEntity::ToString()
+{
+	char szBuff[256] = { 0 };
+	sprintf_s(szBuff, 256, "[%d]", userId);
+	uint32 strLen = (uint32)strlen(szBuff);
+	for (uint32 i = 0; i < cards.size(); ++i)
+	{
+		sprintf_s(szBuff + strLen, 256 - strLen, "%d ", cards[i]);
+		strLen = (uint32)strlen(szBuff);
+	}
+	return szBuff;
+}
+
+uint32 GameEntity::GetCard(uint32 idx)
+{
+	if (idx >= cards.size()) return 0;
+	return cards[idx];
+}
+
+luabind::object GameEntity::GetCards()
+{
+	LuaScript* luaScript = sLua.getScript(sScriptPlayer);
+	if (luaScript == NULL) return luabind::object();
+
+	luabind::object obj = luabind::newtable(luaScript->getLuaState());
+	for (uint32 i = 0; i < cards.size(); ++i) {
+		obj[i] = cards[i];
+	}
+	return obj;
 }

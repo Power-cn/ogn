@@ -239,7 +239,7 @@ typedef struct internal_state {
     uInt last_lit;      /* running index in l_buf */
 
     ushf *d_buf;
-    /* StreamBuffer for distances. To simplify the code, d_buf and l_buf have
+    /* object_bytes for distances. To simplify the code, d_buf and l_buf have
      * the same number of elements. To use different lengths, an extra flag
      * array would be necessary.
      */

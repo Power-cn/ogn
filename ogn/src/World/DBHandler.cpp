@@ -24,7 +24,7 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 		return 0;
 	}
 
-	Player* player = GetModule(WorldModule)->getPlayer(res->accountInfo.id);
+	Player* player = sWorld.FindPlrByAccId(res->accountInfo.id);
 	do 
 	{
 		if (player)
@@ -34,25 +34,27 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 			{
 				player->sendRespnoseMsg(MC_LoginTheNumberInTheRemote);
 				Dictionary dict;
-				INSTANCE(Application).onLeaveWorld(player, dict);
+				sApp.onLeaveWorld(player, dict);
 
 				NetLoginRes res;
 				res.result = 3;
 				oldSession->sendPacketToWorld(res);
 				player->unbindSession();
 
-				INSTANCE(Application).doSessionLeaveWorld(oldSession);
+				sApp.doSessionLeaveWorld(oldSession);
 			}
+			player->SetOnline(true);
 			player->bindSession(session);
 			break;
 		}
 
 		player = new Player;
+		player->SetOnline(true);
+		player->bindSession(session);
 		player->setAccId(res->accountInfo.id);
 		player->setUser(res->accountInfo.user);
 		player->setName(res->accountInfo.user);
-		player->bindSession(session);
-		GetModule(WorldModule)->addPlayer(player);
+		sWorld.addPlayer(player);
 
 	} while (false);
 
@@ -60,15 +62,15 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 	req.accountId = player->getAccId();
 	req.user = player->getUser();
 	req.roleCount = 1;
-	session->sendPacketToTarget(req, INSTANCE(Application).getDBServer()->getSocket());
-	res->guid = player->getInstanceId();
+	session->sendPacketToTarget(req, sApp.getDBServer() ? sApp.getDBServer()->getSocket() : NULL);
+	res->guid = player->getGuid();
 	player->sendPacket(*res);
 	return 0;
 }
 
 int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 {
-	Player* player = GetModule(WorldModule)->getPlayer(res->accountId);
+	Player* player = sWorld.FindPlrByAccId(res->accountId);
 	if (!player) return 0;
 
 	if (res->roleInfos.size() == 1)
@@ -79,7 +81,6 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 		player->setUserId(info.id);
 		player->setName(info.name);
 		player->SetOnlineTimer(DateTime::Now());
-
 		sWorld.addPlayerToUserId(player);
 
 		char szBuffer[256] = { 0 };
@@ -87,13 +88,13 @@ int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 		sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
 		Dictionary dict;
-		if (info.property.getWPostion() <= 0)
+		if (info.property.wpos() <= 0)
 			player->DoCreateCharacter(dict, info);
 		else
 			info.property >> dict;
 
-		INSTANCE(Application).onLoad(player, dict);
-		INSTANCE(Application).onEnterWorld(player, dict);
+		sApp.onLoad(player, dict);
+		sApp.onEnterWorld(player, dict);
 		return 0;
 	}
 	LOG_ERROR("create character fail");

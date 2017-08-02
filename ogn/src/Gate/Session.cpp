@@ -16,14 +16,14 @@ void Session::sendPacketToTarget(Packet& packet, Socket* target)
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	int32 packetCount = 0;
 	in << getSessionId();
-	int32 pos = in.getWPostion();
+	int32 pos = in.wpos();
 	in << packetCount;
 	in << packet;
-	packetCount = in.getWPostion() - sizeof(int32) - sizeof(uint64);
+	packetCount = in.wpos() - sizeof(int32) - sizeof(uint64);
 	packetCount = Shared::htonl(packetCount);
 
-	in.PushBytes(pos, &packetCount, sizeof(int32));
-	target->sendBuffer(in.getPtr(), in.getWPostion());
+	in.push(pos, &packetCount, sizeof(int32));
+	target->sendBuffer(in.datas(), in.wpos());
 }
 
 void Session::sendBufferToTarget(void* data, int32 count, Socket* target)
@@ -35,8 +35,8 @@ void Session::sendBufferToTarget(void* data, int32 count, Socket* target)
 	BinaryStream  transform(output, PACKET_MAX_LENGTH);
 	transform << getSessionId();
 	transform << count;
-	transform.WriteBytes(data, count);
-	target->sendBuffer(transform.getPtr(), transform.getWPostion());
+	transform.write(data, count);
+	target->sendBuffer(transform.datas(), transform.wpos());
 }
 
 void Session::sendPacket(Packet& packet)
@@ -64,14 +64,14 @@ void Session::sendPacketToWorld(Packet& packet)
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	int32 packetCount = 0;
 	in << getSessionId();
-	int32 pos = in.getWPostion();
+	int32 pos = in.wpos();
 	in << packetCount;
 	in << packet;
-	packetCount = in.getWPostion() - sizeof(int32) - sizeof(uint64);
+	packetCount = in.wpos() - sizeof(int32) - sizeof(uint64);
 	packetCount = Shared::htonl(packetCount);
 
-	in.PushBytes(pos, &packetCount, sizeof(int32));
-	socket->sendBuffer(in.getPtr(), in.getWPostion());
+	in.push(pos, &packetCount, sizeof(int32));
+	socket->sendBuffer(in.datas(), in.wpos());
 }
 
 void Session::sendBufferToWorld(void* data, int32 count)
@@ -83,8 +83,8 @@ void Session::sendBufferToWorld(void* data, int32 count)
 	BinaryStream  transform(output, PACKET_MAX_LENGTH);
 	transform << getSessionId();
 	transform << count;
-	transform.WriteBytes(data, count);
-	socket->sendBuffer(transform.getPtr(), transform.getWPostion());
+	transform.write(data, count);
+	socket->sendBuffer(transform.datas(), transform.wpos());
 }
 
 Session::Session(Socket* s):

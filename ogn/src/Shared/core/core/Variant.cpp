@@ -23,7 +23,7 @@ Variant::Variant(const BinaryStream& value)
 	mValue = { 0 };
 	mType = TypeMemory;
 	mValue.value_bytes = new BinaryStream();
-	mValue.value_bytes->WriteBytes(value.getPtr(), value.getWPostion());
+	mValue.value_bytes->write(value.datas(), value.wpos());
 }
 
 Variant::Variant(int8* value, int32 length)
@@ -31,7 +31,7 @@ Variant::Variant(int8* value, int32 length)
 	mValue = { 0 };
 	mType = TypeMemory;
 	mValue.value_bytes = new BinaryStream();
-	mValue.value_bytes->WriteBytes(value, length);
+	mValue.value_bytes->write(value, length);
 }
 
 Variant::~Variant(void)
@@ -309,7 +309,7 @@ bool Variant::operator>=( const Variant& other ) const
 	case TypeString:
 		return strcmp(mValue.value_str, other.mValue.value_str) >= 0;
 	case TypeMemory:
-		return memcmp(mValue.value_bytes->getPtr(), other.mValue.value_bytes->getPtr(), mValue.value_bytes->getWPostion() <= other.mValue.value_bytes->getWPostion() ? mValue.value_bytes->getWPostion() : other.mValue.value_bytes->getWPostion()) >= 0;
+		return memcmp(mValue.value_bytes->datas(), other.mValue.value_bytes->datas(), mValue.value_bytes->wpos() <= other.mValue.value_bytes->wpos() ? mValue.value_bytes->wpos() : other.mValue.value_bytes->wpos()) >= 0;
 	case TypePointer:
 		return mValue.value_pointer >= other.mValue.value_pointer;
 	}
@@ -355,7 +355,7 @@ bool Variant::operator<=( const Variant& other ) const
 	case TypeString:
 		return strcmp(mValue.value_str, other.mValue.value_str) <= 0;
 	case TypeMemory:
-		return memcmp(mValue.value_bytes->getPtr(), other.mValue.value_bytes->getPtr(), mValue.value_bytes->getWPostion() <= other.mValue.value_bytes->getWPostion() ? mValue.value_bytes->getWPostion() : other.mValue.value_bytes->getWPostion()) <= 0;
+		return memcmp(mValue.value_bytes->datas(), other.mValue.value_bytes->datas(), mValue.value_bytes->wpos() <= other.mValue.value_bytes->wpos() ? mValue.value_bytes->wpos() : other.mValue.value_bytes->wpos()) <= 0;
 	case TypePointer:
 		return mValue.value_pointer <= other.mValue.value_pointer;
 	}
@@ -396,7 +396,7 @@ bool Variant::operator==( const Variant& other ) const
 	case TypeString:
 		return strcmp(mValue.value_str, other.mValue.value_str) == 0;
 	case TypeMemory:
-		return memcmp(mValue.value_bytes->getPtr(), other.mValue.value_bytes->getPtr(), mValue.value_bytes->getWPostion() <= other.mValue.value_bytes->getWPostion() ? mValue.value_bytes->getWPostion() : other.mValue.value_bytes->getWPostion()) == 0;
+		return memcmp(mValue.value_bytes->datas(), other.mValue.value_bytes->datas(), mValue.value_bytes->wpos() <= other.mValue.value_bytes->wpos() ? mValue.value_bytes->wpos() : other.mValue.value_bytes->wpos()) == 0;
 	case TypePointer:
 		return mValue.value_pointer == other.mValue.value_pointer;
 	}
@@ -415,7 +415,7 @@ Variant& Variant::operator=(const BinaryStream& value)
 	reset();
 	mType = TypeMemory;
 	mValue.value_bytes = mValue.value_bytes ? mValue.value_bytes : new BinaryStream;
-	mValue.value_bytes->WriteBytes(value.getPtr(), value.getWPostion());
+	mValue.value_bytes->write(value.datas(), value.wpos());
 	return *this;
 }
 
@@ -501,10 +501,10 @@ const std::string Variant::toString() const
 		sprintf_s(buffer, sizeof(buffer), "%d", mValue.value_int);
 		return buffer;
 	case TypeInt64:
-		sprintf_s(buffer, sizeof(buffer), "%I64d", mValue.value_int64);
+		sprintf_s(buffer, sizeof(buffer), "%lld", mValue.value_int64);
 		return buffer;
 	case TypeUint8:
-		sprintf_s(buffer, sizeof(buffer), "%d", mValue.value_uchar);
+		sprintf_s(buffer, sizeof(buffer), "%u", mValue.value_uchar);
 		return buffer;
 	case TypeUint16:
 		sprintf_s(buffer, sizeof(buffer), "%u", mValue.value_ushort);
@@ -513,7 +513,7 @@ const std::string Variant::toString() const
 		sprintf_s(buffer, sizeof(buffer), "%u", mValue.value_uint);
 		return buffer;
 	case TypeUint64:
-		sprintf_s(buffer, sizeof(buffer), "%I64u", mValue.value_uint64);
+		sprintf_s(buffer, sizeof(buffer), "%llu", mValue.value_uint64);
 		return buffer;
 	case TypeFloat32:
 		sprintf_s(buffer, sizeof(buffer), "%04f", mValue.value_float);
@@ -524,7 +524,7 @@ const std::string Variant::toString() const
 	case TypeString:
 		return mValue.value_str == NULL ? "" : mValue.value_str;
 	case TypeMemory:
-		return "Bytes";
+		return mValue.value_bytes ? mValue.value_bytes->toString() : "NULL";
 	case TypePointer:
 		sprintf_s(buffer, sizeof(buffer), "%p", mValue.value_pointer);
 		return buffer;
@@ -621,72 +621,66 @@ void Variant::reset()
 
 	if (mType == TypeMemory) {
 		if (bytes) {
-			bytes->Clear();
+			bytes->clear();
 			mValue.value_bytes = bytes;
 		}
 	}
 }
 
-void Variant::copyValue(const ValueUnion& src, ValueUnion& des, int8 type)
+void Variant::copyValue(const object_union& src, object_union& dst, int8 type)
 {
 	switch (type)
 	{
 	case TypeBoolean:
-		des.value_bool = src.value_bool;
+		dst.value_bool = src.value_bool;
 		break;
 	case TypeInt8:
-		des.value_char = src.value_char;
+		dst.value_char = src.value_char;
 		break;
 	case TypeUint8:
-		des.value_uchar = src.value_uchar;
+		dst.value_uchar = src.value_uchar;
 		break;
 	case TypeInt16:
-		des.value_short = src.value_short;
+		dst.value_short = src.value_short;
 		break;
 	case TypeUint16:
-		des.value_ushort = src.value_ushort;
+		dst.value_ushort = src.value_ushort;
 		break;
 	case TypeInt32:
-		des.value_int = src.value_int;
+		dst.value_int = src.value_int;
 		break;
 	case TypeUint32:
-		des.value_uint = src.value_uint;
+		dst.value_uint = src.value_uint;
 		break;
 	case TypeInt64:
-		des.value_int64 = src.value_int64;
+		dst.value_int64 = src.value_int64;
 		break;
 	case TypeUint64:
-		des.value_uint64 = src.value_uint64;
+		dst.value_uint64 = src.value_uint64;
 		break;
 	case TypeFloat32:
-		des.value_float = src.value_float;
+		dst.value_float = src.value_float;
 		break;
 	case TypeFloat64:
-		des.value_double = src.value_double;
+		dst.value_double = src.value_double;
 		break;
 	case TypeString:
-		delete [] des.value_str;
-		des.value_str = new char[strlen(src.value_str) + 1];
-		strcpy_s(des.value_str, strlen(src.value_str) + 1, src.value_str);
-		break;
-	case TypePointer:
-		break;
-	case TypeDate:
+		delete [] dst.value_str;
+		dst.value_str = new char[strlen(src.value_str) + 1];
+		strcpy_s(dst.value_str, strlen(src.value_str) + 1, src.value_str);
 		break;
 	case TypeMemory:
-
-		des.value_bytes = des.value_bytes ? des.value_bytes : new BinaryStream;
-		des.value_bytes->Clear();
+		dst.value_bytes = dst.value_bytes ? dst.value_bytes : new BinaryStream;
+		dst.value_bytes->clear();
 		if (src.value_bytes)
-			des.value_bytes->WriteBytes(src.value_bytes->getPtr(), src.value_bytes->getWPostion());
-
+			dst.value_bytes->write(src.value_bytes->datas(), src.value_bytes->wpos());
 		break;
 	default:
 		break;
 	}
 }
 
-char Variant::StringToType(const char* str)
+char Variant::convert(const char* str)
 {
 	if (strcmp(str, "bool") == 0)
 		return TypeBoolean;

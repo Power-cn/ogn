@@ -535,3 +535,9 @@ uint32 Shared::BKDRHash(const char* str)
 		hash = hash * seed + (*str++);
 	return (hash & 0x7FFFFFFF);
 }
+
+void Shared::XOR(char* input, int len, int key)
+{
+	for (int i = 0; i < len; ++i)
+		input[i] = input[i] ^ key;
+}

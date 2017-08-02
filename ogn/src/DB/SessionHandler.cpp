@@ -63,7 +63,7 @@ int SessionHandler::onNetLoginReq(Session* session, NetLoginReq* req)
 	res.result = 0;
 	res.accountInfo.id = account.id;
 	res.accountInfo.user = account.user;
-	res.accountInfo.password.WriteBytes(account.password.getPtr(), account.password.getWPostion());
+	res.accountInfo.password.write(account.password.datas(), account.password.wpos());
 	res.accountInfo.name = account.name;
 	res.accountInfo.email = account.email;
 	res.accountInfo.phone = account.phone;
@@ -98,7 +98,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			info.id = role.id;
 			info.accountId = role.id;
 			info.name = role.name;
-			info.property.WriteBytes(role.property.getPtr(), role.property.getWPostion());
+			info.property.write(role.property.datas(), role.property.wpos());
 			res.roleInfos.push_back(info);
 			uint32 t1 = (uint32)DateTime::GetNowAppUS() - t0;
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role[%s] time:[%d]", req->user.c_str(), role.name.c_str(), t1);
@@ -120,7 +120,7 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			info.id = role.id;
 			info.accountId = role.id;
 			info.name = role.name;
-			info.property.WriteBytes(role.property.getPtr(), role.property.getWPostion());
+			info.property.write(role.property.datas(), role.property.wpos());
 			res.roleInfos.push_back(info);
 
 			uint32 t1 = (uint32)DateTime::GetNowAppUS() - t0;
@@ -140,7 +140,7 @@ int SessionHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
 		DBRoleInfo& info = res->roleInfos[0];
 		DBUser dbRole;
 		dbRole.id = info.id;
-		dbRole.property.WriteBytes(info.property.getPtr(), info.property.getWPostion());
+		dbRole.property.write(info.property.datas(), info.property.wpos());
 		uint32 updateRows = 0;
 		const int8* err = INSTANCE(Application).getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
 		if (!err) return 0;

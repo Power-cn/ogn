@@ -6,8 +6,8 @@ public:
 	CircularBuffer(uint32 uiCount = PACKET_MAX_LENGTH);
 	CircularBuffer(uint32 uiCount, void* data);
 	~CircularBuffer(void);
-	char* getPtr();
-	uint32 getCount();
+	char* datas();
+	uint32 count();
 	uint32 get_data_length();		// 得到当前有效数据长度;
 	uint32 get_can_write_length();	// 得到可写数据长度;
 	uint32 get_space_length();		// 得到剩余空间长度;

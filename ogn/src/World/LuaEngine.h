@@ -36,7 +36,8 @@ public:
 	LuaEngine();
 	~LuaEngine();
 	void reloadScript();
-protected:
+//protected:
+
 	LuaScript* loadScript(cstring& path);
 	LuaScript* getScript(cstring& name);
 	void clearScript();

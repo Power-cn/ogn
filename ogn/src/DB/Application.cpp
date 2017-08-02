@@ -103,9 +103,9 @@ int32 Application::onDBRecv(SocketEvent& e)
 	int32 msgId = 0;
 	CHECK_RETURN(out >> sessionId, 0);
 	CHECK_RETURN(out >> packetCount, 0);
-	int32 rpos = out.getRPostion();
+	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
-	out.setRPostion(rpos);
+	out.rpos(rpos);
 
 	Session* session = INSTANCE(SessionManager).getSession(sessionId);
 	do 
