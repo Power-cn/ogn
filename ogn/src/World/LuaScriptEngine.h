@@ -32,4 +32,5 @@ RoomModule* luaRoom();
 GameModule* luaGame();
 ConfigManager* luaCfg();
 
-luabind::object GetTestTable();
+
+luabind::object GetTestTable(lua_State* luaState);

@@ -17,9 +17,35 @@ void LuaScript::bindScript()
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom),
 			luabind::def("luaGame", &luaGame),
-			luabind::def("GetTestTable", &GetTestTable),
+			luabind::def("GetTestTable", &GetTestTable, mLuaState),
 			luabind::def("luaCfg", &luaCfg)
 			//luabind::def("TestFunc", &TestFunc)
+		];
+	luabind::module(mLuaState)
+		[
+			luabind::class_<EnumChannel>("A") 
+			.enum_("EnumChannel")
+			[
+				luabind::value("EC_NONE", EC_NONE),
+				luabind::value("EC_WORLD", EC_WORLD),
+				luabind::value("EC_SYSTEM", EC_SYSTEM),
+				luabind::value("EC_MAP", EC_MAP),
+				luabind::value("EC_VIEW", EC_VIEW),
+				luabind::value("EC_TEAM", EC_TEAM),
+				luabind::value("EC_ROOM", EC_ROOM),
+				luabind::value("EC_TARGET", EC_TARGET)
+			]
+			.enum_("")
+				[
+					luabind::value("EC_NONE", EC_NONE),
+					luabind::value("EC_WORLD", EC_WORLD),
+					luabind::value("EC_SYSTEM", EC_SYSTEM),
+					luabind::value("EC_MAP", EC_MAP),
+					luabind::value("EC_VIEW", EC_VIEW),
+					luabind::value("EC_TEAM", EC_TEAM),
+					luabind::value("EC_ROOM", EC_ROOM),
+					luabind::value("EC_TARGET", EC_TARGET)
+				]
 		];
 
 	luabind::module(mLuaState)

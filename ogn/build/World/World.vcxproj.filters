@@ -320,9 +320,6 @@
     <ClInclude Include="..\..\src\World\Module\WorldModule\PlayerHandler.h">
       <Filter>Module\WorldModule</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\World\Channel.h">
-      <Filter>Common</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h">
       <Filter>Module\GameModule</Filter>
     </ClInclude>
@@ -331,6 +328,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h">
       <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Channel.h">
+      <Filter>Common</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
