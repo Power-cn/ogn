@@ -9,7 +9,8 @@ function OnDispose()
 end
 
 function OnEnter()
-	local t = GetTestTable();
+	local tab = GetTestTable();
+	
 	for key, value in pairs(t) do  
 		print(value);   
 	end  

@@ -71,11 +71,9 @@ ConfigManager* luaCfg()
 	return &sCfgMgr;
 }
 
-luabind::object GetTestTable()
+luabind::object GetTestTable(lua_State* luaState)
 {
-	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(sScriptPlayer);
-
-	luabind::object obj = luabind::newtable(luaScript->getLuaState());
+	luabind::object obj;
 	for (uint32 i = 1; i <= 10; ++i)
 	{
 		obj[i] = i;
