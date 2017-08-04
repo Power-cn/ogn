@@ -17,8 +17,8 @@ void LuaScript::bindScript()
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom),
 			luabind::def("luaGame", &luaGame),
-			luabind::def("GetTestTable", &GetTestTable, luabind::raw(_2)),
-			luabind::def("GetTestTable", &GetTestTable, mLuaState),
+			luabind::def("GetTestTable", &GetTestTable),
+			//luabind::def("GetTestTable", &GetTestTable, mLuaState),
 			luabind::def("luaCfg", &luaCfg)
 			//luabind::def("TestFunc", &TestFunc)
 		];
