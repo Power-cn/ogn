@@ -57,6 +57,13 @@ void GameModle::DelGameEnt(uint32 userId)
 	}
 }
 
+uint32 GameModle::GetPlrCard(uint32 userId, uint32 idx)
+{
+	GameEntity* aGameEnt = FindGameEnt(userId);
+	if (aGameEnt == NULL) return 0;
+	return aGameEnt->GetCard(idx);
+}
+
 std::string GameModle::ToString()
 {
 	std::string str;

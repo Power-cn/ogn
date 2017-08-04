@@ -7,7 +7,6 @@ static const char* sScriptTeam = "team";
 static const char* sScriptCard = "card";
 
 static const char* sKey = "ogn";
-static const int32 sKeyXor = 1314;
 
 
 enum CardType
@@ -25,4 +24,15 @@ enum JokerType
 	JT_None,
 	JT_Small,			// 小
 	JT_Big,				// 大
+};
+
+enum ThreeCardType
+{
+	TCT_None,
+	TCT_Danzhang,				// 单
+	TCT_Duizi,					// 对
+	TCT_Shunzi,					// 顺
+	TCT_Tonghua,				// 同
+	TCT_Tonghuashun,			// 同顺
+	TCT_Baozi,					// 豹
 };

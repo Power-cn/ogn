@@ -156,3 +156,8 @@ luabind::object GameEntity::GetCards()
 	}
 	return obj;
 }
+
+ThreeCardType GameEntity::GetThreeCardType()
+{
+	return ThreeCardType::TCT_None;
+}

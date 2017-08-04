@@ -19,6 +19,7 @@ public:
 	uint32 GetInsId() { return mInsId; }
 	uint32 GetGameEntCount() { return (uint32)mLstGameEntity.size(); }
 	uint32 GetRoomId() { return mRoomId; }
+	uint32 GetPlrCard(uint32 userId, uint32 idx);
 
 	virtual std::string ToString();
 protected:

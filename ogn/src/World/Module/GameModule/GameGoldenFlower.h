@@ -18,6 +18,7 @@ public:
 	uint32 GetCardCount() { return (uint32)cards.size(); }
 	uint32 GetCard(uint32 idx);
 	luabind::object GetCards();
+	ThreeCardType GetThreeCardType();
 protected:
 };
 

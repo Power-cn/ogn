@@ -228,7 +228,7 @@ namespace Shared
 	// BKDR Hash Function
 	uint32 BKDRHash(const char* str);
 
-	void XOR(char* input, int len, int key);
+	void XOR(char* input, int len, cstring& key);
 };
 
 //

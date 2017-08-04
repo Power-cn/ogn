@@ -41,7 +41,7 @@ void Robot::sendPacket(Packet& packet)
 	in << packet;
 	//AES aes(sKey);
 	//aes.Cipher(in.datas(), in.wpos());
-	Shared::XOR((char*)in.datas(), in.wpos(), sKeyXor);
+	Shared::XOR((char*)in.datas(), in.wpos(), sKey);
 	char* datas = new char[in.wpos()];
 	memcpy(datas, in.datas(), in.wpos());
 	AES aes1(sKey);

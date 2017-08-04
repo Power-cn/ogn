@@ -19,8 +19,6 @@ function OnStart(gameId)
 		end
 
 	end
-	
-	
 	return 0;
 end
 
@@ -50,7 +48,7 @@ function OnEnter(gameId, userId)
 	return 0;
 end
 
-function onLeave(gameId, userId)
+function OnLeave(gameId, userId)
 
 	return 0;
 end

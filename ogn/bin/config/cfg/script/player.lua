@@ -9,6 +9,7 @@ function OnDispose()
 end
 
 function OnEnter()
+	local sss = AClass.TWO;
 	local tab = GetTestTable();
 	
 	for key, value in pairs(t) do  

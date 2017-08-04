@@ -32,7 +32,7 @@ int SocketHandler::onRecv(SocketEvent& e)
 {
 	//AES aes(sKey);
 	//aes.InvCipher(e.data, e.count);
-	Shared::XOR((char*)e.data, e.count, sKeyXor);
+	Shared::XOR((char*)e.data, e.count, sKey);
 
 	BinaryStream out(e.data, e.count);
 	int32 msgId = 0;

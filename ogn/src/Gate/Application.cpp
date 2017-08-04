@@ -52,7 +52,7 @@ bool Application::Update()
 	if (mFPSTimer >= 1.0)
 	{
 		static char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "Gate:FPS:%d Player:%d", mFPS, gateServer->getSocketCount());
+		sprintf_s(szBuffer, 256, "Gate:%d FPS:%d Player:%d", mGateIdx,mFPS, gateServer->getSocketCount());
 		Shared::setConsoleTitle(szBuffer);
 		//LOG_INFO("FPS:%d", mFPS);
 		mFPS = 0;
@@ -144,7 +144,7 @@ int Application::onGateRecv(SocketEvent& e)
 	*/
 	//AES aes(sKey);
 	//aes.InvCipher((unsigned char*)e.data, e.count);
-	Shared::XOR((char*)e.data, e.count, sKeyXor);
+	Shared::XOR((char*)e.data, e.count, sKey);
 	sendBufferToWorld((int8*)e.data, e.count, session);
 	/*
 	*********** Ω‚√‹ ***********
@@ -213,7 +213,7 @@ int Application::onWorldRecv(SocketEvent& e)
 		*/
 		//AES aes(sKey);
 		//aes.Cipher((unsigned char*)e.data + rpos, packetCount);
-		Shared::XOR((int8*)e.data + rpos, packetCount, sKeyXor);
+		Shared::XOR((int8*)e.data + rpos, packetCount, sKey);
 		session->sendBuffer((int8*)e.data + rpos, packetCount);
 		/*
 		*********** º”√‹ ***********

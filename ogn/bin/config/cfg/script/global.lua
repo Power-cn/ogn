@@ -17,5 +17,13 @@ RPS_Ready = 1;				-- 准备
 RPS_Game = 2;				-- 游戏中
 RPS_Observed = 3;			-- 观战中
 
-t={1,2,3,4,5};
-tt={name='ettan', age=23, desc='正值花季年龄'}  
+
+
+
+TCT_Danzhang = 1;				-- 单
+TCT_Duizi = 2;					-- 对
+TCT_Shunzi = 3;					-- 顺
+TCT_Tonghua = 4;				-- 同
+TCT_Tonghuashun = 5;			-- 同顺
+TCT_Baozi = 6;					-- 豹
+

@@ -81,3 +81,8 @@ luabind::object GetTestTable(lua_State* luaState)
 	int k = luabind::tablecount(obj);
 	return obj;
 }
+
+//luabind::object GetTestTable1(luabind::object& obj)
+//{
+//	return obj;
+//}
