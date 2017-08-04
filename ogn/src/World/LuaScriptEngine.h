@@ -33,3 +33,5 @@ GameModule* luaGame();
 ConfigManager* luaCfg();
 
 luabind::object GetTestTable(lua_State* luaState);
+
+luabind::object GetTestTable(lua_State* luaState);

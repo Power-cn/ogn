@@ -74,6 +74,7 @@ ConfigManager* luaCfg()
 luabind::object GetTestTable(lua_State* luaState)
 {
 	luabind::object obj;
+	luabind::object obj = luabind::newtable(luaState);
 	for (uint32 i = 1; i <= 10; ++i)
 	{
 		obj[i] = i;
