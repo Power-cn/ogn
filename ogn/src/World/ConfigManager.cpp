@@ -371,6 +371,7 @@ void ConfigManager::loadGameLevelJson(cstring& path)
 		gamelvJson.Mingold = v["Mingold"].asUInt();
 		gamelvJson.Maxgold = v["Maxgold"].asUInt();
 		gamelvJson.Poundage = v["Poundage"].asUInt();
+		gamelvJson.Maxround = v["Maxround"].asUInt();
 		gamelvJson.Desc = v["Desc"].asString();
 
 		mMapGameLevelJson.insert(std::make_pair(gamelvJson.ID, gamelvJson));

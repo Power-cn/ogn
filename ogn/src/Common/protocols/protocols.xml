@@ -62,6 +62,9 @@
       <member type="uint32" name="bankerUserId" />
       <member type="uint32" name="curSpeakUserId" />
       <member type="uint32" name="speakTime" />
+      <member type="uint32" name="curUseGold" />
+      <member type="uint32" name="curMaxUseGold" />
+      <member type="uint32" name="round" />
       <member type="vector" name="gameEntInfos" element="GameEntityInfo" />
     </element>
     
@@ -327,13 +330,18 @@
       <member type="GameGoldenFlowerInfo" name="info" />
     </element>
 
-    <element id="ID_NetRoomChipInReq" name="NetRoomChipInReq" >
+    <element id="ID_NetGameInfoNotify" name="NetGameInfoNotify" >
+      <member type="GameGoldenFlowerInfo" name="info" />
+    </element>
+    
+    <element id="ID_NetGameChipInReq" name="NetGameChipInReq" >
       <member type="uint8" name="chiptype" comment="1.下注2.跟注" />
       <member type="uint32" name="gold" comment="金币" />
     </element>
 
-    <element id="ID_NetRoomChipInRes" name="NetRoomChipInRes" >
+    <element id="ID_NetGameChipInRes" name="NetGameChipInRes" >
       <member type="uint8" name="result" comment="0.失败1.成功" />
+      <member type="uint32" name="gold" comment="金币" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

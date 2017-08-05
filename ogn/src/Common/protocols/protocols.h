@@ -52,8 +52,9 @@ ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
 ID_NetGameStartNotify,
-ID_NetRoomChipInReq,
-ID_NetRoomChipInRes,
+ID_NetGameInfoNotify,
+ID_NetGameChipInReq,
+ID_NetGameChipInRes,
 ID_NetEnd,
 
 };
@@ -368,6 +369,9 @@ roomId = 0;
 bankerUserId = 0;
 curSpeakUserId = 0;
 speakTime = 0;
+curUseGold = 0;
+curMaxUseGold = 0;
+round = 0;
 
 
 	}
@@ -378,6 +382,9 @@ CHECK(bytes << roomId);
 CHECK(bytes << bankerUserId);
 CHECK(bytes << curSpeakUserId);
 CHECK(bytes << speakTime);
+CHECK(bytes << curUseGold);
+CHECK(bytes << curMaxUseGold);
+CHECK(bytes << round);
 uint32 gameEntInfos_Size = (uint32)gameEntInfos.size();
 bytes << gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -393,6 +400,9 @@ CHECK(bytes >> roomId);
 CHECK(bytes >> bankerUserId);
 CHECK(bytes >> curSpeakUserId);
 CHECK(bytes >> speakTime);
+CHECK(bytes >> curUseGold);
+CHECK(bytes >> curMaxUseGold);
+CHECK(bytes >> round);
 uint32 gameEntInfos_Size = 0;
 bytes >> gameEntInfos_Size;
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
@@ -409,6 +419,9 @@ uint32 roomId;
 uint32 bankerUserId;
 uint32 curSpeakUserId;
 uint32 speakTime;
+uint32 curUseGold;
+uint32 curMaxUseGold;
+uint32 round;
 std::vector<GameEntityInfo> gameEntInfos;
 
 };
@@ -1895,10 +1908,34 @@ GameGoldenFlowerInfo info;
 
 };
 
-class NetRoomChipInReq : public Packet {
+class NetGameInfoNotify : public Packet {
 public:
-	NetRoomChipInReq():
-	Packet(ID_NetRoomChipInReq) {
+	NetGameInfoNotify():
+	Packet(ID_NetGameInfoNotify) {
+info;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << info);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> info);
+
+		return true;
+	}
+public:
+GameGoldenFlowerInfo info;
+
+};
+
+class NetGameChipInReq : public Packet {
+public:
+	NetGameChipInReq():
+	Packet(ID_NetGameChipInReq) {
 chiptype = 0;
 gold = 0;
 
@@ -1923,27 +1960,31 @@ uint32 gold;
 
 };
 
-class NetRoomChipInRes : public Packet {
+class NetGameChipInRes : public Packet {
 public:
-	NetRoomChipInRes():
-	Packet(ID_NetRoomChipInRes) {
+	NetGameChipInRes():
+	Packet(ID_NetGameChipInRes) {
 result = 0;
+gold = 0;
 
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << result);
+CHECK(bytes << gold);
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> result);
+CHECK(bytes >> gold);
 
 		return true;
 	}
 public:
 uint8 result;
+uint32 gold;
 
 };
 
@@ -2020,6 +2061,7 @@ REGISTER_PACKET_HELPER(ID_NetRoomReadyRes, NetRoomReadyRes);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameReq, NetRoomStartGameReq);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameRes, NetRoomStartGameRes);
 REGISTER_PACKET_HELPER(ID_NetGameStartNotify, NetGameStartNotify);
-REGISTER_PACKET_HELPER(ID_NetRoomChipInReq, NetRoomChipInReq);
-REGISTER_PACKET_HELPER(ID_NetRoomChipInRes, NetRoomChipInRes);
+REGISTER_PACKET_HELPER(ID_NetGameInfoNotify, NetGameInfoNotify);
+REGISTER_PACKET_HELPER(ID_NetGameChipInReq, NetGameChipInReq);
+REGISTER_PACKET_HELPER(ID_NetGameChipInRes, NetGameChipInRes);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

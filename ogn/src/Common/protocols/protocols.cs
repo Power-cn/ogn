@@ -56,8 +56,9 @@ ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
 ID_NetGameStartNotify,
-ID_NetRoomChipInReq,
-ID_NetRoomChipInRes,
+ID_NetGameInfoNotify,
+ID_NetGameChipInReq,
+ID_NetGameChipInRes,
 ID_NetEnd,
 
 }
@@ -117,8 +118,9 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyRes, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq, "NetRoomStartGameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes, "NetRoomStartGameRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameStartNotify, "NetGameStartNotify");
-PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomChipInReq, "NetRoomChipInReq");
-PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomChipInRes, "NetRoomChipInRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameInfoNotify, "NetGameInfoNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameChipInReq, "NetGameChipInReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameChipInRes, "NetGameChipInRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -460,6 +462,9 @@ roomId = 0;
 bankerUserId = 0;
 curSpeakUserId = 0;
 speakTime = 0;
+curUseGold = 0;
+curMaxUseGold = 0;
+round = 0;
 gameEntInfos = new List<GameEntityInfo>();
 
 	}
@@ -471,6 +476,9 @@ bytes.Write(roomId);
 bytes.Write(bankerUserId);
 bytes.Write(curSpeakUserId);
 bytes.Write(speakTime);
+bytes.Write(curUseGold);
+bytes.Write(curMaxUseGold);
+bytes.Write(round);
 int gameEntInfos_TEMP = gameEntInfos.Count;
 bytes.Write(gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -488,6 +496,9 @@ bytes.Read(ref roomId);
 bytes.Read(ref bankerUserId);
 bytes.Read(ref curSpeakUserId);
 bytes.Read(ref speakTime);
+bytes.Read(ref curUseGold);
+bytes.Read(ref curMaxUseGold);
+bytes.Read(ref round);
 int gameEntInfos_TEMP = 0;
 bytes.Read(ref gameEntInfos_TEMP);
 for (int i = 0; i < gameEntInfos_TEMP; ++i)
@@ -506,6 +517,9 @@ public uint roomId;
 public uint bankerUserId;
 public uint curSpeakUserId;
 public uint speakTime;
+public uint curUseGold;
+public uint curMaxUseGold;
+public uint round;
 public List<GameEntityInfo> gameEntInfos;
 
 }
@@ -2057,9 +2071,34 @@ bytes.Read(info);
 public GameGoldenFlowerInfo info;
 
 }
-public class NetRoomChipInReq : Packet
+public class NetGameInfoNotify : Packet
 {
-	public NetRoomChipInReq():base((int)PACKET_ID_ENUM.ID_NetRoomChipInReq)
+	public NetGameInfoNotify():base((int)PACKET_ID_ENUM.ID_NetGameInfoNotify)
+	{
+info = new GameGoldenFlowerInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(info);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(info);
+
+		return true;
+	}
+
+public GameGoldenFlowerInfo info;
+
+}
+public class NetGameChipInReq : Packet
+{
+	public NetGameChipInReq():base((int)PACKET_ID_ENUM.ID_NetGameChipInReq)
 	{
 chiptype = 0;
 gold = 0;
@@ -2086,17 +2125,19 @@ public sbyte chiptype;
 public uint gold;
 
 }
-public class NetRoomChipInRes : Packet
+public class NetGameChipInRes : Packet
 {
-	public NetRoomChipInRes():base((int)PACKET_ID_ENUM.ID_NetRoomChipInRes)
+	public NetGameChipInRes():base((int)PACKET_ID_ENUM.ID_NetGameChipInRes)
 	{
 result = 0;
+gold = 0;
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
 bytes.Write(result);
+bytes.Write(gold);
 
 		return true;
 	}
@@ -2104,11 +2145,13 @@ bytes.Write(result);
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
 bytes.Read(ref result);
+bytes.Read(ref gold);
 
 		return true;
 	}
 
 public sbyte result;
+public uint gold;
 
 }
 public class NetEnd : Packet

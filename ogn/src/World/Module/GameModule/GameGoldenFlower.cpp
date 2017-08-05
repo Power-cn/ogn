@@ -8,6 +8,7 @@ GameGoldenFlower::GameGoldenFlower()
 	mCurGold = 0;
 	mGameLv = 0;
 	mCurMaxGold = 0;
+	mSpeedCount = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
@@ -67,7 +68,7 @@ uint32 GameGoldenFlower::GetNextSpeakPlr()
 		if (idx >= GetGameEntCount())
 			idx = 0;
 		GameEntity* aGameEnt =  GetGameEnt(idx);
-		if (aGameEnt)
+		if (aGameEnt && aGameEnt->GetState() == GS_Normal)
 			return aGameEnt->userId;
 	}
 	return 0;
@@ -98,18 +99,36 @@ std::string GameGoldenFlower::ToString()
 	return str;
 }
 
-bool GameGoldenFlower::DoChipin(uint32 gold, GameEntity* aGameEnt)
+bool GameGoldenFlower::DoChipin(uint32 gold, GameEntity* aGameEnt, uint32& userGold)
 {
 	Player* aPlr = sWorld.FindPlrByUserId(aGameEnt->userId);
 	if (aPlr == NULL)
 	{
 		return false;
 	}
+	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(GetGameLv());
+	if (aGameLvJson == NULL)
+	{
+		return false;
+	}
 	if (sProperty.hasGold(aPlr, gold))
 	{
+		if (mRound + 1 > aGameLvJson->Maxround)
+		{
+			// 最大回合
+			return false;
+		}
 		sProperty.addGold(aPlr, -(int32)gold);
 		aGameEnt->addGold(gold);
 		AddCurGold(gold);
+		SetCurMaxGold(gold);
+		userGold = gold;
+		mSpeedCount++;
+		if (mSpeedCount > GetGameEntCount())
+		{
+			mRound++;
+			mSpeedCount = 0;
+		}
 		return true;
 	}
 	return false;

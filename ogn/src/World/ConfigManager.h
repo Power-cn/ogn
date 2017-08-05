@@ -104,6 +104,7 @@ struct GameLevelJson
 	uint32				Mingold;
 	uint8				Maxgold;
 	uint8				Poundage;
+	uint32				Maxround;
 	std::string			Desc;
 };
 

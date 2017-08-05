@@ -3,6 +3,12 @@
 #define MAX_UNIT_POKER_COUNT 3
 #define MAX_POKER_COUNT 54
 
+enum GameState
+{
+	GS_None,
+	GS_Normal,		// 正常
+	GS_Giveup,		// 放弃
+};
 
 class GameEntity
 {
@@ -19,12 +25,16 @@ public:
 	uint32 GetCard(uint32 idx);
 	uint32 getGold() { return mGold; }
 
+	GameState GetState() { return (GameState)mState; }
 	//luabind::object GetCards();
 	ThreeCardType GetThreeCardType();
 
 	void addGold(uint32 gold) { mGold += gold; }
+
+	void SetState(GameState gState) { mState = gState; }
 protected:
 	uint32					mGold;
+	uint8					mState;
 };
 
 /*
@@ -62,7 +72,7 @@ public:
 	uint32 CheckUserGold(uint32 gold);
 	virtual std::string ToString();
 
-	bool DoChipin(uint32 gold, GameEntity* aGameEnt);
+	bool DoChipin(uint32 gold, GameEntity* aGameEnt, uint32& userGold);
 protected:
 	virtual bool OnStart();
 	virtual bool OnClose();
@@ -79,4 +89,5 @@ protected:
 	uint8							mGameLv;
 	uint32							mCurMaxGold;			// 当前最大
 	uint32							mRound;					// 回合数
+	uint32							mSpeedCount;
 };

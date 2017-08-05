@@ -134,6 +134,8 @@ bool GameModule::DoStartGame(Room* aRoom)
 
 	aGame->DoShuffle();
 	aGame->SetRoomId(aRoom->GetInsId());
+	aGame->SetGameLv(1);
+
 	aRoom->SetGameInsId(aGame->GetInsId());
 	aRoom->DoAllStart();
 
@@ -167,9 +169,7 @@ bool GameModule::DoStartGame(Room* aRoom)
 			aGame->OnEnter(aGameEnt);
 		}
 	}
-	GameEntity* aGameEnt1 = aGame->GetGameEnt(0);
-	GameEntity* aGameEnt2 = aGame->GetGameEnt(1);
-	LuaEngine::Call("card", "ComparePlrCard", aGameEnt1->userId, aGameEnt2->userId);
+
 	NetGameStartNotify nfy;
 	*aGame >> nfy.info;
 	aRoom->sendPacketToAll(nfy);
@@ -217,6 +217,11 @@ bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
 	{
 		return false;
 	}
+	Room* aRoom = sRoom.FindRoom(aGame->GetRoomId());
+	if (aRoom == NULL)
+	{
+		return false;
+	}
 
 	if (aGame->GetCurSpeak() != aPlr->getUserId())
 	{
@@ -247,8 +252,22 @@ bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
 	{
 		return false;
 	}
-	aGame->DoChipin(userGold, aGameEnt);
+	uint32 retGold = 0;
+	if (aGame->DoChipin(userGold, aGameEnt, retGold))
+	{
+		uint32 nextUserId = aGame->GetNextSpeakPlr();
+		aGame->SetCurSpeakPlr(nextUserId);
+		NetGameChipInRes res;
+		res.gold = retGold;
+		aRoom->sendPacketToAll(res);
+		NetGameInfoNotify nfy;
+		aRoom->sendPacketToAll(nfy);
+		return true;
+	}
 
+	aGameEnt->SetState(GS_Giveup);
+	NetGameInfoNotify nfy;
+	aRoom->sendPacketToAll(nfy);
 	return true;
 }
 

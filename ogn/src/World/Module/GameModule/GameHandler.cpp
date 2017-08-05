@@ -2,10 +2,10 @@
 
 GameHandler::GameHandler()
 {
-	RegWorldEvent(ID_NetRoomChipInReq, &GameHandler::onNetRoomChipInReq, this);
+	RegWorldEvent(ID_NetGameChipInReq, &GameHandler::onNetGameChipInReq, this);
 }
 
-int32 GameHandler::onNetRoomChipInReq(Player* aPlr, NetRoomChipInReq* req)
+int32 GameHandler::onNetGameChipInReq(Player* aPlr, NetGameChipInReq* req)
 {
 	sGame.DoChipInReq(aPlr, req->chiptype, req->gold);
 	return 0;
