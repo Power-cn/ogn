@@ -36,3 +36,10 @@ enum ThreeCardType
 	TCT_Tonghuashun,			// Í¬Ë³
 	TCT_Baozi,					// ±ª
 };
+
+enum ChipinType
+{
+	CT_None = 0,
+	CT_Chipin,					// ÏÂ
+	CT_CallChipin,				// ¸ú
+};

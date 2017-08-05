@@ -195,6 +195,9 @@
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp">
       <Filter>Module\RoomModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -331,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Common\Channel.h">
       <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h">
+      <Filter>Module\GameModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

@@ -24,6 +24,7 @@ bool ConfigManager::reloadConfig()
 	loadTaskJson("../config/cfg/task.json");
 	loadTaskStepJson("../config/cfg/taskStep.json");
 	loadCardJson("../config/cfg/card.json");
+	loadGameLevelJson("../config/cfg/gamelevel.json");
 	LOG_DEBUG(LogSystem::csl_color_green, "Load Config success");
 	return true;
 }
@@ -350,6 +351,32 @@ void ConfigManager::loadCardJson(cstring& path)
 	}
 }
 
+void ConfigManager::loadGameLevelJson(cstring& path)
+{
+	Json::Reader jsonReader;
+	Json::Value jsonRoot;
+
+	if (!loadJson(path, jsonReader, jsonRoot))
+		return;
+
+	mMapGameLevelJson.clear();
+
+	Json::Value cf = jsonRoot["config"];
+	for (uint32 i = 0; i < cf.size(); ++i)
+	{
+		Json::Value v = cf[i];
+
+		GameLevelJson gamelvJson;
+		gamelvJson.ID = v["ID"].asUInt();
+		gamelvJson.Mingold = v["Mingold"].asUInt();
+		gamelvJson.Maxgold = v["Maxgold"].asUInt();
+		gamelvJson.Poundage = v["Poundage"].asUInt();
+		gamelvJson.Desc = v["Desc"].asString();
+
+		mMapGameLevelJson.insert(std::make_pair(gamelvJson.ID, gamelvJson));
+	}
+}
+
 MapJson* ConfigManager::getMapJson(uint32 id)
 {
 	auto itr = mMapMapJson.find(id);
@@ -450,6 +477,14 @@ CardJson* ConfigManager::getCardJsonByName(cstring& name)
 	if (itr != mMapNameCard.end())
 		return itr->second;
 
+	return NULL;
+}
+
+GameLevelJson* ConfigManager::getGameLevelJson(uint32 id)
+{
+	auto itr = mMapGameLevelJson.find(id);
+	if (itr != mMapGameLevelJson.end())
+		return &itr->second;
 	return NULL;
 }
 

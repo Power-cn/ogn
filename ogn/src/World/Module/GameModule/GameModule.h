@@ -28,6 +28,7 @@ public:
 public:
 	bool DoStartGame(Room* aRoom);
 	bool DoCloseGame(uint32 roomId);
+	bool DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold);
 protected:
 	std::map<uint32, GameModle*>				mMapGameModle;
 	std::map<uint32, GameModle*>				mMapRoomGameModle;

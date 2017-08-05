@@ -8,6 +8,8 @@ mJson()
 	mOnlineTimer = 0;
 	mOfflineTimer = 0;
 	mOnline = false;
+
+	addProperty(new PlayerProperty);
 }
 
 Player::~Player()

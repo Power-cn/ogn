@@ -19,6 +19,7 @@ enum EnumProperty
 	ep_Mp,
 	ep_Attack,
 	ep_Defense,
+	ep_Gold,
 };
 
 class Property : public Object
@@ -46,28 +47,39 @@ class EntityProperty :  public Property
 {
 	DECLARE_CLASS(EntityProperty);
 protected:
-	virtual bool serialize(BinaryStream& bitStream);
-	virtual bool deSerialize(BinaryStream& bitStream);
+	virtual bool operator>>(BinaryStream& bytes);
+	virtual bool operator<<(BinaryStream& bytes);
 public:
-	int32			accountId;
-	int32			roleId;
-	int32			instanceId;
-	int32			CharId;
+	int32			accId = 0;
+	int32			roleId = 0;
+	int32			guid = 0;
+	int32			CharId = 0;
 	std::string		name;
-	int32			mapId;
+	int32			mapId = 0;
 	Vector2			pos;
-	int8			dir;
+	int8			dir = 0;
 	
-	uint8			mLevel;
-	int32			mMaxHp;
-	int32			mMaxMp;
-	int32			mHp;
-	int32			mMp;
-	int32			mAttack;
-	int32			mDefense;
+	uint8			mLevel = 0;
+	int32			mMaxHp = 0;
+	int32			mMaxMp = 0;
+	int32			mHp = 0;
+	int32			mMp = 0;
+	int32			mAttack = 0;
+	int32			mDefense = 0;
+};
+
+class PlayerProperty : public EntityProperty
+{
+	DECLARE_CLASS(PlayerProperty);
+protected:
+	virtual bool operator >> (BinaryStream& bytes);
+	virtual bool operator << (BinaryStream& bytes);
+public:
+	uint64			mGold = 0;			// ½ð±Ò
 };
 
 class Entity;
+class Player;
 
 class PropertyHelper
 {
@@ -95,6 +107,11 @@ public:
 
 	void setDefense(Entity* entity, int32 value);
 	int32 getDefense(Entity* entity);
+
+	void setGold(Player* aPlr, int64 value);
+	void addGold(Player* aPlr, int64 value);
+	int64 getGold(Player* aPlr);
+	bool hasGold(Player* aPlr, int64 gold);
 
 	uint32 CalculateMaxHp(Entity* ent);
 	uint32 CalculateMaxMp(Entity* ent);

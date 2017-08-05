@@ -58,6 +58,8 @@ bool Application::Initialize()
 
 	INSTANCE(CmdDispatcher).addEventListener("addfrd", (EventCallback)&Application::onAddFrd, this);
 
+	INSTANCE(CmdDispatcher).addEventListener("test", (EventCallback)&Application::onTest, this);
+
 
 	INSTANCE(ConfigManager);
 	INSTANCE(SessionManager);
@@ -482,6 +484,16 @@ int32 Application::onAddFrd(CmdEvent& e)
 	return 0;
 }
 
+int32 Application::onTest(CmdEvent& e)
+{
+	int ret1 = LuaEngine::Call(sScriptCard, "testfun", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®2,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	return 0;
+}
+
 int32 Application::RedisConnect(RedisEvent& e)
 {
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
@@ -501,7 +513,7 @@ int32 Application::RedisAuth(RedisEvent& e)
 	//sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);
 
 	//int ret = LuaEngine::Call(NULL, sScriptPlayer, "OnEnter");
-	int ret = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	
 	//int testaaa = 10;
 	return 0;
 }

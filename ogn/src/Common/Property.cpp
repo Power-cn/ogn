@@ -2,6 +2,7 @@
 
 IMPLEMENT_CLASS(Property, Object);
 IMPLEMENT_CLASS(EntityProperty, Property);
+IMPLEMENT_CLASS(PlayerProperty, EntityProperty);
 
 
 std::map<int32, std::string> Property::sMapPropertyType;
@@ -36,33 +37,45 @@ REGISTER_PROPERTY(ep_Hp)
 REGISTER_PROPERTY(ep_Mp)
 REGISTER_PROPERTY(ep_Attack)
 REGISTER_PROPERTY(ep_Defense)
+REGISTER_PROPERTY(ep_Gold)
 
-bool EntityProperty::serialize(BinaryStream& bitStream)
+bool EntityProperty::operator >> (BinaryStream& bytes)
 {
-	CHECK_RETURN(bitStream << accountId, false);
-	CHECK_RETURN(bitStream << roleId, false);
-	CHECK_RETURN(bitStream << instanceId, false);
-	CHECK_RETURN(bitStream << CharId, false);
-	
-	CHECK_RETURN(bitStream << name, false);
-
-	CHECK_RETURN(bitStream << mapId, false);
-	CHECK_RETURN(bitStream << pos, false);
-	CHECK_RETURN(bitStream << dir, false);
+	CHECK_RETURN(bytes << accId, false);
+	CHECK_RETURN(bytes << roleId, false);
+	CHECK_RETURN(bytes << guid, false);
+	CHECK_RETURN(bytes << CharId, false);
+	CHECK_RETURN(bytes << name, false);
+	CHECK_RETURN(bytes << mapId, false);
+	CHECK_RETURN(bytes << pos, false);
+	CHECK_RETURN(bytes << dir, false);
 	return true;
 }
 
-bool EntityProperty::deSerialize(BinaryStream& bitStream)
+bool EntityProperty::operator<<(BinaryStream& bytes)
 {
-	CHECK_RETURN(bitStream >> accountId, false);
-	CHECK_RETURN(bitStream >> roleId, false);
-	CHECK_RETURN(bitStream >> instanceId, false);
-	CHECK_RETURN(bitStream >> CharId, false);
-	CHECK_RETURN(bitStream >> name, false);
+	CHECK_RETURN(bytes >> accId, false);
+	CHECK_RETURN(bytes >> roleId, false);
+	CHECK_RETURN(bytes >> guid, false);
+	CHECK_RETURN(bytes >> CharId, false);
+	CHECK_RETURN(bytes >> name, false);
+	CHECK_RETURN(bytes >> mapId, false);
+	CHECK_RETURN(bytes >> pos, false);
+	CHECK_RETURN(bytes >> dir, false);
+	return true;
+}
 
-	CHECK_RETURN(bitStream >> mapId, false);
-	CHECK_RETURN(bitStream >> pos, false);
-	CHECK_RETURN(bitStream >> dir, false);
+bool PlayerProperty::operator >> (BinaryStream& bytes)
+{
+	CHECK_RETURN(EntityProperty::operator >> (bytes), false);
+	CHECK_RETURN(bytes << mGold, false);
+	return true;
+}
+
+bool PlayerProperty::operator<<(BinaryStream& bytes)
+{
+	CHECK_RETURN(EntityProperty::operator << (bytes), false);
+	CHECK_RETURN(bytes >> mGold, false);
 	return true;
 }
 
@@ -196,6 +209,34 @@ int32 PropertyHelper::getDefense(Entity* entity)
 	if (pro == NULL)
 		return 0;
 	return pro->mDefense;
+}
+
+void PropertyHelper::setGold(Player* aPlr, int64 value)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return;
+	aPro->mGold = value;
+}
+
+void PropertyHelper::addGold(Player* aPlr, int64 value)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return;
+	aPro->mGold += value;
+}
+
+int64 PropertyHelper::getGold(Player* aPlr)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return 0L;
+	return aPro->mGold;
+}
+
+bool PropertyHelper::hasGold(Player* aPlr, int64 value)
+{
+	if (getGold(aPlr) >= value)
+		return true;
+	return false;
 }
 
 uint32 PropertyHelper::CalculateMaxHp(Entity* ent)

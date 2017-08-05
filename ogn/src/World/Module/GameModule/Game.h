@@ -6,7 +6,7 @@ class GameModle
 	friend class GameModule;
 public:
 	GameModle();
-	~GameModle();
+	virtual ~GameModle();
 public:
 	GameEntity* AddGameEnt(GameEntity* aGameEnt);
 	GameEntity* GetGameEnt(uint32 idx);

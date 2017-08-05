@@ -32,7 +32,6 @@ Entity::~Entity()
 bool Entity::Initialize()
 {
 	GetModule(WarModule)->CreateWar(this);
-	addProperty(new EntityProperty);
 	mStatus->Register(ES_IDLE, new EntityIdleStatus);
 	mStatus->Register(ES_MOVE, new EntityMoveStatus);
 	mStatus->ChangeStatus(ES_IDLE);

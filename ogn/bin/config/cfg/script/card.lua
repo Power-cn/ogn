@@ -9,33 +9,30 @@ CT_Joker = 5;
 JT_Small = 1;
 JT_Big = 2;
 
-function testfun(card1, card2)
-	print(112312313);
-	return 1;
-end
 
 function SortCards(cards)
-	if cards[2].Number > cards[1].Number then
+	if cards[2].Number > cards[3].Number then
+		local swap = cards[3];
+		cards[3] = cards[2];
+		cards[2] = swap;
+	end
+
+	if cards[1].Number > cards[3].Number then
+		local swap = cards[3];
+		cards[3] = cards[1];
+		cards[1] = swap;
+	end	
+	
+	if cards[1].Number > cards[2].Number then
 		local swap = cards[1];
 		cards[1] = cards[2];
 		cards[2] = swap;
-	end
-	
-	if cards[2].Number > cards[3].Number then
-		local swap = cards[2];
-		cards[2] = cards[3];
-		cards[3] = swap;
-	end
-	
-	if cards[2].Number > cards[1].Number then
-			local swap = cards[1];
-			cards[1] = cards[2];
-			cards[2] = swap;
 	end
 	return cards;
 end
 
 function IsBaozi(card1, card2, card3)
+	print(card1.Number.." "..card2.Number.." "..card3.Number);
 	if card1.Number == card2.Number and card1.Number == card3.Number then
 		return 1;
 	end
@@ -58,15 +55,13 @@ function IsTonghua(card1, card2, card3)
 end
 
 function IsShunzi(card1, card2, card3)
-	local cards = {card1, card2, card3};
-
-	if (cards[1].Number + 1 == cards[1].Number and
-		cards[2].Number + 1 == cards[3].Number)then
+	if (card1.Number + 1 == card2.Number and
+		card2.Number + 1 == card3.Number)then
 		return 1;
 	end
 
-	if (cards[3].Number - cards[2].Number == 12 and
-		cards[2].Number + 1 == cards[3].Number)then
+	if (card3.Number - card1.Number == 12 and
+		card2.Number + 1 == card3.Number)then
 		return 1;
 	end
 	return 0;
@@ -87,27 +82,27 @@ end
 
 function CheckThreeCardType(card1, card2, card3)
 
-	if (IsBaozi(card1, card2, card3)) then
+	if (IsBaozi(card1, card2, card3) == 1) then
 		return TCT_Baozi;
 	end
 	
-	if (IsTonghuashun(card1, card2, card3)) then
+	if (IsTonghuashun(card1, card2, card3) == 1) then
 		return TCT_Tonghuashun;
 	end
 	
-	if (IsTonghua(card1, card2, card3)) then
+	if (IsTonghua(card1, card2, card3) == 1) then
 		return TCT_Tonghua;
 	end
 	
-	if (IsShunzi(card1, card2, card3)) then
+	if (IsShunzi(card1, card2, card3) == 1) then
 		return TCT_Shunzi;
 	end
 	
-	if (IsDuizi(card1, card2, card3)) then
+	if (IsDuizi(card1, card2, card3) == 1) then
 		return TCT_Duizi;
 	end
 	
-	if (IsDanzhang(card1, card2, card3)) then
+	if (IsDanzhang(card1, card2, card3) == 1) then
 		return TCT_Danzhang;
 	end
 	return 0;
@@ -121,6 +116,14 @@ function CheckDanzhang(cards1, cards2)
 	local u2card1 = cards2[1];
 	local u2card2 = cards2[2];
 	local u2card3 = cards2[3];
+	
+	if u1card1.Number == 1 and u2card1.Number ~= 1 then
+		return 1;
+	end
+	
+	if u1card1.Number ~= 1 and u2card1.Number == 1 then
+		return 2;
+	end
 
 	if u1card3.Number > u2card3.Number then
 		return 1;
@@ -158,8 +161,10 @@ function CheckDuizi(cards1, cards2)
 	local u2card2 = cards2[2];
 	local u2card3 = cards2[3];
 
-	local u1duizi, u2duizi;
-	local u1danz, u2danz;
+	local u1duizi = 0;
+	local u2duizi = 0;
+	local u1danz = 0;
+	local u2danz = 0;
 	
 	if u1card1.Number == u1card2.Number then
 		u1duizi = u1card1.Number;
@@ -175,14 +180,14 @@ function CheckDuizi(cards1, cards2)
 	end
 	
 	if u2card1.Number == u2card2.Number then
-		u1duizi = u2card1.Number;
+		u2duizi = u2card1.Number;
 		u2danz = u2card3.Number;
 	else
 		if u2card1.Number == u2card3.Number then
-			u1duizi = u2card1.Number;
+			u2duizi = u2card1.Number;
 			u2danz = u2card2.Number;
 		else
-			u1duizi = u2card3.Number
+			u2duizi = u2card3.Number
 			u2danz = u2card1.Number;
 		end
 	end
@@ -193,6 +198,14 @@ function CheckDuizi(cards1, cards2)
 	if u1duizi < u2duizi then
 		return 2;
 	end
+	
+	if u1danz > u2danz then
+		return 1;
+	end
+	if u1danz < u2danz then
+		return 2;
+	end
+			
 	return 0;
 end
 
@@ -228,14 +241,6 @@ function CheckShunzi(cards1, cards2)
 	if u1card1.Number < u2card1.Number then
 		return 2;
 	end	
-	
-	if u1card3.Color > u2card3.Color then
-		return 1;
-	end
-	
-	if u1card3.Color < u2card3.Color then
-		return 2;
-	end
 	
 	return 0;
 end
@@ -346,10 +351,16 @@ function CompareNumberCard(cards1, cards2)
 	return CompareCards(cards1, cards2);	
 end
 
+function testfun(cards1, cards2)
+	local ret = CompareStringCard("梅花A,方块2,黑桃3", "黑桃K,红桃Q,方块A");
+	print (ret);
+	return 1;
+end
+
 function CompareStringCard(cards1, cards2)
-	local u1cards = split(cards1, ",");
-	local u2cards = split(cards2, ",");
-	
+	local u1cards = string.split(cards1, ",");
+	local u2cards = string.split(cards2, ",");
+		
 	local sCfgMgr = luaCfg();
 	local u1card1 = sCfgMgr:getCardJsonByName(u1cards[1]);
 	local u1card2 = sCfgMgr:getCardJsonByName(u1cards[2]);
@@ -389,9 +400,10 @@ function ComparePlrCard(userId1, userId2)
 	return CompareCards(cards1, cards2);	
 end
 
+-- 1.大于2.小于3.等于--
 function CompareCards(cards1, cards2)
-	SortCards(cards1);
-	SortCards(cards2);		
+	cards1 = SortCards(cards1);
+	cards2 = SortCards(cards2);		
 	
 	local u1cardtype = CheckThreeCardType(cards1[1], cards1[2], cards1[3]);
 	local u2cardtype = CheckThreeCardType(cards2[1], cards2[2], cards2[3]);

@@ -101,6 +101,8 @@
 #include "./Module/RoomModule/RoomHandler.h"
 #include "./Module/RoomModule/Room.h"
 #include "./Module/RoomModule/RoomModule.h"
+
+#include "./Module/GameModule/GameHandler.h"
 #include "./Module/GameModule/Game.h"
 #include "./Module/GameModule/GameGoldenFlower.h"
 #include "./Module/GameModule/GameModule.h"
@@ -120,6 +122,7 @@
 #define sSsnMgr INSTANCE(SessionManager)
 #define sRedisProxy INSTANCE(RedisProxy)
 #define sLua INSTANCE(LuaEngine)
+#define sProperty INSTANCE(PropertyHelper)
 
 #define sWorld (*GetModule(WorldModule))
 #define sMap (*GetModule(MapModule))

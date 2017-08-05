@@ -54,8 +54,8 @@ void LuaScript::bindScript()
 		,
 		luabind::class_<Object>("Object")
 		.def(luabind::constructor<>())
-		.def("Serialize", &Object::operator<<)
-		.def("Deserialize", &Object::operator >> )
+		.def("Serialize", &Object::operator >> )
+		.def("Deserialize", &Object::operator<<)
 		,
 		luabind::class_<Entity, Object>("Entity")
 		.def(luabind::constructor<>())

@@ -56,6 +56,8 @@ ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
 ID_NetGameStartNotify,
+ID_NetRoomChipInReq,
+ID_NetRoomChipInRes,
 ID_NetEnd,
 
 }
@@ -115,6 +117,8 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyRes, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq, "NetRoomStartGameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes, "NetRoomStartGameRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameStartNotify, "NetGameStartNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomChipInReq, "NetRoomChipInReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomChipInRes, "NetRoomChipInRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -406,19 +410,21 @@ public class GameEntityInfo : Header
 	public GameEntityInfo()
 	{
 userId = 0;
-pokers = new List<sbyte>();
+cards = new List<sbyte>();
+userGold = 0;
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
 bytes.Write(userId);
-int pokers_TEMP = pokers.Count;
-bytes.Write(pokers_TEMP);
-for (int i = 0; i < pokers_TEMP; ++i)
+int cards_TEMP = cards.Count;
+bytes.Write(cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
 {
-	bytes.Write(pokers[i]);
+	bytes.Write(cards[i]);
 }
+bytes.Write(userGold);
 
 		return true;
 	}
@@ -426,21 +432,23 @@ for (int i = 0; i < pokers_TEMP; ++i)
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
 bytes.Read(ref userId);
-int pokers_TEMP = 0;
-bytes.Read(ref pokers_TEMP);
-for (int i = 0; i < pokers_TEMP; ++i)
+int cards_TEMP = 0;
+bytes.Read(ref cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
 {
-	sbyte info_pokers;
-	info_pokers = 0;
-	bytes.Read(ref info_pokers);
-	pokers.Add(info_pokers);
+	sbyte info_cards;
+	info_cards = 0;
+	bytes.Read(ref info_cards);
+	cards.Add(info_cards);
 }
+bytes.Read(ref userGold);
 
 		return true;
 	}
 
 public uint userId;
-public List<sbyte> pokers;
+public List<sbyte> cards;
+public uint userGold;
 
 }
 public class GameGoldenFlowerInfo : Header
@@ -2047,6 +2055,60 @@ bytes.Read(info);
 	}
 
 public GameGoldenFlowerInfo info;
+
+}
+public class NetRoomChipInReq : Packet
+{
+	public NetRoomChipInReq():base((int)PACKET_ID_ENUM.ID_NetRoomChipInReq)
+	{
+chiptype = 0;
+gold = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(chiptype);
+bytes.Write(gold);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref chiptype);
+bytes.Read(ref gold);
+
+		return true;
+	}
+
+public sbyte chiptype;
+public uint gold;
+
+}
+public class NetRoomChipInRes : Packet
+{
+	public NetRoomChipInRes():base((int)PACKET_ID_ENUM.ID_NetRoomChipInRes)
+	{
+result = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+
+		return true;
+	}
+
+public sbyte result;
 
 }
 public class NetEnd : Packet

@@ -5,6 +5,9 @@ GameGoldenFlower::GameGoldenFlower()
 	mBankerUserId = 0;
 	mCurSpeakUserId = 0;
 	mSpeakTime = 0;
+	mCurGold = 0;
+	mGameLv = 0;
+	mCurMaxGold = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
@@ -70,6 +73,16 @@ uint32 GameGoldenFlower::GetNextSpeakPlr()
 	return 0;
 }
 
+uint32 GameGoldenFlower::CheckUserGold(uint32 gold)
+{
+	GameLevelJson* aGameJson = sCfgMgr.getGameLevelJson(GetGameLv());
+	if (aGameJson == NULL) return 0;
+
+	gold = gold > aGameJson->Maxgold ? aGameJson->Maxgold : gold;
+	gold = gold < aGameJson->Mingold ? aGameJson->Mingold : gold;
+	return gold;
+}
+
 std::string GameGoldenFlower::ToString()
 {
 	std::string str;
@@ -83,6 +96,23 @@ std::string GameGoldenFlower::ToString()
 	}
 
 	return str;
+}
+
+bool GameGoldenFlower::DoChipin(uint32 gold, GameEntity* aGameEnt)
+{
+	Player* aPlr = sWorld.FindPlrByUserId(aGameEnt->userId);
+	if (aPlr == NULL)
+	{
+		return false;
+	}
+	if (sProperty.hasGold(aPlr, gold))
+	{
+		sProperty.addGold(aPlr, -(int32)gold);
+		aGameEnt->addGold(gold);
+		AddCurGold(gold);
+		return true;
+	}
+	return false;
 }
 
 bool GameGoldenFlower::OnStart()
@@ -122,7 +152,8 @@ GameEntity::~GameEntity()
 bool GameEntity::operator >> (GameEntityInfo& info)
 {
 	info.userId = userId;
-	info.pokers = cards;
+	info.cards = cards;
+	info.userGold = getGold();
 	return true;
 }
 

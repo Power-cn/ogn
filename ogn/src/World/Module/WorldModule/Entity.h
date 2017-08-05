@@ -157,3 +157,5 @@ protected:
 };
 
 #define EntityGetProperty(tar, class_name) (class_name*)(tar)->getProperty(#class_name)
+
+#define CastProperty(tar, class_name) (class_name*)(tar)->getProperty(#class_name)

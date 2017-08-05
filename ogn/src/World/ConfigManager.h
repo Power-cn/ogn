@@ -98,6 +98,15 @@ struct CardJson
 	std::string			Name;
 };
 
+struct GameLevelJson
+{
+	uint32				ID;
+	uint32				Mingold;
+	uint8				Maxgold;
+	uint8				Poundage;
+	std::string			Desc;
+};
+
 namespace Json {
 	class Reader;
 	class Value;
@@ -127,6 +136,7 @@ public:
 	void loadTaskJson(const std::string& path);
 	void loadTaskStepJson(const std::string& path);
 	void loadCardJson(cstring& path);
+	void loadGameLevelJson(cstring& path);
 
 	MapJson* getMapJson(uint32 id);
 	std::map<int32, MapJson>& getMapMapJson() { return mMapMapJson; }
@@ -141,6 +151,7 @@ public:
 	TaskStepJson* getTaskStepJson(uint32 id);
 	CardJson* getCardJson(uint32 id);
 	CardJson* getCardJsonByName(cstring& name);
+	GameLevelJson* getGameLevelJson(uint32 id);
 	void loadAllFiles();
 protected:
 	std::map<std::string, std::pair<int8*, int32>>		mMapFilesStream;
@@ -157,5 +168,6 @@ protected:
 	std::map<int32, std::map<int32, TaskStepJson*>>		mMapTaskStepJsonMap;
 	std::map<int32, CardJson>							mMapCard;
 	std::map<std::string, CardJson*>					mMapNameCard;
+	std::map<int32, GameLevelJson>						mMapGameLevelJson;
 };
 

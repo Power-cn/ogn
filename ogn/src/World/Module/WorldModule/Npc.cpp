@@ -3,7 +3,7 @@ Npc::Npc():
 Entity(ET_Npc),
 mNpcId(0)
 {
-
+	addProperty(new EntityProperty);
 }
 
 Npc::~Npc()

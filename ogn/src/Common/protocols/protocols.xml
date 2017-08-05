@@ -52,7 +52,8 @@
 
     <element name="GameEntityInfo" parent="object">
       <member type="uint32" name="userId" />
-      <member type="vector" name="pokers" element="uint8" />
+      <member type="vector" name="cards" element="uint8" />
+      <member type="uint32" name="userGold" comment="使用的钱" />
     </element>
 
     <element name="GameGoldenFlowerInfo" parent="object">
@@ -324,6 +325,15 @@
 
     <element id="ID_NetGameStartNotify" name="NetGameStartNotify" >
       <member type="GameGoldenFlowerInfo" name="info" />
+    </element>
+
+    <element id="ID_NetRoomChipInReq" name="NetRoomChipInReq" >
+      <member type="uint8" name="chiptype" comment="1.下注2.跟注" />
+      <member type="uint32" name="gold" comment="金币" />
+    </element>
+
+    <element id="ID_NetRoomChipInRes" name="NetRoomChipInRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

@@ -48,7 +48,7 @@ GameGoldenFlower* luaPlrGoldenFlower(uint32 userId)
 
 PropertyHelper* luaProperty()
 {
-	return &INSTANCE(PropertyHelper);
+	return &sProperty;
 }
 
 WorldModule* luaWorld()

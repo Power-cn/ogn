@@ -210,3 +210,45 @@ bool GameModule::DoCloseGame(uint32 roomId)
 	return true;
 }
 
+bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
+{
+	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
+	if (aGame == NULL) 
+	{
+		return false;
+	}
+
+	if (aGame->GetCurSpeak() != aPlr->getUserId())
+	{
+		return false;
+	}
+
+	GameEntity* aGameEnt = aGame->GetGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL)
+	{
+		return false;
+	}
+	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(aGame->GetGameLv());
+	if (aGameLvJson == NULL)
+	{
+		return false;
+	}
+	uint32 curMaxGold = aGame->GetCurMaxGold();
+	curMaxGold = curMaxGold == 0 ? aGameLvJson->Mingold : curMaxGold;
+	uint32 userGold = 0;
+	if (chiptype == CT_Chipin)
+		userGold = gold;
+	
+	if (chiptype == CT_CallChipin)
+		userGold = curMaxGold;
+
+	userGold = aGame->CheckUserGold(userGold);
+	if (userGold == 0)
+	{
+		return false;
+	}
+	aGame->DoChipin(userGold, aGameEnt);
+
+	return true;
+}
+
