@@ -27,3 +27,12 @@ TCT_Tonghua = 4;				-- 同
 TCT_Tonghuashun = 5;			-- 同顺
 TCT_Baozi = 6;					-- 豹
 
+
+function split(str, split_char)
+	local sub_str_tab = {};
+	for mu_id in string.gmatch(str, "(%d+)"..split_char .."*") do
+		table.insert(sub_str_tab, mu_id)
+	end
+	return sub_str_tab;
+end
+

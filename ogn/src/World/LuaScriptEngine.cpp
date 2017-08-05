@@ -71,16 +71,16 @@ ConfigManager* luaCfg()
 	return &sCfgMgr;
 }
 
-luabind::object GetTestTable(lua_State* luaState)
-{
-	luabind::object obj = luabind::newtable(luaState);
-	for (uint32 i = 1; i <= 10; ++i)
-	{
-		obj[i] = i;
-	}
-	int k = luabind::tablecount(obj);
-	return obj;
-}
+//luabind::object GetTestTable(lua_State* luaState)
+//{
+//	luabind::object obj = luabind::newtable(luaState);
+//	for (uint32 i = 1; i <= 10; ++i)
+//	{
+//		obj[i] = i;
+//	}
+//	int k = luabind::tablecount(obj);
+//	return obj;
+//}
 
 //luabind::object GetTestTable1(luabind::object& obj)
 //{

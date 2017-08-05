@@ -2,7 +2,7 @@ dofile("../config/cfg/script/global.lua");
 
 function OnCreate(roomId, userId)
 	local sWorld = luaWorld();
-	local play = sWorld:getPlayerToUserId(userId);
+	local play = sWorld:FindPlrByUserId(userId);
 	if play then
 		play:sendPacketToMsg(EC_TARGET, "["..play:getName().."]创建["..roomId.."]房间");
 	end

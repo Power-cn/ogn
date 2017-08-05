@@ -23,6 +23,7 @@ bool ConfigManager::reloadConfig()
 	loadRobotJson("../config/cfg/robot.json");
 	loadTaskJson("../config/cfg/task.json");
 	loadTaskStepJson("../config/cfg/taskStep.json");
+	loadCardJson("../config/cfg/card.json");
 	LOG_DEBUG(LogSystem::csl_color_green, "Load Config success");
 	return true;
 }
@@ -333,6 +334,7 @@ void ConfigManager::loadCardJson(cstring& path)
 		return;
 
 	mMapCard.clear();
+	mMapNameCard.clear();
 	Json::Value cf = jsonRoot["config"];
 	for (uint32 i = 0; i < cf.size(); ++i)
 	{
@@ -344,6 +346,7 @@ void ConfigManager::loadCardJson(cstring& path)
 		cardJson.Color = v["Color"].asInt();
 		cardJson.Name = v["Name"].asString();
 		mMapCard.insert(std::make_pair(cardJson.ID, cardJson));
+		mMapNameCard[cardJson.Name] = getCardJson(cardJson.ID);
 	}
 }
 
@@ -437,6 +440,15 @@ CardJson* ConfigManager::getCardJson(uint32 id)
 	auto itr = mMapCard.find(id);
 	if (itr != mMapCard.end())
 		return &itr->second;
+
+	return NULL;
+}
+
+CardJson* ConfigManager::getCardJsonByName(cstring& name)
+{
+	auto itr = mMapNameCard.find(name);
+	if (itr != mMapNameCard.end())
+		return itr->second;
 
 	return NULL;
 }

@@ -229,6 +229,8 @@ namespace Shared
 	uint32 BKDRHash(const char* str);
 
 	void XOR(char* input, int len, cstring& key);
+	std::string ConvertHexString(char* datas, int32 length);
+
 };
 
 //

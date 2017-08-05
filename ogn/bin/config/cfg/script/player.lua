@@ -1,23 +1,20 @@
-function OnCreate()
+dofile("../config/cfg/script/global.lua");
+
+function OnCreate(userId)
 	local play = luaPlayer();
 	play:sendPacketToMsg(EC_SYSTEM, "["..play:getName().."]创建角色成功");
 	return 0;
 end
 
-function OnDispose()
+function OnDispose(userId)
 	return 0;
 end
 
-function OnEnter()
-	local sss = AClass.TWO;
-	local tab = GetTestTable();
-	
-	for key, value in pairs(t) do  
-		print(value);   
-	end  
+function OnEnter(userId)
+
 	return 0;
 end
 
-function OnLeave()
+function OnLeave(userId)
 	return 0;
 end

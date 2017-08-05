@@ -166,32 +166,32 @@ bool Room::IsCanAdd(Player* aPlr)
 
 void Room::OnCreate(uint32 userId)
 {
-	LuaEngine::executeScript(sScriptRoom, "OnCreate", GetInsId(), userId);
+	LuaEngine::Call(sScriptRoom, "OnCreate", GetInsId(), userId);
 }
 
 void Room::OnClose()
 {
-	LuaEngine::executeScript(sScriptRoom, "OnClose", GetInsId());
+	LuaEngine::Call(sScriptRoom, "OnClose", GetInsId());
 }
 
 void Room::OnEnter(uint32 userId)
 {
-	LuaEngine::executeScript(sScriptRoom, "OnEnter", GetInsId(), userId);
+	LuaEngine::Call(sScriptRoom, "OnEnter", GetInsId(), userId);
 }
 
 void Room::OnLeave(uint32 userId)
 {
-	LuaEngine::executeScript(sScriptRoom, "OnLeave", GetInsId(), userId);
+	LuaEngine::Call(sScriptRoom, "OnLeave", GetInsId(), userId);
 }
 
 void Room::OnChangeMaster(uint32 oldUserId, uint32 newUserId)
 {
-	LuaEngine::executeScript(sScriptRoom, "OnChangeMaster", GetInsId(), oldUserId, newUserId);
+	LuaEngine::Call(sScriptRoom, "OnChangeMaster", GetInsId(), oldUserId, newUserId);
 }
 
 void Room::OnChangeState(uint32 userId, uint8 oldState, uint8 state)
 {
-	LuaEngine::executeScript(sScriptRoom, "OnChangeState", GetInsId(), userId, oldState, state);
+	LuaEngine::Call(sScriptRoom, "OnChangeState", GetInsId(), userId, oldState, state);
 }
 
 bool RoomPlayer::operator<<(RoomPlayerInfo& info)

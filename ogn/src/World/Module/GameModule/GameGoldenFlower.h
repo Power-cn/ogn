@@ -17,7 +17,7 @@ public:
 	std::string ToString();
 	uint32 GetCardCount() { return (uint32)cards.size(); }
 	uint32 GetCard(uint32 idx);
-	luabind::object GetCards();
+	//luabind::object GetCards();
 	ThreeCardType GetThreeCardType();
 protected:
 };

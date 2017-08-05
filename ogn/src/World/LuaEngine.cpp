@@ -90,16 +90,13 @@ void LuaEngine::clearScript()
 	}
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, int32 p1)
 {
 	sCurrentObject = object;
 
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
 	lua_State* luaState = luaScript->getLuaState();
-	luabind::object obj;
-	obj[0] = 1;
-	obj[1] = 2;
 
 	if (!luaState) return 0;
 
@@ -120,7 +117,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, in
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2)
 {
 	sCurrentObject = object;
 
@@ -146,7 +143,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, in
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
 {
 	sCurrentObject = object;
 
@@ -172,7 +169,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, in
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
 {
 	sCurrentObject = object;
 
@@ -198,7 +195,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, in
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, cstring& p1)
 {
 	sCurrentObject = object;
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
@@ -223,7 +220,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cs
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2)
 {
 	sCurrentObject = object;
 
@@ -249,7 +246,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cs
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
 {
 	sCurrentObject = object;
 
@@ -275,7 +272,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cs
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
 {
 	sCurrentObject = object;
 
@@ -301,7 +298,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func, cs
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func)
+uint32 LuaEngine::Call(Object* object, cstring& name, cstring& func)
 {
 	sCurrentObject = object;
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
@@ -326,7 +323,7 @@ uint32 LuaEngine::executeScript(Object* object, cstring& name, cstring& func)
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1)
+uint32 LuaEngine::Call(cstring& name, cstring& func, cstring& p1)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -350,7 +347,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1)
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2)
+uint32 LuaEngine::Call(cstring& name, cstring& func, cstring& p1, cstring& p2)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -374,7 +371,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstri
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
+uint32 LuaEngine::Call(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -398,7 +395,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstri
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
+uint32 LuaEngine::Call(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -422,7 +419,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, cstring& p1, cstri
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1)
+uint32 LuaEngine::Call(cstring& name, cstring& func, int32 p1)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -446,7 +443,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1)
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2)
+uint32 LuaEngine::Call(cstring& name, cstring& func, int32 p1, int32 p2)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -470,7 +467,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
+uint32 LuaEngine::Call(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;
@@ -494,7 +491,7 @@ uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2
 	return 0;
 }
 
-uint32 LuaEngine::executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
+uint32 LuaEngine::Call(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4)
 {
 	LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
 	if (!luaScript) return 0;

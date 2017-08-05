@@ -36,7 +36,7 @@ void LuaScript::bindScript()
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom),
 			luabind::def("luaGame", &luaGame),
-			luabind::def("GetTestTable", &GetTestTable),
+			//luabind::def("GetTestTable", &GetTestTable),
 			//luabind::def("GetTestTable1", &GetTestTable1),
 			//luabind::def("GetTestTable", &GetTestTable, mLuaState),
 			luabind::def("luaCfg", &luaCfg)
@@ -44,51 +44,6 @@ void LuaScript::bindScript()
 		];
 	luabind::module(mLuaState)
 		[
-			luabind::class_<AClass>("AClass")
-			.enum_("constants")
-		[
-			luabind::value("ONE", AClass::ONE),
-			luabind::value("TWO", AClass::TWO)
-		]
-		];
-
-	//luabind::module(mLuaState)
-	//	[
-	//		//luabind::class_<EnumChannel>("A") 
-	//		//.enum_("constants")
-	//		//[
-	//		//	luabind::value("EC_NONE", EC_NONE),
-	//		//	luabind::value("EC_WORLD", EC_WORLD),
-	//		//	luabind::value("EC_SYSTEM", EC_SYSTEM),
-	//		//	luabind::value("EC_MAP", EC_MAP),
-	//		//	luabind::value("EC_VIEW", EC_VIEW),
-	//		//	luabind::value("EC_TEAM", EC_TEAM),
-	//		//	luabind::value("EC_ROOM", EC_ROOM),
-	//		//	luabind::value("EC_TARGET", EC_TARGET)
-	//		//]
-	//		//.enum_("constants")
-	//		//	[
-	//		//		luabind::value("EC_NONE", EC_NONE),
-	//		//		luabind::value("EC_WORLD", EC_WORLD),
-	//		//		luabind::value("EC_SYSTEM", EC_SYSTEM),
-	//		//		luabind::value("EC_MAP", EC_MAP),
-	//		//		luabind::value("EC_VIEW", EC_VIEW),
-	//		//		luabind::value("EC_TEAM", EC_TEAM),
-	//		//		luabind::value("EC_ROOM", EC_ROOM),
-	//		//		luabind::value("EC_TARGET", EC_TARGET)
-	//		//	]
-	//	];
-
-	luabind::module(mLuaState)
-		[
-			//luabind::class_<EnumChannel>("EnumChannel")
-			//.scope[
-			//	luabind::def("EC_NONE", EnumChannel::EC_NONE),
-			//	luabind::def("EC_WORLD", EnumChannel::EC_WORLD)
-			//]
-			//,
-			//
-
 		luabind::class_<BinaryStream>("BinaryStream")
 		.def(luabind::constructor<>())
 		//.scope[
@@ -189,7 +144,7 @@ void LuaScript::bindScript()
 		.def("ToString", &GameEntity::ToString)
 		.def("GetCardCount", &GameEntity::GetCardCount)
 		.def("GetCard", &GameEntity::GetCard)
-		.def("GetCards", &GameEntity::GetCards)
+		//.def("GetCards", &GameEntity::GetCards)
 		,
 
 		luabind::class_<GameModle>("GameModle")
@@ -228,6 +183,8 @@ void LuaScript::bindScript()
 
 		luabind::class_<ConfigManager>("ConfigManager")
 		.def("getCardJson", &ConfigManager::getCardJson)
+		.def("getCardJsonByName", &ConfigManager::getCardJsonByName)
+
 		//.def("GetGameEnt", &GameGoldenFlower::GetGameEnt)
 		//.def("FindGameEnt", &GameGoldenFlower::FindGameEnt)
 		//.def("GetPlrInx", &GameGoldenFlower::GetPlrInx)
@@ -250,18 +207,18 @@ void LuaEngine::reloadScript()
 {
 	clearScript();
 
-	//std::vector<std::string> files;
-	//Shared::GetDirectoryFiles("../config/cfg/script", files);
-	//for (std::string& path : files)
-	//{
-	//	loadScript(path);
-	//}
-	loadScript("../config/cfg/script/global.lua");
-	loadScript("../config/cfg/script/player.lua");
-	loadScript("../config/cfg/script/gm.lua");
-	loadScript("../config/cfg/script/team.lua");
-	loadScript("../config/cfg/script/room.lua");
-	loadScript("../config/cfg/script/game.lua");
+	std::vector<std::string> files;
+	Shared::GetDirectoryFiles("../config/cfg/script", files);
+	for (std::string& path : files)
+	{
+		loadScript(path);
+	}
+	//loadScript("../config/cfg/script/global.lua");
+	//loadScript("../config/cfg/script/player.lua");
+	//loadScript("../config/cfg/script/gm.lua");
+	//loadScript("../config/cfg/script/team.lua");
+	//loadScript("../config/cfg/script/room.lua");
+	//loadScript("../config/cfg/script/game.lua");
 
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

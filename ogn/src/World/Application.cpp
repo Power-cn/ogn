@@ -496,9 +496,13 @@ int32 Application::RedisConnect(RedisEvent& e)
 int32 Application::RedisAuth(RedisEvent& e)
 {
 	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success");
-	sRedisProxy.sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
-	sRedisProxy.sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
-	sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);
+	//sRedisProxy.sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
+	//sRedisProxy.sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
+	//sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);
+
+	//int ret = LuaEngine::Call(NULL, sScriptPlayer, "OnEnter");
+	int ret = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	//int testaaa = 10;
 	return 0;
 }
 
@@ -538,7 +542,4 @@ void Application::OnInitialize()
 	testint = LuaEngine::GetInt32("global", "EC_TEAM");
 	testint = LuaEngine::GetInt32("global", "EC_ROOM");
 	testint = LuaEngine::GetInt32("global", "EC_TARGET");
-
-
-	//LuaEngine::executeScript("team", "onEnterTeam", "sdfsdfsdfdsf");
 }

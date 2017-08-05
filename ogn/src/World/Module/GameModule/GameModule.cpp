@@ -167,6 +167,9 @@ bool GameModule::DoStartGame(Room* aRoom)
 			aGame->OnEnter(aGameEnt);
 		}
 	}
+	GameEntity* aGameEnt1 = aGame->GetGameEnt(0);
+	GameEntity* aGameEnt2 = aGame->GetGameEnt(1);
+	LuaEngine::Call("card", "ComparePlrCard", aGameEnt1->userId, aGameEnt2->userId);
 	NetGameStartNotify nfy;
 	*aGame >> nfy.info;
 	aRoom->sendPacketToAll(nfy);

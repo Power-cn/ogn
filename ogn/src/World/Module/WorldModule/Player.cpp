@@ -407,20 +407,20 @@ int32 Player::onTimerSaveDB(TimerEvent& e)
 
 void Player::OnCreate()
 {
-	LuaEngine::executeScript(this, sScriptPlayer, "OnCreate");
+	LuaEngine::Call(this, sScriptPlayer, "OnCreate", getUserId());
 }
 
 void Player::OnDispose()
 {
-	LuaEngine::executeScript(this, sScriptPlayer, "OnDispose");
+	LuaEngine::Call(this, sScriptPlayer, "OnDispose", getUserId());
 }
 
 void Player::OnEnter()
 {
-	LuaEngine::executeScript(this, sScriptPlayer, "OnEnter");
+	LuaEngine::Call(this, sScriptPlayer, "OnEnter", getUserId());
 }
 
 void Player::OnLeave()
 {
-	LuaEngine::executeScript(this, sScriptPlayer, "OnLeave");
+	LuaEngine::Call(this, sScriptPlayer, "OnLeave", getUserId());
 }

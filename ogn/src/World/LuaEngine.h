@@ -42,23 +42,23 @@ public:
 	LuaScript* getScript(cstring& name);
 	void clearScript();
 public:
-	static uint32 executeScript(Object* object, cstring& name, cstring& func);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
-	static uint32 executeScript(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
-	static uint32 executeScript(cstring& name, cstring& func, cstring& p1);
-	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2);
-	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
-	static uint32 executeScript(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
-	static uint32 executeScript(cstring& name, cstring& func, int32 p1);
-	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2);
-	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
-	static uint32 executeScript(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
+	static uint32 Call(Object* object, cstring& name, cstring& func);
+	static uint32 Call(Object* object, cstring& name, cstring& func, int32 p1);
+	static uint32 Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2);
+	static uint32 Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
+	static uint32 Call(Object* object, cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
+	static uint32 Call(Object* object, cstring& name, cstring& func, cstring& p1);
+	static uint32 Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2);
+	static uint32 Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
+	static uint32 Call(Object* object, cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
+	static uint32 Call(cstring& name, cstring& func, cstring& p1);
+	static uint32 Call(cstring& name, cstring& func, cstring& p1, cstring& p2);
+	static uint32 Call(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3);
+	static uint32 Call(cstring& name, cstring& func, cstring& p1, cstring& p2, cstring& p3, cstring& p4);
+	static uint32 Call(cstring& name, cstring& func, int32 p1);
+	static uint32 Call(cstring& name, cstring& func, int32 p1, int32 p2);
+	static uint32 Call(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3);
+	static uint32 Call(cstring& name, cstring& func, int32 p1, int32 p2, int32 p3, int32 p4);
 
 
 	static int32 GetInt32(cstring& name, cstring& field);

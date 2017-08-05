@@ -45,7 +45,7 @@ int32 PlayerHandler::onNetGmMsg(Player* aPlr, NetGmMsg* msg)
 	std::string p1 = msg->gmParams.size() >= 1 ? msg->gmParams[0] : "";
 	std::string p2 = msg->gmParams.size() >= 2 ? msg->gmParams[1] : "";
 	std::string p3 = msg->gmParams.size() >= 3 ? msg->gmParams[2] : "";
-	LuaEngine::executeScript(aPlr, "gm", "GmCmd", msg->name, p1, p2, p3);
+	LuaEngine::Call(aPlr, "gm", "GmCmd", msg->name, p1, p2, p3);
 
 	LOG_DEBUG(LogSystem::csl_color_green, "[%s] GmCmd:%s %s %s %s", aPlr->getName(),msg->name.c_str(), p1.c_str(), p2.c_str(), p3.c_str());
 	return 0;

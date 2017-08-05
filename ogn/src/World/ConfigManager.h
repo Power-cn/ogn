@@ -140,7 +140,7 @@ public:
 	TaskJson* getTaskJson(uint32 id);
 	TaskStepJson* getTaskStepJson(uint32 id);
 	CardJson* getCardJson(uint32 id);
-
+	CardJson* getCardJsonByName(cstring& name);
 	void loadAllFiles();
 protected:
 	std::map<std::string, std::pair<int8*, int32>>		mMapFilesStream;
@@ -156,5 +156,6 @@ protected:
 	std::map<int32, TaskStepJson>						mMapTaskStepJson;
 	std::map<int32, std::map<int32, TaskStepJson*>>		mMapTaskStepJsonMap;
 	std::map<int32, CardJson>							mMapCard;
+	std::map<std::string, CardJson*>					mMapNameCard;
 };
 

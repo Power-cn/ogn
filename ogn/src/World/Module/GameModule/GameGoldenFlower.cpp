@@ -87,25 +87,25 @@ std::string GameGoldenFlower::ToString()
 
 bool GameGoldenFlower::OnStart()
 {
-	LuaEngine::executeScript(sScriptGame, "OnStart", GetInsId());
+	LuaEngine::Call(sScriptGame, "OnStart", GetInsId());
 	return true;
 }
 
 bool GameGoldenFlower::OnClose()
 {
-	LuaEngine::executeScript(sScriptGame, "OnClose", GetInsId());
+	LuaEngine::Call(sScriptGame, "OnClose", GetInsId());
 	return true;
 }
 
 bool GameGoldenFlower::OnEnter(GameEntity* aGameEnt)
 {
-	LuaEngine::executeScript(sScriptGame, "OnEnter", GetInsId(), aGameEnt->userId);
+	LuaEngine::Call(sScriptGame, "OnEnter", GetInsId(), aGameEnt->userId);
 	return true;
 }
 
 bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
 {
-	LuaEngine::executeScript(sScriptGame, "OnLeave", GetInsId(), aGameEnt->userId);
+	LuaEngine::Call(sScriptGame, "OnLeave", GetInsId(), aGameEnt->userId);
 	return true;
 }
 
@@ -145,17 +145,17 @@ uint32 GameEntity::GetCard(uint32 idx)
 	return cards[idx];
 }
 
-luabind::object GameEntity::GetCards()
-{
-	LuaScript* luaScript = sLua.getScript(sScriptPlayer);
-	if (luaScript == NULL) return luabind::object();
-
-	luabind::object obj = luabind::newtable(luaScript->getLuaState());
-	for (uint32 i = 0; i < cards.size(); ++i) {
-		obj[i] = cards[i];
-	}
-	return obj;
-}
+//luabind::object GameEntity::GetCards()
+//{
+//	LuaScript* luaScript = sLua.getScript(sScriptPlayer);
+//	if (luaScript == NULL) return luabind::object();
+//
+//	luabind::object obj = luabind::newtable(luaScript->getLuaState());
+//	for (uint32 i = 0; i < cards.size(); ++i) {
+//		obj[i] = cards[i];
+//	}
+//	return obj;
+//}
 
 ThreeCardType GameEntity::GetThreeCardType()
 {
