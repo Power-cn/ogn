@@ -538,13 +538,14 @@ uint32 Shared::BKDRHash(const char* str)
 
 void Shared::XOR(char* input, int len, cstring& key)
 {
+	if (key.length() == 0) return;
 	const char* akey = key.c_str();
 	uint32 keylen = key.length();
 	uint32 keypos = 0;
 	for (uint32 i = 0; i < len; ++i) {
 		input[i] ^= akey[keypos];
-		keypos++;
-		keypos = keypos >= keylen ? 0 : keypos;
+		keypos = (keypos + 1) % keylen;
+		
 	}
 }
 
