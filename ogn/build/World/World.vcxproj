@@ -34,7 +34,7 @@
     <ClCompile Include="..\..\src\World\Module.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp" />
-    <ClCompile Include="..\..\src\World\Module\GameModule\Game.cpp" />
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp" />
@@ -82,7 +82,7 @@
     <ClInclude Include="..\..\src\World\Module.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h" />
-    <ClInclude Include="..\..\src\World\Module\GameModule\Game.h" />
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h" />

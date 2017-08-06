@@ -7,7 +7,7 @@ class Player;
 class Npc;
 
 class PropertyHelper;
-class GameModle;
+class GameComponent;
 class GameGoldenFlower;
 
 class WorldModule;
@@ -17,12 +17,14 @@ class GameModule;
 Object* luaObject();
 Entity* luaEntity();
 Player* luaPlayer();
+GameGoldenFlower* luaGameComponent();
 
 Entity* luaPlrToEnt(Player* player);
 Entity* luaNpcToEnt(Npc* npc);
 Player* luaFindPlrByUserId(uint32 userId);
+Player* luaFindPlrByName(cstring& name);
 
-GameModle* luaToGameModle(GameGoldenFlower* aGame);
+GameComponent* luaToGameModle(GameGoldenFlower* aGame);
 GameGoldenFlower* luaGoldenFlower(uint32 insId);
 GameGoldenFlower* luaPlrGoldenFlower(uint32 userId);
 

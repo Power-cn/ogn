@@ -165,9 +165,6 @@
     <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp">
       <Filter>Module\GameModule</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\World\Module\GameModule\Game.cpp">
-      <Filter>Module\GameModule</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp">
       <Filter>Module\MapModule</Filter>
     </ClCompile>
@@ -196,6 +193,9 @@
       <Filter>Module\RoomModule</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp">
       <Filter>Module\GameModule</Filter>
     </ClCompile>
   </ItemGroup>
@@ -299,9 +299,6 @@
     <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h">
       <Filter>Module\GameModule</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\World\Module\GameModule\Game.h">
-      <Filter>Module\GameModule</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\World\Module\MapModule\Map.h">
       <Filter>Module\MapModule</Filter>
     </ClInclude>
@@ -336,6 +333,9 @@
       <Filter>Common</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h">
       <Filter>Module\GameModule</Filter>
     </ClInclude>
   </ItemGroup>

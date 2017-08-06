@@ -55,10 +55,18 @@ ID_NetRoomReadyReq,
 ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
+ID_NetRoomInfoNotify,
 ID_NetGameStartNotify,
+ID_NetGameCloseNotify,
 ID_NetGameInfoNotify,
-ID_NetGameChipInReq,
-ID_NetGameChipInRes,
+ID_NetGameOperateSeeReq,
+ID_NetGameOperateSeeRes,
+ID_NetGameOperateChipinReq,
+ID_NetGameOperateChipinRes,
+ID_NetGameOperateCallReq,
+ID_NetGameOperateCallRes,
+ID_NetGameOperateCompareReq,
+ID_NetGameOperateCompareRes,
 ID_NetEnd,
 
 }
@@ -117,10 +125,18 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyReq, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomReadyRes, "NetRoomReadyRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameReq, "NetRoomStartGameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomStartGameRes, "NetRoomStartGameRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetRoomInfoNotify, "NetRoomInfoNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameStartNotify, "NetGameStartNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameCloseNotify, "NetGameCloseNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameInfoNotify, "NetGameInfoNotify");
-PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameChipInReq, "NetGameChipInReq");
-PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameChipInRes, "NetGameChipInRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateSeeReq, "NetGameOperateSeeReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateSeeRes, "NetGameOperateSeeRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateChipinReq, "NetGameOperateChipinReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateChipinRes, "NetGameOperateChipinRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCallReq, "NetGameOperateCallReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCallRes, "NetGameOperateCallRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCompareReq, "NetGameOperateCompareReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCompareRes, "NetGameOperateCompareRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -2046,6 +2062,31 @@ bytes.Read(ref result);
 public sbyte result;
 
 }
+public class NetRoomInfoNotify : Packet
+{
+	public NetRoomInfoNotify():base((int)PACKET_ID_ENUM.ID_NetRoomInfoNotify)
+	{
+roomInfo = new RoomInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(roomInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(roomInfo);
+
+		return true;
+	}
+
+public RoomInfo roomInfo;
+
+}
 public class NetGameStartNotify : Packet
 {
 	public NetGameStartNotify():base((int)PACKET_ID_ENUM.ID_NetGameStartNotify)
@@ -2069,6 +2110,35 @@ bytes.Read(info);
 	}
 
 public GameGoldenFlowerInfo info;
+
+}
+public class NetGameCloseNotify : Packet
+{
+	public NetGameCloseNotify():base((int)PACKET_ID_ENUM.ID_NetGameCloseNotify)
+	{
+winUserId = 0;
+winGold = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(winUserId);
+bytes.Write(winGold);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref winUserId);
+bytes.Read(ref winGold);
+
+		return true;
+	}
+
+public uint winUserId;
+public uint winGold;
 
 }
 public class NetGameInfoNotify : Packet
@@ -2096,48 +2166,45 @@ bytes.Read(info);
 public GameGoldenFlowerInfo info;
 
 }
-public class NetGameChipInReq : Packet
+public class NetGameOperateSeeReq : Packet
 {
-	public NetGameChipInReq():base((int)PACKET_ID_ENUM.ID_NetGameChipInReq)
+	public NetGameOperateSeeReq():base((int)PACKET_ID_ENUM.ID_NetGameOperateSeeReq)
 	{
-chiptype = 0;
-gold = 0;
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
-bytes.Write(chiptype);
-bytes.Write(gold);
 
 		return true;
 	}
 
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
-bytes.Read(ref chiptype);
-bytes.Read(ref gold);
 
 		return true;
 	}
 
-public sbyte chiptype;
-public uint gold;
 
 }
-public class NetGameChipInRes : Packet
+public class NetGameOperateSeeRes : Packet
 {
-	public NetGameChipInRes():base((int)PACKET_ID_ENUM.ID_NetGameChipInRes)
+	public NetGameOperateSeeRes():base((int)PACKET_ID_ENUM.ID_NetGameOperateSeeRes)
 	{
 result = 0;
-gold = 0;
+cards = new List<sbyte>();
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
 bytes.Write(result);
-bytes.Write(gold);
+int cards_TEMP = cards.Count;
+bytes.Write(cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
+{
+	bytes.Write(cards[i]);
+}
 
 		return true;
 	}
@@ -2145,13 +2212,269 @@ bytes.Write(gold);
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
 bytes.Read(ref result);
-bytes.Read(ref gold);
+int cards_TEMP = 0;
+bytes.Read(ref cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
+{
+	sbyte info_cards;
+	info_cards = 0;
+	bytes.Read(ref info_cards);
+	cards.Add(info_cards);
+}
 
 		return true;
 	}
 
 public sbyte result;
+public List<sbyte> cards;
+
+}
+public class NetGameOperateChipinReq : Packet
+{
+	public NetGameOperateChipinReq():base((int)PACKET_ID_ENUM.ID_NetGameOperateChipinReq)
+	{
+gold = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(gold);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref gold);
+
+		return true;
+	}
+
 public uint gold;
+
+}
+public class NetGameOperateChipinRes : Packet
+{
+	public NetGameOperateChipinRes():base((int)PACKET_ID_ENUM.ID_NetGameOperateChipinRes)
+	{
+result = 0;
+userId = 0;
+gold = 0;
+state = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(userId);
+bytes.Write(gold);
+bytes.Write(state);
+bytes.Write(nextSpeakUserId);
+bytes.Write(speakTime);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref userId);
+bytes.Read(ref gold);
+bytes.Read(ref state);
+bytes.Read(ref nextSpeakUserId);
+bytes.Read(ref speakTime);
+
+		return true;
+	}
+
+public sbyte result;
+public uint userId;
+public uint gold;
+public sbyte state;
+public uint nextSpeakUserId;
+public uint speakTime;
+
+}
+public class NetGameOperateCallReq : Packet
+{
+	public NetGameOperateCallReq():base((int)PACKET_ID_ENUM.ID_NetGameOperateCallReq)
+	{
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+
+}
+public class NetGameOperateCallRes : Packet
+{
+	public NetGameOperateCallRes():base((int)PACKET_ID_ENUM.ID_NetGameOperateCallRes)
+	{
+result = 0;
+userId = 0;
+gold = 0;
+state = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(userId);
+bytes.Write(gold);
+bytes.Write(state);
+bytes.Write(nextSpeakUserId);
+bytes.Write(speakTime);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref userId);
+bytes.Read(ref gold);
+bytes.Read(ref state);
+bytes.Read(ref nextSpeakUserId);
+bytes.Read(ref speakTime);
+
+		return true;
+	}
+
+public sbyte result;
+public uint userId;
+public uint gold;
+public sbyte state;
+public uint nextSpeakUserId;
+public uint speakTime;
+
+}
+public class NetGameOperateCompareReq : Packet
+{
+	public NetGameOperateCompareReq():base((int)PACKET_ID_ENUM.ID_NetGameOperateCompareReq)
+	{
+tarUserId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(tarUserId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref tarUserId);
+
+		return true;
+	}
+
+public uint tarUserId;
+
+}
+public class NetGameOperateCompareRes : Packet
+{
+	public NetGameOperateCompareRes():base((int)PACKET_ID_ENUM.ID_NetGameOperateCompareRes)
+	{
+result = 0;
+userId = 0;
+cards = new List<sbyte>();
+gold = 0;
+state = 0;
+tarUserId = 0;
+tarCards = new List<sbyte>();
+tarState = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(userId);
+int cards_TEMP = cards.Count;
+bytes.Write(cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
+{
+	bytes.Write(cards[i]);
+}
+bytes.Write(gold);
+bytes.Write(state);
+bytes.Write(tarUserId);
+int tarCards_TEMP = tarCards.Count;
+bytes.Write(tarCards_TEMP);
+for (int i = 0; i < tarCards_TEMP; ++i)
+{
+	bytes.Write(tarCards[i]);
+}
+bytes.Write(tarState);
+bytes.Write(nextSpeakUserId);
+bytes.Write(speakTime);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref userId);
+int cards_TEMP = 0;
+bytes.Read(ref cards_TEMP);
+for (int i = 0; i < cards_TEMP; ++i)
+{
+	sbyte info_cards;
+	info_cards = 0;
+	bytes.Read(ref info_cards);
+	cards.Add(info_cards);
+}
+bytes.Read(ref gold);
+bytes.Read(ref state);
+bytes.Read(ref tarUserId);
+int tarCards_TEMP = 0;
+bytes.Read(ref tarCards_TEMP);
+for (int i = 0; i < tarCards_TEMP; ++i)
+{
+	sbyte info_tarCards;
+	info_tarCards = 0;
+	bytes.Read(ref info_tarCards);
+	tarCards.Add(info_tarCards);
+}
+bytes.Read(ref tarState);
+bytes.Read(ref nextSpeakUserId);
+bytes.Read(ref speakTime);
+
+		return true;
+	}
+
+public sbyte result;
+public uint userId;
+public List<sbyte> cards;
+public uint gold;
+public sbyte state;
+public uint tarUserId;
+public List<sbyte> tarCards;
+public sbyte tarState;
+public uint nextSpeakUserId;
+public uint speakTime;
 
 }
 public class NetEnd : Packet

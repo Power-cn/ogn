@@ -26,9 +26,11 @@ void LuaScript::bindScript()
 			luabind::def("luaObject", &luaObject),
 			luabind::def("luaEntity", &luaEntity),
 			luabind::def("luaPlayer", &luaPlayer),
+			luabind::def("luaGameComponent", &luaGameComponent),
 			luabind::def("luaPlrToEnt", &luaPlrToEnt),
 			luabind::def("luaNpcToEnt", &luaNpcToEnt),
 			luabind::def("luaFindPlrByUserId", &luaFindPlrByUserId),
+			luabind::def("luaFindPlrByName", &luaFindPlrByName),
 			luabind::def("luaToGameModle", &luaToGameModle),
 			luabind::def("luaGoldenFlower", &luaGoldenFlower),
 			luabind::def("luaPlrGoldenFlower", &luaPlrGoldenFlower),
@@ -72,6 +74,10 @@ void LuaScript::bindScript()
 		,
 		luabind::class_<PropertyHelper>("PropertyHelper")
 		.def("setMaxHp", &PropertyHelper::setMaxHp)
+		.def("setGold", &PropertyHelper::setGold)
+		.def("addGold", &PropertyHelper::addGold)
+		.def("getGold", &PropertyHelper::getGold)
+		.def("hasGold", &PropertyHelper::hasGold)
 		,
 
 		luabind::class_<Module>("Module")
@@ -147,18 +153,18 @@ void LuaScript::bindScript()
 		//.def("GetCards", &GameEntity::GetCards)
 		,
 
-		luabind::class_<GameModle>("GameModle")
-		.def("GetInsId", &GameModle::GetInsId)
-		.def("GetGameEnt", &GameModle::GetGameEnt)
-		.def("FindGameEnt", &GameModle::FindGameEnt)
-		.def("GetPlrInx", &GameModle::GetPlrInx)
-		.def("ToString", &GameModle::ToString)
-		.def("GetGameEntCount", &GameModle::GetGameEntCount)
-		.def("GetRoomId", &GameModle::GetRoomId)
-		.def("GetPlrCard", &GameModle::GetPlrCard)
+		luabind::class_<GameComponent>("GameComponent")
+		.def("GetInsId", &GameComponent::GetInsId)
+		.def("GetGameEnt", &GameComponent::GetGameEnt)
+		.def("FindGameEnt", &GameComponent::FindGameEnt)
+		.def("GetPlrInx", &GameComponent::GetPlrInx)
+		.def("ToString", &GameComponent::ToString)
+		.def("GetGameEntCount", &GameComponent::GetGameEntCount)
+		.def("GetRoomId", &GameComponent::GetRoomId)
+		.def("GetPlrCard", &GameComponent::GetPlrCard)
 		,
 	
-		luabind::class_<GameGoldenFlower, GameModle>("GameGoldenFlower")
+		luabind::class_<GameGoldenFlower, GameComponent>("GameGoldenFlower")
 		//.def("GetInsId", &GameGoldenFlower::GetInsId)
 		//.def("GetGameEnt", &GameGoldenFlower::GetGameEnt)
 		//.def("FindGameEnt", &GameGoldenFlower::FindGameEnt)
@@ -172,6 +178,11 @@ void LuaScript::bindScript()
 		.def("FindPlrGameModle", &GameModule::FindPlrGameModle)
 		.def("FindPlrGameEnt", &GameModule::FindPlrGameEnt)
 		.def("DoStartGame", &GameModule::DoStartGame)
+		.def("DoCloseGame", &GameModule::DoCloseGame)
+		.def("DoOperateSee", &GameModule::DoOperateSee)
+		.def("DoOperateChipinReq", &GameModule::DoOperateChipinReq)
+		.def("DoOperateCallReq", &GameModule::DoOperateCallReq)
+		.def("DoOperateCompareReq", &GameModule::DoOperateCompareReq)
 		,
 	
 		luabind::class_<CardJson>("CardJson")

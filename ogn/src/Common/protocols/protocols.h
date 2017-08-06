@@ -51,10 +51,18 @@ ID_NetRoomReadyReq,
 ID_NetRoomReadyRes,
 ID_NetRoomStartGameReq,
 ID_NetRoomStartGameRes,
+ID_NetRoomInfoNotify,
 ID_NetGameStartNotify,
+ID_NetGameCloseNotify,
 ID_NetGameInfoNotify,
-ID_NetGameChipInReq,
-ID_NetGameChipInRes,
+ID_NetGameOperateSeeReq,
+ID_NetGameOperateSeeRes,
+ID_NetGameOperateChipinReq,
+ID_NetGameOperateChipinRes,
+ID_NetGameOperateCallReq,
+ID_NetGameOperateCallRes,
+ID_NetGameOperateCompareReq,
+ID_NetGameOperateCompareRes,
 ID_NetEnd,
 
 };
@@ -1884,6 +1892,30 @@ uint8 result;
 
 };
 
+class NetRoomInfoNotify : public Packet {
+public:
+	NetRoomInfoNotify():
+	Packet(ID_NetRoomInfoNotify) {
+roomInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << roomInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> roomInfo);
+
+		return true;
+	}
+public:
+RoomInfo roomInfo;
+
+};
+
 class NetGameStartNotify : public Packet {
 public:
 	NetGameStartNotify():
@@ -1905,6 +1937,34 @@ CHECK(bytes >> info);
 	}
 public:
 GameGoldenFlowerInfo info;
+
+};
+
+class NetGameCloseNotify : public Packet {
+public:
+	NetGameCloseNotify():
+	Packet(ID_NetGameCloseNotify) {
+winUserId = 0;
+winGold = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << winUserId);
+CHECK(bytes << winGold);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> winUserId);
+CHECK(bytes >> winGold);
+
+		return true;
+	}
+public:
+uint32 winUserId;
+uint32 winGold;
 
 };
 
@@ -1932,59 +1992,297 @@ GameGoldenFlowerInfo info;
 
 };
 
-class NetGameChipInReq : public Packet {
+class NetGameOperateSeeReq : public Packet {
 public:
-	NetGameChipInReq():
-	Packet(ID_NetGameChipInReq) {
-chiptype = 0;
-gold = 0;
+	NetGameOperateSeeReq():
+	Packet(ID_NetGameOperateSeeReq) {
 
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
-CHECK(bytes << chiptype);
-CHECK(bytes << gold);
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
-CHECK(bytes >> chiptype);
-CHECK(bytes >> gold);
 
 		return true;
 	}
 public:
-uint8 chiptype;
-uint32 gold;
 
 };
 
-class NetGameChipInRes : public Packet {
+class NetGameOperateSeeRes : public Packet {
 public:
-	NetGameChipInRes():
-	Packet(ID_NetGameChipInRes) {
+	NetGameOperateSeeRes():
+	Packet(ID_NetGameOperateSeeRes) {
 result = 0;
-gold = 0;
+
 
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << result);
-CHECK(bytes << gold);
+uint32 cards_Size = (uint32)cards.size();
+bytes << cards_Size;
+for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
+	bytes << cards[cards_i];
+}
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> result);
-CHECK(bytes >> gold);
+uint32 cards_Size = 0;
+bytes >> cards_Size;
+for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
+	uint8 cards_info;
+	bytes >> cards_info;
+	cards.push_back(cards_info);
+}
 
 		return true;
 	}
 public:
 uint8 result;
+std::vector<uint8> cards;
+
+};
+
+class NetGameOperateChipinReq : public Packet {
+public:
+	NetGameOperateChipinReq():
+	Packet(ID_NetGameOperateChipinReq) {
+gold = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << gold);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> gold);
+
+		return true;
+	}
+public:
 uint32 gold;
+
+};
+
+class NetGameOperateChipinRes : public Packet {
+public:
+	NetGameOperateChipinRes():
+	Packet(ID_NetGameOperateChipinRes) {
+result = 0;
+userId = 0;
+gold = 0;
+state = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << userId);
+CHECK(bytes << gold);
+CHECK(bytes << state);
+CHECK(bytes << nextSpeakUserId);
+CHECK(bytes << speakTime);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> userId);
+CHECK(bytes >> gold);
+CHECK(bytes >> state);
+CHECK(bytes >> nextSpeakUserId);
+CHECK(bytes >> speakTime);
+
+		return true;
+	}
+public:
+uint8 result;
+uint32 userId;
+uint32 gold;
+uint8 state;
+uint32 nextSpeakUserId;
+uint32 speakTime;
+
+};
+
+class NetGameOperateCallReq : public Packet {
+public:
+	NetGameOperateCallReq():
+	Packet(ID_NetGameOperateCallReq) {
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+
+		return true;
+	}
+public:
+
+};
+
+class NetGameOperateCallRes : public Packet {
+public:
+	NetGameOperateCallRes():
+	Packet(ID_NetGameOperateCallRes) {
+result = 0;
+userId = 0;
+gold = 0;
+state = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << userId);
+CHECK(bytes << gold);
+CHECK(bytes << state);
+CHECK(bytes << nextSpeakUserId);
+CHECK(bytes << speakTime);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> userId);
+CHECK(bytes >> gold);
+CHECK(bytes >> state);
+CHECK(bytes >> nextSpeakUserId);
+CHECK(bytes >> speakTime);
+
+		return true;
+	}
+public:
+uint8 result;
+uint32 userId;
+uint32 gold;
+uint8 state;
+uint32 nextSpeakUserId;
+uint32 speakTime;
+
+};
+
+class NetGameOperateCompareReq : public Packet {
+public:
+	NetGameOperateCompareReq():
+	Packet(ID_NetGameOperateCompareReq) {
+tarUserId = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << tarUserId);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> tarUserId);
+
+		return true;
+	}
+public:
+uint32 tarUserId;
+
+};
+
+class NetGameOperateCompareRes : public Packet {
+public:
+	NetGameOperateCompareRes():
+	Packet(ID_NetGameOperateCompareRes) {
+result = 0;
+userId = 0;
+
+gold = 0;
+state = 0;
+tarUserId = 0;
+
+tarState = 0;
+nextSpeakUserId = 0;
+speakTime = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << userId);
+uint32 cards_Size = (uint32)cards.size();
+bytes << cards_Size;
+for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
+	bytes << cards[cards_i];
+}
+CHECK(bytes << gold);
+CHECK(bytes << state);
+CHECK(bytes << tarUserId);
+uint32 tarCards_Size = (uint32)tarCards.size();
+bytes << tarCards_Size;
+for (uint32 tarCards_i = 0; tarCards_i < tarCards_Size; ++tarCards_i) {
+	bytes << tarCards[tarCards_i];
+}
+CHECK(bytes << tarState);
+CHECK(bytes << nextSpeakUserId);
+CHECK(bytes << speakTime);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> userId);
+uint32 cards_Size = 0;
+bytes >> cards_Size;
+for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
+	uint8 cards_info;
+	bytes >> cards_info;
+	cards.push_back(cards_info);
+}
+CHECK(bytes >> gold);
+CHECK(bytes >> state);
+CHECK(bytes >> tarUserId);
+uint32 tarCards_Size = 0;
+bytes >> tarCards_Size;
+for (uint32 tarCards_i = 0; tarCards_i < tarCards_Size; ++tarCards_i) {
+	uint8 tarCards_info;
+	bytes >> tarCards_info;
+	tarCards.push_back(tarCards_info);
+}
+CHECK(bytes >> tarState);
+CHECK(bytes >> nextSpeakUserId);
+CHECK(bytes >> speakTime);
+
+		return true;
+	}
+public:
+uint8 result;
+uint32 userId;
+std::vector<uint8> cards;
+uint32 gold;
+uint8 state;
+uint32 tarUserId;
+std::vector<uint8> tarCards;
+uint8 tarState;
+uint32 nextSpeakUserId;
+uint32 speakTime;
 
 };
 
@@ -2060,8 +2358,16 @@ REGISTER_PACKET_HELPER(ID_NetRoomReadyReq, NetRoomReadyReq);
 REGISTER_PACKET_HELPER(ID_NetRoomReadyRes, NetRoomReadyRes);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameReq, NetRoomStartGameReq);
 REGISTER_PACKET_HELPER(ID_NetRoomStartGameRes, NetRoomStartGameRes);
+REGISTER_PACKET_HELPER(ID_NetRoomInfoNotify, NetRoomInfoNotify);
 REGISTER_PACKET_HELPER(ID_NetGameStartNotify, NetGameStartNotify);
+REGISTER_PACKET_HELPER(ID_NetGameCloseNotify, NetGameCloseNotify);
 REGISTER_PACKET_HELPER(ID_NetGameInfoNotify, NetGameInfoNotify);
-REGISTER_PACKET_HELPER(ID_NetGameChipInReq, NetGameChipInReq);
-REGISTER_PACKET_HELPER(ID_NetGameChipInRes, NetGameChipInRes);
+REGISTER_PACKET_HELPER(ID_NetGameOperateSeeReq, NetGameOperateSeeReq);
+REGISTER_PACKET_HELPER(ID_NetGameOperateSeeRes, NetGameOperateSeeRes);
+REGISTER_PACKET_HELPER(ID_NetGameOperateChipinReq, NetGameOperateChipinReq);
+REGISTER_PACKET_HELPER(ID_NetGameOperateChipinRes, NetGameOperateChipinRes);
+REGISTER_PACKET_HELPER(ID_NetGameOperateCallReq, NetGameOperateCallReq);
+REGISTER_PACKET_HELPER(ID_NetGameOperateCallRes, NetGameOperateCallRes);
+REGISTER_PACKET_HELPER(ID_NetGameOperateCompareReq, NetGameOperateCompareReq);
+REGISTER_PACKET_HELPER(ID_NetGameOperateCompareRes, NetGameOperateCompareRes);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

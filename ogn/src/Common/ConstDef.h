@@ -37,9 +37,18 @@ enum ThreeCardType
 	TCT_Baozi,					// 豹
 };
 
-enum ChipinType
+enum GameOperateType
 {
-	CT_None = 0,
-	CT_Chipin,					// 下
-	CT_CallChipin,				// 跟
+	GOperT_None = 0,
+	GOperT_See,						// 看
+	GOperT_Chipin,					// 下
+	GOperT_CallChipin,				// 跟
+	GOperT_VS,						// 比
+};
+
+enum VSType
+{
+	VST_None,
+	VST_Win,
+	VST_Lose,
 };

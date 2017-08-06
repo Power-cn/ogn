@@ -8,7 +8,8 @@ GameGoldenFlower::GameGoldenFlower()
 	mCurGold = 0;
 	mGameLv = 0;
 	mCurMaxGold = 0;
-	mSpeedCount = 0;
+	mRound = 0;
+	mSpeakCount = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
@@ -34,23 +35,47 @@ bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 
 void GameGoldenFlower::DoShuffle()
 {
-	for (uint32 i = 0; i < MAX_POKER_COUNT; ++i) {
-		mPoker[i] = i + 1;
+	for (uint32 i = 0; i < MAX_CARD_COUNT; ++i) {
+		mCards[i] = i + 1;
 	}
-	uint32 curSize = MAX_POKER_COUNT;
+	uint32 curSize = MAX_CARD_COUNT;
 	while (curSize > 0)
 	{
 		uint32 idx = rand() % curSize;
-		mCurPoker.push(mPoker[idx]);
+		mCurCards.push(mCards[idx]);
 		curSize--;
-		mPoker[idx] = mPoker[curSize];
+		mCards[idx] = mCards[curSize];
 	}
+}
+
+void GameGoldenFlower::IncSpeakCount()
+{
+	mSpeakCount++;
+	if (mSpeakCount > GetGameEntCount()) {
+		mRound++;
+		mSpeakCount = 0;
+	}
+}
+
+bool GameGoldenFlower::IsMaxRount()
+{
+	if (mSpeakCount + 1 > GetGameEntCount()) {
+		GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(GetGameLv());
+		if (aGameLvJson == NULL){
+			return false;
+		}
+
+		if (GetRound() + 1 >= aGameLvJson->Maxround) {
+			return true;
+		}
+	}
+	return false;
 }
 
 uint8 GameGoldenFlower::DoDealPoker()
 {
-	uint8 pkr = mCurPoker.front();
-	mCurPoker.pop();
+	uint8 pkr = mCurCards.front();
+	mCurCards.pop();
 	return pkr;
 }
 
@@ -72,6 +97,46 @@ uint32 GameGoldenFlower::GetNextSpeakPlr()
 			return aGameEnt->userId;
 	}
 	return 0;
+}
+
+uint32 GameGoldenFlower::GetCurMaxGold()
+{
+	uint32 curMaxGold = mCurMaxGold;
+	if (curMaxGold != 0) return curMaxGold;
+
+	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(GetGameLv());
+	if (aGameLvJson == NULL) {
+		return false;
+	}
+	curMaxGold = curMaxGold == 0 ? aGameLvJson->Mingold : curMaxGold;
+	SetCurMaxGold(curMaxGold);
+	return curMaxGold;
+}
+
+uint32 GameGoldenFlower::CalculateUseGold(uint32 userGold)
+{
+	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(GetGameLv());
+	if (aGameLvJson == NULL){
+		return 0;
+	}
+
+	uint32 curMaxGold = GetCurMaxGold();
+	curMaxGold = curMaxGold == 0 ? aGameLvJson->Mingold : curMaxGold;
+	userGold = CheckUserGold(userGold);
+	if (userGold < curMaxGold) {
+		return 0;
+	}
+	return userGold;
+}
+
+uint32 GameGoldenFlower::GetLivePlrCount()
+{
+	uint32 num = 0;
+	for (GameEntity* aGameEnt:mLstGameEntity) {
+		if (aGameEnt->GetState() == GS_Normal)
+			num++;
+	}
+	return num;
 }
 
 uint32 GameGoldenFlower::CheckUserGold(uint32 gold)
@@ -99,36 +164,37 @@ std::string GameGoldenFlower::ToString()
 	return str;
 }
 
-bool GameGoldenFlower::DoChipin(uint32 gold, GameEntity* aGameEnt, uint32& userGold)
+int32 GameGoldenFlower::CheckCardsToTarget(uint32 srcUserId, uint32 dstUserId)
 {
-	Player* aPlr = sWorld.FindPlrByUserId(aGameEnt->userId);
-	if (aPlr == NULL)
+	return LuaEngine::Call(sScriptCard, "ComparePlrCard", srcUserId, dstUserId);
+}
+
+bool GameGoldenFlower::DoUseGold(Player* aPlr, uint32 gold)
+{
+	GameEntity* aGameEnt = FindGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL) return false;
+	sProperty.addGold(aPlr, -(int32)gold);
+	aGameEnt->addGold(gold);
+	AddCurGold(gold);
+	SetCurMaxGold(gold);
+	IncSpeakCount();
+	uint32 nextUserId = GetNextSpeakPlr();
+	SetCurSpeakPlr(nextUserId);
+	return true;
+}
+
+bool GameGoldenFlower::DoResult(uint32& winer)
+{
+	if (GetLivePlrCount() == 1)
 	{
-		return false;
-	}
-	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(GetGameLv());
-	if (aGameLvJson == NULL)
-	{
-		return false;
-	}
-	if (sProperty.hasGold(aPlr, gold))
-	{
-		if (mRound + 1 > aGameLvJson->Maxround)
-		{
-			// 最大回合
-			return false;
+		uint32 num = 0;
+		for (GameEntity* aGameEnt : mLstGameEntity) {
+			if (aGameEnt->GetState() == GS_Normal) {
+				winer = aGameEnt->GetUserId();
+				break;
+			}
 		}
-		sProperty.addGold(aPlr, -(int32)gold);
-		aGameEnt->addGold(gold);
-		AddCurGold(gold);
-		SetCurMaxGold(gold);
-		userGold = gold;
-		mSpeedCount++;
-		if (mSpeedCount > GetGameEntCount())
-		{
-			mRound++;
-			mSpeedCount = 0;
-		}
+
 		return true;
 	}
 	return false;
@@ -158,6 +224,30 @@ bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
 	return true;
 }
 
+bool GameGoldenFlower::OnSeeCard(GameEntity* aGameEnt)
+{
+	LuaEngine::Call(this, sScriptGame, "OnSeeCard", aGameEnt->userId);
+	return true;
+}
+
+bool GameGoldenFlower::OnChipinReq(GameEntity* aGameEnt, uint32 gold)
+{
+	LuaEngine::Call(this, sScriptGame, "OnChipinReq", aGameEnt->userId, gold);
+	return true;
+}
+
+bool GameGoldenFlower::OnCallReq(GameEntity* aGameEnt, uint32 gold)
+{
+	LuaEngine::Call(this, sScriptGame, "OnCallReq", aGameEnt->userId, gold);
+	return true;
+}
+
+bool GameGoldenFlower::OnCompareReq(GameEntity* aGameEnt, uint32 tarUserId, uint8 result)
+{
+	LuaEngine::Call(this, sScriptGame, "OnCompareReq", aGameEnt->userId, tarUserId, result);
+	return true;
+}
+
 GameEntity::GameEntity()
 {
 
@@ -171,7 +261,7 @@ GameEntity::~GameEntity()
 bool GameEntity::operator >> (GameEntityInfo& info)
 {
 	info.userId = userId;
-	info.cards = cards;
+	info.cards = GetSeeCards();
 	info.userGold = getGold();
 	return true;
 }

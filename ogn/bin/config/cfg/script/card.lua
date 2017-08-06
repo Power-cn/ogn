@@ -404,6 +404,9 @@ end
 function CompareCards(cards1, cards2)
 	cards1 = SortCards(cards1);
 	cards2 = SortCards(cards2);		
+	if CheckRepeat(cards1, cards2) then
+		return 3;
+	end
 	
 	local u1cardtype = CheckThreeCardType(cards1[1], cards1[2], cards1[3]);
 	local u2cardtype = CheckThreeCardType(cards2[1], cards2[2], cards2[3]);
@@ -416,5 +419,73 @@ function CompareCards(cards1, cards2)
 		return 2;
 	end
 	
-	return CompareCardsType(u1cardtype, cards1, cards2);
+	local ret = CompareCardsType(u1cardtype, cards1, cards2);
+	if (ret == 0) then
+		return 1;
+	end
+	return ret;
+end
+
+function CheckRepeat(cards1, cards2)
+	if cards1[1].ID == cards1[2].ID then
+		return true;
+	end
+	
+	if cards1[1].ID == cards1[3].ID then
+		return true;
+	end
+			
+	if cards1[1].ID == cards2[1].ID then
+		return true;
+	end
+	
+	if cards1[1].ID == cards2[2].ID then
+		return true;
+	end
+	
+	if cards1[1].ID == cards2[3].ID then
+		return true;
+	end
+	
+	if cards1[2].ID == cards1[3].ID then
+		return true;
+	end
+			
+	if cards1[2].ID == cards2[1].ID then
+		return true;
+	end
+
+	if cards1[2].ID == cards2[2].ID then
+		return true;
+	end
+
+	if cards1[2].ID == cards2[3].ID then
+		return true;
+	end
+	
+	if cards1[3].ID == cards2[1].ID then
+		return true;
+	end
+
+	if cards1[3].ID == cards2[2].ID then
+		return true;
+	end
+
+	if cards1[3].ID == cards2[3].ID then
+		return true;
+	end
+	
+	if cards2[1].ID == cards2[2].ID then
+		return true;
+	end
+
+	if cards2[1].ID == cards2[3].ID then
+		return true;
+	end
+	
+	if cards2[2].ID == cards2[3].ID then
+		return true;
+	end
+			
+	return false;
 end

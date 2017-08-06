@@ -104,6 +104,9 @@ void CmdDispatcher::update(float32 time, float32 delay)
 	CmdEvent e;
 	e.event = cmd->cmd;
 	e.cmdExecute = cmd;
+	if (cmd->cmd == "clear") {
+		system("cls");
+	}
 	this->dispatch(e);
 	delete cmd;
 }

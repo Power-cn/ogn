@@ -16,6 +16,11 @@ Player* luaPlayer()
 	return (Player*)LuaEngine::sCurrentObject;
 }
 
+GameGoldenFlower* luaGameComponent()
+{
+	return (GameGoldenFlower*)LuaEngine::sCurrentObject;
+}
+
 Entity* luaPlrToEnt(Player* player)
 {
 	return player;
@@ -31,9 +36,14 @@ Player* luaFindPlrByUserId(uint32 userId)
 	return sWorld.FindPlrByUserId(userId);
 }
 
-GameModle* luaToGameModle(GameGoldenFlower* aGame)
+Player* luaFindPlrByName(cstring& name)
 {
-	return (GameModle*)aGame;
+	return sWorld.FindPlrByName(name);
+}
+
+GameComponent* luaToGameModle(GameGoldenFlower* aGame)
+{
+	return (GameComponent*)aGame;
 }
 
 GameGoldenFlower* luaGoldenFlower(uint32 insId)

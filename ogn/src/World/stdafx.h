@@ -103,7 +103,7 @@
 #include "./Module/RoomModule/RoomModule.h"
 
 #include "./Module/GameModule/GameHandler.h"
-#include "./Module/GameModule/Game.h"
+#include "./Module/GameModule/GameComponent.h"
 #include "./Module/GameModule/GameGoldenFlower.h"
 #include "./Module/GameModule/GameModule.h"
 

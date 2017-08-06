@@ -44,11 +44,59 @@ function OnClose(gameId)
 end
 
 function OnEnter(gameId, userId)
-	
+	local aGame = luaGoldenFlower(gameId);
+	local aGameEnt = aGame:FindGameEnt(userId);
+	local play = luaFindPlrByUserId(userId);
+	local count = aGameEnt:GetCardCount();
+	local str = "";
+	local sCfgMgr = luaCfg();
+		
+	for i = 0, count - 1, 1 do
+		local card = aGameEnt:GetCard(i);
+		local cardinfo = sCfgMgr:getCardJson(card);
+		str = str.."["..cardinfo.Name.."]";
+	end	
+	play:sendPacketToMsg(EC_SYSTEM, str);
 	return 0;
 end
 
 function OnLeave(gameId, userId)
 
+	return 0;
+end
+
+function OnSeeCard(userId)
+	local aGame = luaGameComponent();
+	local aGameEnt = aGame:FindGameEnt(userId);
+	local play = luaFindPlrByUserId(userId);
+	play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]".."¿´ÅÆ");
+	return 0;
+end
+
+-- ÏÂ
+function OnChipinReq(userId, gold)
+	local aGame = luaGameComponent();
+	local aGameEnt = aGame:FindGameEnt(userId);
+	local play = luaFindPlrByUserId(userId);
+	play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]".."ÏÂ×¢"..gold.."½ð±Ò");
+	return 0;
+end
+
+--¸ú
+function OnCallReq(userId, gold)
+	local aGame = luaGameComponent();
+	local aGameEnt = aGame:FindGameEnt(userId);
+	local play = luaFindPlrByUserId(userId);
+	play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]".."¸ú×¢"..gold.."½ð±Ò");
+	return 0;
+end
+
+function OnCompareReq(userId, tarUserId, result)
+	local aGame = luaGameComponent();
+	local aGameEnt = aGame:FindGameEnt(userId);
+	local play = luaFindPlrByUserId(userId);
+	local tarPlay = luaFindPlrByUserId(tarUserId);
+	local strret = result == 1 and "Ó®" or "Êä";
+	play:sendPacketToMsg(EC_ROOM, "["..play:getName().."]±ÈÅÆ".."["..tarPlay:getName().."]["..strret.."]");
 	return 0;
 end

@@ -27,6 +27,15 @@ end
 
 RegGm(
 {
+name = "addgold";
+fun=function (player, s1, s2, s3)
+	local property = luaProperty();
+	property:setGold(player, tonumber(s1));
+end
+});
+
+RegGm(
+{
 name = "croom";
 fun=function (player, s1, s2, s3)
 	local luaRoom = luaRoom();
@@ -105,5 +114,42 @@ name = "auroom";
 fun=function (player, s1, s2, s3)
 	local luaRoom = luaRoom();
 	luaRoom:DoAutoMatch(player);
+end
+});
+
+RegGm(
+{
+name = "kpai";
+fun=function (play, s1, s2, s3)
+	local sGame = luaGame();
+	sGame:DoOperateSee(play);
+end
+});
+
+RegGm(
+{
+name = "xzhu";
+fun=function (player, s1, s2, s3)
+	local sGame = luaGame();
+	sGame:DoOperateChipinReq(play, tonumber(s1));
+end
+});
+
+RegGm(
+{
+name = "gzhu";
+fun=function (player, s1, s2, s3)
+	local sGame = luaGame();
+	sGame:DoOperateCallReq(play);
+end
+});
+
+RegGm(
+{
+name = "bpai";
+fun=function (player, s1, s2, s3)
+	local sGame = luaGame();
+	local tarPlr = luaFindPlrByName(s1);
+	sGame:DoOperateCompareReq(play, tarPlr:getUserId());
 end
 });

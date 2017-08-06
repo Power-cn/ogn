@@ -1,12 +1,12 @@
 #pragma once
 
 class GameEntity;
-class GameModle
+class GameComponent : public Object
 {
 	friend class GameModule;
 public:
-	GameModle();
-	virtual ~GameModle();
+	GameComponent();
+	virtual ~GameComponent();
 public:
 	GameEntity* AddGameEnt(GameEntity* aGameEnt);
 	GameEntity* GetGameEnt(uint32 idx);

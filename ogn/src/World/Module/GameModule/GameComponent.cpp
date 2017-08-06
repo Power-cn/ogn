@@ -1,14 +1,14 @@
 #include "stdafx.h"
 
-uint32 GameModle::sId = 0;
+uint32 GameComponent::sId = 0;
 
-GameModle::GameModle():
+GameComponent::GameComponent():
 mInsId(++sId),
 mRoomId(0)
 {
 }
 
-GameModle::~GameModle()
+GameComponent::~GameComponent()
 {
 	for (GameEntity* aGameEnt : mLstGameEntity)
 	{
@@ -17,20 +17,20 @@ GameModle::~GameModle()
 	mLstGameEntity.clear();
 }
 
-GameEntity* GameModle::AddGameEnt(GameEntity* aGameEnt)
+GameEntity* GameComponent::AddGameEnt(GameEntity* aGameEnt)
 {
 	mLstGameEntity.push_back(aGameEnt);
 	return aGameEnt;
 }
 
-GameEntity* GameModle::GetGameEnt(uint32 idx)
+GameEntity* GameComponent::GetGameEnt(uint32 idx)
 {
 	if (idx < mLstGameEntity.size())
 		return mLstGameEntity[idx];
 	return NULL;
 }
 
-GameEntity* GameModle::FindGameEnt(uint32 userId)
+GameEntity* GameComponent::FindGameEnt(uint32 userId)
 {
 	for (GameEntity* aGameEnt : mLstGameEntity)
 	{
@@ -42,7 +42,7 @@ GameEntity* GameModle::FindGameEnt(uint32 userId)
 	return NULL;
 }
 
-void GameModle::DelGameEnt(uint32 userId)
+void GameComponent::DelGameEnt(uint32 userId)
 {
 	for (auto itr = mLstGameEntity.begin();
 		itr != mLstGameEntity.end();
@@ -57,14 +57,14 @@ void GameModle::DelGameEnt(uint32 userId)
 	}
 }
 
-uint32 GameModle::GetPlrCard(uint32 userId, uint32 idx)
+uint32 GameComponent::GetPlrCard(uint32 userId, uint32 idx)
 {
 	GameEntity* aGameEnt = FindGameEnt(userId);
 	if (aGameEnt == NULL) return 0;
 	return aGameEnt->GetCard(idx);
 }
 
-std::string GameModle::ToString()
+std::string GameComponent::ToString()
 {
 	std::string str;
 	char szBuffer[256] = { 0 };
@@ -76,7 +76,7 @@ std::string GameModle::ToString()
 	return str;
 }
 
-int32 GameModle::GetPlrInx(uint32 userId)
+int32 GameComponent::GetPlrInx(uint32 userId)
 {
 	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
 	{

@@ -13,14 +13,14 @@ protected:
 	virtual bool onEnterWorld(Player* player, Dictionary& dict);
 	virtual bool onLeaveWorld(Player* player, Dictionary& dict);
 public:
-	GameModle* FindGameModle(uint32 insId);
-	GameModle* FindPlrGameModle(uint32 userId);
-	GameModle* FindRoomGameModle(uint32 roomId);
+	GameComponent* FindGameModle(uint32 insId);
+	GameComponent* FindPlrGameModle(uint32 userId);
+	GameComponent* FindRoomGameModle(uint32 roomId);
 	GameEntity* FindPlrGameEnt(uint32 userId);
 
-	GameModle* AddGameModle(GameModle* aGameModle);
-	GameModle* AddPlrGameModle(uint32 userId, GameModle* aGameModle);
-	GameModle* AddRoomGameModle(uint32 roomId, GameModle* aGameModle);
+	GameComponent* AddGameModle(GameComponent* aGameModle);
+	GameComponent* AddPlrGameModle(uint32 userId, GameComponent* aGameModle);
+	GameComponent* AddRoomGameModle(uint32 roomId, GameComponent* aGameModle);
 
 	void DelGameModle(uint32 insId);
 	void DelPlrGameModle(uint32 userId);
@@ -28,9 +28,12 @@ public:
 public:
 	bool DoStartGame(Room* aRoom);
 	bool DoCloseGame(uint32 roomId);
-	bool DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold);
+	bool DoOperateSee(Player* aPlr);
+	bool DoOperateChipinReq(Player* aPlr, uint32 gold);
+	bool DoOperateCallReq(Player* aPlr);
+	bool DoOperateCompareReq(Player* aPlr, uint32 tarUserId);
 protected:
-	std::map<uint32, GameModle*>				mMapGameModle;
-	std::map<uint32, GameModle*>				mMapRoomGameModle;
-	std::map<uint32, GameModle*>				mMapPlrGameModle;
+	std::map<uint32, GameComponent*>				mMapGameModle;
+	std::map<uint32, GameComponent*>				mMapRoomGameModle;
+	std::map<uint32, GameComponent*>				mMapPlrGameModle;
 };

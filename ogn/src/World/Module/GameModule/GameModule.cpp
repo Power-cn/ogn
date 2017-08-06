@@ -37,7 +37,7 @@ bool GameModule::onLeaveWorld(Player* player, Dictionary& dict)
 	return true;
 }
 
-GameModle* GameModule::AddGameModle(GameModle* aGameModle)
+GameComponent* GameModule::AddGameModle(GameComponent* aGameModle)
 {
 	auto itr = mMapGameModle.find(aGameModle->GetInsId());
 	if (itr != mMapGameModle.end())
@@ -46,7 +46,7 @@ GameModle* GameModule::AddGameModle(GameModle* aGameModle)
 	return aGameModle;
 }
 
-GameModle* GameModule::FindGameModle(uint32 insId)
+GameComponent* GameModule::FindGameModle(uint32 insId)
 {
 	auto itr = mMapGameModle.find(insId);
 	if (itr != mMapGameModle.end())
@@ -63,7 +63,7 @@ void GameModule::DelGameModle(uint32 insId)
 	}
 }
 
-GameModle* GameModule::AddPlrGameModle(uint32 userId, GameModle* aGameModle)
+GameComponent* GameModule::AddPlrGameModle(uint32 userId, GameComponent* aGameModle)
 {
 	auto itr = mMapPlrGameModle.find(userId);
 	if (itr != mMapPlrGameModle.end())
@@ -73,7 +73,7 @@ GameModle* GameModule::AddPlrGameModle(uint32 userId, GameModle* aGameModle)
 	return aGameModle;
 }
 
-GameModle* GameModule::AddRoomGameModle(uint32 roomId, GameModle* aGameModle)
+GameComponent* GameModule::AddRoomGameModle(uint32 roomId, GameComponent* aGameModle)
 {
 	auto itr = mMapRoomGameModle.find(roomId);
 	if (itr != mMapRoomGameModle.end())
@@ -83,7 +83,7 @@ GameModle* GameModule::AddRoomGameModle(uint32 roomId, GameModle* aGameModle)
 	return aGameModle;
 }
 
-GameModle* GameModule::FindPlrGameModle(uint32 userId)
+GameComponent* GameModule::FindPlrGameModle(uint32 userId)
 {
 	auto itr = mMapPlrGameModle.find(userId);
 	if (itr != mMapPlrGameModle.end())
@@ -105,7 +105,7 @@ void GameModule::DelRoomGameModle(uint32 roomId)
 		mMapRoomGameModle.erase(itr);
 }
 
-GameModle* GameModule::FindRoomGameModle(uint32 roomId)
+GameComponent* GameModule::FindRoomGameModle(uint32 roomId)
 {
 	auto itr = mMapRoomGameModle.find(roomId);
 	if (itr != mMapRoomGameModle.end())
@@ -115,7 +115,7 @@ GameModle* GameModule::FindRoomGameModle(uint32 roomId)
 
 GameEntity* GameModule::FindPlrGameEnt(uint32 userId)
 {
-	GameModle* aGameModule = FindPlrGameModle(userId);
+	GameComponent* aGameModule = FindPlrGameModle(userId);
 	if (aGameModule == NULL)
 		return NULL;
 	return aGameModule->FindGameEnt(userId);
@@ -157,6 +157,7 @@ bool GameModule::DoStartGame(Room* aRoom)
 		{
 			GameEntity* aGameEnt = aGame->GetGameEnt(i);
 			aGameEnt->cards.push_back(aGame->DoDealPoker());
+			aGameEnt->seeCards.push_back(0);
 		}
 	}
 
@@ -178,7 +179,25 @@ bool GameModule::DoStartGame(Room* aRoom)
 
 bool GameModule::DoCloseGame(uint32 roomId)
 {
-	GameModle* aGameModle = FindRoomGameModle(roomId);
+	Room* aRoom = sRoom.FindRoom(roomId);
+	if (aRoom == NULL)
+	{
+		return false;
+	}
+
+	for (int32 i = 0 ;i < aRoom->GetRoomPlayerCount(); ++i)
+	{
+		RoomPlayer* aRoomPlayer = aRoom->GetRoomPlayer(i);
+		if (aRoomPlayer)
+		{
+			aRoomPlayer->SetState(RPS_None);
+		}
+	}
+	NetRoomInfoNotify nfy;
+	(*aRoom) >> nfy.roomInfo;
+	aRoom->sendPacketToAll(nfy);
+
+	GameComponent* aGameModle = FindRoomGameModle(roomId);
 	if (aGameModle == NULL)
 	{
 		LOG_ERROR("%d 房间没有开始游戏", roomId);
@@ -210,10 +229,42 @@ bool GameModule::DoCloseGame(uint32 roomId)
 	return true;
 }
 
-bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
+
+bool GameModule::DoOperateSee(Player* aPlr)
+{
+	NetGameOperateSeeRes res;
+
+	GameEntity* aGameEnt = FindPlrGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL)
+	{
+		res.result = NResultFail;
+		aPlr->sendPacket(res);
+		return false;
+	}
+
+	if (aGameEnt->GetIsSee())
+	{
+		res.result = NResultFail;
+		aPlr->sendPacket(res);
+		return false;
+	}
+	aGameEnt->SetIsSee(true);
+	aGameEnt->GetSeeCards() = aGameEnt->GetCards();
+	res.result = NResultSuccess;
+	res.cards = aGameEnt->GetCards();
+	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
+	if (aGame) {
+		aGame->OnSeeCard(aGameEnt);
+	}
+
+	aPlr->sendPacket(res);
+	return true;
+}
+
+bool GameModule::DoOperateChipinReq(Player* aPlr, uint32 gold)
 {
 	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
-	if (aGame == NULL) 
+	if (aGame == NULL)
 	{
 		return false;
 	}
@@ -222,7 +273,6 @@ bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
 	{
 		return false;
 	}
-
 	if (aGame->GetCurSpeak() != aPlr->getUserId())
 	{
 		return false;
@@ -233,41 +283,191 @@ bool GameModule::DoChipInReq(Player* aPlr, uint8 chiptype, uint32 gold)
 	{
 		return false;
 	}
+
+	if (aGame->IsMaxRount())
+	{
+		// 最大回合
+		return false;
+	}
+	uint32 userGold = aGame->CalculateUseGold(gold);
+	if (userGold == 0)
+	{
+		return false;
+	}
+	NetGameOperateChipinRes res;
+	if (sProperty.hasGold(aPlr, userGold))
+	{
+		aGame->DoUseGold(aPlr, userGold);
+
+		if (aGame) {
+			aGame->OnChipinReq(aGameEnt, userGold);
+		}
+
+		res.result = NResultSuccess;
+		res.userId = aPlr->getUserId();
+		res.gold = userGold;
+		res.state =(uint8) aGameEnt->GetState();
+		res.nextSpeakUserId = aGame->GetCurSpeak();
+		res.speakTime = aGame->GetSpeakTime();
+		aRoom->sendPacketToAll(res);
+		uint32 winer = 0;
+		if (aGame->DoResult(winer)) {
+			NetGameCloseNotify nfy;
+			nfy.winUserId = winer;
+			nfy.winGold = aGame->GetCurGold();
+			aRoom->sendPacketToAll(nfy);
+
+			DoCloseGame(aGame->GetRoomId());
+		}
+		return true;
+	}
+	res.result = NResultFail;
+	res.state = (uint8)aGameEnt->GetState();
+	aRoom->sendPacketToAll(res);
+	return false;
+}
+
+bool GameModule::DoOperateCallReq(Player* aPlr)
+{
+	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
+	if (aGame == NULL)
+	{
+		return false;
+	}
+	Room* aRoom = sRoom.FindRoom(aGame->GetRoomId());
+	if (aRoom == NULL)
+	{
+		return false;
+	}
+	if (aGame->GetCurSpeak() != aPlr->getUserId())
+	{
+		return false;
+	}
+
+	GameEntity* aGameEnt = aGame->GetGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL)
+	{
+		return false;
+	}
+	if (aGame->IsMaxRount())
+	{
+		// 最大回合
+		return false;
+	}
+
 	GameLevelJson* aGameLvJson = sCfgMgr.getGameLevelJson(aGame->GetGameLv());
 	if (aGameLvJson == NULL)
 	{
 		return false;
 	}
-	uint32 curMaxGold = aGame->GetCurMaxGold();
-	curMaxGold = curMaxGold == 0 ? aGameLvJson->Mingold : curMaxGold;
-	uint32 userGold = 0;
-	if (chiptype == CT_Chipin)
-		userGold = gold;
-	
-	if (chiptype == CT_CallChipin)
-		userGold = curMaxGold;
 
-	userGold = aGame->CheckUserGold(userGold);
+	uint32 userGold = aGame->CalculateUseGold(aGame->GetCurMaxGold());
 	if (userGold == 0)
 	{
 		return false;
 	}
-	uint32 retGold = 0;
-	if (aGame->DoChipin(userGold, aGameEnt, retGold))
+	NetGameOperateCallRes res;
+	if (sProperty.hasGold(aPlr, userGold))
 	{
-		uint32 nextUserId = aGame->GetNextSpeakPlr();
-		aGame->SetCurSpeakPlr(nextUserId);
-		NetGameChipInRes res;
-		res.gold = retGold;
+		aGame->DoUseGold(aPlr, userGold);
+		aGame->OnCallReq(aGameEnt, userGold);
+
+		res.result = NResultSuccess;
+		res.userId = aPlr->getUserId();
+		res.gold = userGold;
+		res.state = (uint8)aGameEnt->GetState();
+		res.nextSpeakUserId = aGame->GetCurSpeak();
+		res.speakTime = aGame->GetSpeakTime();
 		aRoom->sendPacketToAll(res);
-		NetGameInfoNotify nfy;
-		aRoom->sendPacketToAll(nfy);
+		uint32 winer = 0;
+		if (aGame->DoResult(winer)) {
+			NetGameCloseNotify nfy;
+			nfy.winUserId = winer;
+			nfy.winGold = aGame->GetCurGold();
+			aRoom->sendPacketToAll(nfy);
+
+			DoCloseGame(aGame->GetRoomId());
+		}
+
 		return true;
 	}
-
-	aGameEnt->SetState(GS_Giveup);
-	NetGameInfoNotify nfy;
-	aRoom->sendPacketToAll(nfy);
-	return true;
+	res.result = NResultFail;
+	res.state = (uint8)aGameEnt->GetState();
+	aRoom->sendPacketToAll(res);
+	return false;
 }
 
+bool GameModule::DoOperateCompareReq(Player* aPlr, uint32 tarUserId)
+{
+	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
+	if (aGame == NULL) {
+		return false;
+	}
+	Room* aRoom = sRoom.FindRoom(aGame->GetRoomId());
+	if (aRoom == NULL) {
+		return false;
+	}
+
+	GameEntity* aGameEnt = FindPlrGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL) {
+		return false;
+	}
+	GameEntity* tarGameEnt = FindPlrGameEnt(tarUserId);
+	if (tarGameEnt == NULL) {
+		return false;
+	}
+
+	if (aGame->IsMaxRount()) {
+		// 最大回合
+		return false;
+	}
+
+	NetGameOperateCompareRes res;
+
+	uint32 userGold = aGame->GetCurMaxGold();
+	if (userGold == 0)
+	{
+		return false;
+	}
+	if (sProperty.hasGold(aPlr, userGold))
+	{
+		int32 ret = aGame->CheckCardsToTarget(aPlr->getUserId(), tarUserId);
+		if (ret == VST_Win) {
+			tarGameEnt->SetState(GS_Lose);
+		}
+		else {
+			aGameEnt->SetState(GS_Lose);
+		}
+
+		aGame->DoUseGold(aPlr, userGold);
+
+		aGame->OnCompareReq(aGameEnt, tarUserId, ret);
+
+		res.result = NResultSuccess;
+		res.userId = aPlr->getUserId();
+		res.gold = userGold;
+		res.state = (uint8)aGameEnt->GetState();
+
+		res.tarUserId = tarUserId;
+		res.tarState = tarGameEnt->GetState();
+
+		res.nextSpeakUserId = aGame->GetCurSpeak();
+		res.speakTime = aGame->GetSpeakTime();
+		aRoom->sendPacketToAll(res);
+
+		uint32 winer = 0;
+		if (aGame->DoResult(winer)) {
+			NetGameCloseNotify nfy;
+			nfy.winUserId = winer;
+			nfy.winGold = aGame->GetCurGold();
+			aRoom->sendPacketToAll(nfy);
+
+			DoCloseGame(aGame->GetRoomId());
+		}
+		return true;
+	}
+	res.result = NResultFail;
+	res.state = (uint8)aGameEnt->GetState();
+	aRoom->sendPacketToAll(res);
+	return false;
+}

@@ -139,6 +139,20 @@ typedef void*			varptr;
 #define BIT(x)		(1<<x)
 
 
+//union Guid
+//{
+//	struct _Guid
+//	{
+//		uint32 h;
+//		uint32 l;
+//	} Guid_;
+//	uint64 guid;
+//	operator uint64()
+//	{
+//		return guid;
+//	}
+//};
+
 #define Guid64
 #ifdef Guid64
 typedef uint64					Guid;

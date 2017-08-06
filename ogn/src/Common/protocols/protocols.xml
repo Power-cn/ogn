@@ -326,22 +326,74 @@
       <member type="uint8" name="result" comment="0.失败1.成功" />
     </element>
 
+    <element id="ID_NetRoomInfoNotify" name="NetRoomInfoNotify" >
+      <member type="RoomInfo" name="roomInfo" />
+    </element>
+    
     <element id="ID_NetGameStartNotify" name="NetGameStartNotify" >
       <member type="GameGoldenFlowerInfo" name="info" />
     </element>
 
+    <element id="ID_NetGameCloseNotify" name="NetGameCloseNotify" >
+      <member type="uint32" name="winUserId" comment="" />
+      <member type="uint32" name="winGold" comment="" />
+    </element>
+    
     <element id="ID_NetGameInfoNotify" name="NetGameInfoNotify" >
       <member type="GameGoldenFlowerInfo" name="info" />
     </element>
+
+    <element id="ID_NetGameOperateSeeReq" name="NetGameOperateSeeReq" >
+    </element>
     
-    <element id="ID_NetGameChipInReq" name="NetGameChipInReq" >
-      <member type="uint8" name="chiptype" comment="1.下注2.跟注" />
+    <element id="ID_NetGameOperateSeeRes" name="NetGameOperateSeeRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
+      <member type="vector" name="cards" element="uint8" />
+    </element>
+
+    <element id="ID_NetGameOperateChipinReq" name="NetGameOperateChipinReq" >
       <member type="uint32" name="gold" comment="金币" />
     </element>
 
-    <element id="ID_NetGameChipInRes" name="NetGameChipInRes" >
+    <element id="ID_NetGameOperateChipinRes" name="NetGameOperateChipinRes" >
       <member type="uint8" name="result" comment="0.失败1.成功" />
-      <member type="uint32" name="gold" comment="金币" />
+      <member type="uint32" name="userId" comment="当前Id" />
+      <member type="uint32" name="gold" comment="使用金币" />
+      <member type="uint8" name="state" comment="状态" />
+      <member type="uint32" name="nextSpeakUserId" comment="下个说话的玩家" />
+      <member type="uint32" name="speakTime" comment="说话时间" />
+      
+    </element>
+
+    <element id="ID_NetGameOperateCallReq" name="NetGameOperateCallReq" >
+    </element>
+
+    <element id="ID_NetGameOperateCallRes" name="NetGameOperateCallRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
+      <member type="uint32" name="userId" comment="当前Id" />
+      <member type="uint32" name="gold" comment="使用金币" />
+      <member type="uint8" name="state" comment="状态" />
+      <member type="uint32" name="nextSpeakUserId" comment="下个说话的玩家" />
+      <member type="uint32" name="speakTime" comment="说话时间" />
+    </element>
+    
+    <element id="ID_NetGameOperateCompareReq" name="NetGameOperateCompareReq" >
+      <member type="uint32" name="tarUserId" comment="" />
+    </element>
+
+    <element id="ID_NetGameOperateCompareRes" name="NetGameOperateCompareRes" >
+      <member type="uint8" name="result" comment="0.失败1.成功" />
+      <member type="uint32" name="userId" comment="" />
+      <member type="vector" name="cards" element="uint8" />
+      <member type="uint32" name="gold" comment="使用金币" />
+      <member type="uint8" name="state" comment="状态" />
+      
+      <member type="uint32" name="tarUserId" comment="" />
+      <member type="vector" name="tarCards" element="uint8" />
+      <member type="uint8" name="tarState" comment="状态" />
+
+      <member type="uint32" name="nextSpeakUserId" comment="下个说话的玩家" />
+      <member type="uint32" name="speakTime" comment="说话时间" />
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

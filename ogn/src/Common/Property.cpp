@@ -211,28 +211,30 @@ int32 PropertyHelper::getDefense(Entity* entity)
 	return pro->mDefense;
 }
 
-void PropertyHelper::setGold(Player* aPlr, int64 value)
+void PropertyHelper::setGold(Player* aPlr, int32 value)
 {
 	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
 	if (aPro == NULL)	return;
 	aPro->mGold = value;
+	aPlr->addChangeValue(ep_Gold, value);
 }
 
-void PropertyHelper::addGold(Player* aPlr, int64 value)
+void PropertyHelper::addGold(Player* aPlr, int32 value)
 {
 	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
 	if (aPro == NULL)	return;
 	aPro->mGold += value;
+	aPlr->addChangeValue(ep_Gold, aPro->mGold);
 }
 
-int64 PropertyHelper::getGold(Player* aPlr)
+int32 PropertyHelper::getGold(Player* aPlr)
 {
 	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
-	if (aPro == NULL)	return 0L;
-	return aPro->mGold;
+	if (aPro == NULL)	return 0;
+	return (int32)aPro->mGold;
 }
 
-bool PropertyHelper::hasGold(Player* aPlr, int64 value)
+bool PropertyHelper::hasGold(Player* aPlr, int32 value)
 {
 	if (getGold(aPlr) >= value)
 		return true;

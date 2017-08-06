@@ -108,10 +108,10 @@ public:
 	void setDefense(Entity* entity, int32 value);
 	int32 getDefense(Entity* entity);
 
-	void setGold(Player* aPlr, int64 value);
-	void addGold(Player* aPlr, int64 value);
-	int64 getGold(Player* aPlr);
-	bool hasGold(Player* aPlr, int64 value);
+	void setGold(Player* aPlr, int32 value);
+	void addGold(Player* aPlr, int32 value);
+	int32 getGold(Player* aPlr);
+	bool hasGold(Player* aPlr, int32 value);
 
 	uint32 CalculateMaxHp(Entity* ent);
 	uint32 CalculateMaxMp(Entity* ent);
