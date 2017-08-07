@@ -129,7 +129,7 @@ end
 RegGm(
 {
 name = "xzhu";
-fun=function (player, s1, s2, s3)
+fun=function (play, s1, s2, s3)
 	local sGame = luaGame();
 	sGame:DoOperateChipinReq(play, tonumber(s1));
 end
@@ -138,7 +138,7 @@ end
 RegGm(
 {
 name = "gzhu";
-fun=function (player, s1, s2, s3)
+fun=function (play, s1, s2, s3)
 	local sGame = luaGame();
 	sGame:DoOperateCallReq(play);
 end
@@ -147,7 +147,7 @@ end
 RegGm(
 {
 name = "bpai";
-fun=function (player, s1, s2, s3)
+fun=function (play, s1, s2, s3)
 	local sGame = luaGame();
 	local tarPlr = luaFindPlrByName(s1);
 	sGame:DoOperateCompareReq(play, tarPlr:getUserId());
