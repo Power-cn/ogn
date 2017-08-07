@@ -107,8 +107,9 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 	const int32 maxCount = sMaxRoleCount;
 	DBUser retRoles[maxCount];
 	std::vector<DBRecord*> result_records;
-	result_records->push_back((DBRecord*)&retRoles[0]);
-	DBRecord* result_records[] = { (DBRecord*)&retRoles [0],(DBRecord*)&retRoles[1],(DBRecord*)&retRoles[2] };
+	result_records.push_back((DBRecord*)&retRoles[0]);
+	result_records.push_back((DBRecord*)&retRoles[1]);
+	result_records.push_back((DBRecord*)&retRoles[2]);
 	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, result_records, queryCount, "accountId", "", maxCount);
 	do {
 		if (err)
@@ -142,7 +143,7 @@ int SessionHandler::DoLogin(Session* session, NetLoginReq* req, NetLoginRes& res
 	DBAccount account;
 	account.user = req->user;
 	uint32 queryCount = 0;
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(account, { (DBRecord*)&account }, queryCount, "user", "");
+	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(account, account, queryCount, "user", "");
 	do
 	{
 		if (err)
@@ -183,7 +184,7 @@ int SessionHandler::DoQueryRole(Session* session, NetLoginReq* req, NetLoginRes&
 	int len = sizeof(DBUser);
 	int len1 = sizeof(DBRecord);
 	//uint32 t0 = (uint32)DateTime::GetNowAppUS();
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, &retRoles[0], queryCount, "accountId", "", maxCount);
+	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, retRoles[0], queryCount, "accountId", "", maxCount);
 	do {
 		if (err)
 		{
@@ -218,7 +219,13 @@ int SessionHandler::DoCreateRole(Session* session, NetCreateRoleReq* req, NetCre
 		uint32 queryCount = 0;
 		const int32 maxCount = sMaxRoleCount;
 		DBUser retRoles[maxCount];
-		char* err = INSTANCE(Application).getDBConnector()->doQuery(queryRole, retRoles, queryCount, "accountId", "", maxCount);
+
+		std::vector<DBRecord*> result_records;
+		result_records.push_back((DBRecord*)&retRoles[0]);
+		result_records.push_back((DBRecord*)&retRoles[1]);
+		result_records.push_back((DBRecord*)&retRoles[2]);
+
+		char* err = INSTANCE(Application).getDBConnector()->doQuery(queryRole, result_records, queryCount, "accountId", "", maxCount);
 		if (queryCount >= sMaxRoleCount)
 		{
 			res.result = NResultFail;
@@ -256,7 +263,7 @@ int SessionHandler::DoSelectRole(Session* session, NetSelectRoleReq* req, NetSel
 	role.id = req->userId;
 	uint32 queryCount = 0;
 	const int32 maxCount = 1;
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, &role, queryCount, "id", "", maxCount);
+	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, role, queryCount, "id", "", maxCount);
 	do {
 		if (err)
 		{
