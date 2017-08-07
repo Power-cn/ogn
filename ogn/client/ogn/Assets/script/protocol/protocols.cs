@@ -11,6 +11,11 @@ ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
+ID_NetPlayerSaveNotify,
+ID_NetCreateRoleReq,
+ID_NetCreateRoleRes,
+ID_NetSelectRoleReq,
+ID_NetSelectRoleRes,
 ID_NetChangeNameReq,
 ID_NetChangeNameRes,
 ID_NetGmMsg,
@@ -61,6 +66,8 @@ ID_NetGameCloseNotify,
 ID_NetGameInfoNotify,
 ID_NetGameOperateSeeReq,
 ID_NetGameOperateSeeRes,
+ID_NetGameOperateGiveupReq,
+ID_NetGameOperateGiveupRes,
 ID_NetGameOperateChipinReq,
 ID_NetGameOperateChipinRes,
 ID_NetGameOperateCallReq,
@@ -81,6 +88,11 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSessionLeaveNotif
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPingNotify, "NetPingNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginReq, "NetLoginReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginRes, "NetLoginRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPlayerSaveNotify, "NetPlayerSaveNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateRoleReq, "NetCreateRoleReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetCreateRoleRes, "NetCreateRoleRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSelectRoleReq, "NetSelectRoleReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSelectRoleRes, "NetSelectRoleRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameReq, "NetChangeNameReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetChangeNameRes, "NetChangeNameRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGmMsg, "NetGmMsg");
@@ -131,6 +143,8 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameCloseNotify, 
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameInfoNotify, "NetGameInfoNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateSeeReq, "NetGameOperateSeeReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateSeeRes, "NetGameOperateSeeRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateGiveupReq, "NetGameOperateGiveupReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateGiveupRes, "NetGameOperateGiveupRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateChipinReq, "NetGameOperateChipinReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateChipinRes, "NetGameOperateChipinRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCallReq, "NetGameOperateCallReq");
@@ -670,7 +684,8 @@ public class NetLoginRes : Packet
 	{
 result = 0;
 guid = 0;
-accountInfo = new DBAccountInfo();
+accInfo = new DBAccountInfo();
+roleInfos = new List<DBRoleInfo>();
 
 	}
 
@@ -678,7 +693,13 @@ accountInfo = new DBAccountInfo();
 	{
 bytes.Write(result);
 bytes.Write(guid);
-bytes.Write(accountInfo);
+bytes.Write(accInfo);
+int roleInfos_TEMP = roleInfos.Count;
+bytes.Write(roleInfos_TEMP);
+for (int i = 0; i < roleInfos_TEMP; ++i)
+{
+	bytes.Write(roleInfos[i]);
+}
 
 		return true;
 	}
@@ -687,14 +708,194 @@ bytes.Write(accountInfo);
 	{
 bytes.Read(ref result);
 bytes.Read(ref guid);
-bytes.Read(accountInfo);
+bytes.Read(accInfo);
+int roleInfos_TEMP = 0;
+bytes.Read(ref roleInfos_TEMP);
+for (int i = 0; i < roleInfos_TEMP; ++i)
+{
+	DBRoleInfo info_roleInfos;
+	info_roleInfos = new DBRoleInfo();
+	bytes.Read(info_roleInfos);
+	roleInfos.Add(info_roleInfos);
+}
 
 		return true;
 	}
 
 public int result;
 public long guid;
-public DBAccountInfo accountInfo;
+public DBAccountInfo accInfo;
+public List<DBRoleInfo> roleInfos;
+
+}
+public class NetPlayerSaveNotify : Packet
+{
+	public NetPlayerSaveNotify():base((int)PACKET_ID_ENUM.ID_NetPlayerSaveNotify)
+	{
+accountId = 0;
+roleInfos = new List<DBRoleInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(accountId);
+int roleInfos_TEMP = roleInfos.Count;
+bytes.Write(roleInfos_TEMP);
+for (int i = 0; i < roleInfos_TEMP; ++i)
+{
+	bytes.Write(roleInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref accountId);
+int roleInfos_TEMP = 0;
+bytes.Read(ref roleInfos_TEMP);
+for (int i = 0; i < roleInfos_TEMP; ++i)
+{
+	DBRoleInfo info_roleInfos;
+	info_roleInfos = new DBRoleInfo();
+	bytes.Read(info_roleInfos);
+	roleInfos.Add(info_roleInfos);
+}
+
+		return true;
+	}
+
+public int accountId;
+public List<DBRoleInfo> roleInfos;
+
+}
+public class NetCreateRoleReq : Packet
+{
+	public NetCreateRoleReq():base((int)PACKET_ID_ENUM.ID_NetCreateRoleReq)
+	{
+accId = 0;
+name = "";
+charId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(accId);
+bytes.Write(name);
+bytes.Write(charId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref accId);
+bytes.Read(ref name);
+bytes.Read(ref charId);
+
+		return true;
+	}
+
+public uint accId;
+public string name;
+public uint charId;
+
+}
+public class NetCreateRoleRes : Packet
+{
+	public NetCreateRoleRes():base((int)PACKET_ID_ENUM.ID_NetCreateRoleRes)
+	{
+result = 0;
+accId = 0;
+roleInfo = new DBRoleInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(accId);
+bytes.Write(roleInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref accId);
+bytes.Read(roleInfo);
+
+		return true;
+	}
+
+public sbyte result;
+public uint accId;
+public DBRoleInfo roleInfo;
+
+}
+public class NetSelectRoleReq : Packet
+{
+	public NetSelectRoleReq():base((int)PACKET_ID_ENUM.ID_NetSelectRoleReq)
+	{
+accId = 0;
+userId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(accId);
+bytes.Write(userId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref accId);
+bytes.Read(ref userId);
+
+		return true;
+	}
+
+public uint accId;
+public uint userId;
+
+}
+public class NetSelectRoleRes : Packet
+{
+	public NetSelectRoleRes():base((int)PACKET_ID_ENUM.ID_NetSelectRoleRes)
+	{
+result = 0;
+accId = 0;
+roleInfo = new DBRoleInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(accId);
+bytes.Write(roleInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref accId);
+bytes.Read(roleInfo);
+
+		return true;
+	}
+
+public sbyte result;
+public uint accId;
+public DBRoleInfo roleInfo;
 
 }
 public class NetChangeNameReq : Packet
@@ -2227,6 +2428,52 @@ for (int i = 0; i < cards_TEMP; ++i)
 
 public sbyte result;
 public List<sbyte> cards;
+
+}
+public class NetGameOperateGiveupReq : Packet
+{
+	public NetGameOperateGiveupReq():base((int)PACKET_ID_ENUM.ID_NetGameOperateGiveupReq)
+	{
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+
+}
+public class NetGameOperateGiveupRes : Packet
+{
+	public NetGameOperateGiveupRes():base((int)PACKET_ID_ENUM.ID_NetGameOperateGiveupRes)
+	{
+userId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(userId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref userId);
+
+		return true;
+	}
+
+public uint userId;
 
 }
 public class NetGameOperateChipinReq : Packet

@@ -12,6 +12,7 @@ public class GameStart : MonoBehaviour {
     public static Network network = new Network();
     public static SocketClient socketClient;
     public static SocketHandler sHandler = new SocketHandler();
+    public static PlayerManager sPlrMgr = PlayerManager.Instance;
 
     public static GameObject root;
     public static GameObject roomItem;
@@ -32,7 +33,6 @@ public class GameStart : MonoBehaviour {
         BinaryStream bit = new BinaryStream(send_data);
         packet.serialize(bit);
         Shared.XOR(bit.buffer, bit.WriteIndex, ConstDef.sKey);
-
         socket.Send(bit.buffer, bit.WriteIndex);
     }
 
