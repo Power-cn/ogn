@@ -14,6 +14,12 @@ int32 GameHandler::onNetGameOperateSeeReq(Player* aPlr, NetGameOperateSeeReq* re
 	return 0;
 }
 
+int32 GameHandler::onNetGameOperateGiveupReq(Player* aPlr, NetGameOperateGiveupReq* req)
+{
+	sGame.DoOperateGiveup(aPlr);
+	return 0;
+}
+
 int32 GameHandler::onNetGameOperateChipinReq(Player* aPlr, NetGameOperateChipinReq* req)
 {
 	sGame.DoOperateChipinReq(aPlr, req->gold);

@@ -1,5 +1,6 @@
 #include "stdafx.h"
 
+
 void main()
 {
 	Dump dump;

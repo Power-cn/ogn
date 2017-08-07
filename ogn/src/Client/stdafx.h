@@ -2,6 +2,7 @@
 
 #include "Shared.hpp"
 #include "protocols/protocols.h"
+#include "MsgCode.h"
 #include "ConstDef.h"
 #include "Channel.h"
 #include "Property.h"

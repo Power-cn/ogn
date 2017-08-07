@@ -2,11 +2,44 @@
 
 PlayerHandler::PlayerHandler()
 {
+	RegWorldEvent(ID_NetCreateRoleReq, &PlayerHandler::onNetCreateRoleReq, this);
+	RegWorldEvent(ID_NetSelectRoleReq, &PlayerHandler::onNetSelectRoleReq, this);
+	RegWorldEvent(ID_NetQueryRoleReq, &PlayerHandler::onNetQueryRoleReq, this);
+
 	RegWorldEvent(ID_NetFirst, &PlayerHandler::onNetFirst, this);
 	RegWorldEvent(ID_NetChatMsgNotify, &PlayerHandler::onNetChatMsgNotify, this);
 	RegWorldEvent(ID_NetGmMsg, &PlayerHandler::onNetGmMsg, this);
 	RegWorldEvent(ID_NetEntityMoveToNotify, &PlayerHandler::onNetEntityMoveToNotify, this);
 	RegWorldEvent(ID_NetEntityMoveNotify, &PlayerHandler::onNetEntityMoveNotify, this);
+}
+
+int32 PlayerHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
+{
+	if (aPlr->getUserId() != 0)
+	{
+		aPlr->sendRespnoseMsg(MC_LoginSelectRole);
+		return 0;
+	}
+	sApp.sendPacketToDB(*req, aPlr->getSession());
+	return 0;
+}
+
+int32 PlayerHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
+{
+	if (aPlr->getUserId() != 0)
+	{
+		aPlr->sendRespnoseMsg(MC_LoginSelectRole);
+		return 0;
+	}
+
+	sApp.sendPacketToDB(*req, aPlr->getSession());
+	return 0;
+}
+
+int32 PlayerHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
+{
+	sApp.sendPacketToDB(*req, aPlr->getSession());
+	return 0;
 }
 
 int32 PlayerHandler::onNetFirst(Player* player, NetFirst* nfy)
@@ -56,7 +89,7 @@ int32 PlayerHandler::onNetEntityMoveNotify(Player* player, NetEntityMoveNotify* 
 	if (player->getCellX() == nfy->x && player->getCellY() == nfy->y)
 		return 0;
 
-	nfy->guid = player->getInstanceId();
+	nfy->guid = player->getGuid();
 	player->setCellX(nfy->x);
 	player->setCellY(nfy->y);
 	player->setCellTarPos(player->getCellPos());
@@ -69,7 +102,7 @@ int32 PlayerHandler::onNetEntityMoveToNotify(Player* player, NetEntityMoveToNoti
 {
 	if (player->getCellTarPos().x == nfy->x && player->getCellTarPos().y == nfy->y)
 		return 0;
-	nfy->guid = player->getInstanceId();
+	nfy->guid = player->getGuid();
 	player->setCellTarX(nfy->x);
 	player->setCellTarY(nfy->y);
 	player->sendPacketToView(*nfy);

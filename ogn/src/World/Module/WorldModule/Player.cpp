@@ -55,7 +55,7 @@ void Player::sendPacketToView(Packet& packet)
 	if (!getMap())
 		return;
 
-	EntitySet* setEntity = getMap()->getEntityView(getInstanceId());
+	EntitySet* setEntity = getMap()->getEntityView(getGuid());
 	if (!setEntity)
 		return;
 
@@ -328,7 +328,7 @@ bool Player::onEnterMap()
 		return false;
 	NetEntityEnterMapNotify nfy;
 	nfy.name = this->getName();
-	nfy.guid = getInstanceId();
+	nfy.guid = getGuid();
 	nfy.mapInsId = getMapInsId();
 	nfy.mapId = getMapId();
 	sendPacket(nfy);
@@ -341,7 +341,7 @@ bool Player::onEnterMap()
 bool Player::onLeaveMap()
 {
 	NetEntityLeaveMapNotify nfy;
-	nfy.guid = getInstanceId();
+	nfy.guid = getGuid();
 	nfy.mapInsId = getMapInsId();
 	nfy.mapId = getMapId();
 	sendPacket(nfy);
@@ -363,7 +363,7 @@ bool Player::onLeaveView(Entity* tar)
 bool Player::onEnterPlayerView(Player* plr)
 {
 	NetPlayerEnterViewNotify nfy;
-	nfy.guid = this->getInstanceId();
+	nfy.guid = this->getGuid();
 	nfy.name = this->getName();
 
 	nfy.charId = this->getCharId();
@@ -381,7 +381,7 @@ bool Player::onEnterPlayerView(Player* plr)
 		return true;
 
 	NetEntityMoveToNotify moveNfy;
-	moveNfy.guid = this->getInstanceId();
+	moveNfy.guid = this->getGuid();
 	moveNfy.x = mTarPos.x;
 	moveNfy.y = mTarPos.y;
 	plr->sendPacket(moveNfy);
@@ -392,7 +392,7 @@ bool Player::onEnterPlayerView(Player* plr)
 bool Player::onLeavePlayerView(Player* plr)
 {
 	NetPlayerLeaveViewNotify nfy;
-	nfy.guid = this->getInstanceId();
+	nfy.guid = this->getGuid();
 	nfy.mapId = getMapId();
 	plr->sendPacket(nfy);
 

@@ -125,11 +125,11 @@ Player* SessionManager::getPlayer(uint32 playerId)
 Player* SessionManager::addPlayer(Player* player)
 {
 	addEntity(player);
-	auto itr = mMapPlayer.find(player->playerId);
+	auto itr = mMapPlayer.find(player->getAccId());
 	if (itr != mMapPlayer.end())
 		return NULL;
 
-	mMapPlayer.insert(std::make_pair(player->playerId, player));
+	mMapPlayer.insert(std::make_pair(player->getAccId(), player));
 	return player;
 }
 

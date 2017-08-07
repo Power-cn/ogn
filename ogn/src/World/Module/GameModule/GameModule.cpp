@@ -135,9 +135,14 @@ bool GameModule::DoStartGame(Room* aRoom)
 	aGame->DoShuffle();
 	aGame->SetRoomId(aRoom->GetInsId());
 	aGame->SetGameLv(1);
+	aGame->SetBanker(aRoom->GetMaster()->mUserId);
+	aGame->SetCurSpeakPlr(aGame->GetBanker());
+	aGame->SetSpeakTime(sSpeakTotalTime);
+	aGame->SetSpeakStartTime(DateTime::Now());
 
 	aRoom->SetGameInsId(aGame->GetInsId());
 	aRoom->DoAllStart();
+
 
 	for (uint32 i = 0; i < aRoom->GetRoomPlayerCount(); ++i)
 	{
@@ -258,6 +263,48 @@ bool GameModule::DoOperateSee(Player* aPlr)
 	}
 
 	aPlr->sendPacket(res);
+	return true;
+}
+
+bool GameModule::DoOperateGiveup(Player* aPlr)
+{
+	Room* aRoom = sRoom.FindPlayerRoom(aPlr->getUserId());
+	if (aRoom == NULL) return false;
+
+	NetGameOperateGiveupRes res;
+	res.userId = aPlr->getUserId();
+	GameEntity* aGameEnt = FindPlrGameEnt(aPlr->getUserId());
+	if (aGameEnt == NULL)
+	{
+		aPlr->sendPacket(res);
+		return false;
+	}
+	if (aGameEnt->GetState() != GS_Normal)
+	{
+		aPlr->sendPacket(res);
+		return false;
+	}
+	aGameEnt->SetState(GS_Giveup);
+	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
+	if (aGame) {
+		aGame->OnGiveup(aGameEnt);
+	}
+	if (aGame->GetCurSpeak() == aPlr->getUserId())
+	{
+		aGame->DoNext();
+	}
+	aRoom->sendPacketToAll(res);
+
+	uint32 winer = 0;
+	if (aGame->DoResult(winer))
+	{
+		NetGameCloseNotify nfy;
+		nfy.winUserId = winer;
+		nfy.winGold = aGame->GetCurGold();
+		aRoom->sendPacketToAll(nfy);
+
+		DoCloseGame(aGame->GetRoomId());
+	}
 	return true;
 }
 

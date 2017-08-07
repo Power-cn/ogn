@@ -9,8 +9,8 @@ enum KeyType
 
 struct FieldDescriptor
 {
-	const int8*				field;
-	const int8*				default;
+	const char*				field;
+	const char*				default;
 	int32					offset;
 	int8					typevalue;
 	int8					typekey;
@@ -20,7 +20,7 @@ struct TableDescriptor
 {
 	FieldDescriptor*			records;
 	int32						recordCount;
-	const int8*					tableName;
+	const char*					tableName;
 	FieldDescriptor* getFieldDescriptor(const std::string& field) const;
 };
 
@@ -125,7 +125,7 @@ public:\
 
 void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
 void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
-bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& query_record, DBRecord* result_records, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
+bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
 bool GetInsertSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names);
 bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names);
 bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names);

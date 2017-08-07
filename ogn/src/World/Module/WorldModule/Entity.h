@@ -55,7 +55,7 @@ protected:
 	virtual bool onEnterPlayerView(Player* plr) { return true; }
 	virtual bool onLeavePlayerView(Player* plr) { return true; }
 public:
-	Guid									instanceId;
+	Guid									mGuid;
 	uint8									entityType;
 	uint32									mCharId;
 	uint8									mSex;
@@ -113,7 +113,7 @@ public:
 	void setMap(Map* map) { mMap = map; }
 	void setMapId(uint32 mapId);
 	void setMapInsId(uint32 mapInsId);
-	void setInstanceId(Guid uId) { instanceId = uId; }
+	void setInstanceId(Guid uId) { mGuid = uId; }
 	void setCharId(uint32 charId) { mCharId = charId; }
 	void setSex(uint8 sex) { mSex = sex; }
 	void removeProperty(const std::string& name);
@@ -132,8 +132,7 @@ public:
 	uint32 getMapId();
 	uint32 getMapInsId();
 
-	Guid getInstanceId() { return instanceId; }
-	Guid getGuid() { return instanceId; }
+	Guid getGuid() { return mGuid; }
 
 	Property* getProperty(const std::string& name);
 	Property* addProperty(Property* property);

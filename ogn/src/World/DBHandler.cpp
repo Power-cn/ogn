@@ -13,22 +13,25 @@ DBHandler::~DBHandler()
 void DBHandler::doRegister()
 {
 	RegDBEvent(ID_NetLoginRes, &DBHandler::onNetNetLoginRes, this);
+	RegDBEvent(ID_NetCreateRoleRes, &DBHandler::onNetCreateRoleRes, this);
+	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
 	RegDBEvent(ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
 }
 
 int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 {
-	if (res->result != 0)
+	uint32 accId = res->accInfo.id;
+
+	if (res->result != NResultSuccess)
 	{
 		session->sendPacketToWorld(*res);
 		return 0;
 	}
 
-	Player* player = sWorld.FindPlrByAccId(res->accountInfo.id);
+	Player* player = sWorld.FindPlrByAccId(accId);
 	do 
 	{
-		if (player)
-		{
+		if (player) {
 			Session* oldSession = player->getSession();
 			if (oldSession)
 			{
@@ -51,52 +54,77 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 		player = new Player;
 		player->SetOnline(true);
 		player->bindSession(session);
-		player->setAccId(res->accountInfo.id);
-		player->setUser(res->accountInfo.user);
-		player->setName(res->accountInfo.user);
-		sWorld.addPlayer(player);
-
+		player->setAccId(res->accInfo.id);
+		player->setUser(res->accInfo.user);
+		sWorld.addPlayerByAccId(player);
 	} while (false);
-
-	NetQueryRoleReq req;
-	req.accountId = player->getAccId();
-	req.user = player->getUser();
-	req.roleCount = 1;
-	session->sendPacketToTarget(req, sApp.getDBServer() ? sApp.getDBServer()->getSocket() : NULL);
 	res->guid = player->getGuid();
 	player->sendPacket(*res);
 	return 0;
 }
 
-int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
+int DBHandler::onNetCreateRoleRes(Session* session, NetCreateRoleRes* res)
 {
-	Player* player = sWorld.FindPlrByAccId(res->accountId);
-	if (!player) return 0;
-
-	if (res->roleInfos.size() == 1)
+	if (res->result == NResultFail)
 	{
-		player->SetOfflineTimer(DateTime::Now());
-
-		DBRoleInfo& info = res->roleInfos[0];
-		player->setUserId(info.id);
-		player->setName(info.name);
-		player->SetOnlineTimer(DateTime::Now());
-		sWorld.addPlayerToUserId(player);
-
-		char szBuffer[256] = { 0 };
-		sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, player->getName(), player->getUserId());
-		sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
-		Dictionary dict;
-		if (info.property.wpos() <= 0)
-			player->DoCreateCharacter(dict, info);
-		else
-			info.property >> dict;
-
-		sApp.onLoad(player, dict);
-		sApp.onEnterWorld(player, dict);
+		session->sendPacketToWorld(*res);
 		return 0;
 	}
-	LOG_ERROR("create character fail");
+
+	//////////////////////////////////////////////////////////////////////////
+	/// 角色创建成功 ///
+
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res->roleInfo.name.c_str(), res->roleInfo.id);
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
+	session->sendPacketToWorld(*res);
+	return 0;
+}
+
+int DBHandler::onNetSelectRoleRes(Session* session, NetSelectRoleRes* res)
+{
+	if (res->result == NResultFail) {
+		session->sendPacketToWorld(*res);
+		return 0;
+	}
+
+	Player* aPlr = sWorld.FindPlrByAccId(res->accId);
+	if (aPlr == NULL) {
+		res->result = NResultFail;
+		session->sendPacketToWorld(*res);
+		return 0;
+	}
+
+	session->sendPacketToWorld(*res);
+
+	aPlr->SetOfflineTimer(DateTime::Now());
+
+	DBRoleInfo& info = res->roleInfo;
+	aPlr->setUserId(info.id);
+	aPlr->setName(info.name);
+	aPlr->SetOnlineTimer(DateTime::Now());
+	sWorld.addPlayerToUserId(aPlr);
+	sWorld.addPlayerByName(aPlr);
+
+	Dictionary dict;
+	if (info.property.wpos() <= 0)
+		aPlr->DoCreateCharacter(dict, info);
+	else
+		info.property >> dict;
+
+	sApp.onLoad(aPlr, dict);
+	sApp.onEnterWorld(aPlr, dict);
+	return 0;
+}
+
+int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
+{
+	Player* aPlr = session->getPlayer();
+	if (aPlr == NULL) {
+		return 0;
+	}
+
+	session->sendPacketToWorld(*res);
 	return 0;
 }

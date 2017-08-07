@@ -24,7 +24,7 @@ public:
 	Map();
 	~Map();
 public:
-	uint32 getInstanceId() { return mInstanceId; }
+	uint32 getGuid() { return mInstanceId; }
 	uint32 getMapId() { return mMapJson ? mMapJson->ID : 0; }
 	uint8 getMapType() { return mMapJson ? mMapJson->Type : 0; }
 

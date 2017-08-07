@@ -9,6 +9,9 @@ RobotManager::RobotManager()
 
 	//addEventListener(ID_NetPingNotify, (EventCallbackProcess)&RobotManager::onNetPingNotify, this);
 	addEventListener(ID_NetLoginRes, (EventCallbackProcess)&RobotManager::onNetLoginRes, this);
+	addEventListener(ID_NetCreateRoleRes, (EventCallbackProcess)&RobotManager::onNetCreateRoleRes, this);
+	addEventListener(ID_NetSelectRoleRes, (EventCallbackProcess)&RobotManager::onNetSelectRoleRes, this);
+
 	//addEventListener(ID_NetPropertyRes, (EventCallbackProcess)&SocketHandler::onNetPropertyRes, this);
 	//addEventListener(ID_NetEntityEnterMapNotify, (EventCallbackProcess)&RobotManager::onNetEntityEnterMapNotify, this);
 	//addEventListener(ID_NetEntityLeaveMapNotify, (EventCallbackProcess)&RobotManager::onNetEntityLeaveMapNotify, this);
@@ -24,6 +27,8 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
 	INSTANCE(CmdDispatcher).addEventListener("login", (EventCallback)&RobotManager::onLogin, this);
+	INSTANCE(CmdDispatcher).addEventListener("crole", (EventCallback)&RobotManager::onCreate, this);
+	INSTANCE(CmdDispatcher).addEventListener("select", (EventCallback)&RobotManager::onSelect, this);
 }
 
 RobotManager::~RobotManager()
@@ -83,9 +88,16 @@ int RobotManager::onNetPingNotify(Robot* robot, NetPingNotify* nfy)
 
 int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
-	if (res->result == 0)
+	if (res->result == NResultSuccess)
 	{
-		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accountInfo.user.c_str(), res->accountInfo.id, res->guid);
+		mCurRobot->mAccountId = res->accInfo.id;
+		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accInfo.user.c_str(), res->accInfo.id, res->guid);
+
+		for (uint32 i = 0; i < res->roleInfos.size(); ++i)
+		{
+			DBRoleInfo& info = res->roleInfos[i];
+			LOG_DEBUG(LogSystem::csl_color_green, "userId:%d user:%s", info.id, info.name.c_str());
+		}
 
 		/*
 		NetFirst nFirst;
@@ -122,6 +134,30 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 	{
 		printf("login fail [%s]\n", INSTANCE(ConfigManager).getMsg(res->result).c_str());
 	}
+	return 0;
+}
+
+int RobotManager::onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res)
+{
+	if (res->result == NResultFail)
+	{
+		LOG_ERROR("创建角色失败");
+		return 0;
+	}
+
+	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str());
+	return 0;
+}
+
+int RobotManager::onNetSelectRoleRes(Robot* robot, NetSelectRoleRes* res)
+{
+	if (res->result == NResultFail)
+	{
+		LOG_ERROR("创建选择角色失败");
+		return 0;
+	}
+
+	LOG_DEBUG(LogSystem::csl_color_green, "select userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str());
 	return 0;
 }
 
@@ -224,5 +260,28 @@ int32 RobotManager::onLogin(CmdEvent& e)
 	std::string user = e.cmdExecute->params[0];
 	INSTANCE(SocketHandler).PushUser(user);
 	INSTANCE(SocketHandler).createRobot();
+	return 0;
+}
+
+int32 RobotManager::onCreate(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+
+	NetCreateRoleReq req;
+	req.accId = mCurRobot->mAccountId;
+	req.name = e.cmdExecute->params[0];
+	mCurRobot->sendPacket(req);
+	return 0;
+}
+
+int32 RobotManager::onSelect(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+
+	NetSelectRoleReq req;
+	req.accId = mCurRobot->mAccountId;
+	
+	req.userId = Shared::strtoint32(e.cmdExecute->params[0]);
+	mCurRobot->sendPacket(req);
 	return 0;
 }

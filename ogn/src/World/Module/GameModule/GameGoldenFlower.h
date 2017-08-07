@@ -62,6 +62,7 @@ public:
 	void SetBanker(uint32 userId) { mBankerUserId = userId; }
 	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
 	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }
+	void SetSpeakStartTime(uint32 t) { mSpeakStartTime = t; }
 	void SetGameLv(uint8 gamelv) { mGameLv = gamelv; }
 	void SetCurMaxGold(uint32 maxGold) { mCurMaxGold = maxGold; }
 	void SetRound(uint32 round) { mRound = round; }
@@ -76,6 +77,7 @@ public:
 	uint32 GetBanker() { return mBankerUserId; }
 	uint32 GetCurSpeak() { return mCurSpeakUserId; }
 	uint32 GetSpeakTime() { return mSpeakTime; }
+	uint32 GetSpeakStartTime() { return mSpeakStartTime; }
 	uint32 GetCurGold() { return mCurGold; }
 	uint32 GetCurMaxGold();
 	uint32 GetRound() { return mRound; }
@@ -89,6 +91,7 @@ public:
 
 	int32 CheckCardsToTarget(uint32 srcUserId, uint32 dstUserId);
 	bool DoUseGold(Player* aPlr, uint32 gold);
+	bool DoNext();
 	bool DoResult(uint32& winer);
 protected:
 	virtual bool OnStart();
@@ -97,6 +100,7 @@ protected:
 	virtual bool OnLeave(GameEntity* aGameEnt);
 
 	bool OnSeeCard(GameEntity* aGameEnt);
+	bool OnGiveup(GameEntity* aGameEnt);
 	bool OnChipinReq(GameEntity* aGameEnt, uint32 gold);
 	bool OnCallReq(GameEntity* aGameEnt, uint32 gold);
 	bool OnCompareReq(GameEntity* aGameEnt, uint32 tarUserId,uint8 result);
@@ -107,6 +111,7 @@ protected:
 	uint32							mBankerUserId;			// 庄家
 	uint32							mCurSpeakUserId;		// 当前说话的人
 	uint32							mSpeakTime;				// 说话剩余时间秒
+	uint32							mSpeakStartTime;		// 开始说话时间
 	uint32							mCurGold;
 	uint8							mGameLv;
 	uint32							mCurMaxGold;			// 当前最大

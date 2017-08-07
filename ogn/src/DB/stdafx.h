@@ -9,6 +9,8 @@
 #include "Session.h"
 #include "SessionManager.h"
 #include "protocols/protocols.h"
+#include "ConstDef.h"
+#include "MsgCode.h"
 #include "Application.h"
 
 #include "mysql.hpp"

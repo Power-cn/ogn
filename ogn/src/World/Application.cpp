@@ -280,14 +280,14 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	BinaryStream stream(1024);
 	stream << bytes;
 
-	NetQueryRoleRes res;
+	NetPlayerSaveNotify nfy;
 	DBRoleInfo info;
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
 	info.property.write(stream.datas(), stream.wpos());
-	res.accountId = plr->getAccId();
-	res.roleInfos.push_back(info);
-	sendPacketToDB(res, session);
+	nfy.accountId = plr->getAccId();
+	nfy.roleInfos.push_back(info);
+	sendPacketToDB(nfy, session);
 }
 
 int Application::onWorldAccept(SocketEvent& e)
@@ -307,49 +307,49 @@ int Application::onWorldRecv(SocketEvent& e)
 	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-	Session* session = INSTANCE(SessionManager).getSession(sessionId);
+	Session* session = sSsnMgr.getSession(sessionId);
 	do 
 	{
 
 	if (session == NULL && msgId == ID_NetSessionEnterNotify)
 	{
-		session = INSTANCE(SessionManager).createSession(e.socket, sessionId);
+		session = sSsnMgr.createSession(e.socket, sessionId);
 		if (session == NULL)
 			return 0;
 
-		INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), session);
+		sSsnMgr.addSessionsBySocket(e.socket->getSocketId(), session);
 	}
 
 	if (session == NULL)
 		break;
 
-	Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
+	Packet* pack = sPacketMgr.Alloc(msgId);
 	if (pack == NULL) break;
 
 	if ((out >> (*pack)) == false)
 	{
-		LOG_ERROR("msg:%s packet errer", INSTANCE(PacketManager).GetName(msgId).c_str());
-		INSTANCE(PacketManager).Free(pack);
+		LOG_ERROR("msg:%s packet errer", sPacketMgr.GetName(msgId).c_str());
+		sPacketMgr.Free(pack);
 		break;
 	}
 
 	if (checkSessionMessage(msgId))
 	{
 		if (worldServer->dispatch(pack->getMsgId(), session, pack) == 0)
-			LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+			LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
 	}
 	else
 	{
 		Player* plr = session->getPlayer();
 		if (plr) {
 			if (worldServer->dispatch(pack->getMsgId(), plr, pack) == 0)
-				LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+				LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
 		}
 		else {
-			LOG_WARN("[%s] not register func", INSTANCE(PacketManager).GetName(msgId).c_str());
+			LOG_WARN("[%s] no login not pro packet", sPacketMgr.GetName(msgId).c_str());
 		}
 	}
-	INSTANCE(PacketManager).Free(pack);
+	sPacketMgr.Free(pack);
 	return 0;
 	} while (false);
 

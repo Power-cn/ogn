@@ -11,7 +11,7 @@ WorldModule::~WorldModule()
 	while (mMapEntity.size() > 0)
 	{
 		auto itr = mMapEntity.begin();
-		removeEntity(itr->second->getInstanceId());
+		removeEntity(itr->second->getGuid());
 	}
 }
 
@@ -73,13 +73,38 @@ Entity* WorldModule::FindEntByGuid(Guid guid)
 	return NULL;
 }
 
+Player* WorldModule::addPlayerByAccId(Player* plr)
+{
+	addEntity(plr);
+	auto itr = mMapPlayer.find(plr->getAccId());
+	if (itr != mMapPlayer.end())
+		return NULL;
+
+	mMapPlayer.insert(std::make_pair(plr->getAccId(), plr));
+	return plr;
+}
+
+Player* WorldModule::addPlayerByName(Player* plr)
+{
+	return (Player*)addEntityByName(plr);
+}
+
 Entity* WorldModule::addEntity(Entity* ent)
 {
-	auto itr = mMapEntity.find(ent->getInstanceId());
+	auto itr = mMapEntity.find(ent->getGuid());
 	if (itr != mMapEntity.end())
 		return NULL;
 
-	mMapEntity.insert(std::make_pair(ent->getInstanceId(), ent));
+	mMapEntity.insert(std::make_pair(ent->getGuid(), ent));
+	return ent;
+}
+
+Entity* WorldModule::addEntityByName(Entity* ent)
+{
+	auto itr = mMapNameEntity.find(ent->getName());
+	if (itr != mMapNameEntity.end())
+		return NULL;
+
 	mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
 	return ent;
 }
@@ -97,17 +122,6 @@ void WorldModule::removeEntity(Entity* ent)
 	mMapEntity.erase(ent->getGuid());
 	mMapNameEntity.erase(ent->getName());
 	delete ent;
-}
-
-Player* WorldModule::addPlayer(Player* plr)
-{
-	addEntity(plr);
-	auto itr = mMapPlayer.find(plr->getAccId());
-	if (itr != mMapPlayer.end())
-		return NULL;
-
-	mMapPlayer.insert(std::make_pair(plr->getAccId(), plr));
-	return plr;
 }
 
 void WorldModule::removePlayer(uint32 accId)

@@ -7,6 +7,7 @@ enum MsgCode
 	MC_LoginTheWrongAccountOrPassword,
 	MC_LoginTheNumberInTheRemote,
 	MC_LoginYouHaveLanded,
+	MC_LoginSelectRole,			// 已经选好角色
 	MC_InviterHaveTeam,
 	MC_JoinerTeamNotExist,
 	MC_HaveTeam,

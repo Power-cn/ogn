@@ -178,8 +178,7 @@ void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field,
 		break;
 	case Variant::TypeString:
 		{
-			if (!valuestr)
-				break;
+			if (!valuestr) break;
 			std::string* str = (std::string*)dataptr;
 			(*str) = valuestr;
 		}
@@ -220,8 +219,7 @@ void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field,
 	}
 }
 
-
-bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_record, DBRecord* result_records, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names)
+bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names)
 {
 	const TableDescriptor& descriptor = *query_record.getDescriptor();
 	char cmd_select_[SQL_CMD_COUNT] = { 0 };

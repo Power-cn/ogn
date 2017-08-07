@@ -7,6 +7,11 @@ ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
+ID_NetPlayerSaveNotify,
+ID_NetCreateRoleReq,
+ID_NetCreateRoleRes,
+ID_NetSelectRoleReq,
+ID_NetSelectRoleRes,
 ID_NetChangeNameReq,
 ID_NetChangeNameRes,
 ID_NetGmMsg,
@@ -57,6 +62,8 @@ ID_NetGameCloseNotify,
 ID_NetGameInfoNotify,
 ID_NetGameOperateSeeReq,
 ID_NetGameOperateSeeRes,
+ID_NetGameOperateGiveupReq,
+ID_NetGameOperateGiveupRes,
 ID_NetGameOperateChipinReq,
 ID_NetGameOperateChipinRes,
 ID_NetGameOperateCallReq,
@@ -560,14 +567,20 @@ public:
 	Packet(ID_NetLoginRes) {
 result = 0;
 guid = 0;
-accountInfo;
+accInfo;
+
 
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << result);
 CHECK(bytes << guid);
-CHECK(bytes << accountInfo);
+CHECK(bytes << accInfo);
+uint32 roleInfos_Size = (uint32)roleInfos.size();
+bytes << roleInfos_Size;
+for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
+	bytes << roleInfos[roleInfos_i];
+}
 
 		return true;
 	}
@@ -575,14 +588,184 @@ CHECK(bytes << accountInfo);
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> result);
 CHECK(bytes >> guid);
-CHECK(bytes >> accountInfo);
+CHECK(bytes >> accInfo);
+uint32 roleInfos_Size = 0;
+bytes >> roleInfos_Size;
+for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
+	DBRoleInfo roleInfos_info;
+	bytes >> roleInfos_info;
+	roleInfos.push_back(roleInfos_info);
+}
 
 		return true;
 	}
 public:
 int32 result;
 int64 guid;
-DBAccountInfo accountInfo;
+DBAccountInfo accInfo;
+std::vector<DBRoleInfo> roleInfos;
+
+};
+
+class NetPlayerSaveNotify : public Packet {
+public:
+	NetPlayerSaveNotify():
+	Packet(ID_NetPlayerSaveNotify) {
+accountId = 0;
+
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << accountId);
+uint32 roleInfos_Size = (uint32)roleInfos.size();
+bytes << roleInfos_Size;
+for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
+	bytes << roleInfos[roleInfos_i];
+}
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> accountId);
+uint32 roleInfos_Size = 0;
+bytes >> roleInfos_Size;
+for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
+	DBRoleInfo roleInfos_info;
+	bytes >> roleInfos_info;
+	roleInfos.push_back(roleInfos_info);
+}
+
+		return true;
+	}
+public:
+int32 accountId;
+std::vector<DBRoleInfo> roleInfos;
+
+};
+
+class NetCreateRoleReq : public Packet {
+public:
+	NetCreateRoleReq():
+	Packet(ID_NetCreateRoleReq) {
+accId = 0;
+name = "";
+charId = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << accId);
+CHECK(bytes << name);
+CHECK(bytes << charId);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> accId);
+CHECK(bytes >> name);
+CHECK(bytes >> charId);
+
+		return true;
+	}
+public:
+uint32 accId;
+std::string name;
+uint32 charId;
+
+};
+
+class NetCreateRoleRes : public Packet {
+public:
+	NetCreateRoleRes():
+	Packet(ID_NetCreateRoleRes) {
+result = 0;
+accId = 0;
+roleInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << accId);
+CHECK(bytes << roleInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> accId);
+CHECK(bytes >> roleInfo);
+
+		return true;
+	}
+public:
+uint8 result;
+uint32 accId;
+DBRoleInfo roleInfo;
+
+};
+
+class NetSelectRoleReq : public Packet {
+public:
+	NetSelectRoleReq():
+	Packet(ID_NetSelectRoleReq) {
+accId = 0;
+userId = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << accId);
+CHECK(bytes << userId);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> accId);
+CHECK(bytes >> userId);
+
+		return true;
+	}
+public:
+uint32 accId;
+uint32 userId;
+
+};
+
+class NetSelectRoleRes : public Packet {
+public:
+	NetSelectRoleRes():
+	Packet(ID_NetSelectRoleRes) {
+result = 0;
+accId = 0;
+roleInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << accId);
+CHECK(bytes << roleInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> accId);
+CHECK(bytes >> roleInfo);
+
+		return true;
+	}
+public:
+uint8 result;
+uint32 accId;
+DBRoleInfo roleInfo;
 
 };
 
@@ -2050,6 +2233,50 @@ std::vector<uint8> cards;
 
 };
 
+class NetGameOperateGiveupReq : public Packet {
+public:
+	NetGameOperateGiveupReq():
+	Packet(ID_NetGameOperateGiveupReq) {
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+
+		return true;
+	}
+public:
+
+};
+
+class NetGameOperateGiveupRes : public Packet {
+public:
+	NetGameOperateGiveupRes():
+	Packet(ID_NetGameOperateGiveupRes) {
+userId = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << userId);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> userId);
+
+		return true;
+	}
+public:
+uint32 userId;
+
+};
+
 class NetGameOperateChipinReq : public Packet {
 public:
 	NetGameOperateChipinReq():
@@ -2314,6 +2541,11 @@ REGISTER_PACKET_HELPER(ID_NetSessionLeaveNotify, NetSessionLeaveNotify);
 REGISTER_PACKET_HELPER(ID_NetPingNotify, NetPingNotify);
 REGISTER_PACKET_HELPER(ID_NetLoginReq, NetLoginReq);
 REGISTER_PACKET_HELPER(ID_NetLoginRes, NetLoginRes);
+REGISTER_PACKET_HELPER(ID_NetPlayerSaveNotify, NetPlayerSaveNotify);
+REGISTER_PACKET_HELPER(ID_NetCreateRoleReq, NetCreateRoleReq);
+REGISTER_PACKET_HELPER(ID_NetCreateRoleRes, NetCreateRoleRes);
+REGISTER_PACKET_HELPER(ID_NetSelectRoleReq, NetSelectRoleReq);
+REGISTER_PACKET_HELPER(ID_NetSelectRoleRes, NetSelectRoleRes);
 REGISTER_PACKET_HELPER(ID_NetChangeNameReq, NetChangeNameReq);
 REGISTER_PACKET_HELPER(ID_NetChangeNameRes, NetChangeNameRes);
 REGISTER_PACKET_HELPER(ID_NetGmMsg, NetGmMsg);
@@ -2364,6 +2596,8 @@ REGISTER_PACKET_HELPER(ID_NetGameCloseNotify, NetGameCloseNotify);
 REGISTER_PACKET_HELPER(ID_NetGameInfoNotify, NetGameInfoNotify);
 REGISTER_PACKET_HELPER(ID_NetGameOperateSeeReq, NetGameOperateSeeReq);
 REGISTER_PACKET_HELPER(ID_NetGameOperateSeeRes, NetGameOperateSeeRes);
+REGISTER_PACKET_HELPER(ID_NetGameOperateGiveupReq, NetGameOperateGiveupReq);
+REGISTER_PACKET_HELPER(ID_NetGameOperateGiveupRes, NetGameOperateGiveupRes);
 REGISTER_PACKET_HELPER(ID_NetGameOperateChipinReq, NetGameOperateChipinReq);
 REGISTER_PACKET_HELPER(ID_NetGameOperateChipinRes, NetGameOperateChipinRes);
 REGISTER_PACKET_HELPER(ID_NetGameOperateCallReq, NetGameOperateCallReq);

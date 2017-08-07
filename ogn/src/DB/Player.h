@@ -5,13 +5,14 @@ class Session;
 class Player : public Entity
 {
 public:
-	uint32		playerId;
+	uint32		accId;
 	Session*	session;
 
 	void setSession(Session* s) { session = s; }
 	Session* getSession() { return session; }
-	void setPlayerId(uint32 plrId) { playerId = plrId; }
-	uint32 getPlayerId() { return playerId; }
+	void setAccId(uint32 plrId) { accId = plrId; }
+	uint32 getAccId() { return accId; }
 protected:
-private:
+	//DBAccount*					mAccount;
+	//std::vector<DBUser*>		mLstUsers;
 };

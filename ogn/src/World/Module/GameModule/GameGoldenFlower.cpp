@@ -5,6 +5,7 @@ GameGoldenFlower::GameGoldenFlower()
 	mBankerUserId = 0;
 	mCurSpeakUserId = 0;
 	mSpeakTime = 0;
+	mSpeakStartTime = 0;
 	mCurGold = 0;
 	mGameLv = 0;
 	mCurMaxGold = 0;
@@ -178,8 +179,19 @@ bool GameGoldenFlower::DoUseGold(Player* aPlr, uint32 gold)
 	AddCurGold(gold);
 	SetCurMaxGold(gold);
 	IncSpeakCount();
+	DoNext();
+	return true;
+}
+
+bool GameGoldenFlower::DoNext()
+{
 	uint32 nextUserId = GetNextSpeakPlr();
+	if (nextUserId == 0)
+	{
+		return false;
+	}
 	SetCurSpeakPlr(nextUserId);
+	SetSpeakStartTime(DateTime::Now());
 	return true;
 }
 
@@ -191,6 +203,11 @@ bool GameGoldenFlower::DoResult(uint32& winer)
 		for (GameEntity* aGameEnt : mLstGameEntity) {
 			if (aGameEnt->GetState() == GS_Normal) {
 				winer = aGameEnt->GetUserId();
+
+				Player* aPlr = sWorld.FindPlrByUserId(winer);
+				if (aPlr) {
+					sProperty.addGold(aPlr, GetCurGold());
+				}
 				break;
 			}
 		}
@@ -227,6 +244,12 @@ bool GameGoldenFlower::OnLeave(GameEntity* aGameEnt)
 bool GameGoldenFlower::OnSeeCard(GameEntity* aGameEnt)
 {
 	LuaEngine::Call(this, sScriptGame, "OnSeeCard", aGameEnt->userId);
+	return true;
+}
+
+bool GameGoldenFlower::OnGiveup(GameEntity* aGameEnt)
+{
+	LuaEngine::Call(this, sScriptGame, "OnGiveup", aGameEnt->userId);
 	return true;
 }
 

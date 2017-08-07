@@ -86,7 +86,7 @@ void SocketHandler::createRobot()
 
 	int32 idx = rand() % 4;
 	char szBuf[32] = { 0 };
-	sprintf_s(szBuf, 32, "Gate", idx);
+	sprintf_s(szBuf, 32, "Gate");
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);

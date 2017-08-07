@@ -27,11 +27,13 @@ public:
 
 	bool ChangeName(Entity* ent, cstring& sname);
 	Entity* addEntity(Entity* ent);
+	Entity* addEntityByName(Entity* ent);
 
 	Entity* FindEntByName(cstring& name);
 	Entity* FindEntByGuid(Guid guid);
 	
-	Player* addPlayer(Player* plr);
+	Player* addPlayerByAccId(Player* plr);
+	Player* addPlayerByName(Player* plr);
 	Player* addPlayerToUserId(Player* plr);
 
 	Player* FindPlrByName(cstring& name);
@@ -52,7 +54,7 @@ public:
 
 	std::map<uint32, Player*>& getMapPlayer() { return mMapPlayer; }
 protected:
-	std::map<Guid, Entity*>						mMapEntity;
+	std::map<Guid, Entity*>							mMapEntity;
 	std::map<std::string, Entity*>					mMapNameEntity;
 	std::map<uint32, Player*>						mMapPlayer;
 	std::map<uint32, Player*>						mMapUserIdPlayer;

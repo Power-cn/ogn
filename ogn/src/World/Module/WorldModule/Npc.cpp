@@ -31,7 +31,7 @@ bool Npc::onLeaveMap()
 bool Npc::onEnterPlayerView(Player* plr)
 {
 	NetNpcEnterViewNotify nfy;
-	nfy.guid = this->getInstanceId();
+	nfy.guid = this->getGuid();
 	nfy.name = this->getName();
 	nfy.npcId = this->getNpcId();
 	nfy.entityType = this->getEntityType();
@@ -46,7 +46,7 @@ bool Npc::onEnterPlayerView(Player* plr)
 	if (!isMoveTo())
 		return true;
 	NetEntityMoveToNotify moveNfy;
-	moveNfy.guid = this->getInstanceId();
+	moveNfy.guid = this->getGuid();
 	moveNfy.x = mTarPos.x;
 	moveNfy.y = mTarPos.y;
 	plr->sendPacket(moveNfy);
@@ -56,7 +56,7 @@ bool Npc::onEnterPlayerView(Player* plr)
 bool Npc::onLeavePlayerView(Player* plr)
 {
 	NetNpcLeaveViewNotify nfy;
-	nfy.guid = this->getInstanceId();
+	nfy.guid = this->getGuid();
 	nfy.mapId = getMapId();
 	plr->sendPacket(nfy);
 	return true;

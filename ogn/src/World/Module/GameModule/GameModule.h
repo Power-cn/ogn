@@ -29,6 +29,7 @@ public:
 	bool DoStartGame(Room* aRoom);
 	bool DoCloseGame(uint32 roomId);
 	bool DoOperateSee(Player* aPlr);
+	bool DoOperateGiveup(Player* aPlr);
 	bool DoOperateChipinReq(Player* aPlr, uint32 gold);
 	bool DoOperateCallReq(Player* aPlr);
 	bool DoOperateCompareReq(Player* aPlr, uint32 tarUserId);

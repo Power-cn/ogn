@@ -2,7 +2,7 @@
 
 static Guid sId = 0;
 Entity::Entity(int8 type /* = 0 */):
-instanceId(++sId),
+	mGuid(++sId),
 entityType(type),
 mSpeed(0.f),
 mDirPosition(D_UP),
@@ -163,7 +163,7 @@ EntitySet* Entity::getView()
 {
 	if (mMap == NULL)
 		return NULL;
-	return mMap->getEntityView(getInstanceId());
+	return mMap->getEntityView(getGuid());
 }
 
 uint32 Entity::getViewCount()
@@ -185,7 +185,7 @@ void Entity::setMapId(uint32 mapId)
 
 uint32 Entity::getMapInsId()
 {
-	return mMap ? mMap->getInstanceId() : 0;
+	return mMap ? mMap->getGuid() : 0;
 }
 
 void Entity::setMapInsId(uint32 mapInsId)
@@ -302,7 +302,7 @@ int32 Entity::onTimerChangeProperty(TimerEvent& e)
 
 	NetEntityPropertyNotify nfy;
 	nfy.property << mDictChangePro;
-	nfy.guid = getInstanceId();
+	nfy.guid = getGuid();
 	sendPacketToView(nfy);
 	mDictChangePro.Clear();
 	return 0;

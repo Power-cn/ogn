@@ -29,7 +29,7 @@ bool MapModule::Initialize()
 			m->mMapJson = &mapMapJson[itr.first];
 			m->Initalize();
 			if (addMap(m))
-				LOG_DEBUG(LogSystem::csl_color_green, "create map success id:%d instanceId:%d ", m->getMapId(), m->getInstanceId());
+				LOG_DEBUG(LogSystem::csl_color_green, "create map success id:%d instanceId:%d ", m->getMapId(), m->getGuid());
 			else
 				delete m;
 		}

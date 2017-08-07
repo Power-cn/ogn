@@ -12,7 +12,11 @@ public:
 	void update(float32 time, float32 delay);
 protected:
 	int onNetPingNotify(Robot* robot, NetPingNotify* nfy);
-	int onNetLoginRes(Robot* robot, NetLoginRes* ref);
+	int onNetLoginRes(Robot* robot, NetLoginRes* res);
+	int onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res);
+	int onNetSelectRoleRes(Robot* robot, NetSelectRoleRes* res);
+
+
 	int onNetEntityEnterMapNotify(Robot* robot, NetEntityEnterMapNotify* nfy);
 	int onNetEntityLeaveMapNotify(Robot* robot, NetEntityLeaveMapNotify* nfy);
 	int onNetPlayerEnterViewNotify(Robot* robot, NetPlayerEnterViewNotify* nfy);
@@ -22,6 +26,8 @@ protected:
 protected:
 	int32 onGmCmd(CmdEvent& e);
 	int32 onLogin(CmdEvent& e);
+	int32 onCreate(CmdEvent& e);
+	int32 onSelect(CmdEvent& e);
 protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;
