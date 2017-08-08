@@ -60,14 +60,14 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Xcode">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Xcode.dll</HintPath>
+    </Reference>
+    <Reference Include="UnityEditor.iOS.Extensions.Common">
+      <HintPath>Library\UnityAssemblies\UnityEditor.iOS.Extensions.Common.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
@@ -123,9 +123,76 @@
     <Compile Include="Assets\script\ui\UIManager.cs" />
     <Compile Include="Assets\script\ui\ViewLoginUI.cs" />
     <Compile Include="Assets\script\ui\ViewMainUI.cs" />
-    <Compile Include="Assets\script\ui\ViewRoomUI.cs" />
+    <Compile Include="Assets\script\ui\ViewGameUI.cs" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Assets\Resources\Atlas\ui\@map\old_main.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_activity\ui_activity.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_arena\ui_arena.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_bag\ui_bag.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_bank\ui_bank.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_bonus\ui_bonus.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_bravefight\ui_bravefight.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_caiji\ui_caiji.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_catch_pet\ui_catch_pet.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_catchpet\ui_catchpet.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_center\ui_center.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_clannad\ui_clannad.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_common\ui_common.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_create_role\ui_create_role.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_dialog\ui_dialog.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_download\louading.atlas.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_elementcrystal\ui_elementcrystal.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_event\ui_event.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_exchangehouse\ui_exchangehouse.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_fail\ui_fail.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_fight\ui_fight.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_friend\ui_friend.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_guidance\ui_guidance.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_handbook\ui_handbook.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head0\ui_head0.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head1\ui_head1.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head10\ui_head10.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head11\ui_head11.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head12\ui_head12.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head13\ui_head13.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head14\ui_head14.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head15\ui_head15.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head16\ui_head16.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head17\ui_head17.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head2\ui_head2.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head3\ui_head3.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head4\ui_head4.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head5\ui_head5.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head6\ui_head6.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head7\ui_head7.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head8\ui_head8.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_head9\ui_head9.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_jobchoose\ui_jobchoose.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_jobchoose_1\ui_jobchoose_1.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_knight\ui_knight.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_login\ui_login.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_main\ui_main.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_main_talk\ui_main_talk.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_mao\ui_mao.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_map\ui_map.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_maze\ui_maze.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_pet\ui_pet.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_popularity\ui_popularity.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_popularity_icon\ui_popularity_icon.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_position\ui_position.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_role\ui_role.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_serverlist\ui_serverlist.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_setting\ui_setting.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_skill\ui_skill.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_skills\ui_skills.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_symmetry\ui_symmetry.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_talk\ui_talk.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_team\ui_team.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_teampvp\ui_teampvp.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_topbar\ui_topbar.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_tower\ui_tower.txt" />
+    <None Include="Assets\Resources\Atlas\ui\@ui_workshop\ui_workshop.txt" />
     <None Include="Assets\Resources\config\ui_config.xml" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

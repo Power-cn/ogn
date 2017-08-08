@@ -306,6 +306,7 @@ public class Network : Singleton<Network>
         SocketClient client = new SocketClient();
 
         SocketEntity socketEnt = new SocketEntity();
+        socketEnt.angent = client;
         client.socket = socketEnt;
         client.network = this;
         Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);

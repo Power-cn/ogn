@@ -24,13 +24,13 @@ public class UIManager : MonoBehaviour {
             obj.AddComponent(System.Type.GetType(script));
             obj.SetActive(false);
             dictUIPlane.Add(node.Attributes["name"].Value, obj);
-            obj.transform.parent = GameStart.canvas.transform;
         }
+        openWindow("ui_login");
 
-	}
-	
-	// Update is called once per frame
-	void Update () {
+    }
+
+    // Update is called once per frame
+    void Update () {
 	
 	}
 

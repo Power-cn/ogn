@@ -218,18 +218,20 @@ void LuaEngine::reloadScript()
 {
 	clearScript();
 
+	std::string  apath = Shared::GetDirectory();
 	std::vector<std::string> files;
-	Shared::GetDirectoryFiles("../config/cfg/script", files);
-	for (std::string& path : files)
-	{
-		loadScript(path);
-	}
-	//loadScript("../config/cfg/script/global.lua");
-	//loadScript("../config/cfg/script/player.lua");
-	//loadScript("../config/cfg/script/gm.lua");
-	//loadScript("../config/cfg/script/team.lua");
-	//loadScript("../config/cfg/script/room.lua");
-	//loadScript("../config/cfg/script/game.lua");
+	//Shared::GetDirectoryFiles("../config/cfg/script", files);
+	//for (std::string& path : files)
+	//{
+	//	loadScript(path);
+	//}
+	loadScript("../config/cfg/script/global.lua");
+	loadScript("../config/cfg/script/player.lua");
+	loadScript("../config/cfg/script/gm.lua");
+	loadScript("../config/cfg/script/team.lua");
+	loadScript("../config/cfg/script/room.lua");
+	loadScript("../config/cfg/script/game.lua");
+	loadScript("../config/cfg/script/card.lua");
 
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

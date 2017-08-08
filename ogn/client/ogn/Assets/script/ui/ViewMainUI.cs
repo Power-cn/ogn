@@ -27,6 +27,7 @@ public class ViewMainUI : MonoBehaviour {
     public Image imagePlayerSex;
     void Awake()
     {
+        /*
         main = gameObject.transform.Find("main").gameObject;
         createObj = main.transform.Find("create").gameObject;
         createBtn = createObj.GetComponent<Button>();
@@ -46,6 +47,7 @@ public class ViewMainUI : MonoBehaviour {
         
         roomList = gameObject.transform.Find("roomList").gameObject;
         roomListGrid = roomList.transform.Find("Grid").gameObject;
+        */
         //createBtn.onClick.AddListener(() => onCreateClick(createBtn));
         //joinBtn.onClick.AddListener(() => onJoinClick(joinBtn));
 

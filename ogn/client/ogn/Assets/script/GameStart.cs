@@ -45,8 +45,8 @@ public class GameStart : MonoBehaviour {
         root = GameObject.Find("GameStart");
         //uiCamera = GameObject.Find("Canvas/UICamera").GetComponent<Camera>();
         uiMgr = gameObject.AddComponent<UIManager>();
-        canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
-        uiMgr.openWindow("ui_login");
+        //canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        //uiMgr.openWindow("ui_login");
 
         //textDebug = uiCamera.transform.Find("Debug").GetComponent<Text>();
 
@@ -63,12 +63,8 @@ public class GameStart : MonoBehaviour {
 
         //socketClient = Network.Connect("112.74.49.74", 13380);
 
-        ServerConfig cf = ConfigManager.Instance.getServerConfig("OGN");
-        socketClient = network.Connect(cf.Host, cf.Port);
-        socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
-        socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
-        socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
-        socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
+        //ServerConfig cf = ConfigManager.Instance.getServerConfig("OGN");
+       
     }
 
 	void Start () {
@@ -92,6 +88,24 @@ public class GameStart : MonoBehaviour {
 
 	}
 
+    public void Connect(string host, short port)
+    {
+        if (socketClient != null)
+        {
+            reConnect();
+            socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
+            socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
+            socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
+            socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
+            return;
+        }
+        socketClient = network.Connect(host, port);
+        socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
+        socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
+        socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
+        socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
+
+    }
     public void reConnect()
     {
         network.reConnect(socketClient);

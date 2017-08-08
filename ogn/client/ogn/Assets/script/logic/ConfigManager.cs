@@ -188,13 +188,13 @@ public class ConfigManager : Singleton<ConfigManager>
     }
     public ConfigManager()
     {
-        loadServerConfig("config.json");
-        loadAnimConfig("config/animation.json");
-        loadResourceConfig("config/resource.json");
-        loadCharacterConfig("config/character.json");
-        loadActorConfig("config/actor.json");
-        loadNpcConfig("config/npc.json");
-        loadMapConfig("config/map.json");
+        //loadServerConfig("config.json");
+        //loadAnimConfig("config/animation.json");
+        //loadResourceConfig("config/resource.json");
+        //loadCharacterConfig("config/character.json");
+        //loadActorConfig("config/actor.json");
+        //loadNpcConfig("config/npc.json");
+        //loadMapConfig("config/map.json");
 
         Debug.Log("load config ok");
     }
