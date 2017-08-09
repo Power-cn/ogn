@@ -25,8 +25,9 @@ bool GameGoldenFlower::operator >> (GameGoldenFlowerInfo& info)
 	info.bankerUserId = GetBanker();
 	info.curSpeakUserId = GetCurSpeak();
 	info.speakTime = GetSpeakTime();
-	for (GameEntity* aGameEnt : mLstGameEntity)
+	for (auto& itr : mLstGameEntity)
 	{
+		GameEntity* aGameEnt = itr.second;
 		GameEntityInfo entInfo;
 		*aGameEnt >> entInfo;
 		info.gameEntInfos.push_back(entInfo);
@@ -88,13 +89,12 @@ void GameGoldenFlower::DoCutCard()
 uint32 GameGoldenFlower::GetNextSpeakPlr()
 {
 	int32 idx = GetPlrInx(mCurSpeakUserId);
-	if (idx >= 0 && idx < GetGameEntCount())
+	for (int8 i = 0; i < GetRoom()->GetMaxCount() - 1; ++i)
 	{
-		idx++;
-		if (idx >= GetGameEntCount())
-			idx = 0;
-		GameEntity* aGameEnt =  GetGameEnt(idx);
-		if (aGameEnt && aGameEnt->GetState() == GS_Normal)
+		idx = idx + 1 >= GetRoom()->GetMaxCount() ? 0 : idx + 1;
+		GameEntity* aGameEnt = GetGameEnt(idx);
+		if (aGameEnt == NULL) continue;
+		if (aGameEnt->GetState() == GS_Normal)
 			return aGameEnt->userId;
 	}
 	return 0;
@@ -133,7 +133,9 @@ uint32 GameGoldenFlower::CalculateUseGold(uint32 userGold)
 uint32 GameGoldenFlower::GetLivePlrCount()
 {
 	uint32 num = 0;
-	for (GameEntity* aGameEnt:mLstGameEntity) {
+	for (auto& itr : mLstGameEntity)
+	{
+		GameEntity* aGameEnt = itr.second;
 		if (aGameEnt->GetState() == GS_Normal)
 			num++;
 	}
@@ -200,7 +202,8 @@ bool GameGoldenFlower::DoResult(uint32& winer)
 	if (GetLivePlrCount() == 1)
 	{
 		uint32 num = 0;
-		for (GameEntity* aGameEnt : mLstGameEntity) {
+		for (auto& itr : mLstGameEntity) {
+			GameEntity* aGameEnt = itr.second;
 			if (aGameEnt->GetState() == GS_Normal) {
 				winer = aGameEnt->GetUserId();
 

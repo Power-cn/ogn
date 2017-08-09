@@ -2,7 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 public class LocalPlayer : Player {
-    public SocketClient client;
+    public SocketEntity client;
     public string user;
     public string password;
     public LocalPlayer()

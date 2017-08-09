@@ -350,6 +350,7 @@ name = "";
 userId = 0;
 insId = 0;
 state = 0;
+pos = 0;
 
 	}
 
@@ -359,6 +360,7 @@ bytes.Write(name);
 bytes.Write(userId);
 bytes.Write(insId);
 bytes.Write(state);
+bytes.Write(pos);
 
 		return true;
 	}
@@ -369,6 +371,7 @@ bytes.Read(ref name);
 bytes.Read(ref userId);
 bytes.Read(ref insId);
 bytes.Read(ref state);
+bytes.Read(ref pos);
 
 		return true;
 	}
@@ -377,6 +380,7 @@ public string name;
 public uint userId;
 public ulong insId;
 public sbyte state;
+public sbyte pos;
 
 }
 public class RoomInfo : Header

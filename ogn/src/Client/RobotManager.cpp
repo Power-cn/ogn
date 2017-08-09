@@ -90,6 +90,7 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
 	if (res->result == NResultSuccess)
 	{
+		robot->mGuid = res->guid;
 		mCurRobot->mAccountId = res->accInfo.id;
 		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accInfo.user.c_str(), res->accInfo.id, res->guid);
 
@@ -145,7 +146,7 @@ int RobotManager::onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res)
 		return 0;
 	}
 
-	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str());
+	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%0.16llx", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
 	return 0;
 }
 
@@ -157,7 +158,7 @@ int RobotManager::onNetSelectRoleRes(Robot* robot, NetSelectRoleRes* res)
 		return 0;
 	}
 
-	LOG_DEBUG(LogSystem::csl_color_green, "select userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str());
+	LOG_DEBUG(LogSystem::csl_color_green, "select userId:%d user:%s guid:%0.16llx", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
 	return 0;
 }
 

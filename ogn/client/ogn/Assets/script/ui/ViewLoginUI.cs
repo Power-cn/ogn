@@ -2,7 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 
-public class ViewLoginUI : MonoBehaviour {
+public class ViewLoginUI : UIEntity {
 
     public Button loginButton;
     public InputField inputUser;
@@ -21,8 +21,7 @@ public class ViewLoginUI : MonoBehaviour {
 	}
 	
 	// Update is called once per frame
-	void Update () {
-	
+    void Update () {
 	}
 
     void onLoginClick(Button button)
@@ -30,7 +29,7 @@ public class ViewLoginUI : MonoBehaviour {
         NetLoginReq req = new NetLoginReq();
         req.user = inputUser.text;
         req.password = inputPwd.text;
-        GameStart.socketClient.Send(req);
+        GameStart.socketClient.socket.SendPacket(req);
         //GameStart.textDebug.text = "onLoginClick";
     }
 }

@@ -15,10 +15,11 @@ Room::~Room()
 
 void Room::sendPacketToAll(Packet& packet)
 {
-	for (RoomPlayer* aRoomPlayer : mRoomPlayers)
+	for (auto & itr : mRoomPlayers)
 	{
-		if (aRoomPlayer->mPlayer == NULL) continue;
-		aRoomPlayer->mPlayer->sendPacket(packet);
+		RoomPlayer* rRoomPlr = itr.second;
+		if (rRoomPlr->mPlayer == NULL) continue;
+		rRoomPlr->mPlayer->sendPacket(packet);
 	}
 }
 
@@ -28,11 +29,14 @@ bool Room::operator >> (RoomInfo& info)
 	info.roomId = GetInsId();
 	info.maxCount = GetMaxCount();
 
-	for (RoomPlayer* aRoomPlayer: mRoomPlayers){
+	for (auto & itr : mRoomPlayers)
+	{
+		RoomPlayer* rRoomPlr = itr.second;
 		RoomPlayerInfo aPlrInfo;
-		(*aRoomPlayer) >> aPlrInfo;
+		(*rRoomPlr) >> aPlrInfo;
 		info.roomPlayerInfos.push_back(aPlrInfo);
 	}
+
 	return true;
 }
 
@@ -52,6 +56,7 @@ RoomPlayer* Room::DoEnter(Player* aPlr, bool isMaster /* = false */)
 	roomPlr->mUserId = aPlr->getUserId();
 	roomPlr->mName = aPlr->getName();
 	roomPlr->mPlayer = aPlr;
+	roomPlr->SetPos(GetEnterPos());
 	if (isMaster)
 		SetMaster(roomPlr);
 
@@ -75,13 +80,12 @@ bool Room::DoLeave(uint32 userId)
 
 RoomPlayer* Room::FindPlayer(uint32 userId)
 {
-	for (auto itr = mRoomPlayers.begin();
-		itr != mRoomPlayers.end();
-		++itr)
+	for (auto & itr : mRoomPlayers)
 	{
-		if ((*itr)->mUserId == userId)
+		RoomPlayer* rRoomPlr = itr.second;
+		if (rRoomPlr && rRoomPlr->mUserId == userId)
 		{
-			return (*itr);
+			return rRoomPlr;
 		}
 	}
 	return NULL;
@@ -89,14 +93,12 @@ RoomPlayer* Room::FindPlayer(uint32 userId)
 
 void Room::RemovePlayer(uint32 userId)
 {
-	for (auto itr = mRoomPlayers.begin();
-		 itr != mRoomPlayers.end();
-		 ++itr)
+	for (auto & itr : mRoomPlayers)
 	{
-		if ((*itr)->mUserId == userId)
+		RoomPlayer* rRoomPlr = itr.second;
+		if (rRoomPlr && rRoomPlr->mUserId == userId)
 		{
-			delete *itr;
-			mRoomPlayers.erase(itr);
+			mRoomPlayers.erase(rRoomPlr->GetPos());
 			break;
 		}
 	}
@@ -104,14 +106,19 @@ void Room::RemovePlayer(uint32 userId)
 
 RoomPlayer* Room::AddPlayer(RoomPlayer* roomPlr)
 {
-	mRoomPlayers.push_back(roomPlr);
+	if (GetRoomPlayer(roomPlr->GetPos()))
+		return NULL;
+	mRoomPlayers[roomPlr->GetPos()] = roomPlr;
 	return roomPlr;
 }
 
 RoomPlayer* Room::GetRoomPlayer(uint32 idx)
 {
-	if (idx > GetRoomPlayerCount()) return NULL;
-	return mRoomPlayers[idx];
+	auto itr = mRoomPlayers.find(idx);
+	if (itr != mRoomPlayers.end())
+		return itr->second;
+	
+	return NULL;
 }
 
 bool Room::IsFull()
@@ -124,8 +131,9 @@ bool Room::IsFull()
 bool Room::IsCanStart()
 {
 	uint32 canStart = 0;
-	for (RoomPlayer* aRoomPlayer:mRoomPlayers) {
-
+	for (auto & itr : mRoomPlayers)
+	{
+		RoomPlayer* aRoomPlayer = itr.second;
 		if (aRoomPlayer->GetState() == RPS_Ready) {
 			canStart++;
 			continue;
@@ -147,7 +155,9 @@ bool Room::IsCanStart()
 
 bool Room::DoAllStart()
 {
-	for (RoomPlayer* aRoomPlayer : mRoomPlayers) {
+	for (auto & itr : mRoomPlayers)
+	{
+		RoomPlayer* aRoomPlayer = itr.second;
 		if (aRoomPlayer->GetState() == RPS_Ready) {
 			uint8 lastState = aRoomPlayer->GetState();
 			aRoomPlayer->SetState(RPS_Game);
@@ -162,6 +172,18 @@ bool Room::IsCanAdd(Player* aPlr)
 	if (IsFull())
 		return false;
 	return true;
+}
+
+uint8 Room::GetEnterPos()
+{
+	for (uint8 i = 0 ; i < GetMaxCount(); ++i)
+	{
+		if (GetRoomPlayer(i) == NULL)
+		{
+			return i;
+		}
+	}
+	return -1;
 }
 
 void Room::OnCreate(uint32 userId)
@@ -205,5 +227,6 @@ bool RoomPlayer::operator >> (RoomPlayerInfo& info)
 	info.userId = mUserId;
 	info.name = mName;
 	info.state = mState;
+	info.pos = GetPos();
 	return true;
 }

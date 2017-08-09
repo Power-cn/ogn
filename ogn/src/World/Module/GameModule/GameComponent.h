@@ -13,7 +13,7 @@ public:
 	GameEntity* FindGameEnt(uint32 userId);
 	void DelGameEnt(uint32 userId);
 	void SetRoomId(uint32 roomId) { mRoomId = roomId; }
-
+	void SetRoom(Room* rRoom) { mRoom = rRoom; }
 	int32 GetPlrInx(uint32 userId);
 
 	uint32 GetInsId() { return mInsId; }
@@ -21,6 +21,7 @@ public:
 	uint32 GetRoomId() { return mRoomId; }
 	uint32 GetPlrCard(uint32 userId, uint32 idx);
 
+	Room* GetRoom() { return mRoom; }
 	virtual std::string ToString();
 protected:
 	virtual bool OnStart() { return true; }
@@ -29,8 +30,9 @@ protected:
 	virtual bool OnLeave(GameEntity* aGameEnt) { return true; }
 protected:
 	static uint32 sId;
-	uint32							mInsId;
-	uint32							mRoomId;
-	std::vector<GameEntity*>		mLstGameEntity;
+	uint32									mInsId;
+	uint32									mRoomId;
+	Room*									mRoom;
+	std::map<uint8, GameEntity*>			mLstGameEntity;
 private:
 };

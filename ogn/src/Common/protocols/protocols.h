@@ -254,6 +254,7 @@ name = "";
 userId = 0;
 insId = 0;
 state = 0;
+pos = 0;
 
 	}
 
@@ -262,6 +263,7 @@ CHECK(bytes << name);
 CHECK(bytes << userId);
 CHECK(bytes << insId);
 CHECK(bytes << state);
+CHECK(bytes << pos);
 
 		return true;
 	}
@@ -271,6 +273,7 @@ CHECK(bytes >> name);
 CHECK(bytes >> userId);
 CHECK(bytes >> insId);
 CHECK(bytes >> state);
+CHECK(bytes >> pos);
 
 		return true;
 	}
@@ -279,6 +282,7 @@ std::string name;
 uint32 userId;
 uint64 insId;
 uint8 state;
+uint8 pos;
 
 };
 

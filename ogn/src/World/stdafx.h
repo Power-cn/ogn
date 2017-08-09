@@ -89,6 +89,8 @@
 #include "./Module/MapModule/MapModule.h"
 #include "./Module/WarModule/Skill.h"
 #include "./Module/WarModule/EntityStatus.h"
+
+#include "./Module/WarModule/WarHandler.h"
 #include "./Module/WarModule/War.h"
 #include "./Module/WarModule/WarModule.h"
 #include "./Module/FriendsModule/Friends.h"
@@ -110,7 +112,6 @@
 #include "Utils.h"
 #include "DBHandler.h"
 #include "SessionHandler.h"
-#include "./Handler/WarHandler.h"
 #include "RedisProxy.h"
 
 #include "Application.h"

@@ -75,6 +75,9 @@ int DBHandler::onNetCreateRoleRes(Session* session, NetCreateRoleRes* res)
 	/// 角色创建成功 ///
 
 	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hmset %s %d %s", sUserIdToName, res->roleInfo.id, res->roleInfo.name.c_str());
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
 	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res->roleInfo.name.c_str(), res->roleInfo.id);
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 

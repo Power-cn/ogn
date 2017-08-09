@@ -60,6 +60,7 @@ public:
 	virtual void sendRespnoseMsg(int32 msgId, std::vector<std::string>* msgParams = NULL);
 	virtual void sendPacketToMsg(const std::string& msg);
 	virtual void sendPacketToMsg(EnumChannel ec, const std::string& msg);
+	virtual bool CanDestroy();
 public:
 	bool onLoad(Dictionary& dict);
 	bool onSaveBegin(Dictionary& dict);

@@ -10,9 +10,7 @@ public class BinaryStream
     {
         short v = 1;
         byte[] data = BitConverter.GetBytes(v);
-        if (data[0] == 1)
-            return false;
-
+        if (data[0] == 1) return false;
         return true;             
     }
 
@@ -49,7 +47,14 @@ public class BinaryStream
         return temp;
     }
 
-    public BinaryStream(int count = PACKET_MAX_LENGTH)
+    public BinaryStream ()
+    {
+        mBuffer = new byte[Shared.MAX_PACKET_LENGTH];
+        mWriteIndex = 0;
+        mReadIndex = 0;
+    }
+
+    public BinaryStream(int count)
     {
         mBuffer = new byte[count];
         mWriteIndex = 0;
@@ -109,11 +114,7 @@ public class BinaryStream
 
     public bool Write(bool value)
     {
-        if (mBuffer.Length - mWriteIndex < 1)
-        {
-            Console.WriteLine("Binary error");
-            return false;
-        }
+        validBuffer(1);
         mBuffer[mWriteIndex] = value ? (byte)1 : (byte)0;
         mWriteIndex += sizeof(byte);
         return true;
@@ -121,11 +122,7 @@ public class BinaryStream
 
     public bool Write(byte value)
     {
-        if (mBuffer.Length - mWriteIndex < 1)
-        {
-            Console.WriteLine("Binary error");
-            return false;
-        }
+        validBuffer(1);
         mBuffer[mWriteIndex] = value;
         mWriteIndex += sizeof(byte);
         return true;
@@ -133,11 +130,7 @@ public class BinaryStream
 
     public bool Write(sbyte value)
     {
-        if (mBuffer.Length - mWriteIndex < 1)
-        {
-            Console.WriteLine("Binary error");
-            return false;
-        }
+        validBuffer(1);
         mBuffer[mWriteIndex] = (byte)value;
         mWriteIndex += sizeof(sbyte);
         return true;
@@ -200,13 +193,13 @@ public class BinaryStream
     }
     public bool Write(BinaryStream value)
     {
-        if (!this.Write(value.WriteIndex))
+        if (!this.Write(value.wpos))
             return false;
         
-        if (value.WriteIndex <= 0)
+        if (value.wpos <= 0)
             return true;
          
-        if (!this.Write(value.buffer, 0, value.WriteIndex))
+        if (!this.Write(value.buffer, 0, value.wpos))
             return false;
         
         return true;
@@ -250,7 +243,7 @@ public class BinaryStream
         count = count == -1 ? buffer.Length : count;
         if (!validBuffer(count))
             return false;
-        Array.Copy(buffer, index, mBuffer, mWriteIndex,count);
+        Array.Copy(buffer, index, mBuffer, mWriteIndex, count);
         mWriteIndex += count;
         return true;
     }
@@ -259,8 +252,11 @@ public class BinaryStream
     {
         if (mBuffer.Length - mWriteIndex < count)
         {
-            Console.WriteLine("空间不足!");
-            return false;
+            byte[] datas = new byte[mBuffer.Length + count];
+            Array.Copy(mBuffer, 0, datas, 0, mBuffer.Length);
+            mBuffer = datas;
+            //Console.WriteLine("空间不足!");
+            return true;
         }
         return true;
     }
@@ -505,18 +501,20 @@ public class BinaryStream
         mWriteIndex = 0;
         mReadIndex = 0;
     }
+
+
     public byte[] buffer
     {
         get { return mBuffer; }
     }
 
-    public int WriteIndex
+    public int wpos
     {
         get { return mWriteIndex;  }
         set { mWriteIndex = value; }
     }
 
-    public int ReadIndex
+    public int rpos
     {
         get { return mReadIndex; }
         set { mReadIndex = value; }

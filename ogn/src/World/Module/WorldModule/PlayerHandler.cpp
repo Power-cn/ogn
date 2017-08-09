@@ -130,6 +130,9 @@ int32 PlayerHandler::OnRedisFindName(RedisEvent& e)
 
 	sWorld.ChangeName(aPlr, newName);
 	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hmset %s %d %s", sUserIdToName, aPlr->getUserId(), aPlr->getName());
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
 	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, aPlr->getName(), aPlr->getUserId());
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 

@@ -39,6 +39,7 @@
       <member type="uint32" name="userId" />
       <member type="uint64" name="insId" />
       <member type="uint8" name="state" />
+      <member type="uint8" name="pos" />
     </element>
     
     <element name="RoomInfo" parent="object">

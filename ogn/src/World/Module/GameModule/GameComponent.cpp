@@ -4,36 +4,44 @@ uint32 GameComponent::sId = 0;
 
 GameComponent::GameComponent():
 mInsId(++sId),
-mRoomId(0)
+mRoomId(0),
+mRoom(NULL)
 {
 }
 
 GameComponent::~GameComponent()
 {
-	for (GameEntity* aGameEnt : mLstGameEntity)
+	for (auto& itr : mLstGameEntity)
 	{
-		delete aGameEnt;
+		delete itr.second;
 	}
 	mLstGameEntity.clear();
 }
 
 GameEntity* GameComponent::AddGameEnt(GameEntity* aGameEnt)
 {
-	mLstGameEntity.push_back(aGameEnt);
+	RoomPlayer* aRoomPlr = mRoom->FindPlayer(aGameEnt->GetUserId());
+	if (aRoomPlr == NULL) return NULL;
+	auto itr = mLstGameEntity.find(aRoomPlr->GetPos());
+	if (itr != mLstGameEntity.end())
+		return NULL;
+	mLstGameEntity[aRoomPlr->GetPos()] = aGameEnt;
 	return aGameEnt;
 }
 
 GameEntity* GameComponent::GetGameEnt(uint32 idx)
 {
-	if (idx < mLstGameEntity.size())
-		return mLstGameEntity[idx];
+	auto itr = mLstGameEntity.find(idx);
+	if (itr != mLstGameEntity.end())
+		return NULL;
 	return NULL;
 }
 
 GameEntity* GameComponent::FindGameEnt(uint32 userId)
 {
-	for (GameEntity* aGameEnt : mLstGameEntity)
+	for (auto& itr : mLstGameEntity)
 	{
+		GameEntity* aGameEnt = itr.second;
 		if (aGameEnt->userId == userId)
 		{
 			return aGameEnt;
@@ -44,14 +52,13 @@ GameEntity* GameComponent::FindGameEnt(uint32 userId)
 
 void GameComponent::DelGameEnt(uint32 userId)
 {
-	for (auto itr = mLstGameEntity.begin();
-		itr != mLstGameEntity.end();
-		++itr)
+	for (auto& itr : mLstGameEntity)
 	{
-		if ((*itr)->userId == userId)
+		GameEntity* aGameEnt = itr.second;
+		if (aGameEnt->userId == userId)
 		{
-			delete (*itr);
-			mLstGameEntity.erase(itr);
+			delete aGameEnt;
+			mLstGameEntity.erase(itr.first);
 			return;
 		}
 	}
@@ -78,10 +85,8 @@ std::string GameComponent::ToString()
 
 int32 GameComponent::GetPlrInx(uint32 userId)
 {
-	for (uint32 i = 0; i < mLstGameEntity.size(); ++i)
-	{
-		if (mLstGameEntity[i]->userId == userId)
-			return i;
-	}
+	RoomPlayer* aRoomPlr = mRoom->FindPlayer(userId);
+	if (aRoomPlr)
+		return aRoomPlr->GetPos();
 	return -1;
 }

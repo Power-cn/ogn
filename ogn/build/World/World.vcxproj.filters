@@ -114,9 +114,6 @@
     <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp">
       <Filter>Module\WarModule</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\World\Handler\WarHandler.cpp">
-      <Filter>Handler</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp">
       <Filter>Module\WarModule</Filter>
     </ClCompile>
@@ -198,6 +195,9 @@
     <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp">
       <Filter>Module\GameModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarHandler.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -247,9 +247,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h">
       <Filter>Module\WarModule</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\Handler\WarHandler.h">
-      <Filter>Handler</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h">
       <Filter>Module\WarModule</Filter>
@@ -337,6 +334,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h">
       <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarHandler.h">
+      <Filter>Module\WarModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

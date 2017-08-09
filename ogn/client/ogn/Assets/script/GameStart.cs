@@ -9,17 +9,19 @@ using System.Collections.Generic;
 public class GameStart : MonoBehaviour {
 
     public static GameStart gameStart = new GameStart();
-    public static Network network = new Network();
     public static SocketClient socketClient;
+    public static Network network = Network.Instance;
     public static SocketHandler sHandler = new SocketHandler();
     public static PlayerManager sPlrMgr = PlayerManager.Instance;
+    public static ConfigManager sCfgMgr = ConfigManager.Instance;
+    public static PacketHelper sPckMgr = PacketHelper.instance;
+    public static UIManager uiMgr;
 
     public static GameObject root;
     public static GameObject roomItem;
     //public static Camera uiCamera;
     public static Camera mainCamera;
     public static Canvas canvas;
-    public static UIManager uiMgr;
     public static Text textDebug;
     public static ConfigManager config;
     public static GameObject castSprite;
@@ -27,13 +29,13 @@ public class GameStart : MonoBehaviour {
     public static Download download;
 	// Use this for initialization
 
-    public void SendPacket(Packet packet, SocketClient socket)
+    public void SendPacket(Packet packet, SocketEntity socket)
     {
         byte[] send_data = new byte[Shared.MAX_PACKET_LENGTH];
         BinaryStream bit = new BinaryStream(send_data);
         packet.serialize(bit);
-        Shared.XOR(bit.buffer, bit.WriteIndex, ConstDef.sKey);
-        socket.Send(bit.buffer, bit.WriteIndex);
+        Shared.XOR(bit.buffer, bit.wpos, ConstDef.sKey);
+        socket.SendBuffer(bit.buffer, bit.wpos);
     }
 
     void onDownload()
@@ -44,6 +46,8 @@ public class GameStart : MonoBehaviour {
         //uiCamera = GameObject.Find("Canvas/UICamera").GetComponent<Camera>();
         uiMgr = gameObject.AddComponent<UIManager>();
         canvas = GameObject.Find("Canvas").GetComponent<Canvas>();
+        uiMgr.openWindow("ui_login");
+
         //textDebug = uiCamera.transform.Find("Debug").GetComponent<Text>();
 
         //mainCamera = AssetManager.Instance.getGameObjectAsset("prefab/Main Camera").GetComponent<Camera>();
@@ -96,7 +100,6 @@ public class GameStart : MonoBehaviour {
     protected int onConnect(EventTarget e)
     {
         Debug.Log("Connect Successful...");
-        uiMgr.openWindow("login_ui");
 
         return 0;
     }
@@ -112,10 +115,8 @@ public class GameStart : MonoBehaviour {
 
     protected int onException(EventTarget e)
     {
-
         SocketEvent se = e as SocketEvent;
         this.reConnect();
-
         Debug.Log(System.Text.Encoding.Default.GetString(se.data));
         return 0;
     }
@@ -124,24 +125,21 @@ public class GameStart : MonoBehaviour {
     {
         SocketEvent se = e as SocketEvent;
         Shared.XOR(se.data, se.data.Length,  ConstDef.sKey);
-
         byte[] msgIdBytes = new byte[4];
         Array.Copy(se.data, 0, msgIdBytes, 0, 4);
 
         int MsgId = BitConverter.ToInt32(msgIdBytes, 0); ;
-
         MsgId = BinaryStream.ntohl(MsgId);
 
         //if (MsgId != (int)PACKET_ID_ENUM.ID_NetRegisterRes && MsgId != (int)PACKET_ID_ENUM.ID_NetLoginRes && PlayerManager.playerMgr.localPlayer == null)
         //    return 1;
 
-        Packet packet = PacketHelper.instance.AllocPacket(MsgId);
-        if (packet != null)
-        {
-            BinaryStream bit = new BinaryStream(se.data);
-            packet.deSerialize(bit);
-            sHandler.dispatchEvent(packet.MsgID, socketClient, packet);
-        }
+        Packet packet = sPckMgr.AllocPacket(MsgId);
+        if (packet == null) return 0;
+
+        BinaryStream bit = new BinaryStream(se.data);
+        packet.deSerialize(bit);
+        sHandler.dispatchEvent(packet.MsgID, socketClient, packet);
 
         return 0;
     }

@@ -6,10 +6,6 @@ using System.Text;
 
 public class EventTarget
 {
-    public EventTarget()
-    {
-
-    }
     public string name = "";
    	public EventDispatcher targetDispatcher = null;
 	public EventRegister targetRegister = null;
@@ -132,7 +128,6 @@ public class EventDispatcher
         for (int i = 0; i < listeners.Count; ++i)
         {
             listeners[i].Invoke(lparam, wparam);
-            //listeners[i].thisObject.(listeners[i].callback)(e);
         }
         return 0;
     }

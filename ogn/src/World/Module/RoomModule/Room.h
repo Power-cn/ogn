@@ -17,9 +17,12 @@ public:
 	Guid			mInsId = 0;
 	std::string		mName;
 	uint8			mState = RPS_None;
-
+	uint8			mPos = 0;
 	RoomPlayerState GetState() { return (RoomPlayerState)mState; }
 	void SetState(RoomPlayerState rps) { mState = rps; }
+	void SetPos(uint8 pos) { mPos; }
+
+	uint8 GetPos() { return mPos; }
 public:
 	bool operator << (RoomPlayerInfo& info);
 	bool operator >> (RoomPlayerInfo& info);
@@ -60,6 +63,8 @@ public:
 	const std::string& GetPassword() { return mPassword; }
 	const std::string& GetName() { return mName; }
 protected:
+	uint8 GetEnterPos();
+protected:
 	void OnCreate(uint32 userId);
 	void OnClose();
 	void OnEnter(uint32 userId);
@@ -73,7 +78,7 @@ protected:
 	std::string								mName;
 	std::string								mPassword;
 	uint32									mMaxCount;			// 房间最多人数
-	std::vector<RoomPlayer*>				mRoomPlayers;
+	std::map<uint8, RoomPlayer*>			mRoomPlayers;
 	uint32									mGameInsId;			// 当前游戏ID
 private:
 };

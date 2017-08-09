@@ -16,40 +16,40 @@ public class SocketEvent : EventTarget
     public static string SEND = "onSend";
     public static string EXIT = "onExit";
     public static string EXCEPTION = "onException";
-
+    public SocketEntity socket;
     public byte[] data = null;
 }
 
 public class Header
 {
-    public virtual bool serialize(BinaryStream bitStream)
+    public virtual bool serialize(BinaryStream bytes)
     {
-        onSerializeHeader(bitStream);
-        OnSerialize(bitStream);
+        onSerializeHeader(bytes);
+        OnSerialize(bytes);
         return true;
     }
-    public virtual bool deSerialize(BinaryStream bitStream)
+    public virtual bool deSerialize(BinaryStream bytes)
     {
-        onDeserializeHeader(bitStream);
-        OnDeserialize(bitStream);
+        onDeserializeHeader(bytes);
+        OnDeserialize(bytes);
         return true;
     }
-    protected virtual bool onSerializeHeader(BinaryStream bitStream)
-    {
-        return true;
-    }
-
-    protected virtual bool onDeserializeHeader(BinaryStream bitStream)
+    protected virtual bool onSerializeHeader(BinaryStream bytes)
     {
         return true;
     }
 
-    protected virtual bool OnSerialize(BinaryStream bitStream)
+    protected virtual bool onDeserializeHeader(BinaryStream bytes)
     {
         return true;
     }
 
-    protected virtual bool OnDeserialize(BinaryStream bitStream)
+    protected virtual bool OnSerialize(BinaryStream bytes)
+    {
+        return true;
+    }
+
+    protected virtual bool OnDeserialize(BinaryStream bytes)
     {
         return true;
     }
@@ -69,17 +69,17 @@ public class Packet : Header
         get { return mMsgId; }
     }
 
-    protected override bool onSerializeHeader(BinaryStream bitStream)
+    protected override bool onSerializeHeader(BinaryStream bytes)
     {
-        bitStream.Write(mMsgId);
-        bitStream.Write(mVersion);
+        bytes.Write(mMsgId);
+        bytes.Write(mVersion);
         return true;
     }
 
-    protected override bool onDeserializeHeader(BinaryStream bitStream)
+    protected override bool onDeserializeHeader(BinaryStream bytes)
     {
-        bitStream.Read(ref mMsgId);
-        bitStream.Read(ref mVersion);
+        bytes.Read(ref mMsgId);
+        bytes.Read(ref mVersion);
         return true;
     }
 }
@@ -152,10 +152,11 @@ public class PacketHandler
     public virtual void OnHandler(Packet packet) {}
 }
 
-public class SocketAngent : EventDispatcher
+public class SocketEntity
 {
-    public Network network;
     public Socket socket = null;
+    public SocketAngent angent;
+
     public int offset = 0;
     public int packet = 0;
     public int position = 0;
@@ -166,72 +167,24 @@ public class SocketAngent : EventDispatcher
     public CircleBuffer buffer = new CircleBuffer();
     public bool sending = false;
 
-    public void unCompression(byte[] input, int inCount, ref byte[] output, ref int outCount)
-    {
-        MemoryStream mOut = new MemoryStream(input, 0, inCount);
-        ZInputStream zOut = new ZInputStream(mOut);
-        
-        int tatolCount = 0;
-        int count = 0;
-        byte[] bytes = new byte[1024];
-        output = new byte[256];
-
-        while (true)
-        {
-            count = zOut.read(bytes, 0, bytes.Length);
-            if (count <= 0)
-                break;
-            if (output.Length < tatolCount + count)
-            {
-                byte[] newBytes = new byte[tatolCount + count];
-                Array.Copy(output, 0, newBytes, 0, tatolCount);
-
-                Array.Copy(bytes, 0, newBytes, tatolCount, count);
-                output = newBytes;
-            }
-            else
-            {
-                Array.Copy(bytes, 0, output, tatolCount, count);
-            }
-            tatolCount += count;
-        }
-        outCount = tatolCount;
-        mOut.Close();
-
-        //Console.WriteLine("unCompression: in {0} out {1}", inCount, outCount);
-    }
-
-    public void compression(byte[] input, int inCount, ref byte[] output, ref int outCount)
-    {
-        MemoryStream mOut = new MemoryStream();
-        ZOutputStream outZStream = new ZOutputStream(mOut, zlibConst.Z_DEFAULT_COMPRESSION);
-        outZStream.Write(input, 0, inCount);
-        outCount = (int)outZStream.TotalOut;
-        output = mOut.GetBuffer();
-        mOut.Close();
-
-        //Console.WriteLine("compression: in {0} out {1}", inCount, outCount);
-    }
-
-
-    public void Send(Packet packet)
+    public void SendPacket(Packet packet)
     {
         byte[] send_data = new byte[4096];
 
         BinaryStream bit = new BinaryStream(send_data);
         packet.serialize(bit);
-        int length = bit.WriteIndex + 4;
+        int length = bit.wpos + 4;
         byte[] send_packet = new byte[length];
 
-        this.Send(bit.buffer, bit.WriteIndex);
+        this.SendBuffer(bit.buffer, bit.wpos);
     }
 
-    public void Send(byte[] data)
+    public void SendBuffer(byte[] data)
     {
-        this.Send(data, data.Length);
+        this.SendBuffer(data, data.Length);
     }
 
-    public void Send(byte[] data, int length, int index = 0)
+    public void SendBuffer(byte[] data, int length, int index = 0)
     {
         BinaryStream send_bit = new BinaryStream(length + 4);
         send_bit.Write(length + 4);
@@ -241,9 +194,6 @@ public class SocketAngent : EventDispatcher
 
         postSend();
     }
-
-
-
     protected void OnSend(IAsyncResult ar)
     {
         try
@@ -256,19 +206,18 @@ public class SocketAngent : EventDispatcher
 
             SocketEvent e = new SocketEvent();
             e.name = SocketEvent.SEND;
-            if (network != null)
-                network.dispatchEvent(this, e);
+            if (angent.network != null)
+                angent.network.dispatchEvent(this, e);
         }
         catch (SocketException ex)
         {
             SocketEvent e = new SocketEvent();
             e.name = SocketEvent.EXCEPTION;
             e.data = System.Text.Encoding.Default.GetBytes(ex.Message);
-            if (network != null)
-                network.dispatchEvent(this, e);
+            if (angent.network != null)
+                angent.network.dispatchEvent(this, e);
         }
     }
-
     public bool postSend()
     {
         if (sending)
@@ -285,17 +234,17 @@ public class SocketAngent : EventDispatcher
             if (sendQueue.Count <= 0)
                 break;
             BinaryStream packet = sendQueue.Peek();
-            if (sendCount + packet.WriteIndex > BinaryStream.PACKET_MAX_LENGTH)
+            if (sendCount + packet.wpos > BinaryStream.PACKET_MAX_LENGTH)
                 break;
-            Network.sPacketBuffer.Write(packet.buffer, 0, packet.WriteIndex);
-            sendCount += packet.WriteIndex;
+            Network.sPacketBuffer.Write(packet.buffer, 0, packet.wpos);
+            sendCount += packet.wpos;
             sendQueue.Dequeue();
         }
 
         try
         {
             sending = true;
-            this.socket.BeginSend(Network.sPacketBuffer.buffer, 0, Network.sPacketBuffer.WriteIndex, SocketFlags.None, new AsyncCallback(this.OnSend), this);
+            this.socket.BeginSend(Network.sPacketBuffer.buffer, 0, Network.sPacketBuffer.wpos, SocketFlags.None, new AsyncCallback(this.OnSend), this);
         }
         catch
         {
@@ -305,22 +254,31 @@ public class SocketAngent : EventDispatcher
         return true;
     }
 }
+public class SocketAngent : EventDispatcher
+{
+    public Network network;
+    public SocketEntity socket;
+}
 
 public class SocketClient : SocketAngent
 {
 
 }
 
+public class SocketListener : SocketAngent
+{
+
+}
 
 
-public class Network 
+public class Network : Singleton<Network>
 {
     public static BinaryStream sPacketBuffer = new BinaryStream();
     PacketHelper m_helper;
     public delegate void PacketHandler_CallBack(Packet pt);
 
     protected Queue<SocketEvent> eventList = new Queue<SocketEvent>();
-    protected Queue<SocketAngent> clientList = new Queue<SocketAngent>();
+    protected Queue<SocketEntity> clientList = new Queue<SocketEntity>();
 
     private EventWaitHandle handle = new EventWaitHandle(true, EventResetMode.AutoReset);
 
@@ -336,53 +294,67 @@ public class Network
         {
             handle.WaitOne();
             SocketEvent e = eventList.Dequeue();
-            SocketAngent a = clientList.Dequeue();
+            SocketEntity a = clientList.Dequeue();
+            SocketAngent angent = a.angent;
             handle.Set();
-            a.dispatchEvent(e);
+            angent.dispatchEvent(e);
         }
     }
 
     public SocketClient Connect(string ip, int port)
     {
         SocketClient client = new SocketClient();
+
+        SocketEntity socketEnt = new SocketEntity();
+        client.socket = socketEnt;
         client.network = this;
-        client.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        socketEnt.socket = socket;
+
         IPAddress addr = IPAddress.Parse(ip);
         IPEndPoint ipe = new IPEndPoint(addr, port);
-        client.ipPoint = ipe;
-        IAsyncResult result = client.socket.BeginConnect(ipe, this.OnConnect, client);
+        socketEnt.ipPoint = ipe;
+        IAsyncResult result = socket.BeginConnect(ipe, this.OnConnect, client);
         return client;
+    }
+
+    public SocketListener Listen(short port)
+    {
+        return new SocketListener();
     }
 
     public void reConnect(SocketClient client)
     {
-        client.socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-        IAsyncResult result = client.socket.BeginConnect(client.ipPoint, this.OnConnect, client);
+        SocketEntity socketEnt = new SocketEntity();
+        Socket socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+        IAsyncResult result = socket.BeginConnect(socketEnt.ipPoint, this.OnConnect, client);
+        client.socket = socketEnt;
+        socketEnt.socket = socket;
     }
 
     void OnConnect(IAsyncResult ar)
     {
         SocketClient client = ar.AsyncState as SocketClient;
+        SocketEntity socketEnt = client.socket;
+        Socket socket = socketEnt.socket;
         try
         {
-            client.socket.EndConnect(ar);
-            client.offset = 0;
-            client.packet = 0;
-            client.socket.BeginReceive(client.buffer.buffer, client.buffer.writePosition, client.buffer.writeLength, SocketFlags.None, new AsyncCallback(this.OnReceive), client);
-
-            client.postSend();
+            socket.EndConnect(ar);
+            socketEnt.offset = 0;
+            socketEnt.packet = 0;
+            socket.BeginReceive(socketEnt.buffer.buffer, socketEnt.buffer.writePosition, socketEnt.buffer.writeLength, SocketFlags.None, new AsyncCallback(this.OnReceive), client);
+            socketEnt.postSend();
 
             SocketEvent e = new SocketEvent();
             e.name = SocketEvent.CONNECT;
-
-            dispatchEvent(client, e);
+            dispatchEvent(socketEnt, e);
         }
         catch (SocketException ex)
         {
             SocketEvent e = new SocketEvent();
             e.name = SocketEvent.EXCEPTION;
             e.data = System.Text.Encoding.Default.GetBytes(ex.Message);
-            dispatchEvent(client, e);
+            dispatchEvent(socketEnt, e);
         }
      
     }
@@ -390,13 +362,14 @@ public class Network
     void OnDisconnect(IAsyncResult ar)
     {
         SocketClient client = ar.AsyncState as SocketClient;
-        Socket socket = client.socket;
+        SocketEntity socketEnt = client.socket;
+        Socket socket = socketEnt.socket;
         try
         {
             socket.EndDisconnect(ar);
             SocketEvent e = new SocketEvent();
             e.name = SocketEvent.EXIT;
-            dispatchEvent(client, e);
+            dispatchEvent(socketEnt, e);
         }
         catch
         {
@@ -404,7 +377,7 @@ public class Network
         }
     }
 
-    public void dispatchEvent(SocketAngent angent, SocketEvent e)
+    public void dispatchEvent(SocketEntity angent, SocketEvent e)
     {
         handle.WaitOne();
         eventList.Enqueue(e);
@@ -415,7 +388,8 @@ public class Network
     void OnReceive(IAsyncResult ar)
     {
         SocketAngent client = ar.AsyncState as SocketAngent;
-        Socket socket = client.socket;
+        SocketEntity socketEnt = client.socket;
+        Socket socket = socketEnt.socket;
         try
         {
             int BytesRead = socket.EndReceive(ar);
@@ -428,19 +402,19 @@ public class Network
                 socket.BeginDisconnect(true, new AsyncCallback(this.OnDisconnect), client);
                 return;
             }
-            client.buffer.writePosition = client.buffer.writePosition + BytesRead;
+            socketEnt.buffer.writePosition = socketEnt.buffer.writePosition + BytesRead;
             while (true)
             {
-                if (client.buffer.Read(client.countBytes, 0, sizeof(int)))
+                if (socketEnt.buffer.Read(socketEnt.countBytes, 0, sizeof(int)))
                 {
-                    count = System.BitConverter.ToInt32(client.countBytes, 0);  
+                    count = System.BitConverter.ToInt32(socketEnt.countBytes, 0);  
                     count = BinaryStream.ntohl(count);
-                    if (client.buffer.validDataLength >= count)
+                    if (socketEnt.buffer.validDataLength >= count)
                     {
-                        if (client.buffer.Pop(client.recvPacket, 0, count))
+                        if (socketEnt.buffer.Pop(socketEnt.recvPacket, 0, count))
                         {
-                            MemoryStream read_stream = new MemoryStream(client.recvPacket, sizeof(int), count - sizeof(int));
-                            this.OnReceive(read_stream.ToArray(), client);
+                            MemoryStream read_stream = new MemoryStream(socketEnt.recvPacket, sizeof(int), count - sizeof(int));
+                            this.OnReceive(read_stream.ToArray(), socketEnt);
 
                         }
                         else
@@ -452,11 +426,11 @@ public class Network
                 else
                     break;
             }
-            if (client.buffer.writeLength <= 0)
+            if (socketEnt.buffer.writeLength <= 0)
             {
                 return;
             }
-            socket.BeginReceive(client.buffer.buffer, client.buffer.writePosition, client.buffer.writeLength, 0, new AsyncCallback(this.OnReceive), client);
+            socket.BeginReceive(socketEnt.buffer.buffer, socketEnt.buffer.writePosition, socketEnt.buffer.writeLength, 0, new AsyncCallback(this.OnReceive), client);
         }
         catch (SocketException)
         {
@@ -464,7 +438,7 @@ public class Network
         }
     }
 
-    void OnReceive(byte[] data, SocketAngent angent)
+    void OnReceive(byte[] data, SocketEntity socketEnt)
     {
 
         //MemoryStream mem = new MemoryStream(data);
@@ -479,8 +453,7 @@ public class Network
         SocketEvent e = new SocketEvent();
         e.name = SocketEvent.RECV;
         e.data = data;
-
-        dispatchEvent(angent, e);
+        dispatchEvent(socketEnt, e);
     }
 
 	void Update () 

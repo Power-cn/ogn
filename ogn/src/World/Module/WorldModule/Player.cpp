@@ -115,6 +115,13 @@ void Player::sendPacketToMsg(const std::string& msg)
 	sWorld.sendPacketToMsg(EC_TARGET, msg, this);
 }
 
+bool Player::CanDestroy()
+{
+	if (mOnline == false && !sRoom.FindRoom(getUserId()))
+		return true;
+	return false;
+}
+
 void Player::bindSession(Session* session)
 {
 	session->setPlayer(this);
@@ -241,9 +248,8 @@ bool Player::onLoadJson(Dictionary& dict)
 bool Player::onLoadJson(Json::Value& root)
 {
 	Json::Value userJson = root["user"]; 
-
-	std::string teststr = userJson["test"].asString();
 	uint32 offline_time = userJson["offline"].asUInt();
+	std::string name = userJson["name"].asString();
 	SetOfflineTimer(offline_time);
 
 	return true;
@@ -292,11 +298,13 @@ bool Player::onSavejson(Dictionary& dict)
 bool Player::onSavejson(Json::Value& root)
 {
 	Json::Value userJson;
+	userJson["accId"] = getAccId();
 	userJson["userId"] = getUserId();
-	userJson["test"] = "test";
+	userJson["name"] = getName();
 	userJson["online"] = GetOfflineTimer();
 	userJson["offline"] = GetOfflineTimer();
 	userJson["lasthost"] = session->getHost();
+
 	root["user"] = userJson;
 	return true;
 }
