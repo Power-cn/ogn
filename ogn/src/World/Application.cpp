@@ -507,7 +507,9 @@ int32 Application::RedisConnect(RedisEvent& e)
 
 int32 Application::RedisAuth(RedisEvent& e)
 {
-	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success");
+	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
+
+	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success  %s %d", cfg.Host.c_str(), cfg.Port);
 	//sRedisProxy.sendCmd("zrevrank test w2", (EventCallback)&Application::RedisCallback1, this);
 	//sRedisProxy.sendCmd("zrange test 0 10 withscores", (EventCallback)&Application::RedisCallback1, this);
 	//sRedisProxy.sendCmd("ZCARD test", (EventCallback)&Application::RedisCallback1, this);

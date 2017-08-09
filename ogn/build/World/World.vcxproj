@@ -211,7 +211,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/modules/Python36-32/include;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -232,7 +232,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/modules/Python36-32/include;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -250,7 +250,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/modules/Python36-32/include;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -275,7 +275,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/modules/Python36-32/include;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

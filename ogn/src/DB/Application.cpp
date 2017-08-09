@@ -61,7 +61,7 @@ bool Application::Initialize()
 		cfMysql.Port);
 
 	if (dbConnector)
-		LOG_DEBUG(LogSystem::csl_color_green, "Database connect %s %d success", cfMysql.DbName.c_str(), cfMysql.Port);
+		LOG_DEBUG(LogSystem::csl_color_green, "Database connect %s %s %d success", cfMysql.DbName.c_str(), cfMysql.Host.c_str(), cfMysql.Port);
 	else
 	{
 		LOG_ERROR("Database connect fail...");
