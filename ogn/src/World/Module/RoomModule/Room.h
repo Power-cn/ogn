@@ -20,7 +20,7 @@ public:
 	uint8			mPos = 0;
 	RoomPlayerState GetState() { return (RoomPlayerState)mState; }
 	void SetState(RoomPlayerState rps) { mState = rps; }
-	void SetPos(uint8 pos) { mPos; }
+	void SetPos(uint8 pos) { mPos = pos; }
 
 	uint8 GetPos() { return mPos; }
 public:

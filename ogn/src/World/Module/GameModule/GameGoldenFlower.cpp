@@ -11,6 +11,7 @@ GameGoldenFlower::GameGoldenFlower()
 	mCurMaxGold = 0;
 	mRound = 0;
 	mSpeakCount = 0;
+	mSpeakTimeEvent = 0;
 }
 
 GameGoldenFlower::~GameGoldenFlower()
@@ -84,6 +85,18 @@ uint8 GameGoldenFlower::DoDealPoker()
 void GameGoldenFlower::DoCutCard()
 {
 
+}
+
+void GameGoldenFlower::SetCurSpeakPlr(uint32 userId)
+{
+	mCurSpeakUserId = userId;
+	mTimer.removeEventListener(mSpeakTimeEvent);
+}
+
+void GameGoldenFlower::SetSpeakStartTime(uint32 t)
+{
+	 mSpeakStartTime = t; 
+	 mSpeakTimeEvent = mTimer.addEventListener((EventCallback)&GameGoldenFlower::onSpeakTime, this, mSpeakStartTime + 5.f);
 }
 
 uint32 GameGoldenFlower::GetNextSpeakPlr()
@@ -272,6 +285,29 @@ bool GameGoldenFlower::OnCompareReq(GameEntity* aGameEnt, uint32 tarUserId, uint
 {
 	LuaEngine::Call(this, sScriptGame, "OnCompareReq", aGameEnt->userId, tarUserId, result);
 	return true;
+}
+
+int32 GameGoldenFlower::onSpeakTime(TimerEvent& e)
+{
+	GameEntity* aGameEnt = FindGameEnt(mCurSpeakUserId);
+	if (aGameEnt == NULL) return 0;
+
+	aGameEnt->SetState(GS_Giveup);
+	DoNext();
+	Room* aRoom = GetRoom();
+	if (aRoom == NULL) return 0;
+
+	uint32 winer = 0;
+	if (DoResult(winer))
+	{
+		NetGameCloseNotify nfy;
+		nfy.winUserId = winer;
+		nfy.winGold = GetCurGold();
+		aRoom->sendPacketToAll(nfy);
+
+		sGame.DoCloseGame(GetRoomId());
+	}
+	return 0;
 }
 
 GameEntity::GameEntity()

@@ -38,8 +38,27 @@ int32 Timer::removeEventListener(int32 timerId)
 	return 0;
 }
 
+void Timer::clear()
+{
+	for(auto& var : mMapTimer)
+	{
+		removeEventListener(var.first);
+	}
+}
+
 void Timer::update(float32 time, float32 delay)
 {
+	while (mListRemove.size() > 0)
+	{
+		auto itr = mListRemove.begin();
+		auto tItr = mMapTimer.find(*itr);
+		if (tItr != mMapTimer.end())
+			delete tItr->second;
+		mMapTimer.erase(*itr);
+
+		mListRemove.erase(itr);
+	}
+
 	for (auto itr : mMapTimer)
 	{
 		TimerDispatcher& timerDispatcher = *(itr.second);
@@ -52,17 +71,6 @@ void Timer::update(float32 time, float32 delay)
 			timerDispatcher.dispatch(te);
 			timerDispatcher.currentTime = time + (t - timerDispatcher.second);
 		}
-	}
-
-	while (mListRemove.size() > 0)
-	{
-		auto itr = mListRemove.begin();
-		auto tItr = mMapTimer.find(*itr);
-		if (tItr != mMapTimer.end())
-			delete tItr->second;
-		mMapTimer.erase(*itr);
-
-		mListRemove.erase(itr);
 	}
 }
 

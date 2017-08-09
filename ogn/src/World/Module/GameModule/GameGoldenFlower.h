@@ -60,9 +60,9 @@ public:
 	void DoShuffle();			// 洗
 	void DoCutCard();			// 切
 	void SetBanker(uint32 userId) { mBankerUserId = userId; }
-	void SetCurSpeakPlr(uint32 userId) { mCurSpeakUserId = userId; }
+	void SetCurSpeakPlr(uint32 userId);
 	void SetSpeakTime(uint32 speakTime) { mSpeakTime = speakTime; }
-	void SetSpeakStartTime(uint32 t) { mSpeakStartTime = t; }
+	void SetSpeakStartTime(uint32 t);
 	void SetGameLv(uint8 gamelv) { mGameLv = gamelv; }
 	void SetCurMaxGold(uint32 maxGold) { mCurMaxGold = maxGold; }
 	void SetRound(uint32 round) { mRound = round; }
@@ -104,6 +104,9 @@ protected:
 	bool OnChipinReq(GameEntity* aGameEnt, uint32 gold);
 	bool OnCallReq(GameEntity* aGameEnt, uint32 gold);
 	bool OnCompareReq(GameEntity* aGameEnt, uint32 tarUserId,uint8 result);
+
+protected:
+	int32 onSpeakTime(TimerEvent& e);
 protected:
 	uint8							mCards[MAX_CARD_COUNT];
 	std::queue<uint8>				mCurCards;				// 没有使用
@@ -117,4 +120,5 @@ protected:
 	uint32							mCurMaxGold;			// 当前最大
 	uint32							mRound;					// 回合数
 	uint32							mSpeakCount;
+	uint32							mSpeakTimeEvent;
 };

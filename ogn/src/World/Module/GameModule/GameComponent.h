@@ -7,6 +7,7 @@ class GameComponent : public Object
 public:
 	GameComponent();
 	virtual ~GameComponent();
+	virtual bool Update(float time, float delay);
 public:
 	GameEntity* AddGameEnt(GameEntity* aGameEnt);
 	GameEntity* GetGameEnt(uint32 idx);
@@ -34,5 +35,7 @@ protected:
 	uint32									mRoomId;
 	Room*									mRoom;
 	std::map<uint8, GameEntity*>			mLstGameEntity;
+	Timer									mTimer;
+
 private:
 };

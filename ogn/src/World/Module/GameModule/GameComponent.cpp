@@ -18,6 +18,12 @@ GameComponent::~GameComponent()
 	mLstGameEntity.clear();
 }
 
+bool GameComponent::Update(float time, float delay)
+{
+	mTimer.update(time, delay);
+	return true;
+}
+
 GameEntity* GameComponent::AddGameEnt(GameEntity* aGameEnt)
 {
 	RoomPlayer* aRoomPlr = mRoom->FindPlayer(aGameEnt->GetUserId());

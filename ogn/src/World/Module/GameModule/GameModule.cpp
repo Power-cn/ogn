@@ -19,6 +19,13 @@ bool GameModule::Initialize()
 
 bool GameModule::Update(float time, float delay)
 {
+	std::map<uint32, GameComponent*> mapGame = mMapGameModle;
+
+	for (auto& itr : mapGame)
+	{
+		itr.second->Update(time, delay);
+	}
+
 	return true;
 }
 
