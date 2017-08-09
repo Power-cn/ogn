@@ -10,10 +10,12 @@ public:
 	Friends* AddFriends(Friends* frds);
 	Friend* AddFriend(uint32 tarUserId, Player* tar);
 	Friend* AddFriend(uint32 tarUserId, Friend* frdTar);
-	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
 	Friends* GetFriends(uint32 userId);
+
+	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
 	bool MutualBindFriend(Player* tar, Player* frd);
 	bool MutualDebindFriend(uint32 tarUserId, uint32 frdUserId);
+
 	void ClearFriends();
 protected:
 	virtual bool Initialize();

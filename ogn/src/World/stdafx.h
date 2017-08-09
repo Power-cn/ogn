@@ -93,6 +93,7 @@
 #include "./Module/WarModule/WarHandler.h"
 #include "./Module/WarModule/War.h"
 #include "./Module/WarModule/WarModule.h"
+#include "./Module/FriendsModule/FriendsHandler.h"
 #include "./Module/FriendsModule/Friends.h"
 #include "./Module/FriendsModule/FriendsModule.h"
 

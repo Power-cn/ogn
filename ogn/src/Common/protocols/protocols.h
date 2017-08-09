@@ -70,6 +70,9 @@ ID_NetGameOperateCallReq,
 ID_NetGameOperateCallRes,
 ID_NetGameOperateCompareReq,
 ID_NetGameOperateCompareRes,
+ID_NetAddFriendReq,
+ID_NetAddFriendRes,
+ID_NetAddFriendNotify,
 ID_NetEnd,
 
 };
@@ -442,6 +445,41 @@ uint32 curUseGold;
 uint32 curMaxUseGold;
 uint32 round;
 std::vector<GameEntityInfo> gameEntInfos;
+
+};
+
+class FriendInfo : public Object {
+public:
+	FriendInfo() {
+userId = 0;
+name = "";
+charId = 0;
+state = 0;
+
+	}
+
+	bool operator >> (BinaryStream& bytes) {
+CHECK(bytes << userId);
+CHECK(bytes << name);
+CHECK(bytes << charId);
+CHECK(bytes << state);
+
+		return true;
+	}
+
+	bool operator << (BinaryStream& bytes) {
+CHECK(bytes >> userId);
+CHECK(bytes >> name);
+CHECK(bytes >> charId);
+CHECK(bytes >> state);
+
+		return true;
+	}
+public:
+uint32 userId;
+std::string name;
+uint32 charId;
+uint8 state;
 
 };
 
@@ -2517,6 +2555,82 @@ uint32 speakTime;
 
 };
 
+class NetAddFriendReq : public Packet {
+public:
+	NetAddFriendReq():
+	Packet(ID_NetAddFriendReq) {
+tarName = "";
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << tarName);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> tarName);
+
+		return true;
+	}
+public:
+std::string tarName;
+
+};
+
+class NetAddFriendRes : public Packet {
+public:
+	NetAddFriendRes():
+	Packet(ID_NetAddFriendRes) {
+result = 0;
+tarName = "";
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << tarName);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> tarName);
+
+		return true;
+	}
+public:
+uint8 result;
+std::string tarName;
+
+};
+
+class NetAddFriendNotify : public Packet {
+public:
+	NetAddFriendNotify():
+	Packet(ID_NetAddFriendNotify) {
+friendInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << friendInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> friendInfo);
+
+		return true;
+	}
+public:
+FriendInfo friendInfo;
+
+};
+
 class NetEnd : public Packet {
 public:
 	NetEnd():
@@ -2608,4 +2722,7 @@ REGISTER_PACKET_HELPER(ID_NetGameOperateCallReq, NetGameOperateCallReq);
 REGISTER_PACKET_HELPER(ID_NetGameOperateCallRes, NetGameOperateCallRes);
 REGISTER_PACKET_HELPER(ID_NetGameOperateCompareReq, NetGameOperateCompareReq);
 REGISTER_PACKET_HELPER(ID_NetGameOperateCompareRes, NetGameOperateCompareRes);
+REGISTER_PACKET_HELPER(ID_NetAddFriendReq, NetAddFriendReq);
+REGISTER_PACKET_HELPER(ID_NetAddFriendRes, NetAddFriendRes);
+REGISTER_PACKET_HELPER(ID_NetAddFriendNotify, NetAddFriendNotify);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

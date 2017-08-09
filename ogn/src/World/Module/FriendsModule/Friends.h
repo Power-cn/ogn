@@ -18,13 +18,18 @@ public:
 	Friends(uint32 tarUserId);
 	~Friends();
 	void SetUserId(uint32 userId) { mUserId = userId; }
-	uint32 GetUserId() { return mUserId; }
+	void ClearFriends();
+	bool DelFriend(uint32 userId);
+
 	Friend* AddFriend(Player* tar);
 	Friend* AddFriend(Friend* frd);
-	bool DelFriend(uint32 userId);
 	Friend* FindFriend(uint32 userId);
-	void ClearFriends();
+	Friend* GetFriend(uint32 idx);
 	std::list<Friend*> GetFriends() { return mFriends; }
+
+	uint32 GetUserId() { return mUserId; }
+	uint32 GetFriendsCount() { return (uint32)mFriends.size(); }
+	
 protected:
 	uint32						mUserId;
 	std::list<Friend*>			mFriends;

@@ -74,6 +74,9 @@ ID_NetGameOperateCallReq,
 ID_NetGameOperateCallRes,
 ID_NetGameOperateCompareReq,
 ID_NetGameOperateCompareRes,
+ID_NetAddFriendReq,
+ID_NetAddFriendRes,
+ID_NetAddFriendNotify,
 ID_NetEnd,
 
 }
@@ -151,6 +154,9 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCallRe
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCallRes, "NetGameOperateCallRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCompareReq, "NetGameOperateCompareReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCompareRes, "NetGameOperateCompareRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendReq, "NetAddFriendReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendRes, "NetAddFriendRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendNotify, "NetAddFriendNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -555,6 +561,43 @@ public uint curUseGold;
 public uint curMaxUseGold;
 public uint round;
 public List<GameEntityInfo> gameEntInfos;
+
+}
+public class FriendInfo : Header
+{
+	public FriendInfo()
+	{
+userId = 0;
+name = "";
+charId = 0;
+state = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(userId);
+bytes.Write(name);
+bytes.Write(charId);
+bytes.Write(state);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref userId);
+bytes.Read(ref name);
+bytes.Read(ref charId);
+bytes.Read(ref state);
+
+		return true;
+	}
+
+public uint userId;
+public string name;
+public uint charId;
+public sbyte state;
 
 }
 public class NetFirst : Packet
@@ -2726,6 +2769,85 @@ public List<sbyte> tarCards;
 public sbyte tarState;
 public uint nextSpeakUserId;
 public uint speakTime;
+
+}
+public class NetAddFriendReq : Packet
+{
+	public NetAddFriendReq():base((int)PACKET_ID_ENUM.ID_NetAddFriendReq)
+	{
+tarName = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(tarName);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref tarName);
+
+		return true;
+	}
+
+public string tarName;
+
+}
+public class NetAddFriendRes : Packet
+{
+	public NetAddFriendRes():base((int)PACKET_ID_ENUM.ID_NetAddFriendRes)
+	{
+result = 0;
+tarName = "";
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(tarName);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(ref tarName);
+
+		return true;
+	}
+
+public sbyte result;
+public string tarName;
+
+}
+public class NetAddFriendNotify : Packet
+{
+	public NetAddFriendNotify():base((int)PACKET_ID_ENUM.ID_NetAddFriendNotify)
+	{
+friendInfo = new FriendInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(friendInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(friendInfo);
+
+		return true;
+	}
+
+public FriendInfo friendInfo;
 
 }
 public class NetEnd : Packet

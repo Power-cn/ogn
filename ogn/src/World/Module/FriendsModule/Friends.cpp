@@ -76,6 +76,17 @@ Friend* Friends::FindFriend(uint32 userId)
 	return NULL;
 }
 
+Friend* Friends::GetFriend(uint32 idx)
+{
+	uint32 i = 0;
+	for (Friend* frd : mFriends)
+	{
+		if (idx == i) return frd;
+		i++;
+	}
+	return NULL;
+}
+
 void Friends::ClearFriends()
 {
 	for (Friend* frd : mFriends)

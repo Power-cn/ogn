@@ -184,7 +184,25 @@ void LuaScript::bindScript()
 		.def("DoOperateCallReq", &GameModule::DoOperateCallReq)
 		.def("DoOperateCompareReq", &GameModule::DoOperateCompareReq)
 		,
-	
+			luabind::class_<Friend>("Friend")
+			.def_readonly("mName", &Friend::mName)
+			.def_readonly("mUserId", &Friend::mUserId)
+			.def_readonly("mCharId", &Friend::mCharId)
+			.def_readonly("mState", &Friend::mState)
+			,
+			luabind::class_<Friends>("Friends")
+			.def("GetUserId", &Friends::GetUserId)
+			.def("FindFriend", &Friends::FindFriend)
+			.def("GetFriend", &Friends::GetFriend)
+			.def("GetFriendsCount", &Friends::GetFriendsCount)
+			,
+		luabind::class_<FriendsModule, Module>("FriendsModule")
+		.def("MutualBindFriend", &FriendsModule::MutualBindFriend)
+		.def("MutualDebindFriend", &FriendsModule::MutualDebindFriend)
+		.def("GetFriends", &FriendsModule::GetFriends)
+		,
+
+
 		luabind::class_<CardJson>("CardJson")
 		.def_readonly("ID", &CardJson::ID)
 		.def_readonly("Number", &CardJson::Number)
@@ -242,3 +260,4 @@ void LuaEngine::reloadScript()
 
 	LOG_DEBUG(LogSystem::csl_color_green, "lua script load finish");
 }
+
