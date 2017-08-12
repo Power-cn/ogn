@@ -3,19 +3,15 @@
 
 bool Friend::operator >> (Json::Value& json)
 {
-	json["mName"] = mName;
 	json["mUserId"] = mUserId;
-	json["mCharId"] = mCharId;
-	json["mState"] = mState;
+	json["mGroupId"] = mGroupId;
 	return true;
 }
 
 bool Friend::operator << (Json::Value& json)
 {
-	mName = json["mName"].asString();
 	mUserId = json["mUserId"].asUInt();
-	mCharId = json["mCharId"].asUInt();
-	mState = json["mState"].asUInt();
+	mGroupId = json["mGroupId"].asUInt();
 	return true;
 }
 
@@ -35,9 +31,7 @@ Friend* Friends::AddFriend(Player* tar)
 	if (FindFriend(tar->getUserId()))
 		return NULL;
 	Friend* frd = new Friend;
-	frd->mName = tar->getName();
 	frd->mUserId = tar->getUserId();
-	frd->mCharId = tar->getCharId();
 	mFriends.push_back(frd);
 	return frd;
 }

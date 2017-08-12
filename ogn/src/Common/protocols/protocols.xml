@@ -441,12 +441,12 @@
     </element>
 
     <element id="ID_NetAddFriendReq" name="NetAddFriendReq" >
-      <member type="string" name="tarName" comment="" />
+      <member type="string" name="tarName" comment="加谁" />
     </element>
 
     <element id="ID_NetAddFriendRes" name="NetAddFriendRes" >
       <member type="uint8" name="result" comment="0.拒绝1.同意" />
-      <member type="string" name="tarName" comment="" />
+      <member type="string" name="tarName" comment="谁加" />
     </element>
 
     <element id="ID_NetAddFriendNotify" name="NetAddFriendNotify" >

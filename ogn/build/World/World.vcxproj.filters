@@ -198,6 +198,9 @@
     <ClCompile Include="..\..\src\World\Module\WarModule\WarHandler.cpp">
       <Filter>Module\WarModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsHandler.cpp">
+      <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -337,6 +340,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\WarModule\WarHandler.h">
       <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsHandler.h">
+      <Filter>Module\FriendsModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

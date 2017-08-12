@@ -21,6 +21,16 @@ public:
 
 void LuaScript::bindScript()
 {
+	lua_newtable(mLuaState);
+	LUA_ENUM(mLuaState, EC_WORLD);
+	LUA_ENUM(mLuaState, EC_SYSTEM);
+	LUA_ENUM(mLuaState, EC_MAP);
+	LUA_ENUM(mLuaState, EC_VIEW);
+	LUA_ENUM(mLuaState, EC_TEAM);
+	LUA_ENUM(mLuaState, EC_ROOM);
+	LUA_ENUM(mLuaState, EC_TARGET);
+	lua_setglobal(mLuaState, "EnumChannel");
+
 	luabind::module(mLuaState)
 		[
 			luabind::def("luaObject", &luaObject),
@@ -185,10 +195,8 @@ void LuaScript::bindScript()
 		.def("DoOperateCompareReq", &GameModule::DoOperateCompareReq)
 		,
 			luabind::class_<Friend>("Friend")
-			.def_readonly("mName", &Friend::mName)
 			.def_readonly("mUserId", &Friend::mUserId)
-			.def_readonly("mCharId", &Friend::mCharId)
-			.def_readonly("mState", &Friend::mState)
+			.def_readonly("mGroupId", &Friend::mGroupId)
 			,
 			luabind::class_<Friends>("Friends")
 			.def("GetUserId", &Friends::GetUserId)
@@ -250,7 +258,7 @@ void LuaEngine::reloadScript()
 	loadScript("../config/cfg/script/room.lua");
 	loadScript("../config/cfg/script/game.lua");
 	loadScript("../config/cfg/script/card.lua");
-
+	//luabind::tablecount()
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();
 	//luabind::object luaTable = luabind::globals(luaState)["t"];

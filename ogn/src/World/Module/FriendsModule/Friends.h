@@ -1,15 +1,14 @@
 #pragma once
 
+
 class Friend
 {
 public:
 	bool operator >> (Json::Value& json);
 	bool operator << (Json::Value& json);
 public:
-	std::string		mName;
 	uint32			mUserId;
-	uint32			mCharId;
-	uint8			mState;
+	uint32			mGroupId;
 };
 
 class Friends
@@ -29,8 +28,11 @@ public:
 
 	uint32 GetUserId() { return mUserId; }
 	uint32 GetFriendsCount() { return (uint32)mFriends.size(); }
-	
+	uint32 GetGroupsCount() { return (uint32)mGroups.size(); }
+
+	std::map<std::string, uint32>& GetGroups() { return mGroups; }
 protected:
-	uint32						mUserId;
-	std::list<Friend*>			mFriends;
+	uint32								mUserId;
+	std::list<Friend*>					mFriends;
+	std::map<std::string, uint32>		mGroups;
 };

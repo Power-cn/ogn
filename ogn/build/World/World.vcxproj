@@ -32,6 +32,7 @@
     <ClCompile Include="..\..\src\World\main.cpp" />
     <ClCompile Include="..\..\src\World\Module.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp" />
@@ -80,6 +81,7 @@
     <ClInclude Include="..\..\src\World\LuaScriptEngine.h" />
     <ClInclude Include="..\..\src\World\Module.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsHandler.h" />
     <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h" />

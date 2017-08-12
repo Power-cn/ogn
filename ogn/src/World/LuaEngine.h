@@ -15,6 +15,11 @@ namespace luabind
 	}
 };
 
+#define LUA_ENUM(L, val)\
+lua_pushliteral(L, #val);\
+lua_pushnumber(L, val);\
+lua_settable(L, -3)
+
 class LuaScript
 {
 public:

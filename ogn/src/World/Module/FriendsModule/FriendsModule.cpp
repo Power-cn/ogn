@@ -56,6 +56,13 @@ Friend* FriendsModule::AddFriend(uint32 tarUserId, Friend* frdTar)
 	return  frds->AddFriend(frdTar);
 }
 
+Friend* FriendsModule::FindFriend(uint32 tarUserId, uint32 frdUserId)
+{
+	Friends* frds = GetFriends(tarUserId);
+	if (frds == NULL) return NULL;
+	return frds->FindFriend(frdUserId);
+}
+
 bool FriendsModule::DelFriend(uint32 tarUserId, uint32 frdUserId)
 {
 	Friends* frds = GetFriends(tarUserId);
@@ -72,8 +79,33 @@ Friends* FriendsModule::GetFriends(uint32 userId)
 	return itr->second;
 }
 
+PlayerRecord* FriendsModule::AddPlrRecord(PlayerRecord* aPlrRecord)
+{
+	PlayerRecord* aPlrRcd = FindPlrRecord(aPlrRecord->GetUserId());
+
+	if (aPlrRecord) return NULL;
+	mMapPlrRecords[aPlrRecord->GetUserId()] = aPlrRecord;
+	return aPlrRecord;
+}
+
+PlayerRecord* FriendsModule::FindPlrRecord(uint32 userId)
+{
+	auto itr = mMapPlrRecords.find(userId);
+	if (itr == mMapPlrRecords.end()) return NULL;
+	return itr->second;
+}
+
 bool FriendsModule::MutualBindFriend(Player* tar, Player* frd)
 {
+	if (FindFriend(tar->getUserId(), frd->getUserId()))
+	{
+		return false;
+	}
+	if (FindFriend(frd->getUserId(), tar->getUserId()))
+	{
+		return false;
+	}
+
 	if (tar->getUserId() == frd->getUserId()) return false;
 	if (!AddFriend(tar->getUserId(), frd))
 		return false;
@@ -97,6 +129,14 @@ void FriendsModule::ClearFriends()
 	mMapFriends.clear();
 }
 
+void FriendsModule::DelPlrRecord(uint32 userId)
+{
+	auto itr = mMapPlrRecords.find(userId);
+	if (itr == mMapPlrRecords.end()) return;
+	delete itr->second;
+	mMapPlrRecords.erase(itr);
+}
+
 bool FriendsModule::Initialize()
 {
 	return true;
@@ -114,7 +154,29 @@ bool FriendsModule::Destroy()
 
 bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 {
+	Friends* frds = GetFriends(player->getUserId());
+	if (frds == NULL)
+	{
+		return true;
+	}
 
+	for (Friend* frd : frds->GetFriends())
+	{
+		PlayerRecord* aPlrRcd = FindPlrRecord(frd->mUserId);
+		if (aPlrRcd == NULL) {
+			aPlrRcd = new PlayerRecord;
+			aPlrRcd->mUserId = frd->mUserId;
+			AddPlrRecord(aPlrRcd);
+		}
+
+		Player* aPlr = sWorld.FindPlrByUserId(frd->mUserId);
+		if (aPlr) {
+			aPlrRcd->mPlayer = aPlr;
+		}
+		else {
+			sRedisProxy.sendCmd("", (EventCallback)&FriendsModule::onRedisFindPlr, this);
+		}
+	}
 	return true;
 }
 
@@ -156,4 +218,17 @@ bool FriendsModule::onSave(Player* player, Dictionary& bytes)
 	}
 	root["friends"] = arrayVal;
 	return true;
+}
+
+int32 FriendsModule::onRedisFindPlr(RedisEvent& e)
+{
+	return 0;
+}
+
+uint32 PlayerRecord::GetUserId()
+{
+	if (mPlayer) {
+		return mPlayer->getUserId();
+	}
+	return mUserId;
 }
