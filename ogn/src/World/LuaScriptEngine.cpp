@@ -76,6 +76,11 @@ GameModule* luaGame()
 	return &sGame;
 }
 
+FriendsModule* luaFriends()
+{
+	return &sFriends;
+}
+
 ConfigManager* luaCfg()
 {
 	return &sCfgMgr;

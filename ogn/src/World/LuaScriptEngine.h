@@ -13,6 +13,7 @@ class GameGoldenFlower;
 class WorldModule;
 class RoomModule;
 class GameModule;
+class FriendsModule;
 
 Object* luaObject();
 Entity* luaEntity();
@@ -32,6 +33,7 @@ PropertyHelper* luaProperty();
 WorldModule* luaWorld();
 RoomModule* luaRoom();
 GameModule* luaGame();
+FriendsModule* luaFriends();
 ConfigManager* luaCfg();
 
 //luabind::object GetTestTable(lua_State* luaState);

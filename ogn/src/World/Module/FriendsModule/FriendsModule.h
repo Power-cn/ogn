@@ -4,10 +4,12 @@ class PlayerRecord
 {
 public:
 	uint32 GetUserId();
+	const std::string& GetName();
+	bool GetOnline();
 public:
-	uint32 mUserId;
+	uint32 mUserId = 0;
 	std::string mName;
-	Player* mPlayer;
+	Player* mPlayer = NULL;
 };
 
 
@@ -29,6 +31,7 @@ public:
 	PlayerRecord* FindPlrRecord(uint32 userId);
 
 	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
+	bool DelFriends(uint32 tarUserId);
 	bool MutualBindFriend(Player* tar, Player* frd);
 	bool MutualDebindFriend(uint32 tarUserId, uint32 frdUserId);
 

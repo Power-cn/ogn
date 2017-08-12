@@ -48,6 +48,7 @@ void LuaScript::bindScript()
 			luabind::def("luaWorld", &luaWorld),
 			luabind::def("luaRoom", &luaRoom),
 			luabind::def("luaGame", &luaGame),
+			luabind::def("luaFriends", &luaFriends),
 			//luabind::def("GetTestTable", &GetTestTable),
 			//luabind::def("GetTestTable1", &GetTestTable1),
 			//luabind::def("GetTestTable", &GetTestTable, mLuaState),
@@ -207,6 +208,7 @@ void LuaScript::bindScript()
 		luabind::class_<FriendsModule, Module>("FriendsModule")
 		.def("MutualBindFriend", &FriendsModule::MutualBindFriend)
 		.def("MutualDebindFriend", &FriendsModule::MutualDebindFriend)
+		.def("FindFriend", &FriendsModule::FindFriend)
 		.def("GetFriends", &FriendsModule::GetFriends)
 		,
 

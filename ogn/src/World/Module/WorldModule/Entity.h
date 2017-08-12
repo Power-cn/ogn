@@ -24,6 +24,7 @@ public:
 	virtual bool Update(float time, float delay);
 	virtual bool Destroy();
 	virtual const char* getName() { return mName.c_str(); }
+	virtual const std::string& GetNameStr() { return mName; }
 	virtual void setName(const std::string& name) { mName = name; }
 	void setLine(uint8 l) { mLine = l; }
 	uint8 getLine() { return mLine; }

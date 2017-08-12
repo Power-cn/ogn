@@ -14,11 +14,7 @@ FriendsModule::~FriendsModule()
 
 Friends* FriendsModule::AddFriends(Friends* frds)
 {
-	if (GetFriends(frds->GetUserId()))
-	{
-		delete frds;
-		return NULL;
-	}
+	if (GetFriends(frds->GetUserId())) return NULL;
 
 	mMapFriends.insert(std::make_pair(frds->GetUserId(), frds));
 	return frds;
@@ -32,11 +28,12 @@ Friend* FriendsModule::AddFriend(uint32 tarUserId, Player* tar)
 	if (frds == NULL)
 	{
 		frds = new Friends(tarUserId);
-
-		frds = AddFriends(frds);
+		if (AddFriends(frds) == NULL) {
+			delete  frds;
+			frds = NULL;
+		}
 	}
-	if (frds == NULL)
-		return NULL;
+	if (frds == NULL) return NULL;
 	return  frds->AddFriend(tar);
 }
 
@@ -48,11 +45,13 @@ Friend* FriendsModule::AddFriend(uint32 tarUserId, Friend* frdTar)
 	if (frds == NULL)
 	{
 		frds = new Friends(tarUserId);
-		frds = AddFriends(frds);
+		if (AddFriends(frds) == NULL) {
+			delete  frds;
+			frds = NULL;
+		}
 	}
 
-	if (frds == NULL)
-		return NULL;
+	if (frds == NULL) return NULL;
 	return  frds->AddFriend(frdTar);
 }
 
@@ -71,6 +70,14 @@ bool FriendsModule::DelFriend(uint32 tarUserId, uint32 frdUserId)
 	return frds->DelFriend(frdUserId);
 }
 
+bool FriendsModule::DelFriends(uint32 tarUserId)
+{
+	auto itr = mMapFriends.find(tarUserId);
+	if (itr == mMapFriends.end()) return false;
+	mMapFriends.erase(itr);
+	return true;
+}
+
 Friends* FriendsModule::GetFriends(uint32 userId)
 {
 	auto itr = mMapFriends.find(userId);
@@ -81,9 +88,7 @@ Friends* FriendsModule::GetFriends(uint32 userId)
 
 PlayerRecord* FriendsModule::AddPlrRecord(PlayerRecord* aPlrRecord)
 {
-	PlayerRecord* aPlrRcd = FindPlrRecord(aPlrRecord->GetUserId());
-
-	if (aPlrRecord) return NULL;
+	if (FindPlrRecord(aPlrRecord->GetUserId())) return NULL;
 	mMapPlrRecords[aPlrRecord->GetUserId()] = aPlrRecord;
 	return aPlrRecord;
 }
@@ -185,8 +190,8 @@ bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 			char szBuffer[64] = { 0 };
 			sprintf_s(szBuffer, 64, "hget %s %d", sUser, frd->mUserId);
 			std::vector<std::string> parstr;
-			parstr.push_back(int32tostr(player->getUserId()));
-			parstr.push_back(int32tostr(frd->mUserId));
+			parstr.push_back(Shared::int32tostr(player->getUserId()));
+			parstr.push_back(Shared::int32tostr(frd->mUserId));
 			sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisFindPlr, this, parstr);
 		}
 	}
@@ -195,6 +200,7 @@ bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 
 bool FriendsModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
+	DelFriends(player->getUserId());
 	return true;
 }
 
@@ -235,6 +241,20 @@ bool FriendsModule::onSave(Player* player, Dictionary& bytes)
 
 int32 FriendsModule::onRedisFindPlr(RedisEvent& e)
 {
+	if (e.backstr.size() <= 0) return 0;
+	Json::Reader jsonReader;
+	Json::Value root;
+	if (!jsonReader.parse(e.backstr[0].c_str(), root))
+		return 0;
+	Json::Value userJson = root["user"];
+
+	uint32 tarUserId = Shared::strtoint32(e.parstr[0]);
+	uint32 frdUserId = Shared::strtoint32(e.parstr[1]);
+
+	PlayerRecord* aPlrRcd = FindPlrRecord(frdUserId);
+	if (aPlrRcd) {
+		aPlrRcd->mName = userJson["name"].asString();
+	}
 	return 0;
 }
 
@@ -244,4 +264,16 @@ uint32 PlayerRecord::GetUserId()
 		return mPlayer->getUserId();
 	}
 	return mUserId;
+}
+
+const std::string& PlayerRecord::GetName()
+{
+	if (mPlayer == NULL) return mName;
+	return mPlayer->GetNameStr();
+}
+
+bool PlayerRecord::GetOnline()
+{
+	if (mPlayer == NULL) return false;
+	return mPlayer->GetOnline();
 }

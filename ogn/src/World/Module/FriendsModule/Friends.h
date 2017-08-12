@@ -7,8 +7,8 @@ public:
 	bool operator >> (Json::Value& json);
 	bool operator << (Json::Value& json);
 public:
-	uint32			mUserId;
-	uint32			mGroupId;
+	uint32			mUserId = 0;
+	uint32			mGroupId = 0;
 };
 
 class Friends

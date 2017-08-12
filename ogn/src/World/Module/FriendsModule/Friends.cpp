@@ -39,7 +39,6 @@ Friend* Friends::AddFriend(Player* tar)
 Friend* Friends::AddFriend(Friend* frd)
 {
 	if (FindFriend(frd->mUserId)) {
-		delete frd;
 		return NULL;
 	}
 	mFriends.push_back(frd);
