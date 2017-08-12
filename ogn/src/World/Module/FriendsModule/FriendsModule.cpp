@@ -154,6 +154,14 @@ bool FriendsModule::Destroy()
 
 bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 {
+	if (FindPlrRecord(player->getUserId()) == NULL)
+	{
+		PlayerRecord* aPlrRcd = new PlayerRecord;
+		aPlrRcd->mUserId = player->getUserId();
+		aPlrRcd->mPlayer = player;
+		AddPlrRecord(aPlrRcd);
+	}
+
 	Friends* frds = GetFriends(player->getUserId());
 	if (frds == NULL)
 	{
@@ -174,7 +182,12 @@ bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 			aPlrRcd->mPlayer = aPlr;
 		}
 		else {
-			sRedisProxy.sendCmd("", (EventCallback)&FriendsModule::onRedisFindPlr, this);
+			char szBuffer[64] = { 0 };
+			sprintf_s(szBuffer, 64, "hget %s %d", sUser, frd->mUserId);
+			std::vector<std::string> parstr;
+			parstr.push_back(int32tostr(player->getUserId()));
+			parstr.push_back(int32tostr(frd->mUserId));
+			sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisFindPlr, this, parstr);
 		}
 	}
 	return true;
