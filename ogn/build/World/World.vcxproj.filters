@@ -70,6 +70,9 @@
     <Filter Include="lua">
       <UniqueIdentifier>{b4dd97af-a76c-4b85-a5fe-ac353c372e7d}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\MailModule">
+      <UniqueIdentifier>{e5c3e78b-142d-47f2-84d3-ab978d6d848e}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -200,6 +203,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsHandler.cpp">
       <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\Mailmodule\MailModule.cpp">
+      <Filter>Module\MailModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MailModule\Mail.cpp">
+      <Filter>Module\MailModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -343,6 +352,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsHandler.h">
       <Filter>Module\FriendsModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\Mailmodule\MailModule.h">
+      <Filter>Module\MailModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MailModule\Mail.h">
+      <Filter>Module\MailModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

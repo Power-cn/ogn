@@ -38,6 +38,8 @@
     <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\MailModule\Mail.cpp" />
+    <ClCompile Include="..\..\src\World\Module\Mailmodule\MailModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp" />
     <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp" />
@@ -87,6 +89,8 @@
     <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h" />
     <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h" />
+    <ClInclude Include="..\..\src\World\Module\MailModule\Mail.h" />
+    <ClInclude Include="..\..\src\World\Module\Mailmodule\MailModule.h" />
     <ClInclude Include="..\..\src\World\Module\MapModule\Map.h" />
     <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h" />

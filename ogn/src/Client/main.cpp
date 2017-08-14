@@ -3,6 +3,7 @@
 
 void main()
 {
+	bool fType = true;
 	Dump dump;
 	srand(time(NULL));
 	INSTANCE(ConfigManager).reloadConfig();
