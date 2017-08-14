@@ -14,7 +14,6 @@ mJson()
 
 Player::~Player()
 {
-
 }
 
 bool Player::Initialize()
@@ -32,6 +31,7 @@ bool Player::Update(float time, float delay)
 
 bool Player::Destroy()
 {
+	sApp.doPlayerLeaveWorld(this);
 	sWorld.removePlayer(getAccId());
 	return true;
 }

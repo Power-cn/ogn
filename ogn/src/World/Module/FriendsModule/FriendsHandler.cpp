@@ -36,3 +36,10 @@ int32 FriendsHandler::onNetAddFriendRes(Player* aPlr, NetAddFriendRes* res)
 	return 0;
 
 }
+
+int32 FriendsHandler::onNetFriendListReq(Player* aPlr, NetFriendListReq* req)
+{
+
+	sFriends.DoFriendsList(aPlr);
+	return 0;
+}

@@ -9,7 +9,7 @@ FriendsModule::FriendsModule()
 
 FriendsModule::~FriendsModule()
 {
-
+	ClearPlayerRecord();
 }
 
 Friends* FriendsModule::AddFriends(Friends* frds)
@@ -142,6 +142,32 @@ void FriendsModule::DelPlrRecord(uint32 userId)
 	mMapPlrRecords.erase(itr);
 }
 
+void FriendsModule::DoFriendsList(Player* aPlr)
+{
+	NetFriendListRes res;
+	Friends* frds = GetFriends(aPlr->getUserId());
+	if (frds == NULL)
+	{
+		aPlr->sendPacket(res);
+		return;
+	}
+
+	for (Friend* frd : frds->GetFriends())
+	{
+		PlayerRecord* aPlrRecrd = FindPlrRecord(frd->mUserId);
+		if (aPlrRecrd)
+		{
+			FriendInfo info;
+			info.userId = aPlrRecrd->GetUserId();
+			info.name = aPlrRecrd->GetName();
+			info.state = aPlrRecrd->GetOnline();
+			info.groupId = frd->mGroupId;
+			res.friendInfos.push_back(info);
+		}
+	}
+	aPlr->sendPacket(res);
+}
+
 bool FriendsModule::Initialize()
 {
 	return true;
@@ -159,12 +185,16 @@ bool FriendsModule::Destroy()
 
 bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 {
-	if (FindPlrRecord(player->getUserId()) == NULL)
+	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
+	if (aPlrRcd == NULL)
 	{
-		PlayerRecord* aPlrRcd = new PlayerRecord;
+		aPlrRcd = new PlayerRecord;
 		aPlrRcd->mUserId = player->getUserId();
 		aPlrRcd->mPlayer = player;
 		AddPlrRecord(aPlrRcd);
+	}
+	else {
+		aPlrRcd->mPlayer = player;
 	}
 
 	Friends* frds = GetFriends(player->getUserId());
@@ -200,6 +230,13 @@ bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 
 bool FriendsModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
+	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
+	if (aPlrRcd) {
+		if (player->CanDestroy()) {
+			aPlrRcd->mPlayer = NULL;
+		}
+	}
+
 	DelFriends(player->getUserId());
 	return true;
 }
@@ -214,8 +251,9 @@ bool FriendsModule::onLoad(Player* player, Dictionary& bytes)
 	{
 		Friend* frd = new Friend;
 		(*frd) << arrayVal[i];
-		if (!AddFriend(player->getUserId(), frd))
+		if (!AddFriend(player->getUserId(), frd)) {
 			delete frd;
+		}
 	}
 	
 	return true;
@@ -237,6 +275,14 @@ bool FriendsModule::onSave(Player* player, Dictionary& bytes)
 	}
 	root["friends"] = arrayVal;
 	return true;
+}
+
+void FriendsModule::ClearPlayerRecord()
+{
+	for (auto& itr: mMapPlrRecords) {
+		delete itr.second;
+	}
+	mMapPlrRecords.clear();
 }
 
 int32 FriendsModule::onRedisFindPlr(RedisEvent& e)

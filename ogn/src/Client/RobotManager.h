@@ -23,6 +23,7 @@ protected:
 	int onNetPlayerLeaveViewNotify(Robot* robot, NetPlayerLeaveViewNotify* nfy);
 	int onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotify* nfy);
 	int onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy);
+	int onNetFriendListRes(Robot* robot, NetFriendListRes* res);
 protected:
 	int32 onGmCmd(CmdEvent& e);
 	int32 onLogin(CmdEvent& e);

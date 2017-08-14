@@ -210,6 +210,7 @@ void LuaScript::bindScript()
 		.def("MutualDebindFriend", &FriendsModule::MutualDebindFriend)
 		.def("FindFriend", &FriendsModule::FindFriend)
 		.def("GetFriends", &FriendsModule::GetFriends)
+		.def("DoFriendsList", &FriendsModule::DoFriendsList)
 		,
 
 

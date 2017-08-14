@@ -77,6 +77,8 @@ ID_NetGameOperateCompareRes,
 ID_NetAddFriendReq,
 ID_NetAddFriendRes,
 ID_NetAddFriendNotify,
+ID_NetFriendListReq,
+ID_NetFriendListRes,
 ID_NetEnd,
 
 }
@@ -157,6 +159,8 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetGameOperateCompar
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendReq, "NetAddFriendReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendRes, "NetAddFriendRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendNotify, "NetAddFriendNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetFriendListReq, "NetFriendListReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetFriendListRes, "NetFriendListRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -569,6 +573,7 @@ public class FriendInfo : Header
 	{
 userId = 0;
 name = "";
+groupId = 0;
 charId = 0;
 state = 0;
 
@@ -578,6 +583,7 @@ state = 0;
 	{
 bytes.Write(userId);
 bytes.Write(name);
+bytes.Write(groupId);
 bytes.Write(charId);
 bytes.Write(state);
 
@@ -588,6 +594,7 @@ bytes.Write(state);
 	{
 bytes.Read(ref userId);
 bytes.Read(ref name);
+bytes.Read(ref groupId);
 bytes.Read(ref charId);
 bytes.Read(ref state);
 
@@ -596,6 +603,7 @@ bytes.Read(ref state);
 
 public uint userId;
 public string name;
+public uint groupId;
 public uint charId;
 public sbyte state;
 
@@ -2848,6 +2856,65 @@ bytes.Read(friendInfo);
 	}
 
 public FriendInfo friendInfo;
+
+}
+public class NetFriendListReq : Packet
+{
+	public NetFriendListReq():base((int)PACKET_ID_ENUM.ID_NetFriendListReq)
+	{
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+
+		return true;
+	}
+
+
+}
+public class NetFriendListRes : Packet
+{
+	public NetFriendListRes():base((int)PACKET_ID_ENUM.ID_NetFriendListRes)
+	{
+friendInfos = new List<FriendInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+int friendInfos_TEMP = friendInfos.Count;
+bytes.Write(friendInfos_TEMP);
+for (int i = 0; i < friendInfos_TEMP; ++i)
+{
+	bytes.Write(friendInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+int friendInfos_TEMP = 0;
+bytes.Read(ref friendInfos_TEMP);
+for (int i = 0; i < friendInfos_TEMP; ++i)
+{
+	FriendInfo info_friendInfos;
+	info_friendInfos = new FriendInfo();
+	bytes.Read(info_friendInfos);
+	friendInfos.Add(info_friendInfos);
+}
+
+		return true;
+	}
+
+public List<FriendInfo> friendInfos;
 
 }
 public class NetEnd : Packet

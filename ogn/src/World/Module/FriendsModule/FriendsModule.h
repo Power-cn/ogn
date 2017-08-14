@@ -37,6 +37,8 @@ public:
 
 	void ClearFriends();
 	void DelPlrRecord(uint32 userId);
+
+	void DoFriendsList(Player* aPlr);
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
@@ -46,6 +48,8 @@ protected:
 
 	virtual bool onLoad(Player* player, Dictionary& bytes);
 	virtual bool onSave(Player* player, Dictionary& bytes);
+protected:
+	void ClearPlayerRecord();
 protected:
 	int32 onRedisFindPlr(RedisEvent& e);
 public:

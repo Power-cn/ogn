@@ -21,6 +21,7 @@ public:
 public:
 	void sendPacketToDB(Packet& packet, Session* session);
 	void doSessionLeaveWorld(Session* session);
+	void doPlayerLeaveWorld(Player* aPlr);
 	void doPlayerSave(Player* plr, Dictionary& bytes);
 protected:
 	int onWorldAccept(SocketEvent& e);

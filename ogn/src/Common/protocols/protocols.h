@@ -73,6 +73,8 @@ ID_NetGameOperateCompareRes,
 ID_NetAddFriendReq,
 ID_NetAddFriendRes,
 ID_NetAddFriendNotify,
+ID_NetFriendListReq,
+ID_NetFriendListRes,
 ID_NetEnd,
 
 };
@@ -453,6 +455,7 @@ public:
 	FriendInfo() {
 userId = 0;
 name = "";
+groupId = 0;
 charId = 0;
 state = 0;
 
@@ -461,6 +464,7 @@ state = 0;
 	bool operator >> (BinaryStream& bytes) {
 CHECK(bytes << userId);
 CHECK(bytes << name);
+CHECK(bytes << groupId);
 CHECK(bytes << charId);
 CHECK(bytes << state);
 
@@ -470,6 +474,7 @@ CHECK(bytes << state);
 	bool operator << (BinaryStream& bytes) {
 CHECK(bytes >> userId);
 CHECK(bytes >> name);
+CHECK(bytes >> groupId);
 CHECK(bytes >> charId);
 CHECK(bytes >> state);
 
@@ -478,6 +483,7 @@ CHECK(bytes >> state);
 public:
 uint32 userId;
 std::string name;
+uint32 groupId;
 uint32 charId;
 uint8 state;
 
@@ -2631,6 +2637,60 @@ FriendInfo friendInfo;
 
 };
 
+class NetFriendListReq : public Packet {
+public:
+	NetFriendListReq():
+	Packet(ID_NetFriendListReq) {
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+
+		return true;
+	}
+public:
+
+};
+
+class NetFriendListRes : public Packet {
+public:
+	NetFriendListRes():
+	Packet(ID_NetFriendListRes) {
+
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+uint32 friendInfos_Size = (uint32)friendInfos.size();
+bytes << friendInfos_Size;
+for (uint32 friendInfos_i = 0; friendInfos_i < friendInfos_Size; ++friendInfos_i) {
+	bytes << friendInfos[friendInfos_i];
+}
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+uint32 friendInfos_Size = 0;
+bytes >> friendInfos_Size;
+for (uint32 friendInfos_i = 0; friendInfos_i < friendInfos_Size; ++friendInfos_i) {
+	FriendInfo friendInfos_info;
+	bytes >> friendInfos_info;
+	friendInfos.push_back(friendInfos_info);
+}
+
+		return true;
+	}
+public:
+std::vector<FriendInfo> friendInfos;
+
+};
+
 class NetEnd : public Packet {
 public:
 	NetEnd():
@@ -2725,4 +2785,6 @@ REGISTER_PACKET_HELPER(ID_NetGameOperateCompareRes, NetGameOperateCompareRes);
 REGISTER_PACKET_HELPER(ID_NetAddFriendReq, NetAddFriendReq);
 REGISTER_PACKET_HELPER(ID_NetAddFriendRes, NetAddFriendRes);
 REGISTER_PACKET_HELPER(ID_NetAddFriendNotify, NetAddFriendNotify);
+REGISTER_PACKET_HELPER(ID_NetFriendListReq, NetFriendListReq);
+REGISTER_PACKET_HELPER(ID_NetFriendListRes, NetFriendListRes);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

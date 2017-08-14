@@ -251,15 +251,7 @@ void Application::doSessionLeaveWorld(Session* session)
 	Player* plr = session->getPlayer();
 	if (plr)
 	{
-		plr->SetOfflineTimer(DateTime::Now());
-		Dictionary dict;
-		doPlayerSave(plr, dict);
-
-		onLeaveWorld(plr, dict);
-
-		//GetModule(WorldModule)->removePlayer(plr->getAccId());
-		plr->SetOnline(false);
-		plr->unbindSession();
+		doPlayerLeaveWorld(plr);
 	}
 
 	NetSessionLeaveNotify nfy;
@@ -269,6 +261,16 @@ void Application::doSessionLeaveWorld(Session* session)
 
 	sSsnMgr.removeSessionsBySocket(session->getSocketId(), session);
 	sSsnMgr.removeSession(session->getSessionId());
+}
+
+void Application::doPlayerLeaveWorld(Player* aPlr)
+{
+	aPlr->SetOnline(false);
+	aPlr->SetOfflineTimer(DateTime::Now());
+	Dictionary dict;
+	doPlayerSave(aPlr, dict);
+	onLeaveWorld(aPlr, dict);
+	aPlr->unbindSession();
 }
 
 void Application::doPlayerSave(Player* plr, Dictionary& bytes)

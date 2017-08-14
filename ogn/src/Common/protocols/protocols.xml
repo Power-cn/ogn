@@ -72,8 +72,9 @@
     <element name="FriendInfo" parent="object">
       <member type="uint32" name="userId" />
       <member type="string" name="name" />
+      <member type="uint32" name="groupId" />
       <member type="uint32" name="charId" />
-      <member type="uint8" name="state" />
+      <member type="uint8" name="state" comment="0.离线1.在线" />
     </element>
     
   </class>
@@ -451,6 +452,13 @@
 
     <element id="ID_NetAddFriendNotify" name="NetAddFriendNotify" >
       <member type="FriendInfo" name="friendInfo" comment="" />
+    </element>
+
+    <element id="ID_NetFriendListReq" name="NetFriendListReq" >
+    </element>
+    
+    <element id="ID_NetFriendListRes" name="NetFriendListRes" >
+      <member type="vector" name="friendInfos" element="FriendInfo"/>
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

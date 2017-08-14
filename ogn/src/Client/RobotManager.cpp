@@ -23,6 +23,7 @@ RobotManager::RobotManager()
 
 	addEventListener(ID_NetChatMsgNotify, (EventCallbackProcess)&RobotManager::onNetChatMsgNotify, this);
 
+	addEventListener(ID_NetFriendListRes, (EventCallbackProcess)&RobotManager::onNetFriendListRes, this);
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
@@ -238,6 +239,17 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 	default:
 		LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(), nfy->from.c_str(), nfy->chatMsg.c_str());
 		break;
+	}
+	return 0;
+}
+
+int RobotManager::onNetFriendListRes(Robot* robot, NetFriendListRes* res)
+{
+	LOG_DEBUG(LogSystem::csl_color_green, "好友个数:%d", res->friendInfos.size());
+	for (uint32 i = 0 ; i < res->friendInfos.size(); ++i)
+	{
+		FriendInfo& info = res->friendInfos[i];
+		LOG_DEBUG(LogSystem::csl_color_green, "\ngroupId:%d\nuserId:%d\nname:%s\n%s\n", info.groupId, info.userId, info.name.c_str(), info.state == 1 ? "在线" : "离线");
 	}
 	return 0;
 }
