@@ -1,6 +1,6 @@
 #include "stdafx.h"
 
-IMPLEMENT_CLASS(FriendsModule, FriendsModule);
+IMPLEMENT_CLASS(FriendsModule, Module);
 
 FriendsModule::FriendsModule()
 {

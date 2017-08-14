@@ -249,8 +249,7 @@ void Application::doSessionLeaveWorld(Session* session)
 {
 	LOG_INFO("ssnId %0.16llx leave world", session->getSessionId());
 	Player* plr = session->getPlayer();
-	if (plr)
-	{
+	if (plr) {
 		doPlayerLeaveWorld(plr);
 	}
 

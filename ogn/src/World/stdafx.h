@@ -110,6 +110,8 @@
 #include "./Module/GameModule/GameGoldenFlower.h"
 #include "./Module/GameModule/GameModule.h"
 
+#include "./Module/Mailmodule/MailModule.h"
+
 #include "Utils.h"
 #include "DBHandler.h"
 #include "SessionHandler.h"
