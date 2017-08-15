@@ -45,6 +45,11 @@ void ShopModule::DoAddProduct(Player* aPlr, uint32 productId)
 	}
 }
 
+void ShopModule::OnSellProduct(Player* aPlr, Product* product)
+{
+	LuaEngine::Call("shop", "OnSellProduct", aPlr->getUserId(), product->mInsId);
+}
+
 bool ShopModule::Initialize()
 {
 	return true;

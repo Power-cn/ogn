@@ -15,6 +15,8 @@ public:
 
 	void DoAddProduct(Player* aPlr, uint32 productId);
 protected:
+	void OnSellProduct(Player* aPlr, Product* product);
+protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
 	virtual bool Destroy();

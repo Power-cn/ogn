@@ -213,6 +213,19 @@ void LuaScript::bindScript()
 		.def("DoFriendsList", &FriendsModule::DoFriendsList)
 		,
 
+			luabind::class_<Product>("Product")
+			.def_readonly("mInsId", &Product::mInsId)
+			.def_readonly("mProductId", &Product::mProductId)
+			.def_readonly("mUserId", &Product::mUserId)
+			.def_readonly("mBuyUserId", &Product::mBuyUserId)
+			.def_readonly("mShelvesTime", &Product::mShelvesTime)
+			.def_readonly("mUnshelvesTime", &Product::mUnshelvesTime)
+			,
+
+			luabind::class_<ShopModule, Module>("ShopModule")
+			.def("FindProduct", &ShopModule::FindProduct)
+			.def("DoAddProduct", &ShopModule::DoAddProduct)
+			,
 
 		luabind::class_<CardJson>("CardJson")
 		.def_readonly("ID", &CardJson::ID)
@@ -261,6 +274,7 @@ void LuaEngine::reloadScript()
 	loadScript("../config/cfg/script/room.lua");
 	loadScript("../config/cfg/script/game.lua");
 	loadScript("../config/cfg/script/card.lua");
+	loadScript("../config/cfg/script/shop.lua");
 	//luabind::tablecount()
 	//LuaScript* luaScript = INSTANCE(LuaEngine).getScript("global");
 	//lua_State* luaState = luaScript->getLuaState();

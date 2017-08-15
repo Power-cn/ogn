@@ -95,6 +95,7 @@ bool Application::Initialize()
 	addModule(new FriendsModule);
 	addModule(new RoomModule);
 	addModule(new GameModule);
+	addModule(new ShopModule);
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 
@@ -561,11 +562,5 @@ void Application::OnInitialize()
 	LuaEngine::SetInt32("global", "EC_TEAM", EnumChannel::EC_TEAM);
 	LuaEngine::SetInt32("global", "EC_ROOM", EnumChannel::EC_ROOM);
 	LuaEngine::SetInt32("global", "EC_TARGET", EnumChannel::EC_TARGET);
-	int32 testint = 0;
-	testint = LuaEngine::GetInt32("global", "EC_WORLD");
-	testint = LuaEngine::GetInt32("global", "EC_MAP");
-	testint = LuaEngine::GetInt32("global", "EC_VIEW");
-	testint = LuaEngine::GetInt32("global", "EC_TEAM");
-	testint = LuaEngine::GetInt32("global", "EC_ROOM");
-	testint = LuaEngine::GetInt32("global", "EC_TARGET");
+	
 }
