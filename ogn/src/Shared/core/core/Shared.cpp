@@ -545,7 +545,6 @@ void Shared::XOR(char* input, int len, cstring& key)
 	for (uint32 i = 0; i < len; ++i) {
 		input[i] ^= akey[keypos];
 		keypos = (keypos + 1) % keylen;
-		
 	}
 }
 

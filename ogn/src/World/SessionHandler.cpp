@@ -17,13 +17,13 @@ int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNot
 {
 	LOG_INFO("ssnId %0.16llx [%s] enter world", session->getSessionId(), nfy->host.c_str());
 	session->setHost(nfy->host);
-	session->sendPacketToTarget(*nfy, INSTANCE(Application).getDBServer()->getSocket());
+	session->sendPacketToDB(*nfy);
 	return 0;
 }
 
 int SessionHandler::onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy)
 {
-	INSTANCE(Application).doSessionLeaveWorld(session);
+	sApp.doSessionLeaveWorld(session);
 	return 0;
 }
 
@@ -36,7 +36,7 @@ int SessionHandler::onNetLoingReq(Session* session, NetLoginReq* req)
 		return 0;
 	}
 
-	INSTANCE(Application).sendPacketToDB(*req, session);
+	session->sendPacketToDB(*req);
 	return 0;
 }
 

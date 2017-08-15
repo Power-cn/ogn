@@ -39,6 +39,11 @@ void Network::update(float32 time, float32 dealy)
 	mIOCPModel->loop();
 }
 
+void Network::Destroy()
+{
+	mIOCPModel->Destory();
+}
+
 SocketListener* Network::listen(int16 port, const std::string host /* = "" */)
 {
 	return mIOCPModel->listen(host, port);

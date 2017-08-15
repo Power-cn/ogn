@@ -5,19 +5,28 @@
 
 const char* RedisEvent::CONNECT = "onConnect";
 
-RedisProxy::RedisProxy():mThread(&RedisProxy::run, this),
+RedisProxy::RedisProxy():
 mHost(""),
 mPort(0)
 {
-
+	mThread = new Threader;
+	mThread->CreateThread((ThreadCallBack)&RedisProxy::onThreadProcess, this);
 }
 
 RedisProxy::~RedisProxy()
 {
+	Destroy();
+}
+
+void RedisProxy::Destroy()
+{
 	if (mContext)
 		redisFree((redisContext*)mContext);
 	mContext = NULL;
+	mThread->Eixt();
+	SAFE_DELETE(mThread);
 }
+
 
 bool RedisProxy::Connect(const std::string& host, short port)
 {
@@ -203,9 +212,9 @@ void RedisProxy::loop()
 	delete redisEvent;
 }
 
-void RedisProxy::run()
+uint32 RedisProxy::onThreadProcess(Threader& threader)
 {
-	while (1)
+	while (threader.Active())
 	{
 		Shared::Sleep(1);
 		if (mContext == NULL)
@@ -245,4 +254,5 @@ void RedisProxy::run()
 		mRedisResponse.push_back(redisEvent);
 		mMutex.unlock();
 	}
+	return 0;
 }

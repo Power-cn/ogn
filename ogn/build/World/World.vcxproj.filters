@@ -73,6 +73,12 @@
     <Filter Include="Module\MailModule">
       <UniqueIdentifier>{e5c3e78b-142d-47f2-84d3-ab978d6d848e}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\ShopModule">
+      <UniqueIdentifier>{f0092cf8-961d-43eb-b424-7b3147b55298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{9aefecb8-1487-47f9-8f5d-ab7305c377c1}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -209,6 +215,15 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\MailModule\Mail.cpp">
       <Filter>Module\MailModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopModule.cpp">
+      <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\Shop.cpp">
+      <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopHandler.cpp">
+      <Filter>Module\ShopModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -358,6 +373,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\MailModule\Mail.h">
       <Filter>Module\MailModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopModule.h">
+      <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\Shop.h">
+      <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\CfgDef.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopHandler.h">
+      <Filter>Module\ShopModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

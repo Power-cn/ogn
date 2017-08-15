@@ -1,7 +1,5 @@
 #include "Shared.hpp"
 
-
-
 using std::string;
 using std::vector;
 using std::sregex_iterator;
@@ -10,23 +8,6 @@ using std::sub_match;
 using std::cin;
 using std::cout;
 using std::endl;
-
-
-class CmdThreadProcessor : public ThreadProcessor
-{
-public:
-	CmdThreadProcessor(CmdDispatcher* cmd);
-protected:
-	unsigned int ThreadProcess(Threader* pThread);
-private:
-	CmdDispatcher*				mCmdDispatcher;
-};
-
-CmdThreadProcessor::CmdThreadProcessor(CmdDispatcher* cmd)
-{
-	mCmdDispatcher = cmd;
-}
-
 
 void SplitParams(std::string& cmdline, std::string& cmd, std::vector<std::string>& list) {
 	// splits the commandline into cmd & paramlist
@@ -53,15 +34,17 @@ void SplitParams(std::string& cmdline, std::string& cmd, std::vector<std::string
 }
 
 
-unsigned int CmdThreadProcessor::ThreadProcess(Threader* pThread)
+uint32 CmdDispatcher::onThreadProcess(Threader& threader)
 {
-	while (pThread->isActive())
+	while (threader.Active())
 	{
 		std::string cmdline;
 		getline(std::cin, cmdline, '\n');
 		CmdExecute* cmdExecute = new CmdExecute;
 		SplitParams(cmdline, cmdExecute->cmd, cmdExecute->params);
-		mCmdDispatcher->mQueueCmd.push(cmdExecute);
+		m_mutex.lock();
+		mQueueCmd.push(cmdExecute);
+		m_mutex.unlock();
 		Threader::sleep(1);
 	}
 	return 0;
@@ -69,22 +52,28 @@ unsigned int CmdThreadProcessor::ThreadProcess(Threader* pThread)
 
 CmdDispatcher::CmdDispatcher()
 {
-	m_pThreadProcessor = new CmdThreadProcessor(this);
-	m_pThread = Threader::createThread(m_pThreadProcessor);
+	m_pThread = new Threader;
+	m_pThread->CreateThread((ThreadCallBack)&CmdDispatcher::onThreadProcess, this);
 }
 
 
 CmdDispatcher::~CmdDispatcher()
 {
-	m_pThread->eixt();
-	SAFE_DELETE(m_pThread);
-	SAFE_DELETE(m_pThreadProcessor);
+	Destroy();
+}
 
+void CmdDispatcher::Destroy()
+{
 	while (mQueueCmd.size() > 0)
 	{
+		m_mutex.lock();
 		delete mQueueCmd.front();
 		mQueueCmd.pop();
+		m_mutex.unlock();
 	}
+
+	m_pThread->Eixt();
+	SAFE_DELETE(m_pThread);
 }
 
 void CmdDispatcher::update(float32 time, float32 delay)

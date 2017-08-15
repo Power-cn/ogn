@@ -2,6 +2,7 @@
 
 Application::Application()
 {
+	mRun = true;
 	mTime = 0.0;
 	mDelay = 0.0;
 	mFPSTimer = 0.0;
@@ -74,8 +75,6 @@ bool Application::Initialize()
 		LOG_ERROR("World listen Port:%d fial", cf.Port);
 		return false;
 	}
-
-	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 
 	INSTANCE(SessionHandler);
 	INSTANCE(PlayerHandler);
@@ -166,7 +165,8 @@ bool Application::Destroy()
 {
 	for (auto itr : mMapModule)
 		itr.second->Destroy();
-
+	INSTANCE(Network).Destroy();
+	sRedisProxy.Destroy();
 	return true;
 }
 
@@ -278,7 +278,7 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	if (session == NULL)
 		return;
 	onSave(plr, bytes);
-	BinaryStream stream(1024);
+	BinaryStream stream(2048);
 	stream << bytes;
 
 	NetPlayerSaveNotify nfy;
@@ -414,8 +414,17 @@ int Application::onDBRecv(SocketEvent & e)
 		break;
 	}
 
-	if (dbServer->dispatch(pack->getMsgId(), session, pack) == 0)
-		LOG_WARN("[%d] not register func");
+	if (msgId == ID_NetLoginRes)
+	{
+		if (dbServer->dispatch(pack->getMsgId(), session, pack) == 0)
+			LOG_WARN("[%d] not register func");
+	}
+	else if (session->getPlayer())
+	{
+		if (dbServer->dispatch(pack->getMsgId(), session->getPlayer(), pack) == 0)
+			LOG_WARN("[%d] not register func");
+	}
+	
 
 	INSTANCE(PacketManager).Free(pack);
 	return 0;
@@ -541,9 +550,11 @@ int32 Application::onRefreshLua(CmdEvent& e)
 
 void Application::OnInitialize()
 {
+	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
 	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
 		return ;
+
 	LuaEngine::SetInt32("global", "EC_WORLD", EnumChannel::EC_WORLD);
 	LuaEngine::SetInt32("global", "EC_MAP", EnumChannel::EC_MAP);
 	LuaEngine::SetInt32("global", "EC_VIEW", EnumChannel::EC_VIEW);

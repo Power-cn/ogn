@@ -3,12 +3,12 @@
 int main()
 {
 	Dump dmp;
-	INSTANCE(Application).Initialize();
-	while (true)
+	sApp.Initialize();
+	while (sApp.GetRun())
 	{
-		INSTANCE(Application).Update();
+		sApp.Update();
 		Threader::sleep(1);
 	}
-	INSTANCE(Application).Destroy();
+	sApp.Destroy();
 	return 0;
 }

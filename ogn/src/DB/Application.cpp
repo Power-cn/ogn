@@ -3,7 +3,7 @@
 Application::Application():
 dbServer(NULL)
 {
-
+	mRun = true;
 }
 Application::~Application()
 {
@@ -68,12 +68,10 @@ bool Application::Initialize()
 		return false;
 	}
 
-	//DBAccount account;
-	//int8* err = dbConnector->doInsert(account, "user");
-	//if (err)
-	//	LOG_ERROR(err);
-	//uint32 queryCount = 0;
-	//dbConnector->doQuery(account, &account, &queryCount, "user", "");
+	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
+	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("Redis");
+	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
+		return false;
 	return true;
 }
 
@@ -81,11 +79,13 @@ bool Application::Update()
 {
 	INSTANCE(Network).update(0.f, 0.f);
 	INSTANCE(DBProxy).update(0.f, 0.f);
+	sRedisProxy.loop();
 	return true;
 }
 
 bool Application::Destroy()
 {
+	sRedisProxy.Destroy();
 	return true;
 }
 
@@ -119,18 +119,24 @@ int32 Application::onDBRecv(SocketEvent& e)
 		if (session == NULL)
 			break;
 
-		Packet* pack = INSTANCE(PacketManager).Alloc(msgId);
+		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
 			
 		if (out >> (*pack) == false)
 		{
 			LOG_ERROR("pack->deSerialize(out)");
-			INSTANCE(PacketManager).Free(pack);
+			sPacketMgr.Free(pack);
 			break;
 		}
-
-		dbServer->dispatch(pack->getMsgId(), session, pack);
-		INSTANCE(PacketManager).Free(pack);
+		if (msgId == ID_NetSessionEnterNotify || msgId == ID_NetSessionLeaveNotify || msgId == ID_NetLoginReq)
+			dbServer->dispatch(pack->getMsgId(), session, pack);
+		else if (session->getPlayer())
+			dbServer->dispatch(pack->getMsgId(), session->getPlayer(), pack);
+		else {
+			sPacketMgr.Free(pack);
+			break;
+		}
+		sPacketMgr.Free(pack);
 		return 0;
 
 	} while (false);
@@ -158,5 +164,21 @@ int32 Application::onDBExit(SocketEvent& e)
 			INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), session);
 		}
 	}
+	return 0;
+}
+
+int32 Application::RedisConnect(RedisEvent& e)
+{
+	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("Redis");
+	char szBuffer[64] = { 0 };
+	sprintf_s(szBuffer, 64, "auth %s", cfg.Password.c_str());
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&Application::RedisAuth, this);
+	return 0;
+}
+
+int32 Application::RedisAuth(RedisEvent& e)
+{
+	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("Redis");
+	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success  %s %d", cfg.Host.c_str(), cfg.Port);
 	return 0;
 }

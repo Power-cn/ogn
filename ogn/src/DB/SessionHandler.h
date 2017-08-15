@@ -8,16 +8,19 @@ public:
 	~SessionHandler();
 protected:
 
-	int onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy);
-	int onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy);
-	int onNetPlayerSaveNotify(Session* session, NetPlayerSaveNotify* req);
-	int onNetLoginReq(Session* session, NetLoginReq* req);
-	int onNetCreateRoleReq(Session* session, NetCreateRoleReq* req);
-	int onNetSelectRoleReq(Session* session, NetSelectRoleReq* req);
-	int onNetQueryRoleReq(Session* session, NetQueryRoleReq* req);
+	int32 onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy);
+	int32 onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy);
+
+	int32 onNetLoginReq(Session* ssn, NetLoginReq* req);
+	int32 onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req);
+	int32 onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req);
+	int32 onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req);
+	int32 onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* req);
+
+	int32 onNetSellProductReq(Player* aPlr, NetSellProductReq* req);
 private:
-	int DoLogin(Session* session, NetLoginReq* req, NetLoginRes& res);
-	int DoQueryRole(Session* session, NetLoginReq* req, NetLoginRes& res);
-	int DoCreateRole(Session* session, NetCreateRoleReq* req, NetCreateRoleRes& res);
-	int DoSelectRole(Session* session, NetSelectRoleReq* req, NetSelectRoleRes& res);
+	int32 DoLogin(NetLoginReq* req, NetLoginRes& res);
+	int32 DoQueryRole(NetLoginReq* req, NetLoginRes& res);
+	int32 DoCreateRole(NetCreateRoleReq* req, NetCreateRoleRes& res);
+	int32 DoSelectRole(NetSelectRoleReq* req, NetSelectRoleRes& res);
 };

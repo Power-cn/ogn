@@ -48,6 +48,9 @@
     <ClCompile Include="..\..\src\DB\ConfigManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\DB\PlayerManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\DB\stdafx.h">
@@ -75,6 +78,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\DB\ConfigManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\DB\PlayerManager.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

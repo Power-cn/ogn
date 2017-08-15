@@ -19,9 +19,9 @@ public:
 	Session* getSessionBySocket(uint32 socketId);
 	void removeSessionBySocket(uint32 socketId);
 
-	Entity* getEntity(uint32 unitId);
+	Entity* getEntity(Guid guid);
 	Entity* addEntity(Entity* unit);
-	void removeEntity(uint32 unitId);
+	void removeEntity(Guid guid);
 	Player* getPlayer(uint32 playerId);
 	Player* addPlayer(Player* player);
 	void removePlayer(uint32 playerId);
@@ -35,7 +35,7 @@ public:
 	void removeSktsBySsn(uint64 sessionId, Socket* skt);
 protected:
 	std::map<uint64, Session*>					mMapSession;
-	std::map<uint32, Entity*>					mMapEntity;
+	std::map<Guid, Entity*>						mMapEntity;
 	std::map<uint32, Player*>					mMapPlayer;
 	std::map<uint32, Session*>					mMapSocketSession;
 	std::map<uint32, std::set<Session*>>		mMapSocketSessions;

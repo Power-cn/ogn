@@ -175,6 +175,9 @@ void Player::DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo)
 	BinaryStream bytes;
 	bytes << aPropertyDict;
 	dict.Add("Property", bytes);
+
+	Dictionary saveDict;
+	sApp.doPlayerSave(this, saveDict);
 }
 
 bool Player::onSaveBegin(Dictionary& dict)

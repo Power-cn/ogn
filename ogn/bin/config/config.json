@@ -7,8 +7,7 @@
 			"Port": 13380,
 			"User": "",
 			"Password": "",
-			"DbName": "",
-			"": "13380"
+			"DbName": ""
 		}, {
 			"ID": 2,
 			"Name": "World",
@@ -16,8 +15,7 @@
 			"Port": 13390,
 			"User": "",
 			"Password": "",
-			"DbName": "",
-			"": "13390"
+			"DbName": ""
 		}, {
 			"ID": 3,
 			"Name": "DB",
@@ -25,8 +23,7 @@
 			"Port": 13400,
 			"User": "",
 			"Password": "",
-			"DbName": "",
-			"": "13400"
+			"DbName": ""
 		}, {
 			"ID": 4,
 			"Name": "OGN",
@@ -34,8 +31,7 @@
 			"Port": 13380,
 			"User": "",
 			"Password": "",
-			"DbName": "",
-			"": "13380"
+			"DbName": ""
 		}, {
 			"ID": 5,
 			"Name": "Mysql",
@@ -43,17 +39,15 @@
 			"Port": 3306,
 			"User": "root",
 			"Password": "123456",
-			"DbName": "game",
-			"": "3306"
+			"DbName": "game"
 		}, {
 			"ID": 6,
 			"Name": "Redis",
-			"Host": "112.74.49.74",
+			"Host": "127.0.0.1",
 			"Port": 6378,
 			"User": "",
 			"Password": "root123456",
-			"DbName": "",
-			"": "6378"
+			"DbName": ""
 		}
 	]
 }

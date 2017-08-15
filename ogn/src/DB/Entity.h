@@ -5,9 +5,11 @@
 class Entity
 {
 public:
-	uint32	unitId;
-	void setUnitId(uint32 uId) { unitId = uId; }
-	uint32 getEntityId() { return unitId; }
+	Entity();
+	Guid getGuid() { return mGuid; }
 protected:
+	static Guid sGuid;
+	Guid mGuid;
 private:
+	
 };

@@ -51,7 +51,10 @@ bool WorldModule::onEnterWorld(Player* player, Dictionary& dict)
 
 bool WorldModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
-	LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] leave world", player->getName());
+	if (player->CanDestroy())
+		LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] destroy", player->getName());
+	else
+		LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] leave world", player->getName());
 	return true;
 }
 

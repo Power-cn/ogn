@@ -7,20 +7,25 @@ IOCPModel::IOCPModel(Network* network)
 	SYSTEM_INFO sysInfo;
 	GetSystemInfo(&sysInfo);
 	mWorkerThreadsCount = sysInfo.dwNumberOfProcessors * 2 + 1;
-	for (uint32 i = 0; i < mWorkerThreadsCount; ++i)
-	{
-		mWorkerThreads.push_back(new std::thread(&IOCPModel::WorkerThread, this));
+	mWorkerThreads = new Threader[mWorkerThreadsCount];
+	for (uint32 i = 0; i < mWorkerThreadsCount; ++i){
+		mWorkerThreads[i].CreateThread((ThreadCallBack)&IOCPModel::WorkerThread, this);
 	}
 }
 
 IOCPModel::~IOCPModel()
 {
+	Destory();
+}
+
+void IOCPModel::Destory()
+{
 	for (uint32 i = 0; i < mWorkerThreadsCount; ++i)
 	{
+		mWorkerThreads[i].Eixt();
 		PostQueuedCompletionStatus(mIOCP, 0, 0, NULL);
-		delete mWorkerThreads[i];
 	}
-	mWorkerThreads.clear();
+	SAFE_DELETE_ARRAY(mWorkerThreads);
 	mNetwork = NULL;
 }
 
@@ -169,6 +174,8 @@ bool IOCPModel::loop()
 	}
 	return true;
 }
+
+
 
 void IOCPModel::postSend(Socket* socket, Packet& packet)
 {
@@ -456,10 +463,11 @@ void IOCPModel::PushQueueClose(uint32 socketId)
 	mQueueClose.insert(socketId);
 }
 
-void IOCPModel::WorkerThread()
+uint32 IOCPModel::WorkerThread(Threader& threader)
 {
-	while (true)
+	while (threader.Active())
 	{
+		Shared::Sleep(1);
 		OVERLAPPED* overlapped = NULL;
 		IO_OVERLAPPED* ioOverlapped = NULL;
 		BOOL dwResult = false;
@@ -476,4 +484,5 @@ void IOCPModel::WorkerThread()
 		response.BytesTransferred = dwBytesTransferred;
 		PushQueueResponse(response);
 	}
+	return 0;
 }

@@ -35,4 +35,21 @@ public:
 	DECLARE_TABLE(DBUser)
 };
 
+class DBProduct : public DBRecord
+{
+public:
+	virtual bool operator >> (BinaryStream& bytes);
+	virtual bool operator << (BinaryStream& bytes);
+
+public:
+	uint32 productId = 0;
+	uint32 userId = 0;
+	uint32 buyUserId = 0;
+	uint32 shelvesTime = 0;
+	uint32 unShelvesTime = 0;
+	std::string datastr;
+
+	DECLARE_TABLE(DBUser)
+};
+
 #pragma pack()

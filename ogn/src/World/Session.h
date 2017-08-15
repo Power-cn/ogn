@@ -22,6 +22,7 @@ public:
 
 	void sendPacket(Packet& packet);
 	void sendBuffer(void* data, int32 count);
+	void sendPacketToDB(Packet& packet);
 
 	void sendPacketToWorld(Packet& packet);
 	void sendBufferToWorld(void* data, int32 count);

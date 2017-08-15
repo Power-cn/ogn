@@ -1,8 +1,6 @@
 #include "Shared.hpp"
 
-
 Threader::Threader(void):
-m_processor(NULL),
 m_thisObject(NULL),
 m_callback(NULL),
 m_hThread(NULL),
@@ -15,11 +13,11 @@ m_isActive(false)
 
 Threader::~Threader(void)
 {
-	this->eixt();
+	this->Eixt();
 	m_thisObject = NULL;
 }
 
-bool Threader::create(void* thisObject, ThreadCallBack callback, bool isRun /* = true */)
+bool Threader::CreateThread(ThreadCallBack callback, Object* thisObject, bool isRun /* = true */)
 {
 	m_thisObject = (Object*)thisObject;
 	m_callback = callback;
@@ -27,60 +25,19 @@ bool Threader::create(void* thisObject, ThreadCallBack callback, bool isRun /* =
 		m_eStatus = eRuning;
 
 #if (defined(WIN32) || defined(WIN64))
-	//pThread->m_hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)CThread::_ThreadProcess, pThread, isRun ? 0 : CREATE_SUSPENDED, &pThread->m_dwThreadID);
-	// CreateThread(NULL, 0, pThrdProc, pParam, thrdFlag, pThreadId);
 	m_hThread = (void*)_beginthreadex(NULL, 0, (unsigned int(__stdcall *)(void *))Threader::_ThreadProcess, this, isRun ? 0 : CREATE_SUSPENDED, (unsigned int*)&m_dwThreadID);
 #else
 	pthread_create((pthread_t*)pThread->m_hThread, NULL, CThread::_ThreadProcess, pThread);
 #endif // 
-
 	m_isActive = true;
 	return true;
 }
 
-bool Threader::create(ThreadProcessor* processor, bool isRun /*= true*/)
-{
-	m_processor = processor;
-	if (isRun)
-		m_eStatus = eRuning;
-
-#if (defined(WIN32) || defined(WIN64))
-	//pThread->m_hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)CThread::_ThreadProcess, pThread, isRun ? 0 : CREATE_SUSPENDED, &pThread->m_dwThreadID);
-	// CreateThread(NULL, 0, pThrdProc, pParam, thrdFlag, pThreadId);
-	m_hThread = (void*)_beginthreadex(NULL, 0, (unsigned int(__stdcall *)(void *))Threader::_ThreadProcess, this, isRun ? 0 : CREATE_SUSPENDED, (unsigned int*)&m_dwThreadID);
-#else
-	pthread_create((pthread_t*)pThread->m_hThread, NULL, CThread::_ThreadProcess, pThread);
-#endif // 
-
-	m_isActive = true;
-	return true;
-}
-
-Threader* Threader::createThread(ThreadProcessor* processor, bool isRun /* = true */)
-{
-	Threader* pThread = new Threader;
-	pThread->m_processor = processor;
-	if (isRun)
-		pThread->m_eStatus = eRuning;
-
-#if (defined(WIN32) || defined(WIN64))
-	//pThread->m_hThread = ::CreateThread(NULL, 0, (LPTHREAD_START_ROUTINE)CThread::_ThreadProcess, pThread, isRun ? 0 : CREATE_SUSPENDED, &pThread->m_dwThreadID);
-	// CreateThread(NULL, 0, pThrdProc, pParam, thrdFlag, pThreadId);
-	pThread->m_hThread = (void*)_beginthreadex(NULL, 0, (unsigned int (__stdcall *)(void *))Threader::_ThreadProcess, pThread, isRun ? 0 : CREATE_SUSPENDED, (unsigned int*)&pThread->m_dwThreadID);
-#else
-	pthread_create((pthread_t*)pThread->m_hThread, NULL, CThread::_ThreadProcess, pThread);
-#endif // 
-
-	pThread->m_isActive = true;
-	return pThread;
-}
-
-
-void Threader::eixt()
+void Threader::Eixt()
 {
 	if (m_eStatus == eSuspend)
 	{
-		this->resume();
+		this->Resume();
 	}
 	m_isActive = false;
 	
@@ -100,7 +57,7 @@ void Threader::eixt()
 	m_dwThreadID = 0;
 }
 
-#ifdef WIN32
+#ifdef WIN64
 unsigned int Threader::_ThreadProcess(void* lp)
 #else
 void* Threader::_ThreadProcess(void* lp)
@@ -108,7 +65,8 @@ void* Threader::_ThreadProcess(void* lp)
 {
 	Threader* pThread = (Threader*)lp;
 	//DWORD dwReturn = (pThread->m_thisObject->*(pThread->m_callback))(*pThread);
-	DWORD dwReturn = pThread->m_processor->ThreadProcess(pThread);
+	DWORD dwReturn = (pThread->m_thisObject->*(pThread->m_callback))(*pThread);
+
 	//DWORD dwReturn = pThread->m_callback(pThread->m_thisObject);
 	pThread->m_eStatus = eEnd;
 #ifdef WIN32
@@ -118,7 +76,7 @@ void* Threader::_ThreadProcess(void* lp)
 #endif
 }
 
-void Threader::suspend()
+void Threader::Suspend()
 {
 	m_eStatus = eSuspend;
 #ifdef WIN32
@@ -126,7 +84,7 @@ void Threader::suspend()
 #endif // WIN32
 }
 
-void Threader::resume()
+void Threader::Resume()
 {
 	m_eStatus = eRuning;
 #ifdef WIN32
@@ -134,17 +92,17 @@ void Threader::resume()
 #endif // WIN32
 }
 
-void Threader::setName( const char* pszName )
+void Threader::SetName( const char* pszName )
 {
 	m_strName = pszName;
 }
 
-const char* Threader::getName()
+const char* Threader::GetName()
 {
 	return m_strName.c_str();
 }
 
-Threader::Status Threader::getStatus()
+ThreadStatus Threader::GetStatus()
 {
 	return m_eStatus;
 }
@@ -158,12 +116,12 @@ void Threader::sleep(unsigned int dwMilliseconds)
 #endif
 }
 
-bool Threader::isActive()
+bool Threader::Active()
 {
 	return m_isActive;
 }
 
-unsigned int Threader::getThreadID()
+unsigned int Threader::GetThreadID()
 {
 	return m_dwThreadID;
 }

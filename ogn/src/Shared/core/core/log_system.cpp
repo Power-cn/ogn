@@ -5,26 +5,11 @@
 
 #define LOG_BUFFER_SIZE		1024 * 4 * 2
 
-class LogThreadProcessor : public ThreadProcessor
+uint32 LogSystem::ThreadProcess(Threader& therader)
 {
-public:
-	LogThreadProcessor(LogSystem* log);
-protected:
-	unsigned int ThreadProcess(Threader* pThread);
-private:
-	LogSystem*				m_pLogSystem;
-};
-
-LogThreadProcessor::LogThreadProcessor( LogSystem* log )
-{
-	m_pLogSystem = log;
-}
-
-unsigned int LogThreadProcessor::ThreadProcess(Threader* pThread)
-{
-	while (pThread->isActive())
+	while (therader.Active())
 	{
-		m_pLogSystem->processOutputer();
+		processOutputer();
 		Threader::sleep(1);
 	}
 	return 0;
@@ -34,17 +19,16 @@ LogSystem::LogSystem(void):
 m_mutex()
 {
 	m_log.clear();
-	m_pThreadProcessor = new LogThreadProcessor(this);
-	m_pThread = Threader::createThread(m_pThreadProcessor);
+	m_pThread = new Threader;
+	m_pThread->CreateThread((ThreadCallBack)&LogSystem::ThreadProcess, this);
+
 	m_buffer = new char[LOG_BUFFER_SIZE];
 }
 
 LogSystem::~LogSystem(void)
 {
-	m_pThread->eixt();
-
+	m_pThread->Eixt();
 	SAFE_DELETE(m_pThread);
-	SAFE_DELETE(m_pThreadProcessor);
 	SAFE_DELETE_ARRAY(m_buffer);
 	m_log.clear();
 }

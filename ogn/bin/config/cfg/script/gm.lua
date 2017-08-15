@@ -153,3 +153,24 @@ fun=function (play, s1, s2, s3)
 	sGame:DoOperateCompareReq(play, tarPlr:getUserId());
 end
 });
+
+RegGm(
+{
+name = "addfrd";
+fun=function (play, s1, s2, s3)
+	local sFriends = luaFriends();
+	local tarPlr = luaFindPlrByName(s1);
+	if (tarPlr ~= nil) then
+		sFriends:MutualBindFriend(play, tarPlr);
+	end
+end
+});
+
+RegGm(
+{
+name = "getfrds";
+fun=function (play, s1, s2, s3)
+	local sFriends = luaFriends();
+	sFriends:DoFriendsList(play);
+end
+});

@@ -1,7 +1,4 @@
-#include "json/json.h"
-#include <fstream>
-#include "Shared.hpp"
-#include "ConfigManager.h"
+#include "stdafx.h"
 
 ConfigManager::ConfigManager()
 {
@@ -25,6 +22,7 @@ bool ConfigManager::reloadConfig()
 	loadTaskStepJson("../config/cfg/taskStep.json");
 	loadCardJson("../config/cfg/card.json");
 	loadGameLevelJson("../config/cfg/gamelevel.json");
+	loadProductJson("../config/cfg/product.json");
 	LOG_DEBUG(LogSystem::csl_color_green, "Load Config success");
 	return true;
 }
@@ -378,6 +376,29 @@ void ConfigManager::loadGameLevelJson(cstring& path)
 	}
 }
 
+void ConfigManager::loadProductJson(cstring& path)
+{
+	Json::Reader jsonReader;
+	Json::Value jsonRoot;
+
+	if (!loadJson(path, jsonReader, jsonRoot))
+		return;
+
+	mMapProductJson.clear();
+
+	Json::Value cf = jsonRoot["config"];
+	for (uint32 i = 0; i < cf.size(); ++i)
+	{
+		Json::Value v = cf[i];
+
+		ProductJson productJson;
+		productJson.ID = v["ID"].asUInt();
+		productJson.Desc = v["Desc"].asString();
+		productJson.Price = v["Price"].asUInt();
+		mMapProductJson.insert(std::make_pair(productJson.ID, productJson));
+	}
+}
+
 MapJson* ConfigManager::getMapJson(uint32 id)
 {
 	auto itr = mMapMapJson.find(id);
@@ -485,6 +506,14 @@ GameLevelJson* ConfigManager::getGameLevelJson(uint32 id)
 {
 	auto itr = mMapGameLevelJson.find(id);
 	if (itr != mMapGameLevelJson.end())
+		return &itr->second;
+	return NULL;
+}
+
+ProductJson* ConfigManager::getProductJson(uint32 id)
+{
+	auto itr = mMapProductJson.find(id);
+	if (itr != mMapProductJson.end())
 		return &itr->second;
 	return NULL;
 }

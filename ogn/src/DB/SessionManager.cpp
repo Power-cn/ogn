@@ -84,9 +84,9 @@ void SessionManager::removeSessionBySocket(uint32 socketId)
 	mMapSocketSession.erase(itr);
 }
 
-Entity* SessionManager::getEntity(uint32 unitId)
+Entity* SessionManager::getEntity(Guid guid)
 {
-	auto itr = mMapEntity.find(unitId);
+	auto itr = mMapEntity.find(guid);
 	if (itr != mMapEntity.end())
 		return itr->second;
 
@@ -95,17 +95,17 @@ Entity* SessionManager::getEntity(uint32 unitId)
 
 Entity* SessionManager::addEntity(Entity* unit)
 {
-	auto itr = mMapEntity.find(unit->unitId);
+	auto itr = mMapEntity.find(unit->getGuid());
 	if (itr != mMapEntity.end())
 		return NULL;
 
-	mMapEntity.insert(std::make_pair(unit->unitId, unit));
+	mMapEntity.insert(std::make_pair(unit->getGuid(), unit));
 	return unit;
 }
 
-void SessionManager::removeEntity(uint32 unitId)
+void SessionManager::removeEntity(Guid guid)
 {
-	auto itr = mMapEntity.find(unitId);
+	auto itr = mMapEntity.find(guid);
 	if (itr != mMapEntity.end())
 	{
 		delete itr->second;
@@ -140,7 +140,7 @@ void SessionManager::removePlayer(uint32 playerId)
 	{
 		Player* plr = itr->second;
 		if (plr)
-			removeEntity(plr->unitId);
+			removeEntity(plr->getGuid());
 		else
 			delete itr->second;
 		mMapPlayer.erase(itr);

@@ -2,16 +2,28 @@
 #include <mysql.h>
 
 DBConnector::DBConnector():
-mMysql(NULL)
+mMysql(NULL),
+mThreader(NULL)
 {
 }
 
 DBConnector::~DBConnector()
 {
-	if (mMysql)
+
+}
+
+void DBConnector::Destroy()
+{
+	if (mMysql) {
 		mysql_close(mMysql);
-	delete mMysql;
-	mMysql = NULL;
+		delete mMysql;
+		mMysql = NULL;
+	}
+
+	if (mThreader) {
+		mThreader->Eixt();
+	}
+	SAFE_DELETE(mThreader);
 }
 
 bool DBConnector::connect(const std::string& host, const std::string& user, const std::string& password, const std::string& name, int16 port)
@@ -523,14 +535,13 @@ int32 DBConnector::threaderRun(Threader& theader)
 	return 0;
 }
 
-uint32 DBConnector::ThreadProcess(Threader* pThread)
+uint32 DBConnector::ThreadProcess(Threader& threader)
 {
-	while (true)
+	while (threader.Active())
 	{
 		process();
 		Threader::sleep(1);
 	}
-
 	return 0;
 }
 

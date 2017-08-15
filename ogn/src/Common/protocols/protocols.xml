@@ -76,6 +76,15 @@
       <member type="uint32" name="charId" />
       <member type="uint8" name="state" comment="0.离线1.在线" />
     </element>
+
+    <element name="ProductInfo" parent="object">
+      <member type="uint32" name="productInsId" comment="" />
+      <member type="uint32" name="productId" comment="" />
+      <member type="uint32" name="sellUserId" comment="" />
+      <member type="uint32" name="buyUserId" comment="" />
+      <member type="uint32" name="shelvesTime" comment="" />
+      <member type="uint32" name="unShelvesTime" comment="" />
+    </element>
     
   </class>
 
@@ -459,6 +468,24 @@
     
     <element id="ID_NetFriendListRes" name="NetFriendListRes" >
       <member type="vector" name="friendInfos" element="FriendInfo"/>
+    </element>
+
+    <element id="ID_NetSellProductReq" name="NetSellProductReq" >
+      <member type="uint32" name="productId" comment="" />
+    </element>
+
+    <element id="ID_NetSellProductRes" name="NetSellProductRes" >
+      <member type="uint32" name="result" comment="" />
+      <member type="ProductInfo" name="productInfo" comment="" />
+    </element>
+
+    <element id="ID_NetProductListReq" name="NetProductListReq" >
+      <member type="uint32" name="index" comment="" />
+      <member type="uint32" name="count" comment="" />
+    </element>
+
+    <element id="ID_NetProductListRes" name="NetProductListRes" >
+      <member type="vector" name="productInfos" element="ProductInfo"/>
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

@@ -4,7 +4,7 @@ class LogOutputer;
 class Threader;
 class ThreadProcessor;
 
-class LogSystem
+class LogSystem : public Object
 {
 public:
 	enum
@@ -43,6 +43,8 @@ public:
 public:
 	static bool assertFail(const char* pszExpression, const char* pszFile, const char* pszFunction, const int iLine);
 	static bool outMessagebox(const char* formt, const char* pszFile, const char* pszFunction, const int iLine, ...);
+protected:
+	uint32 ThreadProcess(Threader& therader);
 private:
 	void processOutputer();
 	void addContent(stContent& content);
@@ -53,7 +55,6 @@ private:
 
 	LogOutputerList										m_log;
 	Threader*											m_pThread;
-	ThreadProcessor*									m_pThreadProcessor;
 	Mutex												m_mutex;
 	typedef std::queue<stContent>						contextQueue;
 	contextQueue										m_contexts;

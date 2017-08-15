@@ -79,6 +79,10 @@ ID_NetAddFriendRes,
 ID_NetAddFriendNotify,
 ID_NetFriendListReq,
 ID_NetFriendListRes,
+ID_NetSellProductReq,
+ID_NetSellProductRes,
+ID_NetProductListReq,
+ID_NetProductListRes,
 ID_NetEnd,
 
 }
@@ -161,6 +165,10 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendRes, "Ne
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetAddFriendNotify, "NetAddFriendNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetFriendListReq, "NetFriendListReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetFriendListRes, "NetFriendListRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSellProductReq, "NetSellProductReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSellProductRes, "NetSellProductRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetProductListReq, "NetProductListReq");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetProductListRes, "NetProductListRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -606,6 +614,51 @@ public string name;
 public uint groupId;
 public uint charId;
 public sbyte state;
+
+}
+public class ProductInfo : Header
+{
+	public ProductInfo()
+	{
+productInsId = 0;
+productId = 0;
+sellUserId = 0;
+buyUserId = 0;
+shelvesTime = 0;
+unShelvesTime = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(productInsId);
+bytes.Write(productId);
+bytes.Write(sellUserId);
+bytes.Write(buyUserId);
+bytes.Write(shelvesTime);
+bytes.Write(unShelvesTime);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref productInsId);
+bytes.Read(ref productId);
+bytes.Read(ref sellUserId);
+bytes.Read(ref buyUserId);
+bytes.Read(ref shelvesTime);
+bytes.Read(ref unShelvesTime);
+
+		return true;
+	}
+
+public uint productInsId;
+public uint productId;
+public uint sellUserId;
+public uint buyUserId;
+public uint shelvesTime;
+public uint unShelvesTime;
 
 }
 public class NetFirst : Packet
@@ -2915,6 +2968,127 @@ for (int i = 0; i < friendInfos_TEMP; ++i)
 	}
 
 public List<FriendInfo> friendInfos;
+
+}
+public class NetSellProductReq : Packet
+{
+	public NetSellProductReq():base((int)PACKET_ID_ENUM.ID_NetSellProductReq)
+	{
+productId = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(productId);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref productId);
+
+		return true;
+	}
+
+public uint productId;
+
+}
+public class NetSellProductRes : Packet
+{
+	public NetSellProductRes():base((int)PACKET_ID_ENUM.ID_NetSellProductRes)
+	{
+result = 0;
+productInfo = new ProductInfo();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(result);
+bytes.Write(productInfo);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref result);
+bytes.Read(productInfo);
+
+		return true;
+	}
+
+public uint result;
+public ProductInfo productInfo;
+
+}
+public class NetProductListReq : Packet
+{
+	public NetProductListReq():base((int)PACKET_ID_ENUM.ID_NetProductListReq)
+	{
+index = 0;
+count = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(index);
+bytes.Write(count);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref index);
+bytes.Read(ref count);
+
+		return true;
+	}
+
+public uint index;
+public uint count;
+
+}
+public class NetProductListRes : Packet
+{
+	public NetProductListRes():base((int)PACKET_ID_ENUM.ID_NetProductListRes)
+	{
+productInfos = new List<ProductInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+int productInfos_TEMP = productInfos.Count;
+bytes.Write(productInfos_TEMP);
+for (int i = 0; i < productInfos_TEMP; ++i)
+{
+	bytes.Write(productInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+int productInfos_TEMP = 0;
+bytes.Read(ref productInfos_TEMP);
+for (int i = 0; i < productInfos_TEMP; ++i)
+{
+	ProductInfo info_productInfos;
+	info_productInfos = new ProductInfo();
+	bytes.Read(info_productInfos);
+	productInfos.Add(info_productInfos);
+}
+
+		return true;
+	}
+
+public List<ProductInfo> productInfos;
 
 }
 public class NetEnd : Packet

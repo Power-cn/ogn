@@ -11,6 +11,8 @@ SessionHandler::SessionHandler()
 	REGISTER_EVENT(ID_NetCreateRoleReq, &SessionHandler::onNetCreateRoleReq, this);
 	REGISTER_EVENT(ID_NetSelectRoleReq, &SessionHandler::onNetSelectRoleReq, this);
 	REGISTER_EVENT(ID_NetQueryRoleReq, &SessionHandler::onNetQueryRoleReq, this);
+
+	REGISTER_EVENT(ID_NetQueryRoleReq, &SessionHandler::onNetQueryRoleReq, this);
 }
 
 SessionHandler::~SessionHandler()
@@ -21,7 +23,6 @@ SessionHandler::~SessionHandler()
 int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
 {
 	LOG_INFO("ssnId %0.16llx enter world", session->getSessionId());
-
 	return 0;
 }
 
@@ -33,7 +34,7 @@ int SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify*
 	return 0;
 }
 
-int SessionHandler::onNetPlayerSaveNotify(Session* session, NetPlayerSaveNotify* nfy)
+int SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* nfy)
 {
 	for (uint32 i = 0; i < nfy->roleInfos.size() && i < sMaxRoleCount; ++i)
 	{
@@ -42,63 +43,84 @@ int SessionHandler::onNetPlayerSaveNotify(Session* session, NetPlayerSaveNotify*
 		dbRole.id = info.id;
 		dbRole.property.write(info.property.datas(), info.property.wpos());
 		uint32 updateRows = 0;
-		const int8* err = INSTANCE(Application).getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
+		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
 		if (!err) return 0;
 		LOG_ERROR(err);
 	}
 	return 0;
 }
 
-int SessionHandler::onNetLoginReq(Session* session, NetLoginReq* req)
+int SessionHandler::onNetLoginReq(Session* ssn, NetLoginReq* req)
 {
 	NetLoginRes res;
-	if (DoLogin(session, req, res) == 0)
+	if (DoLogin(req, res) == 0)
 	{
 		res.result = NResultFail;
-		session->sendPacketToWorld(res);
+		ssn->sendPacketToWorld(res);
 		return 0;
 	}
-	if (DoQueryRole(session, req, res) == 0)
+	if (DoQueryRole(req, res) == 0)
 	{
 		res.result = NResultFail;
-		session->sendPacketToWorld(res);
+		ssn->sendPacketToWorld(res);
 		return 0;
 	}
 	res.result = NResultSuccess;
-	session->sendPacketToWorld(res);
+
+	Player* aPlr = sPlrMgr.FindPlrByAccId(res.accInfo.id);
+	if (aPlr == NULL)
+	{
+		aPlr = new Player;
+		aPlr->setAccId(res.accInfo.id);
+		sPlrMgr.AddPlrByAccId(aPlr);
+	}
+	aPlr->setSession(ssn);
+	ssn->setPlayer(aPlr);
+
+	ssn->sendPacketToWorld(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] login success", req->user.c_str());
 	return 0;
 }
 
-
-int SessionHandler::onNetCreateRoleReq(Session* session, NetCreateRoleReq* req)
+int SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 {
 	NetCreateRoleRes res;
-	if (DoCreateRole(session, req, res) == 0)
+	if (DoCreateRole(req, res) == 0)
 	{
-		session->sendPacketToWorld(res);
+		aPlr->sendPacket(res);
 		return 0;
 	}
-	session->sendPacketToWorld(res);
+
+	char szBuffer[256] = { 0 };
+	sprintf_s(szBuffer, 256, "hmset %s %d %s", sUserIdToName, res.roleInfo.id, res.roleInfo.name.c_str());
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
+	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res.roleInfo.name.c_str(), res.roleInfo.id);
+	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
+
+
+	aPlr->sendPacket(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "accId[%d] insert role[%s]", req->accId, res.roleInfo.name.c_str());
 	return 1;
 }
 
-int SessionHandler::onNetSelectRoleReq(Session* session, NetSelectRoleReq* req)
+int SessionHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
 {
 	NetSelectRoleRes res;
-	if (DoSelectRole(session, req, res) == 0)
+	if (DoSelectRole(req, res) == 0)
 	{
-		session->sendPacketToWorld(res);
+		aPlr->sendPacket(res);
 		return 0;
 	}
 
-	session->sendPacketToWorld(res);
+	aPlr->setUserId(res.roleInfo.id);
+	sPlrMgr.AddPlrByUserId(aPlr);
+	aPlr->sendPacket(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "accId[%d] userId[%d] selete role[%s]", res.roleInfo.accountId, res.roleInfo.id, res.roleInfo.name.c_str());
 	return 1;
 }
 
-int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
+int SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 {
 	NetQueryRoleRes res;
 	DBUser role;
@@ -110,12 +132,12 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 	result_records.push_back((DBRecord*)&retRoles[0]);
 	result_records.push_back((DBRecord*)&retRoles[1]);
 	result_records.push_back((DBRecord*)&retRoles[2]);
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, result_records, queryCount, "accountId", "", maxCount);
+	const int8* err = sDBConnector.doQuery(role, result_records, queryCount, "accountId", "", maxCount);
 	do {
 		if (err)
 		{
 			LOG_ERROR(err);
-			session->sendPacketToWorld(res);
+			aPlr->sendPacket(res);
 			return 0;
 		}
 
@@ -134,16 +156,40 @@ int SessionHandler::onNetQueryRoleReq(Session* session, NetQueryRoleReq* req)
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role count[%d]", req->user.c_str(), queryCount);
 		}
 	} while (false);
-	session->sendPacketToWorld(res);
+	aPlr->sendPacket(res);
 	return 1;
 }
 
-int SessionHandler::DoLogin(Session* session, NetLoginReq* req, NetLoginRes& res)
+int32 SessionHandler::onNetSellProductReq(Player* aPlr, NetSellProductReq* req)
+{
+	DBProduct dbProduct;
+	dbProduct.productId = req->productId;
+	dbProduct.userId = aPlr->getUserId();
+	dbProduct.shelvesTime = DateTime::Now();
+	NetSellProductRes res;
+	char* err =	sDBConnector.doInsert(dbProduct);
+	if (err) {
+		res.result = NResultFail;
+		LOG_ERROR(err);
+		aPlr->sendPacket(res);
+		return 0;
+	}
+	res.result = NResultSuccess;
+	res.productInfo.productInsId = dbProduct.id;
+	res.productInfo.productId = dbProduct.productId;
+	res.productInfo.sellUserId = dbProduct.userId;
+	res.productInfo.shelvesTime = dbProduct.shelvesTime;
+
+	aPlr->sendPacket(res);
+	return 0;
+}
+
+int SessionHandler::DoLogin(NetLoginReq* req, NetLoginRes& res)
 {
 	DBAccount account;
 	account.user = req->user;
 	uint32 queryCount = 0;
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(account, account, queryCount, "user", "");
+	const int8* err = sDBConnector.doQuery(account, account, queryCount, "user", "");
 	do
 	{
 		if (err)
@@ -155,7 +201,7 @@ int SessionHandler::DoLogin(Session* session, NetLoginReq* req, NetLoginRes& res
 		{
 			account.user = req->user;
 			account.createTime = DateTime::Now();
-			err = INSTANCE(Application).getDBConnector()->doInsert(account, "", "user");
+			err = sDBConnector.doInsert(account, "", "user");
 			if (err) {
 				res.result = 1;
 				LOG_ERROR(err);
@@ -173,7 +219,7 @@ int SessionHandler::DoLogin(Session* session, NetLoginReq* req, NetLoginRes& res
 	return 1;
 }
 
-int SessionHandler::DoQueryRole(Session* session, NetLoginReq* req, NetLoginRes& res)
+int SessionHandler::DoQueryRole(NetLoginReq* req, NetLoginRes& res)
 {
 	DBUser role;
 	role.accountId = res.accInfo.id;
@@ -186,7 +232,7 @@ int SessionHandler::DoQueryRole(Session* session, NetLoginReq* req, NetLoginRes&
 		result_records.push_back((DBRecord*)&retRoles[i]);
 
 	//uint32 t0 = (uint32)DateTime::GetNowAppUS();
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, result_records, queryCount, "accountId", "", maxCount);
+	const int8* err = sDBConnector.doQuery(role, result_records, queryCount, "accountId", "", maxCount);
 	do {
 		if (err)
 		{
@@ -212,7 +258,7 @@ int SessionHandler::DoQueryRole(Session* session, NetLoginReq* req, NetLoginRes&
 	return 1;
 }
 
-int SessionHandler::DoCreateRole(Session* session, NetCreateRoleReq* req, NetCreateRoleRes& res)
+int SessionHandler::DoCreateRole(NetCreateRoleReq* req, NetCreateRoleRes& res)
 {
 	res.accId = req->accId;
 	{
@@ -226,7 +272,7 @@ int SessionHandler::DoCreateRole(Session* session, NetCreateRoleReq* req, NetCre
 		for (uint32 i = 0; i < maxCount; ++i)
 			result_records.push_back((DBRecord*)&retRoles[i]);
 
-		char* err = INSTANCE(Application).getDBConnector()->doQuery(queryRole, result_records, queryCount, "accountId", "", maxCount);
+		char* err = sDBConnector.doQuery(queryRole, result_records, queryCount, "accountId", "", maxCount);
 		if (queryCount >= sMaxRoleCount)
 		{
 			res.result = NResultFail;
@@ -239,7 +285,7 @@ int SessionHandler::DoCreateRole(Session* session, NetCreateRoleReq* req, NetCre
 		role.accountId = req->accId;
 		role.name = req->name;
 		role.createTime = DateTime::Now();
-		char* err = INSTANCE(Application).getDBConnector()->doInsert(role, "", "name");
+		char* err = sDBConnector.doInsert(role, "", "name");
 		if (err)
 		{
 			LOG_ERROR(err);
@@ -257,14 +303,14 @@ int SessionHandler::DoCreateRole(Session* session, NetCreateRoleReq* req, NetCre
 	return 1;
 }
 
-int SessionHandler::DoSelectRole(Session* session, NetSelectRoleReq* req, NetSelectRoleRes& res)
+int SessionHandler::DoSelectRole(NetSelectRoleReq* req, NetSelectRoleRes& res)
 {
 	res.accId = req->accId;
 	DBUser role;
 	role.id = req->userId;
 	uint32 queryCount = 0;
 	const int32 maxCount = 1;
-	const int8* err = INSTANCE(Application).getDBConnector()->doQuery(role, role, queryCount, "id", "", maxCount);
+	const int8* err = sDBConnector.doQuery(role, role, queryCount, "id", "", maxCount);
 	do {
 		if (err)
 		{
@@ -286,3 +332,4 @@ int SessionHandler::DoSelectRole(Session* session, NetSelectRoleReq* req, NetSel
 	res.result = NResultSuccess;
 	return 1;
 }
+

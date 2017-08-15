@@ -23,9 +23,11 @@ public:
 	CmdDispatcher();
 	~CmdDispatcher();
 	void update(float32 time, float32 delay);
+	void Destroy();
+protected:
+	uint32 onThreadProcess(Threader& threader);
 protected:
 	Threader*											m_pThread;
-	ThreadProcessor*									m_pThreadProcessor;
 	Mutex												m_mutex;
 	std::queue<CmdExecute*>								mQueueCmd;
 };

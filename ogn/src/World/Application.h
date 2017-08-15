@@ -18,6 +18,7 @@ public:
 	virtual bool onLeaveWorld(Player* player, Dictionary& dict);
 	virtual bool onLoad(Player* player, Dictionary& bytes);
 	virtual bool onSave(Player* player, Dictionary& bytes);
+	bool GetRun() { return mRun; }
 public:
 	void sendPacketToDB(Packet& packet, Session* session);
 	void doSessionLeaveWorld(Session* session);
@@ -59,6 +60,7 @@ protected:
 	int32 mFPS;
 	float64 mFPSTimer;
 	std::set<uint32>			mSetSessionMessage;
+	bool						mRun;
 private:
 };
 

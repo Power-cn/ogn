@@ -7,13 +7,14 @@ class UpdateResult;
 class DeleteResult;
 
 
-class DBConnector : public ThreadProcessor
+class DBConnector : public Object
 {
 public:
 	DBConnector();
 	~DBConnector();
 	bool connect(const std::string& host, const std::string& user, const std::string& password, const std::string& name, int16 port);
 	void update(float time, float delay);
+	void Destroy();
 public: //异步;
 	int8* Query(const DBRecord& query_record_, DBRecord* result_records, uint32* result_count_, const uint32 result_max_count = 0);
 	int8* Query(const DBRecord& query_record_, DBRecord* result_records_, uint32* result_count_, const int8* compare_record_names_, const int8* return_record_names_, int32 result_max_count = 0);
@@ -24,7 +25,7 @@ public: //异步;
 	int8* Delete(const DBRecord& delete_record_, const int8* compare_record_names_, uint32* update_rows_);
 private:
 	void process();
-	virtual uint32 ThreadProcess(Threader* pThread);
+	virtual uint32 ThreadProcess(Threader& threader);
 	int32 threaderRun(Threader& theader);
 public: // 同步;
 	int8* doQuery(const DBRecord& query_record, std::vector<DBRecord*>& result_records, uint32& result_count, const uint32 result_max_count = 0);
@@ -58,5 +59,5 @@ protected:
 	std::queue<UpdateResult*> completeUpdateQueue;
 	std::queue<DeleteResult*> completeDeleteQueue;
 	Mutex					_mutex;
-	Threader*				_threader;
+	Threader*				mThreader;
 };

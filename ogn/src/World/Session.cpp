@@ -55,6 +55,11 @@ void Session::sendBuffer(void* data, int32 count)
 	mSocket->sendBuffer(data, count);
 }
 
+void Session::sendPacketToDB(Packet& packet)
+{
+	sApp.sendPacketToDB(packet, this);
+}
+
 void Session::sendPacketToWorld(Packet& packet)
 {
 	if (!mSocket)

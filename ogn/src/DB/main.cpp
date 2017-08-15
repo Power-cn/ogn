@@ -1,14 +1,13 @@
-#include "Shared.hpp"
-#include "Application.h"
+#include "stdafx.h"
 
 int main(){
 	Dump dmp;
-	INSTANCE(Application).Initialize();
-	while (1)
+	sApp.Initialize();
+	while (sApp.GetRun())
 	{
-		INSTANCE(Application).Update();
+		sApp.Update();
 		Threader::sleep(1);
 	}
-	INSTANCE(Application).Destroy();
+	sApp.Destroy();
 	return 0;
 }

@@ -39,15 +39,16 @@ public:
 	std::vector<std::string> sendCommand(const char *format, va_list ap);
 	std::string getError();
 	void loop();
+	void Destroy();
 protected:
-	void run();
+	uint32 onThreadProcess(Threader& threader);
 public:
 	void*								mContext;
 	void*								mReply;
-	std::mutex							mMutex;
+	Mutex								mMutex;
 	std::list<RedisRequest>				mRedisRequest;
 	std::list<RedisEvent*>				mRedisResponse;
-	std::thread							mThread;
+	Threader*							mThread;
 	std::string							mHost;
 	uint16								mPort;
 };

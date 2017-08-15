@@ -16,12 +16,12 @@ void DBHandler::doRegister()
 	RegDBEvent(ID_NetCreateRoleRes, &DBHandler::onNetCreateRoleRes, this);
 	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
 	RegDBEvent(ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
+	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
 }
 
-int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
+int32 DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 {
 	uint32 accId = res->accInfo.id;
-
 	if (res->result != NResultSuccess)
 	{
 		session->sendPacketToWorld(*res);
@@ -63,43 +63,22 @@ int DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 	return 0;
 }
 
-int DBHandler::onNetCreateRoleRes(Session* session, NetCreateRoleRes* res)
+int32 DBHandler::onNetCreateRoleRes(Player* aPlr, NetCreateRoleRes* res)
 {
-	if (res->result == NResultFail)
-	{
-		session->sendPacketToWorld(*res);
-		return 0;
-	}
-
 	//////////////////////////////////////////////////////////////////////////
 	/// 角色创建成功 ///
-
-	char szBuffer[256] = { 0 };
-	sprintf_s(szBuffer, 256, "hmset %s %d %s", sUserIdToName, res->roleInfo.id, res->roleInfo.name.c_str());
-	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
-	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res->roleInfo.name.c_str(), res->roleInfo.id);
-	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
-	session->sendPacketToWorld(*res);
+	aPlr->sendPacket(*res);
 	return 0;
 }
 
-int DBHandler::onNetSelectRoleRes(Session* session, NetSelectRoleRes* res)
+int32 DBHandler::onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res)
 {
 	if (res->result == NResultFail) {
-		session->sendPacketToWorld(*res);
+		aPlr->sendPacket(*res);
 		return 0;
 	}
 
-	Player* aPlr = sWorld.FindPlrByAccId(res->accId);
-	if (aPlr == NULL) {
-		res->result = NResultFail;
-		session->sendPacketToWorld(*res);
-		return 0;
-	}
-
-	session->sendPacketToWorld(*res);
+	aPlr->sendPacket(*res);
 
 	aPlr->SetOfflineTimer(DateTime::Now());
 
@@ -121,13 +100,28 @@ int DBHandler::onNetSelectRoleRes(Session* session, NetSelectRoleRes* res)
 	return 0;
 }
 
-int DBHandler::onNetQueryRoleRes(Session* session, NetQueryRoleRes* res)
+int32 DBHandler::onNetQueryRoleRes(Player* aPlr, NetQueryRoleRes* res)
 {
-	Player* aPlr = session->getPlayer();
-	if (aPlr == NULL) {
+	aPlr->sendPacket(*res);
+	return 0;
+}
+
+int32 DBHandler::onNetSellProductRes(Player* aPlr, NetSellProductRes* res)
+{
+	if (res->result == NResultFail)
+	{
+		aPlr->sendPacket(*res);
 		return 0;
 	}
-
-	session->sendPacketToWorld(*res);
+	Product* product = new Product;
+	product->mInsId = res->productInfo.productInsId;
+	product->mProductId = res->productInfo.productId;
+	product->mUserId = res->productInfo.sellUserId;
+	product->mBuyUserId = res->productInfo.buyUserId;
+	product->mShelvesTime = res->productInfo.shelvesTime;
+	product->mUnshelvesTime = res->productInfo.unShelvesTime;
+	if (sShop.AddProduct(product) == NULL)
+		delete product;
+	aPlr->sendPacket(*res);
 	return 0;
 }

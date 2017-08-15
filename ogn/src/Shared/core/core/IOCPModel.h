@@ -13,7 +13,7 @@ struct QueueResponse
 	DWORD BytesTransferred = 0;
 };
 
-class IOCPModel
+class IOCPModel : public Object
 {
 public:
 	friend class Network;
@@ -22,6 +22,7 @@ public:
 	SocketListener* listen(const std::string& host, short port);
 	SocketClient* connect(const std::string& host, short port);
 	bool loop();
+	void Destory();
 protected:
 	void postSend(Socket* socket, Packet& packet);
 	void postSend(Socket* socket, void* dataBuffer, int dataCount);
@@ -41,14 +42,14 @@ protected:
 	void PushQueueResponse(QueueResponse& response);
 	void PushQueueClose(uint32 socketId);
 protected:
-	void WorkerThread();
+	uint32 WorkerThread(Threader& threader);
 protected:
 	Network*								mNetwork;
 	HANDLE									mIOCP;
-	std::mutex								mMutex;
+	Mutex									mMutex;
 	std::queue<QueueResponse>				mQueueEvent;
 	std::set<uint32>						mQueueClose;
-	std::vector<std::thread*>				mWorkerThreads;
+	Threader*								mWorkerThreads;
 	uint32									mWorkerThreadsCount;
 };
 

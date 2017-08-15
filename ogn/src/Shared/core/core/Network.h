@@ -14,6 +14,7 @@ public:
 	Network();
 	~Network();
 	void update(float32 time, float32 dealy);
+	void Destroy();
 public:
 	SocketListener* listen(int16 port, const std::string host = "");
 	SocketClient* connect(const std::string& host, int16 port);

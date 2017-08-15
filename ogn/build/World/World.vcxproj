@@ -46,6 +46,9 @@
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\Shop.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\TeamModule\Team.cpp" />
     <ClCompile Include="..\..\src\World\Module\TeamModule\TeamHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\TeamModule\TeamModule.cpp" />
@@ -76,6 +79,7 @@
     <ClInclude Include="..\..\src\World\Application.h" />
     <ClInclude Include="..\..\src\World\Backpack.h" />
     <ClInclude Include="..\..\src\World\BackpackModule.h" />
+    <ClInclude Include="..\..\src\World\CfgDef.h" />
     <ClInclude Include="..\..\src\World\ConfigManager.h" />
     <ClInclude Include="..\..\src\World\DBHandler.h" />
     <ClInclude Include="..\..\src\World\Item.h" />
@@ -97,6 +101,9 @@
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\Shop.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopModule.h" />
     <ClInclude Include="..\..\src\World\Module\TeamModule\Team.h" />
     <ClInclude Include="..\..\src\World\Module\TeamModule\TeamHandler.h" />
     <ClInclude Include="..\..\src\World\Module\TeamModule\TeamModule.h" />

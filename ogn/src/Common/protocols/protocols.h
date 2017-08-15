@@ -75,6 +75,10 @@ ID_NetAddFriendRes,
 ID_NetAddFriendNotify,
 ID_NetFriendListReq,
 ID_NetFriendListRes,
+ID_NetSellProductReq,
+ID_NetSellProductRes,
+ID_NetProductListReq,
+ID_NetProductListRes,
 ID_NetEnd,
 
 };
@@ -486,6 +490,49 @@ std::string name;
 uint32 groupId;
 uint32 charId;
 uint8 state;
+
+};
+
+class ProductInfo : public Object {
+public:
+	ProductInfo() {
+productInsId = 0;
+productId = 0;
+sellUserId = 0;
+buyUserId = 0;
+shelvesTime = 0;
+unShelvesTime = 0;
+
+	}
+
+	bool operator >> (BinaryStream& bytes) {
+CHECK(bytes << productInsId);
+CHECK(bytes << productId);
+CHECK(bytes << sellUserId);
+CHECK(bytes << buyUserId);
+CHECK(bytes << shelvesTime);
+CHECK(bytes << unShelvesTime);
+
+		return true;
+	}
+
+	bool operator << (BinaryStream& bytes) {
+CHECK(bytes >> productInsId);
+CHECK(bytes >> productId);
+CHECK(bytes >> sellUserId);
+CHECK(bytes >> buyUserId);
+CHECK(bytes >> shelvesTime);
+CHECK(bytes >> unShelvesTime);
+
+		return true;
+	}
+public:
+uint32 productInsId;
+uint32 productId;
+uint32 sellUserId;
+uint32 buyUserId;
+uint32 shelvesTime;
+uint32 unShelvesTime;
 
 };
 
@@ -2691,6 +2738,120 @@ std::vector<FriendInfo> friendInfos;
 
 };
 
+class NetSellProductReq : public Packet {
+public:
+	NetSellProductReq():
+	Packet(ID_NetSellProductReq) {
+productId = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << productId);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> productId);
+
+		return true;
+	}
+public:
+uint32 productId;
+
+};
+
+class NetSellProductRes : public Packet {
+public:
+	NetSellProductRes():
+	Packet(ID_NetSellProductRes) {
+result = 0;
+productInfo;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << result);
+CHECK(bytes << productInfo);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> result);
+CHECK(bytes >> productInfo);
+
+		return true;
+	}
+public:
+uint32 result;
+ProductInfo productInfo;
+
+};
+
+class NetProductListReq : public Packet {
+public:
+	NetProductListReq():
+	Packet(ID_NetProductListReq) {
+index = 0;
+count = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << index);
+CHECK(bytes << count);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> index);
+CHECK(bytes >> count);
+
+		return true;
+	}
+public:
+uint32 index;
+uint32 count;
+
+};
+
+class NetProductListRes : public Packet {
+public:
+	NetProductListRes():
+	Packet(ID_NetProductListRes) {
+
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+uint32 productInfos_Size = (uint32)productInfos.size();
+bytes << productInfos_Size;
+for (uint32 productInfos_i = 0; productInfos_i < productInfos_Size; ++productInfos_i) {
+	bytes << productInfos[productInfos_i];
+}
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+uint32 productInfos_Size = 0;
+bytes >> productInfos_Size;
+for (uint32 productInfos_i = 0; productInfos_i < productInfos_Size; ++productInfos_i) {
+	ProductInfo productInfos_info;
+	bytes >> productInfos_info;
+	productInfos.push_back(productInfos_info);
+}
+
+		return true;
+	}
+public:
+std::vector<ProductInfo> productInfos;
+
+};
+
 class NetEnd : public Packet {
 public:
 	NetEnd():
@@ -2787,4 +2948,8 @@ REGISTER_PACKET_HELPER(ID_NetAddFriendRes, NetAddFriendRes);
 REGISTER_PACKET_HELPER(ID_NetAddFriendNotify, NetAddFriendNotify);
 REGISTER_PACKET_HELPER(ID_NetFriendListReq, NetFriendListReq);
 REGISTER_PACKET_HELPER(ID_NetFriendListRes, NetFriendListRes);
+REGISTER_PACKET_HELPER(ID_NetSellProductReq, NetSellProductReq);
+REGISTER_PACKET_HELPER(ID_NetSellProductRes, NetSellProductRes);
+REGISTER_PACKET_HELPER(ID_NetProductListReq, NetProductListReq);
+REGISTER_PACKET_HELPER(ID_NetProductListRes, NetProductListRes);
 REGISTER_PACKET_HELPER(ID_NetEnd, NetEnd);

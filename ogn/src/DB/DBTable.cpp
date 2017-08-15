@@ -67,3 +67,39 @@ bool DBUser::operator<<(BinaryStream& bytes)
 	CHECK(bytes >> createTime);
 	return true;
 }
+
+IMPLEMENT_TABLE_BEGIN(DBProduct, "product")
+
+IMPLEMENT_RECORD_INFO(DBProduct, id, Variant::TypeInt32, "NULL", KeyTypeAutoInc)
+IMPLEMENT_RECORD_INFO(DBProduct, productId, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBProduct, userId, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBProduct, buyUserId, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBProduct, shelvesTime, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBProduct, unShelvesTime, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBProduct, datastr, Variant::TypeString, "NULL", KeyTypeNone)
+
+IMPLEMENT_TABLE_END(DBProduct, "product")
+
+bool DBProduct::operator >> (BinaryStream& bytes)
+{
+	CHECK(__super::operator >> (bytes));
+	CHECK(bytes << productId);
+	CHECK(bytes << userId);
+	CHECK(bytes << buyUserId);
+	CHECK(bytes << shelvesTime);
+	CHECK(bytes << unShelvesTime);
+	CHECK(bytes << datastr);
+	return true;
+}
+
+bool DBProduct::operator<<(BinaryStream& bytes)
+{
+	CHECK(__super::operator <<(bytes));
+	CHECK(bytes >> productId);
+	CHECK(bytes >> userId);
+	CHECK(bytes >> buyUserId);
+	CHECK(bytes >> shelvesTime);
+	CHECK(bytes >> unShelvesTime);
+	CHECK(bytes >> datastr);
+	return true;
+}

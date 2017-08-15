@@ -172,6 +172,7 @@
     <ClCompile Include="..\..\src\DB\DBTable.cpp" />
     <ClCompile Include="..\..\src\DB\main.cpp" />
     <ClCompile Include="..\..\src\DB\Player.cpp" />
+    <ClCompile Include="..\..\src\DB\PlayerManager.cpp" />
     <ClCompile Include="..\..\src\DB\Session.cpp" />
     <ClCompile Include="..\..\src\DB\SessionHandler.cpp" />
     <ClCompile Include="..\..\src\DB\SessionManager.cpp" />
@@ -182,6 +183,7 @@
     <ClInclude Include="..\..\src\DB\ConfigManager.h" />
     <ClInclude Include="..\..\src\DB\DBTable.h" />
     <ClInclude Include="..\..\src\DB\Player.h" />
+    <ClInclude Include="..\..\src\DB\PlayerManager.h" />
     <ClInclude Include="..\..\src\DB\Session.h" />
     <ClInclude Include="..\..\src\DB\SessionHandler.h" />
     <ClInclude Include="..\..\src\DB\SessionManager.h" />

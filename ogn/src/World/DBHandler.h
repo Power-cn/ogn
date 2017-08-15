@@ -9,9 +9,11 @@ public:
 	~DBHandler();
 	void doRegister();
 protected:
-	int onNetNetLoginRes(Session* session, NetLoginRes* res);
-	int onNetCreateRoleRes(Session* session, NetCreateRoleRes* res);
-	int onNetSelectRoleRes(Session* session, NetSelectRoleRes* res);
-	int onNetQueryRoleRes(Session* session, NetQueryRoleRes* res);
+	int32 onNetNetLoginRes(Session* session, NetLoginRes* res);
+protected:
+	int32 onNetCreateRoleRes(Player* aPlr, NetCreateRoleRes* res);
+	int32 onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res);
+	int32 onNetQueryRoleRes(Player* aPlr, NetQueryRoleRes* res);
+	int32 onNetSellProductRes(Player* aPlr, NetSellProductRes* res);
 private:
 };

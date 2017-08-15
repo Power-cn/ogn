@@ -8,6 +8,7 @@
 
 #include "protocols/protocols.h"
 #include "Channel.h"
+#include "CfgDef.h"
 #include "ConfigManager.h"
 #include "Property.h"
 
@@ -113,6 +114,10 @@
 #include "./Module/MailModule/Mail.h"
 #include "./Module/Mailmodule/MailModule.h"
 
+#include "./Module/ShopModule/ShopHandler.h"
+#include "./Module/ShopModule/Shop.h"
+#include "./Module/ShopModule/ShopModule.h"
+
 #include "Utils.h"
 #include "DBHandler.h"
 #include "SessionHandler.h"
@@ -135,6 +140,8 @@
 #define sFriends (*GetModule(FriendsModule))
 #define sRoom (*GetModule(RoomModule))
 #define sGame (*GetModule(GameModule))
+#define sShop (*GetModule(ShopModule))
+
 
 #define RegDBEvent(id, cb, thisObject) RegisterEventProcess(GetDBServer(), id, cb, thisObject)
 #define RegWorldEvent(id, cb, thisObject) RegisterEventProcess((GetWorldServer()), id, cb, thisObject)
