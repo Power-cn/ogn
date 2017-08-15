@@ -86,6 +86,11 @@ ConfigManager* luaCfg()
 	return &sCfgMgr;
 }
 
+ShopModule* luaShop()
+{
+	return &sShop;
+}
+
 //luabind::object GetTestTable(lua_State* luaState)
 //{
 //	luabind::object obj = luabind::newtable(luaState);

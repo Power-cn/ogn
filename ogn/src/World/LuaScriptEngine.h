@@ -14,6 +14,7 @@ class WorldModule;
 class RoomModule;
 class GameModule;
 class FriendsModule;
+class ShopModule;
 
 Object* luaObject();
 Entity* luaEntity();
@@ -35,6 +36,7 @@ RoomModule* luaRoom();
 GameModule* luaGame();
 FriendsModule* luaFriends();
 ConfigManager* luaCfg();
+ShopModule* luaShop();
 
 //luabind::object GetTestTable(lua_State* luaState);
 //luabind::object GetTestTable1(luabind::object& obj);

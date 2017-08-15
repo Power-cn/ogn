@@ -14,6 +14,7 @@ public:
 	void DelProduct(uint32 insId);
 
 	void DoAddProduct(Player* aPlr, uint32 productId);
+	void DoFindProductList(Player* aPlr, uint32 idx, uint32 count);
 protected:
 	void OnSellProduct(Player* aPlr, Product* product);
 protected:

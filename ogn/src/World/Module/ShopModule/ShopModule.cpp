@@ -45,6 +45,29 @@ void ShopModule::DoAddProduct(Player* aPlr, uint32 productId)
 	}
 }
 
+void ShopModule::DoFindProductList(Player* aPlr, uint32 idx, uint32 count)
+{
+	NetProductListRes res;
+	uint32 index = 0;
+	for (auto& itr : mMapProduct)
+	{
+		if (idx == index && count > 0) {
+			Product* product = itr.second;
+			ProductInfo info;
+			info.productInsId = product->mInsId;
+			info.productId = product->mProductId;
+			info.sellUserId = product->mUserId;
+			info.buyUserId = product->mBuyUserId;
+			info.shelvesTime = product->mShelvesTime;
+			info.unShelvesTime = product->mUnshelvesTime;
+			res.productInfos.push_back(info);
+			count--;				
+		}
+		index++;
+	}
+	aPlr->sendPacket(res);
+}
+
 void ShopModule::OnSellProduct(Player* aPlr, Product* product)
 {
 	LuaEngine::Call("shop", "OnSellProduct", aPlr->getUserId(), product->mInsId);
