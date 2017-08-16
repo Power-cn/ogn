@@ -31,6 +31,7 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher).addEventListener("login", (EventCallback)&RobotManager::onLogin, this);
 	INSTANCE(CmdDispatcher).addEventListener("crole", (EventCallback)&RobotManager::onCreate, this);
 	INSTANCE(CmdDispatcher).addEventListener("select", (EventCallback)&RobotManager::onSelect, this);
+	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&RobotManager::onClose, this);
 }
 
 RobotManager::~RobotManager()
@@ -316,4 +317,10 @@ int32 RobotManager::onSelect(CmdEvent& e)
 	req.userId = Shared::strtoint32(e.cmdExecute->params[0]);
 	mCurRobot->sendPacket(req);
 	return 0;
+}
+
+int32 RobotManager::onClose(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+	INSTANCE(Network).closesocket(mCurRobot->mSocket->getSocketId());
 }

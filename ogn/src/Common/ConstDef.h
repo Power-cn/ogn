@@ -10,6 +10,14 @@ static const char* sKey = "ogn";
 
 static const uint32 sSpeakTotalTime = 30;
 static const uint32 sMaxRoleCount = 3;
+
+
+enum SndTarget : char
+{
+	Snd_Ssn,
+	Snd_Plr,
+};
+
 enum CardType
 {
 	CT_None = 0,

@@ -15,7 +15,7 @@ void Session::sendPacketToTarget(Packet& packet, Socket* target)
 	static char input[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	int32 packetCount = 0;
-	in << getSessionId();
+	in << getSsnId();
 	int32 pos = in.wpos();
 	in << packetCount;
 	in << packet;
@@ -33,7 +33,7 @@ void Session::sendBufferToTarget(void* data, int32 count, Socket* target)
 
 	static char output[PACKET_MAX_LENGTH];
 	BinaryStream  transform(output, PACKET_MAX_LENGTH);
-	transform << getSessionId();
+	transform << getSsnId();
 	transform << count;
 	transform.write(data, count);
 	target->sendBuffer(transform.datas(), transform.wpos());
@@ -63,7 +63,7 @@ void Session::sendPacketToWorld(Packet& packet)
 	static char input[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	int32 packetCount = 0;
-	in << getSessionId();
+	in << getSsnId();
 	int32 pos = in.wpos();
 	in << packetCount;
 	in << packet;
@@ -81,7 +81,7 @@ void Session::sendBufferToWorld(void* data, int32 count)
 
 	static char output[PACKET_MAX_LENGTH];
 	BinaryStream  transform(output, PACKET_MAX_LENGTH);
-	transform << getSessionId();
+	transform << getSsnId();
 	transform << count;
 	transform.write(data, count);
 	socket->sendBuffer(transform.datas(), transform.wpos());

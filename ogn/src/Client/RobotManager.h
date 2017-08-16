@@ -30,6 +30,7 @@ protected:
 	int32 onLogin(CmdEvent& e);
 	int32 onCreate(CmdEvent& e);
 	int32 onSelect(CmdEvent& e);
+	int32 onClose(CmdEvent& e);
 protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;

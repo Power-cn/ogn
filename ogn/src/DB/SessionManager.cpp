@@ -23,9 +23,9 @@ Session* SessionManager::newSession(Socket* s, uint64 ssnId /*= 0*/)
 {
 	Session* ssn = new Session(s);
 	if (ssnId != 0)
-		ssn->setSessionId(ssnId);
+		ssn->setSsnId(ssnId);
 	else
-		ssn->setSessionId(++Session::sId);
+		ssn->setSsnId(++Session::sId);
 	return ssn;
 }
 
@@ -73,7 +73,7 @@ Session* SessionManager::getSessionBySocket(uint32 socketId)
 	if (itr == mMapSocketSession.end())
 		return NULL;
 
-	return getSession(itr->second->getSessionId());
+	return getSession(itr->second->getSsnId());
 }
 
 void SessionManager::removeSessionBySocket(uint32 socketId)
@@ -187,7 +187,7 @@ void SessionManager::removeSessionsBySocket(uint32 socketId, Session* ssn)
 		if (sset.size() <= 0)
 			mMapSocketSessions.erase(itr);
 	}
-	removeSession(ssn->getSessionId());
+	removeSession(ssn->getSsnId());
 }
 
 Socket* SessionManager::addSktsBySsn(uint64 sessionId, Socket* skt)

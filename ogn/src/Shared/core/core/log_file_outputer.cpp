@@ -23,6 +23,7 @@ void LogFileOutputer::Outputer(const char* content, int color /* = 0 */, int lev
 	int32 err = GetLastError();
 	if (file == NULL) return;
 	fwrite(content, strlen(content), 1, file);
+	fwrite("\r", 1, 1, file);
 	if (Shared::GetFileLength(file) > 1024 * 1024)
 		mIdx++;
 	fclose(file);

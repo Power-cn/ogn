@@ -17,14 +17,11 @@ public:
 	Socket*		socket;
 	void setPlayer(Player* plr) { player = plr; }
 	Player* getPlayer() { return player; }
-	void setSessionId(uint64 sId) { sessionId = sId; }
-	uint64 getSessionId() { return sessionId; }
+	void setSsnId(uint64 sId) { sessionId = sId; }
+	uint64 getSsnId() { return sessionId; }
 	void setSocket(Socket* s) { socket = s; }
 	Socket* getSocket() { return socket; }
 	uint32 getSocketId();
-
-	void sendPacketToTarget(Packet& packet, Socket* target);
-	void sendBufferToTarget(void* data, int32 count, Socket* target);
 
 	void sendPacket(Packet& packet);
 	void sendBuffer(void* data, int32 count);

@@ -20,44 +20,24 @@ SessionHandler::~SessionHandler()
 
 }
 
-int SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)
+int32 SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("ssnId %0.16llx enter world", ssn->getSessionId());
+	LOG_INFO("ssnId %0.16llx enter world", ssn->getSsnId());
 	return 0;
 }
 
-int SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy)
+int32 SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy)
 {
-	LOG_INFO("ssnId %0.16llx leave world", ssn->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave world", ssn->getSsnId());
 
-	Player* aPlr = ssn->getPlayer();
-	if (aPlr)
-	{
-		aPlr->setSession(NULL);
-		ssn->setPlayer(NULL);
+	if (ssn->getPlayer()) {
+		ssn->getPlayer()->unbindSsn();
 	}
-
 	INSTANCE(SessionManager).removeSessionsBySocket(ssn->getSocketId(), ssn);
 	return 0;
 }
 
-int SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* nfy)
-{
-	for (uint32 i = 0; i < nfy->roleInfos.size() && i < sMaxRoleCount; ++i)
-	{
-		DBRoleInfo& info = nfy->roleInfos[i];
-		DBUser dbRole;
-		dbRole.id = info.id;
-		dbRole.property.write(info.property.datas(), info.property.wpos());
-		uint32 updateRows = 0;
-		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
-		if (!err) return 0;
-		LOG_ERROR(err);
-	}
-	return 0;
-}
-
-int SessionHandler::onNetLoginReq(Session* ssn, NetLoginReq* req)
+int32 SessionHandler::onNetLoginReq(Session* ssn, NetLoginReq* req)
 {
 	NetLoginRes res;
 	if (DoLogin(req, res) == 0)
@@ -81,15 +61,13 @@ int SessionHandler::onNetLoginReq(Session* ssn, NetLoginReq* req)
 		aPlr->setAccId(res.accInfo.id);
 		sPlrMgr.AddPlrByAccId(aPlr);
 	}
-	aPlr->setSession(ssn);
-	ssn->setPlayer(aPlr);
-
+	aPlr->bindSsn(ssn);
 	ssn->sendPacketToWorld(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] login success", req->user.c_str());
 	return 0;
 }
 
-int SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
+int32 SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 {
 	NetCreateRoleRes res;
 	if (DoCreateRole(req, res) == 0)
@@ -111,7 +89,7 @@ int SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 	return 1;
 }
 
-int SessionHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
+int32 SessionHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
 {
 	NetSelectRoleRes res;
 	if (DoSelectRole(req, res) == 0)
@@ -127,7 +105,7 @@ int SessionHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
 	return 1;
 }
 
-int SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
+int32 SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 {
 	NetQueryRoleRes res;
 	DBUser role;
@@ -165,6 +143,22 @@ int SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 	} while (false);
 	aPlr->sendPacket(res);
 	return 1;
+}
+
+int32 SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* nfy)
+{
+	for (uint32 i = 0; i < nfy->roleInfos.size() && i < sMaxRoleCount; ++i)
+	{
+		DBRoleInfo& info = nfy->roleInfos[i];
+		DBUser dbRole;
+		dbRole.id = info.id;
+		dbRole.property.write(info.property.datas(), info.property.wpos());
+		uint32 updateRows = 0;
+		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
+		if (!err) return 0;
+		LOG_ERROR(err);
+	}
+	return 0;
 }
 
 int32 SessionHandler::onNetSellProductReq(Player* aPlr, NetSellProductReq* req)

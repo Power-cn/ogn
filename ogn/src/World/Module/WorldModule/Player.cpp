@@ -304,9 +304,9 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["accId"] = getAccId();
 	userJson["userId"] = getUserId();
 	userJson["name"] = getName();
-	userJson["online"] = GetOfflineTimer();
+	userJson["online"] = GetOnlineTimer();
 	userJson["offline"] = GetOfflineTimer();
-	userJson["lasthost"] = ssn->getHost();
+	userJson["lasthost"] = getHost();
 
 	root["user"] = userJson;
 	return true;

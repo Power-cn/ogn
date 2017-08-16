@@ -20,7 +20,7 @@ int32 PlayerHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 		aPlr->sendRespnoseMsg(MC_LoginSelectRole);
 		return 0;
 	}
-	sApp.sendPacketToDB(*req, aPlr->getSession());
+	sApp.sendPacketToDB(*req, aPlr);
 	return 0;
 }
 
@@ -32,13 +32,13 @@ int32 PlayerHandler::onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req)
 		return 0;
 	}
 
-	sApp.sendPacketToDB(*req, aPlr->getSession());
+	sApp.sendPacketToDB(*req, aPlr);
 	return 0;
 }
 
 int32 PlayerHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 {
-	sApp.sendPacketToDB(*req, aPlr->getSession());
+	sApp.sendPacketToDB(*req, aPlr);
 	return 0;
 }
 

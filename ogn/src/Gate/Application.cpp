@@ -121,7 +121,7 @@ int Application::onGateAccept(SocketEvent& e)
 
 	NetSessionEnterNotify nfy;
 	nfy.host = e.socket->getIP();
-	LOG_INFO("ssnId %0.16llx [%s] accept", ssn->getSessionId(), e.socket->getIP());
+	LOG_INFO("ssnId %0.16llx [%s] accept", ssn->getSsnId(), e.socket->getIP());
 	sendPacketToWorld(nfy, ssn);
 	return 0;
 }
@@ -155,7 +155,7 @@ int Application::onGateRecv(SocketEvent& e)
 	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", ssn->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
+	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", ssn->getSsnId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
 
 	return 0;
@@ -167,13 +167,13 @@ int Application::onGateExit(SocketEvent& e)
 	if (!ssn)
 		return 0;
 
-	LOG_INFO("ssnId %0.16llx leave", ssn->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave", ssn->getSsnId());
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, ssn);
 
 	INSTANCE(SessionManager).removeSessionBySocket(e.socket->getSocketId());
-	INSTANCE(SessionManager).removeSession(ssn->getSessionId());
+	INSTANCE(SessionManager).removeSession(ssn->getSsnId());
 	return 0;
 }
 
@@ -202,7 +202,7 @@ int Application::onWorldRecv(SocketEvent& e)
 			break;
 
 #ifdef _DEBUG
-		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", ssn->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
+		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", ssn->getSsnId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
 #endif // DEBUG
 
 		if (msgId == ID_NetSessionLeaveNotify)

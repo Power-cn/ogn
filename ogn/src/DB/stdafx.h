@@ -61,5 +61,6 @@
 
 #define sRedisProxy INSTANCE(RedisProxy)
 #define sApp INSTANCE(Application)
+#define sSsnMgr INSTANCE(SessionManager)
 #define sPlrMgr INSTANCE(PlayerManager)
 #define sPacketMgr INSTANCE(PacketManager)

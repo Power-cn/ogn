@@ -21,6 +21,7 @@ protected:
 	UserStatus			mUserStatus;
 	Json::Value			mJson;
 	bool				mOnline;
+	std::string			mHost;
 public:
 	Player();
 	~Player();
@@ -34,7 +35,7 @@ public:
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
-
+	void setHost(const std::string& host) { mHost = host; }
 	bool GetOnline() { return mOnline; }
 	void SetOnline(bool isOnline) { mOnline = isOnline; }
 
@@ -42,10 +43,11 @@ public:
 	uint32 getUserId() { return userId; }
 
 	const std::string& getUser() { return user; }
-
+	const std::string& getHost() { return mHost; }
 	UserStatus GetStatus() { return mUserStatus; }
 	Json::Value& GetJson();
 	Session* getSession() { return ssn; }
+	
 public:
 	void DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo);
 public:

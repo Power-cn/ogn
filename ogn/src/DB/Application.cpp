@@ -99,55 +99,70 @@ int32 Application::onDBRecv(SocketEvent& e)
 {
 	BinaryStream out(e.data, e.count);
 	uint64 sessionId = 0;
+	uint32 accId = 0;
 	int32 packetCount = 0;
 	int32 msgId = 0;
-	CHECK_RETURN(out >> sessionId, 0);
+	int8 sndTarget = 0;
+	CHECK_RETURN(out >> sndTarget, 0);
+
+	if (sndTarget == Snd_Ssn) {
+		CHECK_RETURN(out >> sessionId, 0);
+	}
+	else {
+		CHECK_RETURN(out >> accId, 0);
+	}
+
 	CHECK_RETURN(out >> packetCount, 0);
 	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-
-	Session* ssn = INSTANCE(SessionManager).getSession(sessionId);
-	do 
+	switch (sndTarget)
 	{
-		if (ssn == NULL && msgId == ID_NetSessionEnterNotify)
+	case Snd_Ssn: {
+		Session* ssn = sSsnMgr.getSession(sessionId);
+		do
 		{
-			ssn = INSTANCE(SessionManager).newSession(e.socket, sessionId);
-			INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), ssn);
-		}
+			if (ssn == NULL && msgId == ID_NetSessionEnterNotify)
+			{
+				ssn = sSsnMgr.newSession(e.socket, sessionId);
+				sSsnMgr.addSessionsBySocket(e.socket->getSocketId(), ssn);
+			}
 
-		if (ssn == NULL)
-			break;
+			if (ssn == NULL) break;
 
+			Packet* pack = sPacketMgr.Alloc(msgId);
+			if (pack == NULL) break;
+			out >> (*pack);
+
+			if (msgId == ID_NetSessionEnterNotify || msgId == ID_NetSessionLeaveNotify || msgId == ID_NetLoginReq)
+				dbServer->dispatch(pack->getMsgId(), ssn, pack);
+
+			sPacketMgr.Free(pack);
+			return 0;
+
+		} while (false);
+
+		if (ssn == NULL) return 0;
+
+		NetSessionLeaveNotify nfy;
+		ssn->sendPacketToWorld(nfy);
+		LOG_DEBUG(LogSystem::csl_color_red, "ssnId %0.16llx packet error leave world", ssn->getSsnId());
+		sSsnMgr.removeSessionsBySocket(e.socket->getSocketId(), ssn);
+	}
+		break;
+	default: {
+		Player* aPlr = sPlrMgr.FindPlrByAccId(accId);
+		if (aPlr == NULL) break;
+		
 		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
-			
-		if (out >> (*pack) == false)
-		{
-			LOG_ERROR("pack->deSerialize(out)");
-			sPacketMgr.Free(pack);
-			break;
-		}
-		if (msgId == ID_NetSessionEnterNotify || msgId == ID_NetSessionLeaveNotify || msgId == ID_NetLoginReq)
-			dbServer->dispatch(pack->getMsgId(), ssn, pack);
-		else if (ssn->getPlayer())
-			dbServer->dispatch(pack->getMsgId(), ssn->getPlayer(), pack);
-		else {
-			sPacketMgr.Free(pack);
-			break;
-		}
+		out >> (*pack);
+		dbServer->dispatch(pack->getMsgId(), aPlr, pack);
 		sPacketMgr.Free(pack);
-		return 0;
-
-	} while (false);
-
-	if (ssn == NULL)
-		return 0;
-	NetSessionLeaveNotify nfy;
-	ssn->sendPacketToWorld(nfy);
-	LOG_DEBUG(LogSystem::csl_color_red, "ssnId %0.16llx packet error leave world", ssn->getSessionId());
-
-	INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), ssn);
+	}
+		break;
+	}
+	
 	return 0;
 }
 

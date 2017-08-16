@@ -58,6 +58,7 @@ int32 DBHandler::onNetNetLoginRes(Session* ssn, NetLoginRes* res)
 		player->setUser(res->accInfo.user);
 		sWorld.addPlayerByAccId(player);
 	} while (false);
+	player->setHost(ssn->getHost());
 	res->guid = player->getGuid();
 	player->sendPacket(*res);
 	return 0;

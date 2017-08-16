@@ -7,33 +7,6 @@ uint32 Session::getSocketId()
 	return mSocket ? mSocket->getSocketId() : 0;
 }
 
-void Session::sendPacketToTarget(Packet& packet, Socket* target)
-{
-	if (!target) return;
-	static char input[PACKET_MAX_LENGTH] = { 0 };
-	BinaryStream in(input, PACKET_MAX_LENGTH);
-	int32 packetCount = 0;
-	in << getSessionId();
-	int32 pos = in.wpos();
-	in << packetCount;
-	in << packet;
-	packetCount = in.wpos() - sizeof(int32) - sizeof(uint64);
-	packetCount = Shared::htonl(packetCount);
-	in.push(pos, &packetCount, sizeof(int32));
-	target->sendBuffer(in.datas(), in.wpos());
-}
-
-void Session::sendBufferToTarget(void* data, int32 count, Socket* target)
-{
-	if (!target) return;
-	static char output[PACKET_MAX_LENGTH];
-	BinaryStream  transform(output, PACKET_MAX_LENGTH);
-	transform << getSessionId();
-	transform << count;
-	transform.write(data, count);
-	target->sendBuffer(transform.datas(), transform.wpos());
-}
-
 void Session::sendPacket(Packet& packet)
 {
 	if (!mSocket)
@@ -51,7 +24,19 @@ void Session::sendBuffer(void* data, int32 count)
 
 void Session::sendPacketToDB(Packet& packet)
 {
-	sApp.sendPacketToDB(packet, this);
+	static char input[PACKET_MAX_LENGTH] = { 0 };
+	BinaryStream in(input, PACKET_MAX_LENGTH);
+	int32 packetCount = 0;
+	in << (int8)Snd_Ssn;
+	in << getSsnId();
+	int32 pos = in.wpos();
+	in << packetCount;
+	int32 offset = in.wpos();
+	in << packet;
+	packetCount = in.wpos() - offset;
+	packetCount = Shared::htonl(packetCount);
+	in.push(pos, &packetCount, sizeof(int32));
+	GetDBServer()->sendBuffer(in.datas(), in.wpos());
 }
 
 void Session::sendPacketToWorld(Packet& packet)
@@ -61,11 +46,12 @@ void Session::sendPacketToWorld(Packet& packet)
 	static char input[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(input, PACKET_MAX_LENGTH);
 	int32 packetCount = 0;
-	in << getSessionId();
+	in << getSsnId();
 	int32 pos = in.wpos();
 	in << packetCount;
+	int32 offset = in.wpos();
 	in << packet;
-	packetCount = in.wpos() - sizeof(int32) - sizeof(uint64);
+	packetCount = in.wpos() - offset;
 	packetCount = Shared::htonl(packetCount);
 
 	in.push(pos, &packetCount, sizeof(int32));
@@ -78,7 +64,7 @@ void Session::sendBufferToWorld(void* data, int32 count)
 
 	static char output[PACKET_MAX_LENGTH];
 	BinaryStream  transform(output, PACKET_MAX_LENGTH);
-	transform << getSessionId();
+	transform << getSsnId();
 	transform << count;
 	transform.write(data, count);
 	mSocket->sendBuffer(transform.datas(), transform.wpos());

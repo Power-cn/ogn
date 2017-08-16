@@ -11,14 +11,11 @@ public:
 public:
 	void setPlayer(Player* plr) { mPlayer = plr; }
 	Player* getPlayer() { return mPlayer; }
-	void setSessionId(SessionID sId) { mSessionId = sId; }
-	SessionID getSessionId() { return mSessionId; }
+	void setSsnId(SessionID sId) { mSessionId = sId; }
+	SessionID getSsnId() { return mSessionId; }
 	void setSocket(Socket* s) { mSocket = s; }
 	Socket* getSocket() { return mSocket; }
 	uint32 getSocketId();
-
-	void sendPacketToTarget(Packet& packet, Socket* target);
-	void sendBufferToTarget(void* data, int32 count, Socket* target);
 
 	void sendPacket(Packet& packet);
 	void sendBuffer(void* data, int32 count);

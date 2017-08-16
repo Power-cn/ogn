@@ -15,7 +15,7 @@ SessionHandler::~SessionHandler()
 
 int SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("ssnId %0.16llx [%s] enter world", ssn->getSessionId(), nfy->host.c_str());
+	LOG_INFO("ssnId %0.16llx [%s] enter world", ssn->getSsnId(), nfy->host.c_str());
 	ssn->setHost(nfy->host);
 	ssn->sendPacketToDB(*nfy);
 	return 0;
