@@ -17,7 +17,7 @@ protected:
 	uint32				userId;
 	std::string			user;
 	std::string			password;
-	Session*			session;
+	Session*			ssn;
 	UserStatus			mUserStatus;
 	Json::Value			mJson;
 	bool				mOnline;
@@ -27,10 +27,10 @@ public:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
 	virtual bool Destroy();
-	void setSession(Session* s) { session = s; }
+	void setSession(Session* s) { ssn = s; }
 	void setAccId(uint32 plrId) { accountId = plrId; }
 	void setUserId(uint32 rId) { userId = rId; }
-	void bindSession(Session* session);
+	void bindSession(Session* ssn);
 	void unbindSession();
 	void setUser(const std::string& u) { user = u; }
 	void SetStatus(UserStatus s) { mUserStatus = s; }
@@ -45,7 +45,7 @@ public:
 
 	UserStatus GetStatus() { return mUserStatus; }
 	Json::Value& GetJson();
-	Session* getSession() { return session; }
+	Session* getSession() { return ssn; }
 public:
 	void DoCreateCharacter(Dictionary& dict, DBRoleInfo& dbRoleInfo);
 public:

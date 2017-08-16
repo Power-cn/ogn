@@ -12,9 +12,9 @@ public:
 	~SessionManager();
 	Session* createSession(Socket* s, uint64 sessionId = 0);
 	Session* getSession(uint64 sessionId);
-	Session* addSession(Session* session);
+	Session* addSession(Session* ssn);
 	void removeSession(uint64 sessionId);
-	Session* addSessionBySocket(uint32 socketId, Session* session);
+	Session* addSessionBySocket(uint32 socketId, Session* ssn);
 	Session* getSessionBySocket(uint32 socketId);
 	void removeSessionBySocket(uint32 socketId);
 
@@ -25,9 +25,9 @@ public:
 	Player* addPlayer(Player* player);
 	void removePlayer(uint32 playerId);
 	
-	Session* addSessionsBySocket(uint32 socketId, Session* session);
+	Session* addSessionsBySocket(uint32 socketId, Session* ssn);
 	std::set<Session*>* getSessionsBySocket(uint32 socketId);
-	void removeSessionsBySocket(uint32 socketId, Session* session);
+	void removeSessionsBySocket(uint32 socketId, Session* ssn);
 
 	Socket* addSktsBySsn(uint64 sessionId, Socket* skt);
 	std::set<Socket*>* getSktsBySsn(uint64 sessionId);

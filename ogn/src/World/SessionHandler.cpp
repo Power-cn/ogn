@@ -13,36 +13,36 @@ SessionHandler::~SessionHandler()
 
 }
 
-int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
+int SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("ssnId %0.16llx [%s] enter world", session->getSessionId(), nfy->host.c_str());
-	session->setHost(nfy->host);
-	session->sendPacketToDB(*nfy);
+	LOG_INFO("ssnId %0.16llx [%s] enter world", ssn->getSessionId(), nfy->host.c_str());
+	ssn->setHost(nfy->host);
+	ssn->sendPacketToDB(*nfy);
 	return 0;
 }
 
-int SessionHandler::onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy)
+int SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy)
 {
-	sApp.doSessionLeaveWorld(session);
+	sApp.doSessionLeaveWorld(ssn);
 	return 0;
 }
 
-int SessionHandler::onNetLoingReq(Session* session, NetLoginReq* req)
+int SessionHandler::onNetLoingReq(Session* ssn, NetLoginReq* req)
 {
-	Player* plr = session->getPlayer();
+	Player* plr = ssn->getPlayer();
 	if (plr)
 	{
 		plr->sendRespnoseMsg(MC_LoginYouHaveLanded);
 		return 0;
 	}
 
-	session->sendPacketToDB(*req);
+	ssn->sendPacketToDB(*req);
 	return 0;
 }
 
-int SessionHandler::onNetPingNotify(Session* session, NetPingNotify* nfy)
+int SessionHandler::onNetPingNotify(Session* ssn, NetPingNotify* nfy)
 {
-	session->sendPacketToWorld(*nfy);
+	ssn->sendPacketToWorld(*nfy);
 	return 0;
 }
 

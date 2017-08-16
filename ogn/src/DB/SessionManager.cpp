@@ -15,18 +15,18 @@ SessionManager::~SessionManager()
 
 Session* SessionManager::createSession(Socket* s, uint64 sessionId)
 {
-	Session* session = newSession(s, sessionId);
-	return addSession(session);
+	Session* ssn = newSession(s, sessionId);
+	return addSession(ssn);
 }
 
 Session* SessionManager::newSession(Socket* s, uint64 ssnId /*= 0*/)
 {
-	Session* session = new Session(s);
+	Session* ssn = new Session(s);
 	if (ssnId != 0)
-		session->setSessionId(ssnId);
+		ssn->setSessionId(ssnId);
 	else
-		session->setSessionId(++Session::sId);
-	return session;
+		ssn->setSessionId(++Session::sId);
+	return ssn;
 }
 
 Session* SessionManager::getSession(uint64 sessionId)
@@ -38,13 +38,13 @@ Session* SessionManager::getSession(uint64 sessionId)
 	return NULL;
 }
 
-Session* SessionManager::addSession(Session* session)
+Session* SessionManager::addSession(Session* ssn)
 {
-	auto itr = mMapSession.find(session->sessionId);
+	auto itr = mMapSession.find(ssn->sessionId);
 	if (itr != mMapSession.end())
 		return NULL;
-	mMapSession.insert(std::make_pair(session->sessionId, session));
-	return session;
+	mMapSession.insert(std::make_pair(ssn->sessionId, ssn));
+	return ssn;
 }
 
 void SessionManager::removeSession(uint64 sessionId)
@@ -58,13 +58,13 @@ void SessionManager::removeSession(uint64 sessionId)
 		
 }
 
-Session* SessionManager::addSessionBySocket(uint32 socketId, Session* session)
+Session* SessionManager::addSessionBySocket(uint32 socketId, Session* ssn)
 {
 	auto itr = mMapSocketSession.find(socketId);
 	if (itr != mMapSocketSession.end())
 		return NULL;
-	mMapSocketSession.insert(std::make_pair(socketId, session));
-	return session;
+	mMapSocketSession.insert(std::make_pair(socketId, ssn));
+	return ssn;
 }
 
 Session* SessionManager::getSessionBySocket(uint32 socketId)
@@ -147,25 +147,25 @@ void SessionManager::removePlayer(uint32 playerId)
 	}
 }
 
-Session* SessionManager::addSessionsBySocket(uint32 socketId, Session* session)
+Session* SessionManager::addSessionsBySocket(uint32 socketId, Session* ssn)
 {
-	addSession(session);
+	addSession(ssn);
 	auto itr = mMapSocketSessions.find(socketId);
 	if (itr != mMapSocketSessions.end())
 	{
 		std::set<Session*>& sset = itr->second;
-		if (sset.find(session) == sset.end())
-			sset.insert(session);
+		if (sset.find(ssn) == sset.end())
+			sset.insert(ssn);
 		else
 			return NULL;
 	}
 	else
 	{
 		std::set<Session*> sset;
-		sset.insert(session);
+		sset.insert(ssn);
 		mMapSocketSessions.insert(std::make_pair(socketId, sset));
 	}
-	return session;
+	return ssn;
 }
 
 std::set<Session*>* SessionManager::getSessionsBySocket(uint32 socketId)
@@ -177,17 +177,17 @@ std::set<Session*>* SessionManager::getSessionsBySocket(uint32 socketId)
 	return NULL;
 }
 
-void SessionManager::removeSessionsBySocket(uint32 socketId, Session* session)
+void SessionManager::removeSessionsBySocket(uint32 socketId, Session* ssn)
 {
 	auto itr = mMapSocketSessions.find(socketId);
 	if (itr != mMapSocketSessions.end())
 	{
 		std::set<Session*>& sset = itr->second;
-		sset.erase(session);
+		sset.erase(ssn);
 		if (sset.size() <= 0)
 			mMapSocketSessions.erase(itr);
 	}
-	removeSession(session->getSessionId());
+	removeSession(ssn->getSessionId());
 }
 
 Socket* SessionManager::addSktsBySsn(uint64 sessionId, Socket* skt)

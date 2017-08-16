@@ -7,15 +7,15 @@ public:
 	~SessionManager();
 	Session* createSession(Socket* s, SessionID sessionId = 0);
 	Session* getSession(SessionID sessionId);
-	Session* addSession(Session* session);
+	Session* addSession(Session* ssn);
 	void removeSession(SessionID sessionId);
-	Session* addSessionBySocket(uint32 socketId, Session* session);
+	Session* addSessionBySocket(uint32 socketId, Session* ssn);
 	Session* getSessionBySocket(uint32 socketId);
 	void removeSessionBySocket(uint32 socketId);
 	
-	Session* addSessionsBySocket(uint32 socketId, Session* session);
+	Session* addSessionsBySocket(uint32 socketId, Session* ssn);
 	std::set<Session*>* getSessionsBySocket(uint32 socketId);
-	void removeSessionsBySocket(uint32 socketId, Session* session);
+	void removeSessionsBySocket(uint32 socketId, Session* ssn);
 	std::map<uint32, std::set<Session*>>& getMapSocketSessions() { return mMapSocketSessions; }
 	Socket* addSktsBySsn(SessionID sessionId, Socket* skt);
 	std::set<Socket*>* getSktsBySsn(SessionID sessionId);

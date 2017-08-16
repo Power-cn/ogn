@@ -16,15 +16,15 @@ void DBHandler::doRegister()
 	RegDBEvent(ID_NetCreateRoleRes, &DBHandler::onNetCreateRoleRes, this);
 	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
 	RegDBEvent(ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
-	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
+	RegDBEvent(ID_NetSellProductRes, &DBHandler::onNetSellProductRes, this);
 }
 
-int32 DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
+int32 DBHandler::onNetNetLoginRes(Session* ssn, NetLoginRes* res)
 {
 	uint32 accId = res->accInfo.id;
 	if (res->result != NResultSuccess)
 	{
-		session->sendPacketToWorld(*res);
+		ssn->sendPacketToWorld(*res);
 		return 0;
 	}
 
@@ -47,13 +47,13 @@ int32 DBHandler::onNetNetLoginRes(Session* session, NetLoginRes* res)
 				sApp.doSessionLeaveWorld(oldSession);
 			}
 			player->SetOnline(true);
-			player->bindSession(session);
+			player->bindSession(ssn);
 			break;
 		}
 
 		player = new Player;
 		player->SetOnline(true);
-		player->bindSession(session);
+		player->bindSession(ssn);
 		player->setAccId(res->accInfo.id);
 		player->setUser(res->accInfo.user);
 		sWorld.addPlayerByAccId(player);
@@ -120,8 +120,11 @@ int32 DBHandler::onNetSellProductRes(Player* aPlr, NetSellProductRes* res)
 	product->mBuyUserId = res->productInfo.buyUserId;
 	product->mShelvesTime = res->productInfo.shelvesTime;
 	product->mUnshelvesTime = res->productInfo.unShelvesTime;
-	if (sShop.AddProduct(product) == NULL)
+	if (sShop.AddProduct(product) == NULL) {
 		delete product;
+		product = NULL;
+	}
+	sShop.OnSellProduct(aPlr, product);
 	aPlr->sendPacket(*res);
 	return 0;
 }

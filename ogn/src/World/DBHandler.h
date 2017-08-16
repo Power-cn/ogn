@@ -9,7 +9,7 @@ public:
 	~DBHandler();
 	void doRegister();
 protected:
-	int32 onNetNetLoginRes(Session* session, NetLoginRes* res);
+	int32 onNetNetLoginRes(Session* ssn, NetLoginRes* res);
 protected:
 	int32 onNetCreateRoleRes(Player* aPlr, NetCreateRoleRes* res);
 	int32 onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res);

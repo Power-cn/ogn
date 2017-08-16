@@ -38,16 +38,16 @@ bool Player::Destroy()
 
 void Player::sendPacket(Packet& packet)
 {
-	if (!session)
+	if (!ssn)
 		return;
-	session->sendPacketToWorld(packet);
+	ssn->sendPacketToWorld(packet);
 }
 
 void Player::sendBuffer(void* data, int32 count)
 {
-	if (!session)
+	if (!ssn)
 		return;
-	session->sendBufferToWorld(data, count);
+	ssn->sendBufferToWorld(data, count);
 }
 
 void Player::sendPacketToView(Packet& packet)
@@ -122,16 +122,16 @@ bool Player::CanDestroy()
 	return false;
 }
 
-void Player::bindSession(Session* session)
+void Player::bindSession(Session* ssn)
 {
-	session->setPlayer(this);
-	setSession(session);
+	ssn->setPlayer(this);
+	setSession(ssn);
 }
 
 void Player::unbindSession()
 {
-	if (session)
-		session->setPlayer(NULL);
+	if (ssn)
+		ssn->setPlayer(NULL);
 	setSession(NULL);
 }
 
@@ -306,7 +306,7 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["name"] = getName();
 	userJson["online"] = GetOfflineTimer();
 	userJson["offline"] = GetOfflineTimer();
-	userJson["lasthost"] = session->getHost();
+	userJson["lasthost"] = ssn->getHost();
 
 	root["user"] = userJson;
 	return true;

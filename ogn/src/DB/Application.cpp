@@ -107,16 +107,16 @@ int32 Application::onDBRecv(SocketEvent& e)
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
 
-	Session* session = INSTANCE(SessionManager).getSession(sessionId);
+	Session* ssn = INSTANCE(SessionManager).getSession(sessionId);
 	do 
 	{
-		if (session == NULL && msgId == ID_NetSessionEnterNotify)
+		if (ssn == NULL && msgId == ID_NetSessionEnterNotify)
 		{
-			session = INSTANCE(SessionManager).newSession(e.socket, sessionId);
-			INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), session);
+			ssn = INSTANCE(SessionManager).newSession(e.socket, sessionId);
+			INSTANCE(SessionManager).addSessionsBySocket(e.socket->getSocketId(), ssn);
 		}
 
-		if (session == NULL)
+		if (ssn == NULL)
 			break;
 
 		Packet* pack = sPacketMgr.Alloc(msgId);
@@ -129,9 +129,9 @@ int32 Application::onDBRecv(SocketEvent& e)
 			break;
 		}
 		if (msgId == ID_NetSessionEnterNotify || msgId == ID_NetSessionLeaveNotify || msgId == ID_NetLoginReq)
-			dbServer->dispatch(pack->getMsgId(), session, pack);
-		else if (session->getPlayer())
-			dbServer->dispatch(pack->getMsgId(), session->getPlayer(), pack);
+			dbServer->dispatch(pack->getMsgId(), ssn, pack);
+		else if (ssn->getPlayer())
+			dbServer->dispatch(pack->getMsgId(), ssn->getPlayer(), pack);
 		else {
 			sPacketMgr.Free(pack);
 			break;
@@ -141,13 +141,13 @@ int32 Application::onDBRecv(SocketEvent& e)
 
 	} while (false);
 
-	if (session == NULL)
+	if (ssn == NULL)
 		return 0;
 	NetSessionLeaveNotify nfy;
-	session->sendPacketToWorld(nfy);
-	LOG_DEBUG(LogSystem::csl_color_red, "ssnId %0.16llx packet error leave world", session->getSessionId());
+	ssn->sendPacketToWorld(nfy);
+	LOG_DEBUG(LogSystem::csl_color_red, "ssnId %0.16llx packet error leave world", ssn->getSessionId());
 
-	INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), session);
+	INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), ssn);
 	return 0;
 }
 
@@ -159,9 +159,9 @@ int32 Application::onDBExit(SocketEvent& e)
 	if (setSession)
 	{
 		std::set<Session*> copySetSession = (*setSession);
-		for (auto session : copySetSession)
+		for (auto ssn : copySetSession)
 		{
-			INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), session);
+			INSTANCE(SessionManager).removeSessionsBySocket(e.socket->getSocketId(), ssn);
 		}
 	}
 	return 0;

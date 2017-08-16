@@ -3,6 +3,6 @@
 
 void Player::sendPacket(Packet& packet) 
 {
-	if (session == NULL) return;
-	session->sendPacketToWorld(packet);
+	if (ssn == NULL) return;
+	ssn->sendPacketToWorld(packet);
 }

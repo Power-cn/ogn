@@ -38,6 +38,7 @@ uint32 CmdDispatcher::onThreadProcess(Threader& threader)
 {
 	while (threader.Active())
 	{
+		Threader::sleep(1);
 		std::string cmdline;
 		getline(std::cin, cmdline, '\n');
 		CmdExecute* cmdExecute = new CmdExecute;
@@ -45,7 +46,6 @@ uint32 CmdDispatcher::onThreadProcess(Threader& threader)
 		m_mutex.lock();
 		mQueueCmd.push(cmdExecute);
 		m_mutex.unlock();
-		Threader::sleep(1);
 	}
 	return 0;
 }

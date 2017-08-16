@@ -27,18 +27,24 @@ private:
 	void process();
 	virtual uint32 ThreadProcess(Threader& threader);
 	int32 threaderRun(Threader& theader);
-public: // 同步;
+public: 
+	// 同步;
 	int8* doQuery(const DBRecord& query_record, std::vector<DBRecord*>& result_records, uint32& result_count, const uint32 result_max_count = 0);
 	int8* doQuery(const DBRecord& query_record, std::vector<DBRecord*>& result_records, uint32& result_count, const std::string& compare_record_names, const std::string& return_record_names, int32 result_max_count = 0);
 	// 同步;
 	int8* doQuery(const DBRecord& query_record, DBRecord& result_record, uint32& result_count, const uint32 result_max_count = 0);
 	int8* doQuery(const DBRecord& query_record, DBRecord& result_record, uint32& result_count, const std::string& compare_record_names, const std::string& return_record_names, int32 result_max_count = 0);
 
-	int8* doQuery(const DBRecord& query_record, const std::string& sql_name, DBRecord* result_records, uint32& result_count, uint32 result_max_count = 0);
+	int8* doQuery(std::vector<DBRecord*>& result_records, const std::string& sqlstr, uint32& result_count, uint32 result_max_count = 0);
+	int8* doQuery(const std::string& tablename, uint32& result_count);
+	int8* doQuery(const std::string& tablename, DBQueryResult* query_result);
+
 	int8* doInsert(const DBRecord& insert_record, const std::string& compare_record_names = "", const std::string& exclution_record_names = "");
 	int8* doUpdate(const DBRecord& update_record, const std::string& compare_record_names, uint32& update_rows, const std::string& update_record_names);
 	int8* doUpdate(const DBRecord& update_record, const std::string& sql_name, uint32& update_rows);
 	int8* doDelete(const DBRecord& delete_record, const std::string& compare_record_names, uint32& update_rows);
+protected:
+	int8* doQuery(const std::string& sqlstr, std::vector<DBRecord*>& result_records, uint32& result_count, uint32 result_max_count = 0, DBQueryResult* query_result = NULL);
 protected:
 	struct st_mysql*		mMysql;
 private:

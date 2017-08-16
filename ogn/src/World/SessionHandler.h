@@ -6,9 +6,9 @@ public:
 	SessionHandler();
 	~SessionHandler();
 protected:
-	int onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy);
-	int onNetSessionLeaveNotify(Session* session, NetSessionLeaveNotify* nfy);
-	int onNetLoingReq(Session* session, NetLoginReq* req);
-	int onNetPingNotify(Session* session, NetPingNotify* nfy);
+	int onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy);
+	int onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy);
+	int onNetLoingReq(Session* ssn, NetLoginReq* req);
+	int onNetPingNotify(Session* ssn, NetPingNotify* nfy);
 private:
 };

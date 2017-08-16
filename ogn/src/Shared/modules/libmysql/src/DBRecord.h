@@ -35,6 +35,28 @@ public:
 	int32 id = 0;
 };
 
+struct DBField
+{
+	char* dataptr = NULL;
+	int length = 0;
+};
+
+struct DBRowResult
+{
+	int fieldCount = 0;
+	DBField* fields = NULL;
+};
+
+struct DBQueryResult
+{
+	std::vector<std::string> fields;
+	int length = 0;
+	DBRowResult* rows = NULL;
+};
+
+void swapQueryResult(DBQueryResult* result, std::vector<DBRecord*>& result_records);
+void releaseResult(DBQueryResult* result);
+
 class DBResult
 {
 public:
@@ -88,19 +110,6 @@ public:
 public:\
 	const TableDescriptor* getDescriptor(); \
 
-//#define IMPLEMENT_TABLE_BEGIN(class_name, table_name) \
-//	FieldDescriptor class_name::s_##class_name##records = { \
-//	
-//#define IMPLEMENT_RECORD_INFO(class_name, member_name, value_type_, default_value, key_type_) \
-//{ #member_name, default_value, sizeof(object_->member_name), offsetof(class_name, member_name), value_type_, key_type_ },
-//
-//
-//#define IMPLEMENT_TABLE_END(class_name, table_name) \
-//}; \
-//	TableDescriptor class_name::s_##class_name##_descriptor = { \
-//	class_name::s_##class_name##records, sizeof(class_name::s_##class_name##records) / sizeof(FieldDescriptor), table_name\
-//}\
-
 #define IMPLEMENT_TABLE_BEGIN(class_name, table_name) \
 	const TableDescriptor* class_name::getDescriptor()\
 {\
@@ -123,9 +132,9 @@ public:\
 
 
 
-void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
-void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
-bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
-bool GetInsertSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names);
-bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names);
-bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names);
+void GetRecordValue(DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
+void GetValueRecord(DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
+bool GetQuerySqlCmd(char* sql_cmd, uint32& size, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
+bool GetInsertSqlCmd(char* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names);
+bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names);
+bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names);

@@ -49,7 +49,7 @@ public:
 	uint32 unShelvesTime = 0;
 	std::string datastr;
 
-	DECLARE_TABLE(DBUser)
+	DECLARE_TABLE(DBProduct)
 };
 
 #pragma pack()

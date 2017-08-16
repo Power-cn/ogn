@@ -6,10 +6,10 @@ class Player : public Entity
 {
 public:
 	uint32		playerId;
-	Session*	session;
+	Session*	ssn;
 
-	void setSession(Session* s) { session = s; }
-	Session* getSession() { return session; }
+	void setSession(Session* s) { ssn = s; }
+	Session* getSession() { return ssn; }
 	void setPlayerId(uint32 plrId) { playerId = plrId; }
 	uint32 getPlayerId() { return playerId; }
 protected:

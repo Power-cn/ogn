@@ -20,8 +20,9 @@ public:
 	virtual bool onSave(Player* player, Dictionary& bytes);
 	bool GetRun() { return mRun; }
 public:
-	void sendPacketToDB(Packet& packet, Session* session);
-	void doSessionLeaveWorld(Session* session);
+	void sendPacketToDB(Packet& packet, Session* ssn);
+	void sendPacketToDB(Packet& packet, Player* aPlr);
+	void doSessionLeaveWorld(Session* ssn);
 	void doPlayerLeaveWorld(Player* aPlr);
 	void doPlayerSave(Player* plr, Dictionary& bytes);
 protected:

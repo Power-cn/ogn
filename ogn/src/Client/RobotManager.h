@@ -24,6 +24,7 @@ protected:
 	int onNetEntityPropertyNotify(Robot* robot, NetEntityPropertyNotify* nfy);
 	int onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy);
 	int onNetFriendListRes(Robot* robot, NetFriendListRes* res);
+	int onNetProductListRes(Robot* robot, NetProductListRes* res);
 protected:
 	int32 onGmCmd(CmdEvent& e);
 	int32 onLogin(CmdEvent& e);

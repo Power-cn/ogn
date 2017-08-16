@@ -174,3 +174,21 @@ fun=function (play, s1, s2, s3)
 	sFriends:DoFriendsList(play);
 end
 });
+
+RegGm(
+{
+name = "sell";
+fun=function (play, s1, s2, s3)
+	local sShop = luaShop();
+	sShop:DoAddProduct(play, tonumber(s1));
+end
+});
+
+RegGm(
+{
+name = "productlst";
+fun=function (play, s1, s2, s3)
+	local sShop = luaShop();
+	sShop:DoFindProductList(play, tonumber(s1), tonumber(s2));
+end
+});

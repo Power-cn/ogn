@@ -8,7 +8,6 @@ IMPLEMENT_CLASS(DBRecord, EventDispatcher);
 bool DBRecord::operator >> (BinaryStream& bytes)
 {
 	return bytes << id;
-
 }
 
 bool DBRecord::operator<<(BinaryStream& bytes)
@@ -22,14 +21,42 @@ bool HasRecord(const std::string& record_list, const std::string& record)
 	return pos != std::string::npos;
 }
 
-void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize)
+void swapQueryResult(DBQueryResult* result, std::vector<DBRecord*>& result_records)
 {
-	MYSQL* sql = (MYSQL*)mysql;
+	for (int32 i = 0; i < result->length; ++i)
+	{
+		DBRowResult& rowResult = result->rows[i];
+		for (int32 j = 0; j < rowResult.fieldCount; ++j)
+		{
+			DBField& field = rowResult.fields[j];
+			
+		}
+	}
+}
+
+void releaseResult(DBQueryResult* result)
+{
+	for (int32 i = 0; i < result->length; ++i)
+	{
+		DBRowResult& rowResult = result->rows[i];
+		for (int32 j = 0; j < rowResult.fieldCount; ++j)
+		{
+			DBField& field = rowResult.fields[j];
+			SAFE_DELETE_ARRAY(field.dataptr);
+			field.length = 0;
+		}
+		SAFE_DELETE_ARRAY(rowResult.fields);
+	}
+	SAFE_DELETE_ARRAY(result->rows);
+	SAFE_DELETE(result);
+}
+
+void GetRecordValue(DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize)
+{
 	char* dataptr = (char*)(&record) + field.offset;
 
 	switch (field.typevalue)
 	{
-
 	case Variant::TypeBoolean:
 		sprintf_s(valuestr, valuestrlength, "%s", (dataptr[0] != 0) ? "TRUE" : "FALSE");
 		valuesize = (uint32)strlen(valuestr);
@@ -124,7 +151,7 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 
 			BinaryStream* buffer = (BinaryStream*)dataptr;
 			if (buffer->wpos() > 0)
-				valuesize += mysql_real_escape_string(sql, valuestr + valuesize, (char*)buffer->datas(), buffer->wpos());
+				valuesize += mysql_escape_string(valuestr + valuesize, (char*)buffer->datas(), buffer->wpos());
 			valuestr[valuesize++] = '\'';
 		}
 		break;
@@ -132,7 +159,7 @@ void GetRecordValue(void* mysql, DBRecord& record, const FieldDescriptor& field,
 	valuestr[valuesize] = 0;
 }
 
-void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 size)
+void GetValueRecord(DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 size)
 {
 	char* dataptr = (char*)&record + field.offset;
 	switch (field.typevalue)
@@ -185,21 +212,17 @@ void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field,
 		break;
 	case Variant::TypeDate:
 		if (valuestr) {
-			if (size <= 4 || valuestr[0] == 0 || memcmp(valuestr, "NULL", 4) == 0)
-			{
+			if (size <= 4 || valuestr[0] == 0 || memcmp(valuestr, "NULL", 4) == 0) {
 				*((time_t*)dataptr) = 0;
 			}
-			else
-			{
+			else {
 				tm tm1 = { 0 };
 				strptime(valuestr, "%Y-%m-%d %H:%M:%S", &tm1);
 
-				if (tm1.tm_year < 0)
-				{
+				if (tm1.tm_year < 0) {
 					*((time_t*)dataptr) = 0;
 				}
-				else
-				{
+				else {
 					*((time_t*)dataptr) = mktime(&tm1);
 				}
 			}
@@ -219,7 +242,7 @@ void GetValueRecord(void* mysql, DBRecord& record, const FieldDescriptor& field,
 	}
 }
 
-bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names)
+bool GetQuerySqlCmd(char* sql_cmd, uint32& size_, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names)
 {
 	const TableDescriptor& descriptor = *query_record.getDescriptor();
 	char cmd_select_[SQL_CMD_COUNT] = { 0 };
@@ -243,7 +266,7 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 		{
 			char value_[SQL_CMD_COUNT] = { 0 };
 			uint32 value_size_ = 0;
-			GetRecordValue(mysql, query_record, record, SQL_CMD_COUNT, value_, value_size_);
+			GetRecordValue(query_record, record, SQL_CMD_COUNT, value_, value_size_);
 			if (!cmd_where_[0])
 			{
 				sprintf_s(cmd_where_, SQL_CMD_COUNT, "where %s=", record.field);
@@ -281,7 +304,7 @@ bool GetQuerySqlCmd(void* mysql, char* sql_cmd, uint32& size_, DBRecord& query_r
 	return true;
 }
 
-bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names)
+bool GetInsertSqlCmd(int8* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names)
 {
 	const TableDescriptor& descriptor = *insert_record.getDescriptor();
 
@@ -324,7 +347,7 @@ bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_
 			insert_value_size_ += (uint32)strlen(", ");
 		}
 
-		GetRecordValue(mysql, insert_record, record, SQL_CMD_COUNT, value_str, value_str_size_);
+		GetRecordValue(insert_record, record, SQL_CMD_COUNT, value_str, value_str_size_);
 		//memcpy(insert_value_ + insert_value_size_, value_str, value_str_size_);
 		memcpy_s(insert_value_ + insert_value_size_, SQL_CMD_COUNT, value_str, value_str_size_);
 		insert_value_size_ += value_str_size_;
@@ -345,7 +368,7 @@ bool GetInsertSqlCmd(void* mysql, int8* sql_cmd, uint32& size, DBRecord& insert_
 	return true;
 }
 
-bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names)
+bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names)
 {
 	const TableDescriptor& descriptor = *update_record.getDescriptor();
 
@@ -363,7 +386,7 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 
 		if (HasRecord(update_record_names, record.field))
 		{
-			GetRecordValue(mysql, update_record, record, SQL_CMD_COUNT, value_, value_size_);
+			GetRecordValue(update_record, record, SQL_CMD_COUNT, value_, value_size_);
 
 			if (!set_value_[0])
 			{
@@ -383,7 +406,7 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 
 		if (HasRecord(compare_record_names, record.field))
 		{
-			GetRecordValue(mysql, update_record, record, SQL_CMD_COUNT, value_, value_size_);
+			GetRecordValue(update_record, record, SQL_CMD_COUNT, value_, value_size_);
 			if (!cmd_where_[0])
 			{
 				sprintf_s(cmd_where_, SQL_CMD_COUNT, " where %s=", record.field);
@@ -418,7 +441,7 @@ bool GetUpdateSqlCmd(void* mysql, char* sql_cmd, int32& size, DBRecord& update_r
 	return true;
 }
 
-bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names)
+bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names)
 {
 	const TableDescriptor& descriptor = *delete_record.getDescriptor();
 
@@ -433,7 +456,7 @@ bool GetDeleteSqlCmd(void* mysql, char* sql_cmd, uint32& size, DBRecord& delete_
 		FieldDescriptor& record = descriptor.records[i];
 		if (HasRecord(compare_record_names, record.field))
 		{
-			GetRecordValue(mysql, delete_record, record, SQL_CMD_COUNT, value_, value_size_);
+			GetRecordValue(delete_record, record, SQL_CMD_COUNT, value_, value_size_);
 
 			if (!cmd_where_[0])
 			{

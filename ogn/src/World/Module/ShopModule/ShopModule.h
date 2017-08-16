@@ -15,7 +15,7 @@ public:
 
 	void DoAddProduct(Player* aPlr, uint32 productId);
 	void DoFindProductList(Player* aPlr, uint32 idx, uint32 count);
-protected:
+public:
 	void OnSellProduct(Player* aPlr, Product* product);
 protected:
 	virtual bool Initialize();

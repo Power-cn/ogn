@@ -12,7 +12,7 @@ SessionHandler::SessionHandler()
 	REGISTER_EVENT(ID_NetSelectRoleReq, &SessionHandler::onNetSelectRoleReq, this);
 	REGISTER_EVENT(ID_NetQueryRoleReq, &SessionHandler::onNetQueryRoleReq, this);
 
-	REGISTER_EVENT(ID_NetQueryRoleReq, &SessionHandler::onNetQueryRoleReq, this);
+	REGISTER_EVENT(ID_NetSellProductReq, &SessionHandler::onNetSellProductReq, this);
 }
 
 SessionHandler::~SessionHandler()
@@ -20,15 +20,22 @@ SessionHandler::~SessionHandler()
 
 }
 
-int SessionHandler::onNetSessionEnterNotify(Session* session, NetSessionEnterNotify* nfy)
+int SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)
 {
-	LOG_INFO("ssnId %0.16llx enter world", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx enter world", ssn->getSessionId());
 	return 0;
 }
 
 int SessionHandler::onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy)
 {
 	LOG_INFO("ssnId %0.16llx leave world", ssn->getSessionId());
+
+	Player* aPlr = ssn->getPlayer();
+	if (aPlr)
+	{
+		aPlr->setSession(NULL);
+		ssn->setPlayer(NULL);
+	}
 
 	INSTANCE(SessionManager).removeSessionsBySocket(ssn->getSocketId(), ssn);
 	return 0;

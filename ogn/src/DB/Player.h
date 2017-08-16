@@ -7,14 +7,14 @@ class Player : public Entity
 public:
 	uint32		accId = 0;
 	uint32		mUserId = 0;
-	Session*	session;
+	Session*	ssn;
 	void sendPacket(Packet& packet);
 
-	void setSession(Session* s) { session = s; }
+	void setSession(Session* s) { ssn = s; }
 	void setAccId(uint32 accId) { accId = accId; }
 	void setUserId(uint32 userId) { mUserId = userId; }
 
-	Session* getSession() { return session; }
+	Session* getSession() { return ssn; }
 	uint32 getAccId() { return accId; }
 	uint32 getUserId() { return mUserId; }
 protected:

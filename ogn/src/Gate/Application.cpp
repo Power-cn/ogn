@@ -112,17 +112,17 @@ int Application::onGateAccept(SocketEvent& e)
 		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
 	}	
-	Session* session = INSTANCE(SessionManager).createSession(e.socket, MakeSsnId());
-	if (!session)
+	Session* ssn = INSTANCE(SessionManager).createSession(e.socket, MakeSsnId());
+	if (!ssn)
 		return 0;
-	session = INSTANCE(SessionManager).addSessionBySocket(e.socket->getSocketId(), session);
-	if (!session)
+	ssn = INSTANCE(SessionManager).addSessionBySocket(e.socket->getSocketId(), ssn);
+	if (!ssn)
 		return 0;
 
 	NetSessionEnterNotify nfy;
 	nfy.host = e.socket->getIP();
-	LOG_INFO("ssnId %0.16llx [%s] accept", session->getSessionId(), e.socket->getIP());
-	sendPacketToWorld(nfy, session);
+	LOG_INFO("ssnId %0.16llx [%s] accept", ssn->getSessionId(), e.socket->getIP());
+	sendPacketToWorld(nfy, ssn);
 	return 0;
 }
 
@@ -133,8 +133,8 @@ int Application::onGateRecv(SocketEvent& e)
 		return 0;
 	}
 
-	Session* session = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
-	if (session == NULL)
+	Session* ssn = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
+	if (ssn == NULL)
 	{
 		INSTANCE(Network).closesocket(e.socket->getSocketId());
 		return 0;
@@ -145,7 +145,7 @@ int Application::onGateRecv(SocketEvent& e)
 	//AES aes(sKey);
 	//aes.InvCipher((unsigned char*)e.data, e.count);
 	Shared::XOR((char*)e.data, e.count, sKey);
-	sendBufferToWorld((int8*)e.data, e.count, session);
+	sendBufferToWorld((int8*)e.data, e.count, ssn);
 	/*
 	*********** ½âÃÜ ***********
 	*/
@@ -155,7 +155,7 @@ int Application::onGateRecv(SocketEvent& e)
 	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
+	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", ssn->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
 
 	return 0;
@@ -163,17 +163,17 @@ int Application::onGateRecv(SocketEvent& e)
 
 int Application::onGateExit(SocketEvent& e)
 {
-	Session* session = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
-	if (!session)
+	Session* ssn = INSTANCE(SessionManager).getSessionBySocket(e.socket->getSocketId());
+	if (!ssn)
 		return 0;
 
-	LOG_INFO("ssnId %0.16llx leave", session->getSessionId());
+	LOG_INFO("ssnId %0.16llx leave", ssn->getSessionId());
 
 	NetSessionLeaveNotify nfy;
-	sendPacketToWorld(nfy, session);
+	sendPacketToWorld(nfy, ssn);
 
 	INSTANCE(SessionManager).removeSessionBySocket(e.socket->getSocketId());
-	INSTANCE(SessionManager).removeSession(session->getSessionId());
+	INSTANCE(SessionManager).removeSession(ssn->getSessionId());
 	return 0;
 }
 
@@ -195,14 +195,14 @@ int Application::onWorldRecv(SocketEvent& e)
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
 
-	Session* session = INSTANCE(SessionManager).getSession(sessionId);
+	Session* ssn = INSTANCE(SessionManager).getSession(sessionId);
 	do
 	{
-		if (session == NULL)
+		if (ssn == NULL)
 			break;
 
 #ifdef _DEBUG
-		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", session->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
+		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", ssn->getSessionId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
 #endif // DEBUG
 
 		if (msgId == ID_NetSessionLeaveNotify)
@@ -214,7 +214,7 @@ int Application::onWorldRecv(SocketEvent& e)
 		//AES aes(sKey);
 		//aes.Cipher((unsigned char*)e.data + rpos, packetCount);
 		Shared::XOR((int8*)e.data + rpos, packetCount, sKey);
-		session->sendBuffer((int8*)e.data + rpos, packetCount);
+		ssn->sendBuffer((int8*)e.data + rpos, packetCount);
 		/*
 		*********** ¼ÓÃÜ ***********
 		*/
@@ -222,13 +222,13 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	} while (false);
 
-	if (!session)
+	if (!ssn)
 		return 0;
 
 
 	NetSessionLeaveNotify nfy;
-	sendPacketToWorld(nfy, session);
-	INSTANCE(Network).closesocket(session->getSocketId());
+	sendPacketToWorld(nfy, ssn);
+	INSTANCE(Network).closesocket(ssn->getSocketId());
 	return 0;
 }
 
@@ -238,8 +238,8 @@ int Application::onWorldExit(SocketEvent& e)
 	std::map<uint64, Session*>  mapSession = INSTANCE(SessionManager).getMapSession();
 	for (auto& itr : mapSession)
 	{
-		Session* session = itr.second;
-		INSTANCE(Network).closesocket(session->getSocketId());
+		Session* ssn = itr.second;
+		INSTANCE(Network).closesocket(ssn->getSocketId());
 	}
 
 	LOG_DEBUG(LogSystem::csl_color_red, "world exit");

@@ -24,6 +24,7 @@ RobotManager::RobotManager()
 	addEventListener(ID_NetChatMsgNotify, (EventCallbackProcess)&RobotManager::onNetChatMsgNotify, this);
 
 	addEventListener(ID_NetFriendListRes, (EventCallbackProcess)&RobotManager::onNetFriendListRes, this);
+	addEventListener(ID_NetProductListRes, (EventCallbackProcess)&RobotManager::onNetProductListRes, this);
 
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
@@ -99,6 +100,13 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		{
 			DBRoleInfo& info = res->roleInfos[i];
 			LOG_DEBUG(LogSystem::csl_color_green, "userId:%d user:%s", info.id, info.name.c_str());
+			if (i == 0)
+			{
+				NetSelectRoleReq req;
+				req.accId = mCurRobot->mAccountId;
+				req.userId = info.id;
+				mCurRobot->sendPacket(req);
+			}
 		}
 
 		/*
@@ -250,6 +258,17 @@ int RobotManager::onNetFriendListRes(Robot* robot, NetFriendListRes* res)
 	{
 		FriendInfo& info = res->friendInfos[i];
 		LOG_DEBUG(LogSystem::csl_color_green, "\ngroupId:%d\nuserId:%d\nname:%s\n%s\n", info.groupId, info.userId, info.name.c_str(), info.state == 1 ? "在线" : "离线");
+	}
+	return 0;
+}
+
+int RobotManager::onNetProductListRes(Robot* robot, NetProductListRes* res)
+{
+	LOG_DEBUG(LogSystem::csl_color_green, "商品个数:%d", res->productInfos.size());
+	for (uint32 i = 0; i < res->productInfos.size(); ++i)
+	{
+		ProductInfo& info = res->productInfos[i];
+		LOG_DEBUG(LogSystem::csl_color_green, "\ninsId:%d\npductId:%d\nsellUid:%d\n", info.productInsId, info.productId, info.sellUserId);
 	}
 	return 0;
 }

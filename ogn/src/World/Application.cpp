@@ -239,47 +239,52 @@ bool Application::onSave(Player* player, Dictionary& bytes)
 	return true;
 }
 
-void Application::sendPacketToDB(Packet& packet, Session* session)
+void Application::sendPacketToDB(Packet& packet, Session* ssn)
 {
 	if (dbServer == NULL || dbServer->getSocket() == NULL)
 		return;
-	session->sendPacketToTarget(packet, dbServer->getSocket());
+	ssn->sendPacketToTarget(packet, dbServer->getSocket());
 }
 
-void Application::doSessionLeaveWorld(Session* session)
+void Application::sendPacketToDB(Packet& packet, Player* aPlr)
 {
-	LOG_INFO("ssnId %0.16llx leave world", session->getSessionId());
-	Player* plr = session->getPlayer();
+
+}
+
+void Application::doSessionLeaveWorld(Session* ssn)
+{
+	LOG_INFO("ssnId %0.16llx leave world", ssn->getSessionId());
+	Player* plr = ssn->getPlayer();
 	if (plr) {
 		doPlayerLeaveWorld(plr);
 	}
 
 	NetSessionLeaveNotify nfy;
 	
-	sendPacketToDB(nfy, session);
-	session->sendPacketToWorld(nfy);
+	sendPacketToDB(nfy, ssn);
+	ssn->sendPacketToWorld(nfy);
 
-	sSsnMgr.removeSessionsBySocket(session->getSocketId(), session);
-	sSsnMgr.removeSession(session->getSessionId());
+	sSsnMgr.removeSessionsBySocket(ssn->getSocketId(), ssn);
+	sSsnMgr.removeSession(ssn->getSessionId());
 }
 
 void Application::doPlayerLeaveWorld(Player* aPlr)
 {
-	aPlr->SetOnline(false);
 	aPlr->SetOfflineTimer(DateTime::Now());
 	Dictionary dict;
-	doPlayerSave(aPlr, dict);
 	onLeaveWorld(aPlr, dict);
+	doPlayerSave(aPlr, dict);
+	aPlr->SetOnline(false);
 	aPlr->unbindSession();
 }
 
 void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 {
-	Session* session = plr->getSession();
-	if (session == NULL)
+	Session* ssn = plr->getSession();
+	if (ssn == NULL)
 		return;
 	onSave(plr, bytes);
-	BinaryStream stream(2048);
+	BinaryStream stream;
 	stream << bytes;
 
 	NetPlayerSaveNotify nfy;
@@ -289,7 +294,7 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	info.property.write(stream.datas(), stream.wpos());
 	nfy.accountId = plr->getAccId();
 	nfy.roleInfos.push_back(info);
-	sendPacketToDB(nfy, session);
+	sendPacketToDB(nfy, ssn);
 }
 
 int Application::onWorldAccept(SocketEvent& e)
@@ -309,20 +314,20 @@ int Application::onWorldRecv(SocketEvent& e)
 	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-	Session* session = sSsnMgr.getSession(sessionId);
+	Session* ssn = sSsnMgr.getSession(sessionId);
 	do 
 	{
 
-	if (session == NULL && msgId == ID_NetSessionEnterNotify)
+	if (ssn == NULL && msgId == ID_NetSessionEnterNotify)
 	{
-		session = sSsnMgr.createSession(e.socket, sessionId);
-		if (session == NULL)
+		ssn = sSsnMgr.createSession(e.socket, sessionId);
+		if (ssn == NULL)
 			return 0;
 
-		sSsnMgr.addSessionsBySocket(e.socket->getSocketId(), session);
+		sSsnMgr.addSessionsBySocket(e.socket->getSocketId(), ssn);
 	}
 
-	if (session == NULL)
+	if (ssn == NULL)
 		break;
 
 	Packet* pack = sPacketMgr.Alloc(msgId);
@@ -337,12 +342,12 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	if (checkSessionMessage(msgId))
 	{
-		if (worldServer->dispatch(pack->getMsgId(), session, pack) == 0)
+		if (worldServer->dispatch(pack->getMsgId(), ssn, pack) == 0)
 			LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
 	}
 	else
 	{
-		Player* plr = session->getPlayer();
+		Player* plr = ssn->getPlayer();
 		if (plr) {
 			if (worldServer->dispatch(pack->getMsgId(), plr, pack) == 0)
 				LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
@@ -355,10 +360,10 @@ int Application::onWorldRecv(SocketEvent& e)
 	return 0;
 	} while (false);
 
-	if (session == NULL)
+	if (ssn == NULL)
 		return 0;
 
-	doSessionLeaveWorld(session);
+	doSessionLeaveWorld(ssn);
 	return 0;
 }
 
@@ -396,10 +401,10 @@ int Application::onDBRecv(SocketEvent & e)
 	int32 rpos = out.rpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
-	Session* session = INSTANCE(SessionManager).getSession(sessionId);
-	if (!session) return 0;
+	Session* ssn = INSTANCE(SessionManager).getSession(sessionId);
+	if (!ssn) return 0;
 
-	Player* player = session->getPlayer();
+	Player* player = ssn->getPlayer();
 	if (!player && msgId != ID_NetLoginRes) return 0;
 
 	do
@@ -417,12 +422,12 @@ int Application::onDBRecv(SocketEvent & e)
 
 	if (msgId == ID_NetLoginRes)
 	{
-		if (dbServer->dispatch(pack->getMsgId(), session, pack) == 0)
+		if (dbServer->dispatch(pack->getMsgId(), ssn, pack) == 0)
 			LOG_WARN("[%d] not register func");
 	}
-	else if (session->getPlayer())
+	else if (ssn->getPlayer())
 	{
-		if (dbServer->dispatch(pack->getMsgId(), session->getPlayer(), pack) == 0)
+		if (dbServer->dispatch(pack->getMsgId(), ssn->getPlayer(), pack) == 0)
 			LOG_WARN("[%d] not register func");
 	}
 	
@@ -432,10 +437,10 @@ int Application::onDBRecv(SocketEvent & e)
 
 	} while (false);
 
-	if (session == NULL)
+	if (ssn == NULL)
 		return 0;
 
-	doSessionLeaveWorld(session);
+	doSessionLeaveWorld(ssn);
 	return 0;
 }
 
@@ -473,11 +478,11 @@ int32 Application::onClose(CmdEvent& e)
 	for (auto& itr : mapPlayer)
 	{
 		Player* plr = itr.second;
-		Session* session = plr->getSession();
+		Session* ssn = plr->getSession();
 
 		NetSessionLeaveNotify nfy;
-		if (session == NULL) continue;
-		session->sendPacketToWorld(nfy);
+		if (ssn == NULL) continue;
+		ssn->sendPacketToWorld(nfy);
 		//doSessionLeaveWorld(plr->getSession());
 	}
 	return 0;

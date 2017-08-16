@@ -161,116 +161,13 @@ int8* DBConnector::Delete(const DBRecord& delete_record_, const int8* compare_re
 
 void DBConnector::process()
 {
-
-	if (taskQueryQueue.size() > 0)
-	{
-		_mutex.lock();
-		QueryResult* query = taskQueryQueue.front();
-		taskQueryQueue.pop();
-		_mutex.unlock();
-
-		int8* err = 0;
-
-		if (query->cmd.length() > 0)
-		{
-			err = doQuery(*query->record, query->cmd, query->records, *query->queryCount, (uint32)query->resultCount);
-		}
-		else
-		{
-			//if (query->compareRecord.length() > 0)
-			//{
-			//	err = doQuery(*query->record, query->records, *query->queryCount, query->compareRecord, query->resultRecord, (uint32)query->resultCount);
-			//}
-			//else
-			//{
-			//	err = doQuery(*query->record, query->records, *query->queryCount, (uint32)query->resultCount);
-			//}
-
-		}
-
-		if (err)
-			query->err = err;
-
-
-		_mutex.lock();
-		completeQueryQueue.push(query);
-		_mutex.unlock();
-	}
-
-	if (taskInsertQueue.size() > 0)
-	{
-		_mutex.lock();
-		InsertResult* insert = taskInsertQueue.front();
-		taskInsertQueue.pop();
-		_mutex.unlock();
-
-		int8* err = 0;
-		if (insert->compareRecord.length() > 0)
-		{
-			err = doInsert(*insert->record, insert->compareRecord.c_str(), insert->exclutionRecord.c_str());
-
-		}
-		else
-		{
-			err = doInsert(*insert->record, "", insert->exclutionRecord.c_str());
-		}
-		if (err)
-			insert->err = err;
-
-		_mutex.lock();
-		completeInsertQueue.push(insert);
-		_mutex.unlock();
-	}
-
-	if (taskUpdateQueue.size() > 0)
-	{
-		_mutex.lock();
-		UpdateResult* update = taskUpdateQueue.front();
-		taskUpdateQueue.pop();
-		_mutex.unlock();
-
-		int8* err = 0;
-		if (update->cmd.length() > 0)
-		{
-			err = doUpdate(*update->record, update->cmd.c_str(), *update->updateRows);
-		}
-		else
-		{
-			err = doUpdate(*update->record, (const int8*)update->compareRecord.c_str(), *update->updateRows, (const int8*)update->updateRecord.c_str());
-		}
-		if (err)
-			update->err = err;
-
-		_mutex.lock();
-		completeUpdateQueue.push(update);
-		_mutex.unlock();
-	}
-
-	if (taskDeleteQueue.size() > 0)
-	{
-		_mutex.lock();
-		DeleteResult* deleteResult = taskDeleteQueue.front();
-		taskDeleteQueue.pop();
-		_mutex.unlock();
-
-		int8* err = 0;
-		err = doDelete(*deleteResult->record, deleteResult->compareRecord.c_str(), *deleteResult->deleteRows);
-		if (err)
-			deleteResult->err = err;
-
-		_mutex.lock();
-		completeDeleteQueue.push(deleteResult);
-		_mutex.unlock();
-	}
-
-
 }
 
 int8* DBConnector::doQuery(const DBRecord& query_record, std::vector<DBRecord*>& result_records, uint32& result_count, const uint32 result_max_count /*= 0*/)
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 sql_size_ = 0;
-	if (!GetQuerySqlCmd(mMysql, sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, NULL, NULL))
+	if (!GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, NULL, NULL))
 	{
 		return "";
 	}
@@ -281,108 +178,13 @@ int8* DBConnector::doQuery(const DBRecord& query_record, std::vector<DBRecord*>&
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 sql_size_ = 0;
-	GetQuerySqlCmd(mMysql, sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, compare_record_names.c_str(), return_record_names.c_str());
-	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_))) {
-		return (int8*)mysql_error(mMysql);
-	}
-
-	MYSQL_RES*  result_ = mysql_store_result(mMysql);
-	if (result_ == NULL) {
-		const int8* err = mysql_error(mMysql);
-		if (err || strlen(err) == 0)
-			return NULL;
-		return (int8*)err;
-	}
-
-	int32 num_rows_ = (int32)mysql_num_rows(result_);
-	if (result_max_count && num_rows_ > result_max_count)
-		num_rows_ = result_max_count;
-
-	if (result_records.size() > 0) {
-
-		uint32 num_fields = mysql_num_fields(result_);
-		std::vector<std::string> fields;
-		MYSQL_FIELD* field = mysql_fetch_field(result_);
-		while (field)
-		{
-			fields.push_back(field->name);
-			field = mysql_fetch_field(result_);
-		}
-		const TableDescriptor& descriptor_ = *((DBRecord&)query_record).getDescriptor();
-		MYSQL_ROW row_ = 0;
-		for (int32 idxRow = 0; idxRow < num_rows_; ++idxRow) {
-
-			row_ = mysql_fetch_row(result_);
-			if (!row_) return "fetch result failed";
-
-			unsigned long* lengths = mysql_fetch_lengths(result_);
-			for (int32 idxCol = 0; idxCol < fields.size(); idxCol++)
-			{
-				FieldDescriptor* record = descriptor_.getFieldDescriptor(fields[idxCol]);
-				if (record == NULL) continue;
-				GetValueRecord(mMysql, *result_records[idxRow], (const FieldDescriptor&)*record, row_[idxCol], lengths[idxCol]);
-			}
-		}
-	}
-
-	result_count = num_rows_;
-	mysql_free_result(result_);
-	return 0;
+	GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, compare_record_names.c_str(), return_record_names.c_str());
+	return doQuery(sql_cmd_, result_records, result_count, result_max_count);
 }
 
-int8* DBConnector::doQuery(const DBRecord& query_record, const std::string& sql_name, DBRecord* result_records, uint32& result_count, uint32 result_max_count)
+int8* DBConnector::doQuery(std::vector<DBRecord *>& result_records, const std::string& sqlstr, uint32& result_count, uint32 result_max_count /* = 0 */)
 {
-	if (int iError = mysql_real_query(mMysql, sql_name.c_str(), (unsigned long)sql_name.length()))
-	{
-		return (int8*)mysql_error(mMysql);
-	}
-
-	MYSQL_RES* result_ = mysql_store_result(mMysql);
-	if (result_ == NULL)
-	{
-		const char* err = mysql_error(mMysql);
-		if (err || strlen(err) == 0)
-			return NULL;
-		else
-			return (int8*)err;
-	}
-
-	uint32 num_rows_ = (uint32)mysql_num_rows(result_);
-	if (result_max_count && num_rows_ > result_max_count)
-	{
-		num_rows_ = result_max_count;
-	}
-
-	if (result_records)
-	{
-		const TableDescriptor& descriptor_ = *((DBRecord&)query_record).getDescriptor();
-		MYSQL_ROW row_ = 0;
-		for (uint32 index_ = 0; index_ < num_rows_; ++index_)
-		{
-			if (!(row_ = mysql_fetch_row(result_)))
-			{
-				return "fetch result failed\n";
-			}
-			unsigned long* lengths = mysql_fetch_lengths(result_);
-
-			size_t col_index_ = 0;
-			MYSQL_FIELD* field = mysql_fetch_field(result_);
-			while (field)
-			{
-				FieldDescriptor* record = descriptor_.getFieldDescriptor(field->name);
-				if (record)
-					GetValueRecord(mMysql, result_records[index_], (const FieldDescriptor&)*record, row_[col_index_], lengths[col_index_]);
-
-				field = mysql_fetch_field(result_);
-				col_index_++;
-			}
-		}
-	}
-
-	result_count = num_rows_;
-
-	mysql_free_result(result_);
-	return 0;
+	return doQuery(sqlstr, result_records, result_count, result_max_count);
 }
 
 int8* DBConnector::doQuery(const DBRecord& query_record, DBRecord& result_record, uint32& result_count, const uint32 result_max_count /*= 0*/)
@@ -399,6 +201,112 @@ int8* DBConnector::doQuery(const DBRecord& query_record, DBRecord& result_record
 	return doQuery(query_record, result_records, result_count, compare_record_names, return_record_names, result_max_count);
 }
 
+int8* DBConnector::doQuery(const std::string& tablename, uint32& result_count)
+{
+	char sqlstr[256] = {};
+	sprintf_s(sqlstr, 256, "select count(*) from %s", tablename.c_str());
+	if (int iError = mysql_real_query(mMysql, sqlstr, (unsigned long)strlen(sqlstr))) {
+		return (int8*)mysql_error(mMysql);
+	}
+	MYSQL_RES*  result_ = mysql_store_result(mMysql);
+	if (result_ == NULL) {
+		const int8* err = mysql_error(mMysql);
+		if (err || strlen(err) == 0)
+			return NULL;
+		return (int8*)err;
+	}
+	result_count = (int32)mysql_num_rows(result_);
+	mysql_free_result(result_);
+	return 0;
+}
+
+int8* DBConnector::doQuery(const std::string& tablename, DBQueryResult* query_result)
+{
+	char sqlstr[256] = {};
+	sprintf_s(sqlstr, 256, "select * from %s", tablename.c_str());
+	uint32 result_count = 0;
+	uint32 result_max_count = 0;
+	std::vector<DBRecord *> result_records;
+	return doQuery(sqlstr, result_records, result_count, result_max_count, query_result);
+}
+
+int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& result_records, uint32& result_count, uint32 result_max_count /* = 0 */, DBQueryResult* query_result /* = NULL */)
+{
+	int32 iError = mysql_real_query(mMysql, sqlstr.c_str(), (unsigned long)sqlstr.length());
+	if (iError){
+		return (int8*)mysql_error(mMysql);
+	}
+
+	MYSQL_RES*  result_ = mysql_store_result(mMysql);
+	if (result_ == NULL) {
+		const int8* err = mysql_error(mMysql);
+		if (err || strlen(err) == 0)
+			return NULL;
+		return (int8*)err;
+	}
+
+	int32 num_rows_ = (int32)mysql_num_rows(result_);
+	if (result_max_count && num_rows_ > result_max_count)
+		num_rows_ = result_max_count;
+	
+	uint32 num_fields = mysql_num_fields(result_);
+	std::vector<std::string> fields;
+	MYSQL_FIELD* field = mysql_fetch_field(result_);
+	while (field)
+	{
+		fields.push_back(field->name);
+		field = mysql_fetch_field(result_);
+	}
+
+	if (result_records.size() > 0 && query_result == NULL) {
+
+		const TableDescriptor& descriptor_ = *(result_records[0]->getDescriptor());
+		MYSQL_ROW row_ = 0;
+		for (int32 idxRow = 0; idxRow < num_rows_; ++idxRow) {
+
+			row_ = mysql_fetch_row(result_);
+			if (!row_) return "fetch result failed";
+			unsigned long* lengths = mysql_fetch_lengths(result_);
+			for (int32 idxCol = 0; idxCol < fields.size(); idxCol++)
+			{
+				FieldDescriptor* record = descriptor_.getFieldDescriptor(fields[idxCol]);
+				if (record == NULL) continue;
+				GetValueRecord(*result_records[idxRow], (const FieldDescriptor&)*record, row_[idxCol], lengths[idxCol]);
+			}
+		}
+	}
+	else
+	{
+		query_result->fields = fields;
+		query_result->length = num_rows_;
+		query_result->rows = new DBRowResult[query_result->length];
+
+		const TableDescriptor& descriptor_ = *(result_records[0]->getDescriptor());
+		MYSQL_ROW row_ = 0;
+		for (int32 idxRow = 0; idxRow < num_rows_; ++idxRow) {
+
+			row_ = mysql_fetch_row(result_);
+			if (!row_) return "fetch result failed";
+			DBRowResult& dbRowResult = query_result->rows[idxRow];
+			dbRowResult.fieldCount = num_fields;
+			dbRowResult.fields = new DBField[dbRowResult.fieldCount];
+
+			unsigned long* lengths = mysql_fetch_lengths(result_);
+			for (int32 idxCol = 0; idxCol < fields.size(); idxCol++)
+			{
+				DBField& dbField = dbRowResult.fields[idxCol];
+				dbField.length = lengths[idxCol];
+				dbField.dataptr = new char[dbField.length];
+				memcpy(dbField.dataptr, row_[idxCol], dbField.length);
+			}
+		}
+	}
+
+	result_count = num_rows_;
+	mysql_free_result(result_);
+	return 0;
+}
+
 int8* DBConnector::doInsert(const DBRecord& insert_record, const std::string& compare_record_names /* = "" */, const std::string& exclution_record_names /* = "" */)
 {
 	if (exclution_record_names.length() > 0)
@@ -413,7 +321,7 @@ int8* DBConnector::doInsert(const DBRecord& insert_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 size_ = 0;
 
-	if (!GetInsertSqlCmd(mMysql, sql_cmd_, size_, (DBRecord&)insert_record, compare_record_names.c_str()))
+	if (!GetInsertSqlCmd(sql_cmd_, size_, (DBRecord&)insert_record, compare_record_names.c_str()))
 		return "error get insert sql cmd .";
 
 	if (int err = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))
@@ -430,7 +338,7 @@ int8* DBConnector::doUpdate(const DBRecord& update_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	int32 size_ = 0;
 
-	if (!GetUpdateSqlCmd(mMysql, sql_cmd_, size_, (DBRecord&)update_record, compare_record_names.c_str(), update_record_names.c_str()))
+	if (!GetUpdateSqlCmd(sql_cmd_, size_, (DBRecord&)update_record, compare_record_names.c_str(), update_record_names.c_str()))
 		return "";
 
 	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))
@@ -451,7 +359,7 @@ int8* DBConnector::doDelete(const DBRecord& delete_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 size_ = 0;
 
-	if (!GetDeleteSqlCmd(mMysql, sql_cmd_, size_, (DBRecord&)delete_record, compare_record_names))
+	if (!GetDeleteSqlCmd(sql_cmd_, size_, (DBRecord&)delete_record, compare_record_names))
 		return "";
 
 	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))

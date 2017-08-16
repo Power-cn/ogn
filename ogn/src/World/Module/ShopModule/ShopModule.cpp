@@ -15,7 +15,7 @@ Product* ShopModule::AddProduct(Product* product)
 {
 	if (FindProduct(product->mInsId)) return NULL;
 	mMapProduct[product->mInsId] = product;
-	return NULL;
+	return product;
 }
 
 Product* ShopModule::FindProduct(uint32 insId)
