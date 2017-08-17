@@ -9,6 +9,9 @@ public:
 	~DBHandler();
 	void doRegister();
 protected:
+	int32 onNetProductListRes(Socket* sck, NetProductListRes* res);
+
+protected:
 	int32 onNetNetLoginRes(Session* ssn, NetLoginRes* res);
 protected:
 	int32 onNetCreateRoleRes(Player* aPlr, NetCreateRoleRes* res);

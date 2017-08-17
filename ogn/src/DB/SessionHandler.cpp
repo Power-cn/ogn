@@ -3,6 +3,7 @@
 #define REGISTER_EVENT(msg, cb, obj) INSTANCE(Application).getDBServer()->addEventListener(msg, (EventCallbackProcess)cb, obj)
 SessionHandler::SessionHandler()
 {
+	REGISTER_EVENT(ID_NetProductListReq, &SessionHandler::onNetProductListReq, this);
 	REGISTER_EVENT(ID_NetSessionEnterNotify, &SessionHandler::onNetSessionEnterNotify, this);
 	REGISTER_EVENT(ID_NetSessionLeaveNotify, &SessionHandler::onNetSessionLeaveNotify, this);
 	REGISTER_EVENT(ID_NetPlayerSaveNotify, &SessionHandler::onNetPlayerSaveNotify, this);
@@ -18,6 +19,37 @@ SessionHandler::SessionHandler()
 SessionHandler::~SessionHandler()
 {
 
+}
+
+int32 SessionHandler::onNetProductListReq(Socket* sck, NetProductListReq* req)
+{
+	NetProductListRes res;
+	DBQueryResult* result = new DBQueryResult;
+	char* err = sDBConnector.doQuery(DBProduct::getDescriptor().tableName, result);
+	if (err)
+	{
+		LOG_ERROR(err);
+	}
+	DBProduct* dbProducts = swapQueryResult<DBProduct>(result);
+	for (uint32 i = 0; i < result->length; ++i)
+	{
+		DBProduct& dbProduct = dbProducts[i];
+		ProductInfo info;
+		info.productInsId = dbProduct.id;
+		info.productId = dbProduct.productId;
+		info.sellUserId = dbProduct.userId;
+		info.buyUserId = dbProduct.buyUserId;
+		info.shelvesTime = dbProduct.shelvesTime;
+		info.unShelvesTime = dbProduct.unShelvesTime;
+		res.productInfos.push_back(info);
+	}
+	sApp.sendPacketToTarget(res, sck);
+
+
+	SAFE_DELETE_ARRAY(dbProducts);
+	releaseResult(result);
+	result = NULL;
+	return 0;
 }
 
 int32 SessionHandler::onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy)

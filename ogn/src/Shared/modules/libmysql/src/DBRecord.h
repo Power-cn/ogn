@@ -28,7 +28,8 @@ class DBRecord : public EventDispatcher
 {
 	DECLARE_CLASS(DBRecord)
 public:
-	virtual const TableDescriptor* getDescriptor()  { static TableDescriptor desc; return &desc; }
+	static TableDescriptor& getDescriptor() { static TableDescriptor desc; return desc; }
+	virtual TableDescriptor& getThisDescriptor()  { return DBRecord::getDescriptor(); }
 	virtual bool operator >> (BinaryStream& bytes);
 	virtual bool operator << (BinaryStream& bytes);
 public:
@@ -54,7 +55,27 @@ struct DBQueryResult
 	DBRowResult* rows = NULL;
 };
 
-void swapQueryResult(DBQueryResult* result, std::vector<DBRecord*>& result_records);
+template<class T>
+T* swapQueryResult(DBQueryResult* result)
+{
+	if (result->length <= 0) return NULL;
+
+	T* dest = new T[result->length];
+	TableDescriptor& descriptor_ = T::getDescriptor();
+	for (int32 i = 0; i < result->length; ++i)
+	{
+		DBRowResult& rowResult = result->rows[i];
+		for (int32 j = 0; j < rowResult.fieldCount; ++j)
+		{
+			FieldDescriptor* record = descriptor_.getFieldDescriptor(result->fields[j]);
+			if (record == NULL) continue;
+			DBField& field = rowResult.fields[j];
+			GetValueRecord(dest[i], (const FieldDescriptor&)*record, field.dataptr, field.length);
+		}
+	}
+	return dest;
+}
+
 void releaseResult(DBQueryResult* result);
 
 class DBResult
@@ -108,10 +129,14 @@ public:
 
 #define DECLARE_TABLE(class_name)\
 public:\
-	const TableDescriptor* getDescriptor(); \
+	TableDescriptor& getThisDescriptor(); \
+	static TableDescriptor& getDescriptor(); \
 
 #define IMPLEMENT_TABLE_BEGIN(class_name, table_name) \
-	const TableDescriptor* class_name::getDescriptor()\
+	TableDescriptor& class_name::getThisDescriptor(){\
+	return class_name::getDescriptor();\
+}\
+	TableDescriptor& class_name::getDescriptor()\
 {\
 	class_name* object_ = 0; \
 	static FieldDescriptor s_##class_name##records[] = {
@@ -122,7 +147,7 @@ public:\
 #define IMPLEMENT_TABLE_END(class_name, table_name) \
 }; \
 	static TableDescriptor s_##class_name##_descriptor = { s_##class_name##records, sizeof(s_##class_name##records) / sizeof(FieldDescriptor), table_name }; \
-	return &s_##class_name##_descriptor; \
+	return s_##class_name##_descriptor; \
 }
 
 

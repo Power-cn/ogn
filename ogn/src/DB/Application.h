@@ -18,6 +18,7 @@ public:
 	SocketListener* getDBServer() { return dbServer; }
 	DBConnector* getDBConnector() { return dbConnector; }
 	bool GetRun() { return mRun; }
+	void sendPacketToTarget(Packet& packet, Socket* socket);
 protected:
 	int32 onDBAccept(SocketEvent& e);
 	int32 onDBRecv(SocketEvent& e);

@@ -7,12 +7,14 @@ public:
 	SessionHandler();
 	~SessionHandler();
 protected:
+	// sck
+	int32 onNetProductListReq(Socket* sck, NetProductListReq* req);
+protected:
 
 	int32 onNetSessionEnterNotify(Session* ssn, NetSessionEnterNotify* nfy);
 	int32 onNetSessionLeaveNotify(Session* ssn, NetSessionLeaveNotify* nfy);
-
 	int32 onNetLoginReq(Session* ssn, NetLoginReq* req);
-
+protected:
 	int32 onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req);
 	int32 onNetSelectRoleReq(Player* aPlr, NetSelectRoleReq* req);
 	int32 onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req);

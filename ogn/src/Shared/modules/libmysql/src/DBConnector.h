@@ -37,6 +37,7 @@ public:
 
 	int8* doQuery(std::vector<DBRecord*>& result_records, const std::string& sqlstr, uint32& result_count, uint32 result_max_count = 0);
 	int8* doQuery(const std::string& tablename, uint32& result_count);
+
 	int8* doQuery(const std::string& tablename, DBQueryResult* query_result);
 
 	int8* doInsert(const DBRecord& insert_record, const std::string& compare_record_names = "", const std::string& exclution_record_names = "");

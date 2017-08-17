@@ -16,6 +16,7 @@ enum SndTarget : char
 {
 	Snd_Ssn,
 	Snd_Plr,
+	Snd_Sck,
 };
 
 enum CardType

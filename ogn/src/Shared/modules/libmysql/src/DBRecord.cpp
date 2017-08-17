@@ -21,18 +21,6 @@ bool HasRecord(const std::string& record_list, const std::string& record)
 	return pos != std::string::npos;
 }
 
-void swapQueryResult(DBQueryResult* result, std::vector<DBRecord*>& result_records)
-{
-	for (int32 i = 0; i < result->length; ++i)
-	{
-		DBRowResult& rowResult = result->rows[i];
-		for (int32 j = 0; j < rowResult.fieldCount; ++j)
-		{
-			DBField& field = rowResult.fields[j];
-			
-		}
-	}
-}
 
 void releaseResult(DBQueryResult* result)
 {
@@ -244,7 +232,7 @@ void GetValueRecord(DBRecord& record, const FieldDescriptor& field, const int8* 
 
 bool GetQuerySqlCmd(char* sql_cmd, uint32& size_, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names)
 {
-	const TableDescriptor& descriptor = *query_record.getDescriptor();
+	TableDescriptor& descriptor = query_record.getThisDescriptor();
 	char cmd_select_[SQL_CMD_COUNT] = { 0 };
 	char cmd_where_[SQL_CMD_COUNT] = { 0 };
 	char str_value_[SQL_CMD_COUNT] = { 0 };
@@ -306,7 +294,7 @@ bool GetQuerySqlCmd(char* sql_cmd, uint32& size_, DBRecord& query_record, uint32
 
 bool GetInsertSqlCmd(int8* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names)
 {
-	const TableDescriptor& descriptor = *insert_record.getDescriptor();
+	TableDescriptor& descriptor = insert_record.getThisDescriptor();
 
 	char insert_value_[SQL_CMD_COUNT] = { 0 };
 	char insert_coumns_[SQL_CMD_COUNT] = { 0 };
@@ -370,7 +358,7 @@ bool GetInsertSqlCmd(int8* sql_cmd, uint32& size, DBRecord& insert_record, const
 
 bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names)
 {
-	const TableDescriptor& descriptor = *update_record.getDescriptor();
+	TableDescriptor& descriptor = update_record.getThisDescriptor();
 
 	int8 set_value_[SQL_CMD_COUNT] = { 0 };
 	int8 cmd_where_[SQL_CMD_COUNT] = { 0 };
@@ -443,7 +431,7 @@ bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const 
 
 bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names)
 {
-	const TableDescriptor& descriptor = *delete_record.getDescriptor();
+	TableDescriptor& descriptor = delete_record.getThisDescriptor();
 
 	char cmd_where_[SQL_CMD_COUNT] = { 0 };
 	int32 where_size_ = 0;

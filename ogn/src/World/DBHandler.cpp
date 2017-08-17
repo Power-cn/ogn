@@ -12,11 +12,17 @@ DBHandler::~DBHandler()
 
 void DBHandler::doRegister()
 {
+	RegDBEvent(ID_NetProductListRes, &DBHandler::onNetProductListRes, this);
 	RegDBEvent(ID_NetLoginRes, &DBHandler::onNetNetLoginRes, this);
 	RegDBEvent(ID_NetCreateRoleRes, &DBHandler::onNetCreateRoleRes, this);
 	RegDBEvent(ID_NetSelectRoleRes, &DBHandler::onNetSelectRoleRes, this);
 	RegDBEvent(ID_NetQueryRoleRes, &DBHandler::onNetQueryRoleRes, this);
 	RegDBEvent(ID_NetSellProductRes, &DBHandler::onNetSellProductRes, this);
+}
+
+int32 DBHandler::onNetProductListRes(Socket* sck, NetProductListRes* res)
+{
+	return 1;
 }
 
 int32 DBHandler::onNetNetLoginRes(Session* ssn, NetLoginRes* res)

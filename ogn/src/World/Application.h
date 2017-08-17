@@ -22,6 +22,7 @@ public:
 public:
 	////void sendPacketToDB(Packet& packet, Session* ssn);
 	void sendPacketToDB(Packet& packet, Player* aPlr);
+	void sendPacketToDB(Packet& packet);
 	void doSessionLeaveWorld(Session* ssn);
 	void doPlayerLeaveWorld(Player* aPlr);
 	void doPlayerSave(Player* plr, Dictionary& bytes);

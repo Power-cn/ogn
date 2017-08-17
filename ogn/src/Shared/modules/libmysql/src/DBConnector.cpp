@@ -260,7 +260,7 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 
 	if (result_records.size() > 0 && query_result == NULL) {
 
-		const TableDescriptor& descriptor_ = *(result_records[0]->getDescriptor());
+		TableDescriptor& descriptor_ = result_records[0]->getThisDescriptor();
 		MYSQL_ROW row_ = 0;
 		for (int32 idxRow = 0; idxRow < num_rows_; ++idxRow) {
 
@@ -281,7 +281,6 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 		query_result->length = num_rows_;
 		query_result->rows = new DBRowResult[query_result->length];
 
-		const TableDescriptor& descriptor_ = *(result_records[0]->getDescriptor());
 		MYSQL_ROW row_ = 0;
 		for (int32 idxRow = 0; idxRow < num_rows_; ++idxRow) {
 
@@ -296,6 +295,8 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 			{
 				DBField& dbField = dbRowResult.fields[idxCol];
 				dbField.length = lengths[idxCol];
+				if (dbField.length <= 0) continue;
+			
 				dbField.dataptr = new char[dbField.length];
 				memcpy(dbField.dataptr, row_[idxCol], dbField.length);
 			}

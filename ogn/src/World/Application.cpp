@@ -263,6 +263,22 @@ void Application::sendPacketToDB(Packet& packet, Player* aPlr)
 	GetDBServer()->sendBuffer(in.datas(), in.wpos());
 }
 
+void Application::sendPacketToDB(Packet& packet)
+{
+	static char input[PACKET_MAX_LENGTH] = { 0 };
+	BinaryStream in(input, PACKET_MAX_LENGTH);
+	int32 packetCount = 0;
+	in << (int8)Snd_Sck;
+	int32 pos = in.wpos();
+	in << packetCount;
+	int32 offset = in.wpos();
+	in << packet;
+	packetCount = in.wpos() - offset;
+	packetCount = Shared::htonl(packetCount);
+	in.push(pos, &packetCount, sizeof(int32));
+	GetDBServer()->sendBuffer(in.datas(), in.wpos());
+}
+
 void Application::doSessionLeaveWorld(Session* ssn)
 {
 	LOG_INFO("ssnId %0.16llx leave world", ssn->getSsnId());
@@ -395,6 +411,9 @@ int Application::onDBConnect(SocketEvent & e)
 	ServerConfig& cf = INSTANCE(ConfigManager).getConfig("DB");
 	LOG_DEBUG(LogSystem::csl_color_green, "connect DB Port:%d success", cf.Port);
 	INSTANCE(DBHandler).doRegister();
+
+	NetProductListReq req;
+	sendPacketToDB(req);
 	return 0;
 }
 
@@ -407,11 +426,16 @@ int Application::onDBRecv(SocketEvent & e)
 	int32 msgId = 0;
 	int8 sndTarget = 0;
 	CHECK_RETURN(out >> sndTarget, 0);
-	if (sndTarget == Snd_Ssn) {
+	switch (sndTarget)
+	{
+	case Snd_Ssn:
 		CHECK_RETURN(out >> sessionId, 0);
-	}
-	else {
+		break;
+	case Snd_Plr:
 		CHECK_RETURN(out >> accId, 0);
+		break;
+	case Snd_Sck:
+		break;
 	}
 
 	CHECK_RETURN(out >> packetCount, 0);
@@ -463,7 +487,15 @@ int Application::onDBRecv(SocketEvent & e)
 		doSessionLeaveWorld(ssn);
 	}
 		break;
-	default: {
+	case Snd_Sck: {
+		Packet* pack = sPacketMgr.Alloc(msgId);
+		if (pack == NULL) break;
+		out >> (*pack);
+		dbServer->dispatch(pack->getMsgId(), e.socket, pack);
+		sPacketMgr.Free(pack);
+	}
+		break;
+	case Snd_Plr: {
 		Player* aPlr = sWorld.FindPlrByAccId(accId);
 		if (aPlr == NULL) break;
 

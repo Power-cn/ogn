@@ -89,6 +89,22 @@ bool Application::Destroy()
 	return true;
 }
 
+void Application::sendPacketToTarget(Packet& packet, Socket* socket)
+{
+	static char input[PACKET_MAX_LENGTH] = { 0 };
+	BinaryStream in(input, PACKET_MAX_LENGTH);
+	int32 packetCount = 0;
+	in << (int8)Snd_Sck;
+	int32 pos = in.wpos();
+	in << packetCount;
+	int32 offset = in.wpos();
+	in << packet;
+	packetCount = in.wpos() - offset;
+	packetCount = Shared::htonl(packetCount);
+	in.push(pos, &packetCount, sizeof(int32));
+	socket->sendBuffer(in.datas(), in.wpos());
+}
+
 int32 Application::onDBAccept(SocketEvent& e)
 {
 	LOG_DEBUG(LogSystem::csl_color_green, "world server accept success");
@@ -105,11 +121,16 @@ int32 Application::onDBRecv(SocketEvent& e)
 	int8 sndTarget = 0;
 	CHECK_RETURN(out >> sndTarget, 0);
 
-	if (sndTarget == Snd_Ssn) {
+	switch (sndTarget)
+	{
+	case Snd_Ssn:
 		CHECK_RETURN(out >> sessionId, 0);
-	}
-	else {
+		break;
+	case Snd_Plr:
 		CHECK_RETURN(out >> accId, 0);
+		break;
+	case Snd_Sck:
+		break;
 	}
 
 	CHECK_RETURN(out >> packetCount, 0);
@@ -150,7 +171,15 @@ int32 Application::onDBRecv(SocketEvent& e)
 		sSsnMgr.removeSessionsBySocket(e.socket->getSocketId(), ssn);
 	}
 		break;
-	default: {
+	case Snd_Sck: {
+		Packet* pack = sPacketMgr.Alloc(msgId);
+		if (pack == NULL) break;
+		out >> (*pack);
+		dbServer->dispatch(pack->getMsgId(), e.socket, pack);
+		sPacketMgr.Free(pack);
+	}
+		break;
+	case Snd_Plr: {
 		Player* aPlr = sPlrMgr.FindPlrByAccId(accId);
 		if (aPlr == NULL) break;
 		

@@ -43,7 +43,7 @@ const std::string ConfigManager::getMsg(int32 id)
 bool ConfigManager::loadJson(const std::string& path, Json::Reader& jsonReader, Json::Value& jsonRoot)
 {
 	FILE* fp = NULL;
-	fopen_s(&fp, path.c_str(), "rb");
+	fp = fopen(path.c_str(), "rb");
 	if (!fp)
 	{
 		LOG_ERROR("%s read error!", path.c_str());
@@ -55,8 +55,7 @@ bool ConfigManager::loadJson(const std::string& path, Json::Reader& jsonReader, 
 	fread(jsonStr, 1, fileSize, fp);
 	jsonStr[fileSize] = 0;
 	fclose(fp);
-	if (!jsonReader.parse(jsonStr, jsonRoot))
-	{
+	if (!jsonReader.parse(jsonStr, jsonRoot)) {
 		delete[] jsonStr;
 		LOG_ERROR("%s read error!", path.c_str());
 		return false;
