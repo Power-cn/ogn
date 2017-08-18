@@ -197,7 +197,12 @@ void IOCPModel::postSend(Socket* socket, void* dataBuffer, int dataCount)
 		PushQueueClose(socket->getSocketId());
 		return;
 	}
-
+	if (dataCount <= 0)
+	{
+		LOG_ERROR("send dataCount <= 0");
+		PushQueueClose(socket->getSocketId());
+		return;
+	}
 	packet.ptr = new int8[packet.len];
 
 	BinaryStream in((void*)packet.ptr, packet.len);

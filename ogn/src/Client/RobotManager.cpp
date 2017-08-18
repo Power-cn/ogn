@@ -32,6 +32,8 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher).addEventListener("crole", (EventCallback)&RobotManager::onCreate, this);
 	INSTANCE(CmdDispatcher).addEventListener("select", (EventCallback)&RobotManager::onSelect, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&RobotManager::onClose, this);
+
+
 }
 
 RobotManager::~RobotManager()
@@ -66,13 +68,13 @@ Robot* RobotManager::getRobat(Socket* socket)
 
 void RobotManager::update(float32 time, float32 delay)
 {
-	if (INSTANCE(SocketHandler).mCreate == false)
-	{
-		if (mCurRobot == NULL)
-		{
-			INSTANCE(SocketHandler).createRobot();
-		}
-	}
+	//if (INSTANCE(SocketHandler).mCreate == false)
+	//{
+	//	if (mCurRobot == NULL)
+	//	{
+	//		INSTANCE(SocketHandler).createRobot();
+	//	}
+	//}
 	INSTANCE(CmdDispatcher).update(time, delay);
 	for (auto itr : mMapSocketRobat)
 	{
@@ -323,4 +325,5 @@ int32 RobotManager::onClose(CmdEvent& e)
 {
 	if (mCurRobot == NULL) return 0;
 	INSTANCE(Network).closesocket(mCurRobot->mSocket->getSocketId());
+	return 0;
 }

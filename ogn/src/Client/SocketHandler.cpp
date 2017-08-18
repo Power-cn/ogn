@@ -4,13 +4,16 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	//for (auto itr : mapRobotJson)
-	//{
-	//	RobotJson& robotJson = itr.second;
-	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	//}
-
+	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	for (auto itr : mapRobotJson)
+	{
+		RobotJson& robotJson = itr.second;
+		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	}
+	for (int i = 0; i < 3000; ++i)
+	{
+		createRobot();
+	}
 	//createRobot();
 }
 
@@ -82,7 +85,7 @@ void SocketHandler::createRobot()
 		return;
 	mCreate = true;
 	std::pair<std::string, std::string>& pa = mUsers.front();
-	LOG_INFO("createRobot: %s", pa.first.c_str());
+	//LOG_INFO("createRobot: %s", pa.first.c_str());
 
 	int32 idx = rand() % 4;
 	char szBuf[32] = { 0 };
