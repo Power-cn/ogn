@@ -12,6 +12,8 @@ enum SocketState
 	IOState_Connect,
 	IOState_Recv,
 	IOState_Send,
+	IOState_RecvFrom,
+	IOState_SendTo,
 };
 
 struct IO_OVERLAPPED
@@ -30,7 +32,7 @@ class Socket : public EventDispatcher
 {
 public:
 	friend class Network;
-	friend class IOCPModel;
+	friend class IOCP;
 	Socket(void);
 	~Socket(void);
 	int32 getSocketId() { return mSocketId; }
@@ -38,7 +40,6 @@ public:
 	void sendPacket(Packet& packet);
 	void sendPacket(void* data, int32 count);
 	void sendBuffer(void* data, int32 count);
-
 	const char* getIP() { return mIP.c_str(); }
 	short getPort() { return mPort; }
 private:

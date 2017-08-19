@@ -205,9 +205,6 @@ int Application::onWorldRecv(SocketEvent& e)
 		DEBUG_DEBUG(LogSystem::csl_color_yellow, "ssnId:%0.16llx s to c %s size:%d", ssn->getSsnId(), INSTANCE(PacketManager).GetName(msgId).c_str(), packetCount);
 #endif // DEBUG
 
-		if (msgId == ID_NetSessionLeaveNotify)
-			break;
-
 		/*
 		*********** º”√‹ ***********
 		*/
@@ -218,13 +215,15 @@ int Application::onWorldRecv(SocketEvent& e)
 		/*
 		*********** º”√‹ ***********
 		*/
+
+		if (msgId == ID_NetSessionLeaveNotify)
+			break;
 		return 0;
 
 	} while (false);
 
 	if (!ssn)
 		return 0;
-
 
 	NetSessionLeaveNotify nfy;
 	sendPacketToWorld(nfy, ssn);

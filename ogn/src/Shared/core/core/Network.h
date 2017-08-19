@@ -9,7 +9,7 @@ class SocketClient;
 class Network
 {
 	friend class Socket;
-	friend class IOCPModel;
+	friend class IOCP;
 public:
 	Network();
 	~Network();
@@ -49,7 +49,7 @@ protected:
 	bool compression(char* input, int inCount, char* output, int& outCount);
 	bool unCompression(char* input, int inCount, char* output, int& outCount);
 protected:
-	IOCPModel*						mIOCPModel;
+	IOCP*							mIOCP;
 protected:
 	static							int8 sPacketBuffer_0[PACKET_MAX_LENGTH];
 	static							int8 sPacketBuffer_1[PACKET_MAX_LENGTH];

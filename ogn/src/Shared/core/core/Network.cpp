@@ -26,37 +26,37 @@ protected:
 Network::Network()
 {
 	INSTANCE(WinNet);
-	mIOCPModel = new IOCPModel(this);
+	mIOCP = new IOCP(this);
 }
 
 Network::~Network()
 {
-	SAFE_DELETE(mIOCPModel);
+	SAFE_DELETE(mIOCP);
 }
 
 void Network::update(float32 time, float32 dealy)
 {
-	mIOCPModel->loop();
+	mIOCP->loop();
 }
 
 void Network::Destroy()
 {
-	mIOCPModel->Destory();
+	mIOCP->Destory();
 }
 
 SocketListener* Network::listen(int16 port, const std::string host /* = "" */)
 {
-	return mIOCPModel->listen(host, port);
+	return mIOCP->listen(host, port);
 }
 
 SocketClient* Network::connect(const std::string& host, int16 port)
 {
-	return mIOCPModel->connect(host, port);
+	return mIOCP->connect(host, port);
 }
 
 void Network::closesocket(int32 socketId)
 {
-	mIOCPModel->PushQueueClose(socketId);
+	mIOCP->PushQueueClose(socketId);
 }
 
 Socket* Network::newSocket()
@@ -76,17 +76,17 @@ SocketListener* Network::newSocketListener()
 
 void Network::postSend(Socket* socket, Packet& packet)
 {
-	mIOCPModel->postSend(socket, packet);
+	mIOCP->postSend(socket, packet);
 }
 
 void Network::postSend(Socket* socket, void* dataBuffer, int dataCount)
 {
-	mIOCPModel->postSend(socket, dataBuffer, dataCount);
+	mIOCP->postSend(socket, dataBuffer, dataCount);
 }
 
 void Network::postSendEncode(Socket* socket, void* dataBuffer, int dataCount)
 {
-	mIOCPModel->postSendEncode(socket, dataBuffer, dataCount);
+	mIOCP->postSendEncode(socket, dataBuffer, dataCount);
 }
 
 

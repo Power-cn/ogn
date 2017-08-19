@@ -10,7 +10,7 @@ SocketHandler::SocketHandler()
 		RobotJson& robotJson = itr.second;
 		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
 	}
-	for (int i = 0; i < 3000; ++i)
+	for (int i = 0; i < 1000; ++i)
 	{
 		createRobot();
 	}

@@ -588,19 +588,27 @@ class NetSessionLeaveNotify : public Packet {
 public:
 	NetSessionLeaveNotify():
 	Packet(ID_NetSessionLeaveNotify) {
+msgCode = 0;
+msg = "";
 
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << msgCode);
+CHECK(bytes << msg);
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> msgCode);
+CHECK(bytes >> msg);
 
 		return true;
 	}
 public:
+int32 msgCode;
+std::string msg;
 
 };
 

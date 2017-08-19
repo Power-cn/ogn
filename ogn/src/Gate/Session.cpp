@@ -66,8 +66,9 @@ void Session::sendPacketToWorld(Packet& packet)
 	in << getSsnId();
 	int32 pos = in.wpos();
 	in << packetCount;
+	int32 offset = in.wpos();
 	in << packet;
-	packetCount = in.wpos() - sizeof(int32) - sizeof(uint64);
+	packetCount = in.wpos() - offset;
 	packetCount = Shared::htonl(packetCount);
 
 	in.push(pos, &packetCount, sizeof(int32));

@@ -13,12 +13,12 @@ struct QueueResponse
 	DWORD BytesTransferred = 0;
 };
 
-class IOCPModel : public Object
+class IOCP : public Object
 {
 public:
 	friend class Network;
-	IOCPModel(Network* network);
-	~IOCPModel();
+	IOCP(Network* network);
+	~IOCP();
 	SocketListener* listen(const std::string& host, short port);
 	SocketClient* connect(const std::string& host, short port);
 	bool loop();

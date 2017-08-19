@@ -1,6 +1,6 @@
 #include "Shared.hpp"
 
-IOCPModel::IOCPModel(Network* network)
+IOCP::IOCP(Network* network)
 {
 	mNetwork = network;
 	mIOCP = CreateIoCompletionPort(INVALID_HANDLE_VALUE, NULL, 0, 0);
@@ -9,16 +9,16 @@ IOCPModel::IOCPModel(Network* network)
 	mWorkerThreadsCount = sysInfo.dwNumberOfProcessors * 2 + 1;
 	mWorkerThreads = new Threader[mWorkerThreadsCount];
 	for (uint32 i = 0; i < mWorkerThreadsCount; ++i){
-		mWorkerThreads[i].CreateThread((ThreadCallBack)&IOCPModel::WorkerThread, this);
+		mWorkerThreads[i].CreateThread((ThreadCallBack)&IOCP::WorkerThread, this);
 	}
 }
 
-IOCPModel::~IOCPModel()
+IOCP::~IOCP()
 {
 	Destory();
 }
 
-void IOCPModel::Destory()
+void IOCP::Destory()
 {
 	for (uint32 i = 0; i < mWorkerThreadsCount; ++i)
 	{
@@ -26,10 +26,11 @@ void IOCPModel::Destory()
 		PostQueuedCompletionStatus(mIOCP, 0, 0, NULL);
 	}
 	SAFE_DELETE_ARRAY(mWorkerThreads);
+	mWorkerThreadsCount = 0;
 	mNetwork = NULL;
 }
 
-SocketListener* IOCPModel::listen(const std::string& host, short port)
+SocketListener* IOCP::listen(const std::string& host, short port)
 {
 	uint32 socketId = (uint32)WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
 	SocketListener* listener = mNetwork->newSocketListener();
@@ -85,7 +86,7 @@ SocketListener* IOCPModel::listen(const std::string& host, short port)
 	return listener;
 }
 
-SocketClient* IOCPModel::connect(const std::string& host, short port)
+SocketClient* IOCP::connect(const std::string& host, short port)
 {
 	uint32 socketId = (uint32)WSASocket(AF_INET, SOCK_STREAM, 0, 0, 0, WSA_FLAG_OVERLAPPED);
 
@@ -104,7 +105,7 @@ SocketClient* IOCPModel::connect(const std::string& host, short port)
 	if (SOCKET_ERROR == bind(socketId, (LPSOCKADDR)&local, sizeof(local)))
 	{
 		printf("°ó¶¨Ì×½Ó×ÖÊ§°Ü!\r\n");
-		delete client;
+		SAFE_DELETE(client);
 		return NULL;
 	}
 
@@ -115,7 +116,7 @@ SocketClient* IOCPModel::connect(const std::string& host, short port)
 		&dwBytes, NULL, NULL);
 	if (!PostConnect(client))
 	{
-		delete client;
+		SAFE_DELETE(client);
 		return NULL;
 	}
 
@@ -124,7 +125,7 @@ SocketClient* IOCPModel::connect(const std::string& host, short port)
 	return client;
 }
 
-bool IOCPModel::loop()
+bool IOCP::loop()
 {
 
 	while (true)
@@ -177,7 +178,7 @@ bool IOCPModel::loop()
 
 
 
-void IOCPModel::postSend(Socket* socket, Packet& packet)
+void IOCP::postSend(Socket* socket, Packet& packet)
 {
 	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
@@ -185,7 +186,7 @@ void IOCPModel::postSend(Socket* socket, Packet& packet)
 	postSend(socket, in.datas(), in.wpos());
 }
 
-void IOCPModel::postSend(Socket* socket, void* dataBuffer, int dataCount)
+void IOCP::postSend(Socket* socket, void* dataBuffer, int dataCount)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 
@@ -214,12 +215,12 @@ void IOCPModel::postSend(Socket* socket, void* dataBuffer, int dataCount)
 		PostWrite(socket);
 }
 
-void IOCPModel::postSendEncode(Socket* socket, void* dataBuffer, int dataCount)
+void IOCP::postSendEncode(Socket* socket, void* dataBuffer, int dataCount)
 {
 
 }
 
-bool IOCPModel::PostAccept(SocketListener* listener)
+bool IOCP::PostAccept(SocketListener* listener)
 {
 	Socket* socket = mNetwork->newSocket();
 	socket->angent = listener;
@@ -261,7 +262,7 @@ bool IOCPModel::PostAccept(SocketListener* listener)
 	return true;
 }
 
-bool IOCPModel::PostConnect(SocketClient* client)
+bool IOCP::PostConnect(SocketClient* client)
 {
 	Socket* socket = mNetwork->newSocket();
 	socket->angent = client;
@@ -303,7 +304,7 @@ bool IOCPModel::PostConnect(SocketClient* client)
 	return true;
 }
 
-bool IOCPModel::PostRead(Socket* socket)
+bool IOCP::PostRead(Socket* socket)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
 	ioOverlapped.overlapped = {};
@@ -313,7 +314,7 @@ bool IOCPModel::PostRead(Socket* socket)
 	DWORD dwBufferCount = 1, dwRecvBytes = 0, Flags = 0;
 	socket->postCount++;
 
-	int result = WSARecv(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, &Flags, &ioOverlapped.overlapped, NULL);
+	int32 result = WSARecv(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, &Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
 	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
 		PushQueueClose(socket->getSocketId());
@@ -322,7 +323,7 @@ bool IOCPModel::PostRead(Socket* socket)
 	return true;
 }
 
-bool IOCPModel::PostWrite(Socket* socket)
+bool IOCP::PostWrite(Socket* socket)
 {
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
 	ioOverlapped.socket = socket;
@@ -335,19 +336,18 @@ bool IOCPModel::PostWrite(Socket* socket)
 
 	DWORD dwBufferCount = 1, dwRecvBytes = 0, Flags = 0;
 	char* wBuffer = ioOverlapped.dataBuffer;
-	int sendSize = 0;
+	int32 sendSize = 0;
 	while (sendQueue.size() > 0)
 	{
 		object_bytes& packet = sendQueue.front();
 		if (sendSize + packet.len > ioOverlapped.dataBufferCount) {
-			LOG_ERROR("send buffer  is not enough!");
 			break;
 		}
 
 		memcpy(wBuffer + sendSize, packet.ptr, packet.len);
 		sendSize += packet.len;
 		sendQueue.pop();
-		delete[] packet.ptr;
+		SAFE_DELETE_ARRAY(packet.ptr);
 	}
 	if (sendSize == 0)
 	{
@@ -358,7 +358,7 @@ bool IOCPModel::PostWrite(Socket* socket)
 	ioOverlapped.overlapped = {};
 	ioOverlapped.wBuffer.len = sendSize;
 	ioOverlapped.ioState = IOState_Send;
-	int result = WSASend(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, Flags, &ioOverlapped.overlapped, NULL);
+	int32 result = WSASend(socket->getSocketId(), &ioOverlapped.wBuffer, dwBufferCount, &dwRecvBytes, Flags, &ioOverlapped.overlapped, NULL);
 	DWORD dwError = WSAGetLastError();
 	if ((result == SOCKET_ERROR) && (WSA_IO_PENDING != dwError)) {
 		PushQueueClose(socket->getSocketId());
@@ -367,7 +367,7 @@ bool IOCPModel::PostWrite(Socket* socket)
 	return true;
 }
 
-void IOCPModel::DoAccept(uint32 socketId, Socket* socket)
+void IOCP::DoAccept(uint32 socketId, Socket* socket)
 {
 	socket->postCount--;
 	SocketListener* listener = mNetwork->FindListener(socketId);
@@ -404,7 +404,7 @@ void IOCPModel::DoAccept(uint32 socketId, Socket* socket)
 	PostAccept(listener);
 }
 
-void IOCPModel::DoConnect(uint32 socketId, Socket* socket)
+void IOCP::DoConnect(uint32 socketId, Socket* socket)
 {
 	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
@@ -419,7 +419,7 @@ void IOCPModel::DoConnect(uint32 socketId, Socket* socket)
 	PostRead(socket);
 }
 
-void IOCPModel::DoRead(Socket* socket)
+void IOCP::DoRead(Socket* socket)
 {
 	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->readOverlapped;
@@ -433,7 +433,7 @@ void IOCPModel::DoRead(Socket* socket)
 	PostRead(socket);
 }
 
-void IOCPModel::DoWrite(Socket* socket)
+void IOCP::DoWrite(Socket* socket)
 {
 	socket->postCount--;
 	IO_OVERLAPPED& ioOverlapped = socket->writeOverlapped;
@@ -446,21 +446,21 @@ void IOCPModel::DoWrite(Socket* socket)
 	PostWrite(socket);
 }
 
-void IOCPModel::DoExit(Socket* socket)
+void IOCP::DoExit(Socket* socket)
 {
 	if (socket == NULL) return;
 	mNetwork->OnExit(socket);
 }
 
 
-void IOCPModel::PushQueueResponse(QueueResponse& response)
+void IOCP::PushQueueResponse(QueueResponse& response)
 {
 	mMutex.lock();
 	mQueueEvent.push(response);
 	mMutex.unlock();
 }
 
-void IOCPModel::PushQueueClose(uint32 socketId)
+void IOCP::PushQueueClose(uint32 socketId)
 {
 	auto itr = mQueueClose.find(socketId);
 	if (itr != mQueueClose.end()) return;
@@ -468,7 +468,7 @@ void IOCPModel::PushQueueClose(uint32 socketId)
 	mQueueClose.insert(socketId);
 }
 
-uint32 IOCPModel::WorkerThread(Threader& threader)
+uint32 IOCP::WorkerThread(Threader& threader)
 {
 	while (threader.Active())
 	{

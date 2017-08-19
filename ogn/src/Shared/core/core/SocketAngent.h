@@ -3,7 +3,7 @@
 class SocketAngent :public EventDispatcher
 {
 	friend class Network;
-	friend class IOCPModel;
+	friend class IOCP;
 public:
 	SocketAngent();
 	~SocketAngent();

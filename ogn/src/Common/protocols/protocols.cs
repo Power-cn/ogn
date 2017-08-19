@@ -715,21 +715,29 @@ public class NetSessionLeaveNotify : Packet
 {
 	public NetSessionLeaveNotify():base((int)PACKET_ID_ENUM.ID_NetSessionLeaveNotify)
 	{
+msgCode = 0;
+msg = "";
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
+bytes.Write(msgCode);
+bytes.Write(msg);
 
 		return true;
 	}
 
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
+bytes.Read(ref msgCode);
+bytes.Read(ref msg);
 
 		return true;
 	}
 
+public int msgCode;
+public string msg;
 
 }
 public class NetPingNotify : Packet

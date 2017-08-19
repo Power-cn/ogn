@@ -99,6 +99,8 @@
     </element>
 
     <element id="ID_NetSessionLeaveNotify" name="NetSessionLeaveNotify" >
+      <member type="int32" name="msgCode" />
+      <member type="string" name="msg" />
     </element>
 
     <element id="ID_NetPingNotify" name="NetPingNotify" >

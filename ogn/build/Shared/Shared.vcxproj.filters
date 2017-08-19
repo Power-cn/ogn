@@ -135,9 +135,6 @@
     <ClInclude Include="..\..\src\Shared\core\core\EventRegister.h">
       <Filter>core</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h">
-      <Filter>core</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\core\List.h">
       <Filter>core</Filter>
     </ClInclude>
@@ -230,6 +227,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\aes\AES.h">
       <Filter>aes</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\IOCP.h">
+      <Filter>core</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
@@ -364,9 +364,6 @@
     <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp">
       <Filter>core</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp">
-      <Filter>core</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\core\List.cpp">
       <Filter>core</Filter>
     </ClCompile>
@@ -447,6 +444,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\aes\AES.cpp">
       <Filter>aes</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\IOCP.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
 </Project>

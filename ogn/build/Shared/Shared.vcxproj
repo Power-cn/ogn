@@ -35,7 +35,7 @@
     <ClInclude Include="..\..\src\Shared\core\core\EventDispatcher.h" />
     <ClInclude Include="..\..\src\Shared\core\core\EventListener.h" />
     <ClInclude Include="..\..\src\Shared\core\core\EventRegister.h" />
-    <ClInclude Include="..\..\src\Shared\core\core\IOCPModel.h" />
+    <ClInclude Include="..\..\src\Shared\core\core\IOCP.h" />
     <ClInclude Include="..\..\src\Shared\core\core\List.h" />
     <ClInclude Include="..\..\src\Shared\core\core\log.h" />
     <ClInclude Include="..\..\src\Shared\core\core\log_console_outpter.h" />
@@ -109,7 +109,7 @@
     <ClCompile Include="..\..\src\Shared\core\core\EventDispatcher.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\EventListener.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\EventRegister.cpp" />
-    <ClCompile Include="..\..\src\Shared\core\core\IOCPModel.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\IOCP.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\List.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\log.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\log_console_outpter.cpp" />
