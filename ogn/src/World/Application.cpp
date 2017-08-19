@@ -297,7 +297,9 @@ void Application::doSessionLeaveWorld(Session* ssn)
 
 void Application::doPlayerLeaveWorld(Player* aPlr)
 {
-	aPlr->SetOfflineTimer(DateTime::Now());
+	if (aPlr->GetOnline())
+		aPlr->SetOfflineTimer(DateTime::Now());
+
 	Dictionary dict;
 	onLeaveWorld(aPlr, dict);
 	doPlayerSave(aPlr, dict);
@@ -316,6 +318,12 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
 	info.property.write(stream.datas(), stream.wpos());
+	if (plr->GetOnline()) {
+		info.onlinetotaltime = plr->GetOnlineTime() + (DateTime::Now() - plr->GetOnlineTimer());
+	}
+	else {
+		info.onlinetotaltime = plr->GetOnlineTime() + (plr->GetOfflineTimer() - plr->GetOnlineTimer());
+	}
 	nfy.accountId = plr->getAccId();
 	nfy.roleInfos.push_back(info);
 	sendPacketToDB(nfy, plr);

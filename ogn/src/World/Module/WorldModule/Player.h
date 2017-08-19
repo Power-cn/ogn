@@ -95,10 +95,14 @@ protected:
 public:
 	void SetOnlineTimer(uint32 t) { mOnlineTimer = t; }
 	void SetOfflineTimer(uint32 t) { mOfflineTimer = t; }
+	void SetOnlineTime(uint32 t) { mOnlineTime = t; }
 
 	uint32 GetOnlineTimer() { return mOnlineTimer; }
 	uint32 GetOfflineTimer() { return mOfflineTimer; }
+	uint32 GetOnlineTime() { return mOnlineTime; }
 protected:
-	uint32	mOnlineTimer;
-	uint32	mOfflineTimer;
+	uint32				mOnlineTimer;
+	uint32				mOfflineTimer;
+	uint32				mOnlineTime; // 在线总时长
+
 };

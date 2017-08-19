@@ -45,6 +45,7 @@ IMPLEMENT_RECORD_INFO(DBUser, accountId, Variant::TypeInt32, "NULL", KeyTypeNone
 IMPLEMENT_RECORD_INFO(DBUser, name, Variant::TypeString, "NULL", KeyTypeNone)
 IMPLEMENT_RECORD_INFO(DBUser, property, Variant::TypeMemory, "NULL", KeyTypeNone)
 IMPLEMENT_RECORD_INFO(DBUser, createTime, Variant::TypeInt32, "NULL", KeyTypeNone)
+IMPLEMENT_RECORD_INFO(DBUser, onlinetotaltime, Variant::TypeInt32, "NULL", KeyTypeNone)
 
 IMPLEMENT_TABLE_END(DBUser, "user")
 
@@ -55,6 +56,7 @@ bool DBUser::operator >> (BinaryStream& bytes)
 	CHECK(bytes << name);
 	CHECK(bytes << property);
 	CHECK(bytes << createTime);
+	CHECK(bytes << onlinetotaltime);
 	return true;
 }
 
@@ -65,6 +67,7 @@ bool DBUser::operator<<(BinaryStream& bytes)
 	CHECK(bytes >> name);
 	CHECK(bytes >> property);
 	CHECK(bytes >> createTime);
+	CHECK(bytes >> onlinetotaltime);
 	return true;
 }
 

@@ -22,6 +22,23 @@ void DBHandler::doRegister()
 
 int32 DBHandler::onNetProductListRes(Socket* sck, NetProductListRes* res)
 {
+	for (int32 i = 0 ; i < res->productInfos.size(); ++i)
+	{
+		ProductInfo& info = res->productInfos[i];
+
+		Product* product = new Product;
+		product->mInsId = info.productInsId;
+		product->mProductId = info.productId;
+		product->mUserId = info.sellUserId;
+		product->mBuyUserId = info.buyUserId;
+		product->mShelvesTime = info.shelvesTime;
+		product->mUnshelvesTime = info.unShelvesTime;
+		if (sShop.AddProduct(product) == NULL) {
+			delete product;
+			product = NULL;
+		}
+	}
+
 	return 1;
 }
 
@@ -87,12 +104,11 @@ int32 DBHandler::onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res)
 
 	aPlr->sendPacket(*res);
 
-	aPlr->SetOfflineTimer(DateTime::Now());
-
 	DBRoleInfo& info = res->roleInfo;
 	aPlr->setUserId(info.id);
 	aPlr->setName(info.name);
 	aPlr->SetOnlineTimer(DateTime::Now());
+	aPlr->SetOnlineTime(info.onlinetotaltime);
 	sWorld.addPlayerToUserId(aPlr);
 	sWorld.addPlayerByName(aPlr);
 

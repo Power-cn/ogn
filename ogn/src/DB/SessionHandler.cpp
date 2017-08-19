@@ -45,7 +45,6 @@ int32 SessionHandler::onNetProductListReq(Socket* sck, NetProductListReq* req)
 	}
 	sApp.sendPacketToTarget(res, sck);
 
-
 	SAFE_DELETE_ARRAY(dbProducts);
 	releaseResult(result);
 	result = NULL;
@@ -115,7 +114,6 @@ int32 SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res.roleInfo.name.c_str(), res.roleInfo.id);
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
 
-
 	aPlr->sendPacket(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "accId[%d] insert role[%s]", req->accId, res.roleInfo.name.c_str());
 	return 1;
@@ -168,6 +166,8 @@ int32 SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 				info.name = role.name;
 				DBUser& dbUser = retRoles[i];
 				info.property.write(dbUser.property.datas(), dbUser.property.wpos());
+				info.createTime = dbUser.createTime;
+				info.onlinetotaltime = dbUser.onlinetotaltime;
 				res.roleInfos.push_back(info);
 			}
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role count[%d]", req->user.c_str(), queryCount);
@@ -185,8 +185,9 @@ int32 SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* n
 		DBUser dbRole;
 		dbRole.id = info.id;
 		dbRole.property.write(info.property.datas(), info.property.wpos());
+		dbRole.onlinetotaltime = info.onlinetotaltime;
 		uint32 updateRows = 0;
-		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property");
+		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property, onlinetotaltime");
 		if (!err) return 0;
 		LOG_ERROR(err);
 	}
@@ -283,6 +284,9 @@ int SessionHandler::DoQueryRole(NetLoginReq* req, NetLoginRes& res)
 				info.accountId = dbUser.accountId;
 				info.name = dbUser.name;
 				info.property.write(dbUser.property.datas(), dbUser.property.wpos());
+				info.createTime = dbUser.createTime;
+				info.onlinetotaltime = dbUser.onlinetotaltime;
+
 				res.roleInfos.push_back(info);
 			}
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role count[%d]", req->user.c_str(), queryCount);
@@ -359,6 +363,8 @@ int SessionHandler::DoSelectRole(NetSelectRoleReq* req, NetSelectRoleRes& res)
 			info.accountId = role.accountId;
 			info.name = role.name;
 			info.property.write(role.property.datas(), role.property.wpos());
+			info.createTime = role.createTime;
+			info.onlinetotaltime = role.onlinetotaltime;
 			res.result = 0;
 		}
 	} while (false);

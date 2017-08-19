@@ -245,7 +245,7 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 		return (int8*)err;
 	}
 
-	int32 num_rows_ = (int32)mysql_num_rows(result_);
+	uint32 num_rows_ = (int32)mysql_num_rows(result_);
 	if (result_max_count && num_rows_ > result_max_count)
 		num_rows_ = result_max_count;
 	

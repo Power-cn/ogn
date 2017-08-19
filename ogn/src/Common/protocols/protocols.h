@@ -117,7 +117,7 @@ CHECK(bytes >> phone);
 		return true;
 	}
 public:
-int32 id;
+uint32 id;
 std::string user;
 BinaryStream password;
 std::string name;
@@ -133,6 +133,8 @@ id = 0;
 accountId = 0;
 name = "";
 property;
+createTime = 0;
+onlinetotaltime = 0;
 
 	}
 
@@ -141,6 +143,8 @@ CHECK(bytes << id);
 CHECK(bytes << accountId);
 CHECK(bytes << name);
 CHECK(bytes << property);
+CHECK(bytes << createTime);
+CHECK(bytes << onlinetotaltime);
 
 		return true;
 	}
@@ -150,14 +154,18 @@ CHECK(bytes >> id);
 CHECK(bytes >> accountId);
 CHECK(bytes >> name);
 CHECK(bytes >> property);
+CHECK(bytes >> createTime);
+CHECK(bytes >> onlinetotaltime);
 
 		return true;
 	}
 public:
-int32 id;
-int32 accountId;
+uint32 id;
+uint32 accountId;
 std::string name;
 BinaryStream property;
+uint32 createTime;
+uint32 onlinetotaltime;
 
 };
 

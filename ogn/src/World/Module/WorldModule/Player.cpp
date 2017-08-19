@@ -307,6 +307,7 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["online"] = GetOnlineTimer();
 	userJson["offline"] = GetOfflineTimer();
 	userJson["lasthost"] = getHost();
+	userJson["onlinetotaltime"] = GetOnlineTime();
 
 	root["user"] = userJson;
 	return true;

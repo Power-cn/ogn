@@ -3,7 +3,7 @@
   <class>
     
     <element name="DBAccountInfo" parent="object">
-      <member type="int32" name="id" />
+      <member type="uint32" name="id" />
       <member type="string" name="user" />
       <member type="BinaryStream" name="password" />
       <member type="string" name="name" />
@@ -12,10 +12,12 @@
     </element>
     
     <element name="DBRoleInfo" parent="object">
-      <member type="int32" name="id" />
-      <member type="int32" name="accountId" />
+      <member type="uint32" name="id" />
+      <member type="uint32" name="accountId" />
       <member type="string" name="name" />
       <member type="BinaryStream" name="property" />
+      <member type="uint32" name="createTime" />
+      <member type="uint32" name="onlinetotaltime" />
     </element>
 
     <element name="Point" parent="object">

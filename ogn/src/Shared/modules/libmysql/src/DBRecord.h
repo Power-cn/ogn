@@ -11,15 +11,15 @@ struct FieldDescriptor
 {
 	const char*				field;
 	const char*				default;
-	int32					offset;
-	int8					typevalue;
-	int8					typekey;
+	uint32					offset;
+	uint8					typevalue;
+	uint8					typekey;
 };
 
 struct TableDescriptor
 {
 	FieldDescriptor*			records;
-	int32						recordCount;
+	uint32						recordCount;
 	const char*					tableName;
 	FieldDescriptor* getFieldDescriptor(const std::string& field) const;
 };
@@ -33,25 +33,25 @@ public:
 	virtual bool operator >> (BinaryStream& bytes);
 	virtual bool operator << (BinaryStream& bytes);
 public:
-	int32 id = 0;
+	uint32 id = 0;
 };
 
 struct DBField
 {
 	char* dataptr = NULL;
-	int length = 0;
+	uint32 length = 0;
 };
 
 struct DBRowResult
 {
-	int fieldCount = 0;
+	uint32 fieldCount = 0;
 	DBField* fields = NULL;
 };
 
 struct DBQueryResult
 {
 	std::vector<std::string> fields;
-	int length = 0;
+	uint32 length = 0;
 	DBRowResult* rows = NULL;
 };
 
@@ -62,10 +62,10 @@ T* swapQueryResult(DBQueryResult* result)
 
 	T* dest = new T[result->length];
 	TableDescriptor& descriptor_ = T::getDescriptor();
-	for (int32 i = 0; i < result->length; ++i)
+	for (uint32 i = 0; i < result->length; ++i)
 	{
 		DBRowResult& rowResult = result->rows[i];
-		for (int32 j = 0; j < rowResult.fieldCount; ++j)
+		for (uint32 j = 0; j < rowResult.fieldCount; ++j)
 		{
 			FieldDescriptor* record = descriptor_.getFieldDescriptor(result->fields[j]);
 			if (record == NULL) continue;

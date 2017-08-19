@@ -211,7 +211,7 @@ bytes.Read(ref phone);
 		return true;
 	}
 
-public int id;
+public uint id;
 public string user;
 public BinaryStream password;
 public string name;
@@ -227,6 +227,8 @@ id = 0;
 accountId = 0;
 name = "";
 property = new BinaryStream();
+createTime = 0;
+onlinetotaltime = 0;
 
 	}
 
@@ -236,6 +238,8 @@ bytes.Write(id);
 bytes.Write(accountId);
 bytes.Write(name);
 bytes.Write(property);
+bytes.Write(createTime);
+bytes.Write(onlinetotaltime);
 
 		return true;
 	}
@@ -246,14 +250,18 @@ bytes.Read(ref id);
 bytes.Read(ref accountId);
 bytes.Read(ref name);
 bytes.Read(property);
+bytes.Read(ref createTime);
+bytes.Read(ref onlinetotaltime);
 
 		return true;
 	}
 
-public int id;
-public int accountId;
+public uint id;
+public uint accountId;
 public string name;
 public BinaryStream property;
+public uint createTime;
+public uint onlinetotaltime;
 
 }
 public class Point : Header

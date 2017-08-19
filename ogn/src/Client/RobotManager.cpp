@@ -98,6 +98,14 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		robot->mGuid = res->guid;
 		mCurRobot->mAccountId = res->accInfo.id;
 		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accInfo.user.c_str(), res->accInfo.id, res->guid);
+		if (res->roleInfos.size() == 0)
+		{
+			NetCreateRoleReq req;
+			req.accId = res->accInfo.id;
+			req.name = res->accInfo.user;
+			robot->sendPacket(req);
+			return 0;
+		}
 
 		for (uint32 i = 0; i < res->roleInfos.size(); ++i)
 		{
@@ -106,9 +114,10 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 			if (i == 0)
 			{
 				NetSelectRoleReq req;
-				req.accId = mCurRobot->mAccountId;
+				req.accId = res->accInfo.id;
 				req.userId = info.id;
-				mCurRobot->sendPacket(req);
+				robot->sendPacket(req);
+				return 0;
 			}
 		}
 
@@ -158,6 +167,10 @@ int RobotManager::onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res)
 		return 0;
 	}
 
+	NetSelectRoleReq req;
+	req.accId = res->roleInfo.accountId;
+	req.userId = res->roleInfo.id;
+	robot->sendPacket(req);
 	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%0.16llx", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
 	return 0;
 }
