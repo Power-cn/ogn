@@ -612,6 +612,10 @@ int32 Application::onRedisAuth(RedisEvent& e)
 	//int ret = LuaEngine::Call(NULL, sScriptPlayer, "OnEnter");
 	
 	//int testaaa = 10;
+
+	Event redisEvent;
+	redisEvent.event = "OnRedisAuth";
+	sRedisProxy.dispatch(redisEvent);
 	return 0;
 }
 

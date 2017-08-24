@@ -39,6 +39,8 @@ public:
 	void DelPlrRecord(uint32 userId);
 
 	void DoFriendsList(Player* aPlr);
+
+	void LoadAllPlayer();
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
@@ -51,6 +53,8 @@ protected:
 protected:
 	void ClearPlayerRecord(); 
 protected:
+	int32 onRedisAuth(Event& e);
+	int32 onRedisAllPlr(RedisEvent& e);
 	int32 onRedisFindPlr(RedisEvent& e);
 public:
 	std::map<uint32, Friends*>					mMapFriends;

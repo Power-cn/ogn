@@ -1,6 +1,6 @@
 #pragma once
 
-class Application : public Object
+class Application : public EventDispatcher
 {
 public:
 	Application();

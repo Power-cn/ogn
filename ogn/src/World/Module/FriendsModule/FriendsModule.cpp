@@ -168,8 +168,16 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 	aPlr->sendPacket(res);
 }
 
+void FriendsModule::LoadAllPlayer()
+{
+	char szBuffer[64] = { 0 };
+	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
+}
+
 bool FriendsModule::Initialize()
 {
+	sRedisProxy.addEventListener("OnRedisAuth", (EventCallback)&FriendsModule::onRedisAuth, this);
 	return true;
 }
 
@@ -282,6 +290,16 @@ void FriendsModule::ClearPlayerRecord()
 		delete itr.second;
 	}
 	mMapPlrRecords.clear();
+}
+
+int32 FriendsModule::onRedisAuth(Event& e)
+{
+	return 0;
+}
+
+int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
+{
+	return 0;
 }
 
 int32 FriendsModule::onRedisFindPlr(RedisEvent& e)
