@@ -49,8 +49,8 @@ public:
 	int32 onTest(CmdEvent& e);
 	
 protected:
-	int32 RedisConnect(RedisEvent& e);
-	int32 RedisAuth(RedisEvent& e);
+	int32 onRedisConnect(RedisEvent& e);
+	int32 onRedisAuth(RedisEvent& e);
 	int32 RedisCallback1(RedisEvent& e);
 protected:
 	SocketListener* worldServer;

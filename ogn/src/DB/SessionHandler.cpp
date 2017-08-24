@@ -186,8 +186,9 @@ int32 SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* n
 		dbRole.id = info.id;
 		dbRole.property.write(info.property.datas(), info.property.wpos());
 		dbRole.onlinetotaltime = info.onlinetotaltime;
+		dbRole.datastr = info.datastr;
 		uint32 updateRows = 0;
-		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property, onlinetotaltime");
+		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property, onlinetotaltime, datastr");
 		if (!err) return 0;
 		LOG_ERROR(err);
 	}
@@ -286,7 +287,7 @@ int SessionHandler::DoQueryRole(NetLoginReq* req, NetLoginRes& res)
 				info.property.write(dbUser.property.datas(), dbUser.property.wpos());
 				info.createTime = dbUser.createTime;
 				info.onlinetotaltime = dbUser.onlinetotaltime;
-
+				//info.datastr = dbUser.datastr;
 				res.roleInfos.push_back(info);
 			}
 			LOG_DEBUG(LogSystem::csl_color_red_blue, "[%s] query role count[%d]", req->user.c_str(), queryCount);
@@ -365,6 +366,7 @@ int SessionHandler::DoSelectRole(NetSelectRoleReq* req, NetSelectRoleRes& res)
 			info.property.write(role.property.datas(), role.property.wpos());
 			info.createTime = role.createTime;
 			info.onlinetotaltime = role.onlinetotaltime;
+			info.datastr = role.datastr;
 			res.result = 0;
 		}
 	} while (false);

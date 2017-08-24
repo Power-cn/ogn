@@ -117,7 +117,7 @@ int32 DBHandler::onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res)
 		aPlr->DoCreateCharacter(dict, info);
 	else
 		info.property >> dict;
-
+	dict.Add("datastr", info.datastr);
 	sApp.onLoad(aPlr, dict);
 	sApp.onEnterWorld(aPlr, dict);
 	return 0;

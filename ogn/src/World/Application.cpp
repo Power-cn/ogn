@@ -310,14 +310,16 @@ void Application::doPlayerLeaveWorld(Player* aPlr)
 void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 {
 	onSave(plr, bytes);
+	std::string datastr = bytes["datastr"];
+	bytes.Remove("datastr");
 	BinaryStream stream;
 	stream << bytes;
-
 	NetPlayerSaveNotify nfy;
 	DBRoleInfo info;
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
 	info.property.write(stream.datas(), stream.wpos());
+	info.datastr = datastr;
 	if (plr->GetOnline()) {
 		info.onlinetotaltime = plr->GetOnlineTime() + (DateTime::Now() - plr->GetOnlineTimer());
 	}
@@ -587,18 +589,18 @@ int32 Application::onTest(CmdEvent& e)
 	return 0;
 }
 
-int32 Application::RedisConnect(RedisEvent& e)
+int32 Application::onRedisConnect(RedisEvent& e)
 {
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
 
 	char szBuffer[64] = { 0 };
 	sprintf_s(szBuffer, 64, "auth %s", cfg.Password.c_str());
-	sRedisProxy.sendCmd(szBuffer, (EventCallback)&Application::RedisAuth, this);
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&Application::onRedisAuth, this);
 
 	return 0;
 }
 
-int32 Application::RedisAuth(RedisEvent& e)
+int32 Application::onRedisAuth(RedisEvent& e)
 {
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
 
@@ -633,7 +635,7 @@ int32 Application::onRefreshLua(CmdEvent& e)
 
 void Application::OnInitialize()
 {
-	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
+	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::onRedisConnect, this);
 	ServerConfig& cfg = sCfgMgr.getConfig("Redis");
 	IF_FALSE(!sRedisProxy.AsyncConnect(cfg.Host, cfg.Port))
 		return ;

@@ -135,6 +135,7 @@ name = "";
 property;
 createTime = 0;
 onlinetotaltime = 0;
+datastr = "";
 
 	}
 
@@ -145,6 +146,7 @@ CHECK(bytes << name);
 CHECK(bytes << property);
 CHECK(bytes << createTime);
 CHECK(bytes << onlinetotaltime);
+CHECK(bytes << datastr);
 
 		return true;
 	}
@@ -156,6 +158,7 @@ CHECK(bytes >> name);
 CHECK(bytes >> property);
 CHECK(bytes >> createTime);
 CHECK(bytes >> onlinetotaltime);
+CHECK(bytes >> datastr);
 
 		return true;
 	}
@@ -166,6 +169,7 @@ std::string name;
 BinaryStream property;
 uint32 createTime;
 uint32 onlinetotaltime;
+std::string datastr;
 
 };
 

@@ -236,7 +236,7 @@ bool Player::onLoad(Dictionary& dict)
 bool Player::onLoadJson(Dictionary& dict)
 {
 	std::string jsonstr;
-	if (dict.ContainsKey("json"))
+	if (dict.ContainsKey("datastr"))
 		jsonstr = dict["json"].valueString();
 	Json::Reader jsonReader;
 	Json::Value& root = GetJson();
@@ -275,14 +275,14 @@ bool Player::onLoadProperty(Dictionary& dict)
 	setCellTarY(getCellY());
 	setDirPosition(aProperyDict[ep_dirPos].valueInt8());
 
-	INSTANCE(PropertyHelper).setLevel(this, aProperyDict[ep_Level].valueUint8());
-	INSTANCE(PropertyHelper).setHp(this, aProperyDict[ep_Hp].valueUint32());
-	INSTANCE(PropertyHelper).setMp(this, aProperyDict[ep_Mp].valueUint32());
+	sProperty.setLevel(this, aProperyDict[ep_Level].valueUint8());
+	sProperty.setHp(this, aProperyDict[ep_Hp].valueUint32());
+	sProperty.setMp(this, aProperyDict[ep_Mp].valueUint32());
 
-	INSTANCE(PropertyHelper).setMaxHp(this, INSTANCE(PropertyHelper).CalculateMaxHp(this));
-	INSTANCE(PropertyHelper).setMaxMp(this, INSTANCE(PropertyHelper).CalculateMaxMp(this));
-	INSTANCE(PropertyHelper).setAttack(this, INSTANCE(PropertyHelper).CalculateAttack(this));
-	INSTANCE(PropertyHelper).setDefense(this, INSTANCE(PropertyHelper).CalculateDefense(this));
+	sProperty.setMaxHp(this, sProperty.CalculateMaxHp(this));
+	sProperty.setMaxMp(this, sProperty.CalculateMaxMp(this));
+	sProperty.setAttack(this, sProperty.CalculateAttack(this));
+	sProperty.setDefense(this, sProperty.CalculateDefense(this));
 	return true;
 }
 
@@ -291,7 +291,7 @@ bool Player::onSavejson(Dictionary& dict)
 	Json::Value& root = GetJson();
 	onSavejson(root);
 	std::string jsonstr = root.toStyledString(true);
-	dict.Add("json", jsonstr);
+	dict.Add("datastr", jsonstr);
 	char szBuffer[4096] = { 0 };
 	sprintf_s(szBuffer, 4096, "hmset %s %d %s", sUser, getUserId(), jsonstr.c_str());
 	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
@@ -323,9 +323,9 @@ bool Player::onSaveProperty(Dictionary& dict)
 	aProperyDict.Add(ep_posX, getCellX());
 	aProperyDict.Add(ep_posY, getCellY());
 	aProperyDict.Add(ep_dirPos, getDirPosition());
-	aProperyDict.Add(ep_Level, INSTANCE(PropertyHelper).getLevel(this));
-	aProperyDict.Add(ep_Hp, INSTANCE(PropertyHelper).getHp(this));
-	aProperyDict.Add(ep_Mp, INSTANCE(PropertyHelper).getMp(this));
+	aProperyDict.Add(ep_Level, sProperty.getLevel(this));
+	aProperyDict.Add(ep_Hp, sProperty.getHp(this));
+	aProperyDict.Add(ep_Mp, sProperty.getMp(this));
 
 	BinaryStream bytes;
 	bytes << aProperyDict;

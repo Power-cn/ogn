@@ -49,7 +49,7 @@ protected:
 	virtual bool onLoad(Player* player, Dictionary& bytes);
 	virtual bool onSave(Player* player, Dictionary& bytes);
 protected:
-	void ClearPlayerRecord();
+	void ClearPlayerRecord(); 
 protected:
 	int32 onRedisFindPlr(RedisEvent& e);
 public:

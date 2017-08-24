@@ -229,6 +229,7 @@ name = "";
 property = new BinaryStream();
 createTime = 0;
 onlinetotaltime = 0;
+datastr = "";
 
 	}
 
@@ -240,6 +241,7 @@ bytes.Write(name);
 bytes.Write(property);
 bytes.Write(createTime);
 bytes.Write(onlinetotaltime);
+bytes.Write(datastr);
 
 		return true;
 	}
@@ -252,6 +254,7 @@ bytes.Read(ref name);
 bytes.Read(property);
 bytes.Read(ref createTime);
 bytes.Read(ref onlinetotaltime);
+bytes.Read(ref datastr);
 
 		return true;
 	}
@@ -262,6 +265,7 @@ public string name;
 public BinaryStream property;
 public uint createTime;
 public uint onlinetotaltime;
+public string datastr;
 
 }
 public class Point : Header

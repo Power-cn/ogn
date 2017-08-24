@@ -243,7 +243,6 @@ bool FriendsModule::onLeaveWorld(Player* player, Dictionary& dict)
 
 bool FriendsModule::onLoad(Player* player, Dictionary& bytes)
 {
-
 	Json::Value& root = player->GetJson();
 	Json::Value arrayVal = root["friends"];
 

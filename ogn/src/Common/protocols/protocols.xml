@@ -18,6 +18,7 @@
       <member type="BinaryStream" name="property" />
       <member type="uint32" name="createTime" />
       <member type="uint32" name="onlinetotaltime" />
+      <member type="string" name="datastr" />
     </element>
 
     <element name="Point" parent="object">

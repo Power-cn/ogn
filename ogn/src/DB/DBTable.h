@@ -32,6 +32,8 @@ public:
 	BinaryStream property;
 	uint32 createTime = 0;
 	uint32 onlinetotaltime = 0;
+	std::string datastr;
+
 	DECLARE_TABLE(DBUser)
 };
 
