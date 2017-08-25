@@ -61,10 +61,7 @@ void BinaryStream::clear()
 
 std::string BinaryStream::toString()
 {
-	for (int32 i = 0; i < wpos(); ++i) {
-
-	}
-	return "Bytes";
+	return Shared::ConvertHex((char*)datas(), wpos());
 }
 
 bool BinaryStream::write(const void* data, int32 count)

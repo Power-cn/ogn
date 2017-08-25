@@ -226,9 +226,9 @@ public class DBRoleInfo : Header
 id = 0;
 accountId = 0;
 name = "";
-property = new BinaryStream();
 createTime = 0;
 onlinetotaltime = 0;
+datas = new BinaryStream();
 datastr = "";
 
 	}
@@ -238,9 +238,9 @@ datastr = "";
 bytes.Write(id);
 bytes.Write(accountId);
 bytes.Write(name);
-bytes.Write(property);
 bytes.Write(createTime);
 bytes.Write(onlinetotaltime);
+bytes.Write(datas);
 bytes.Write(datastr);
 
 		return true;
@@ -251,9 +251,9 @@ bytes.Write(datastr);
 bytes.Read(ref id);
 bytes.Read(ref accountId);
 bytes.Read(ref name);
-bytes.Read(property);
 bytes.Read(ref createTime);
 bytes.Read(ref onlinetotaltime);
+bytes.Read(datas);
 bytes.Read(ref datastr);
 
 		return true;
@@ -262,9 +262,9 @@ bytes.Read(ref datastr);
 public uint id;
 public uint accountId;
 public string name;
-public BinaryStream property;
 public uint createTime;
 public uint onlinetotaltime;
+public BinaryStream datas;
 public string datastr;
 
 }

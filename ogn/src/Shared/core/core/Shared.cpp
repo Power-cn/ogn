@@ -548,17 +548,23 @@ void Shared::XOR(char* input, int len, cstring& key)
 	}
 }
 
-std::string Shared::ConvertHexString(char* datas, int32 length)
+std::string Shared::ConvertHex(char* datas, int32 length)
 {
 	char szBuffer[20480] = {};
 	int tlen = 20480;
 	if (length <= 0) return szBuffer;
-	uint32 len = 0;
+	int len = 0;
 	sprintf_s(szBuffer + len, tlen - len, "\n");
+	len = strlen(szBuffer);
 	for (int i = 0; i < length; i++)
 	{
-		sprintf_s(szBuffer + len, tlen - len, "%02X ", datas[i]);
+		sprintf_s(szBuffer + len, tlen - len, "%02X ", (unsigned char)datas[i]);
 		len = strlen(szBuffer);
+		if ((i + 1) % 4 == 0)
+		{
+			sprintf_s(szBuffer + len, tlen - len, " ");
+			len = strlen(szBuffer);
+		}
 		if ((i + 1) % 8 == 0) {
 			sprintf_s(szBuffer + len, tlen - len, "\n");
 			len = strlen(szBuffer);

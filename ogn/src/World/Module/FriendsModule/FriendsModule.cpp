@@ -168,13 +168,6 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 	aPlr->sendPacket(res);
 }
 
-void FriendsModule::LoadAllPlayer()
-{
-	char szBuffer[64] = { 0 };
-	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
-	sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
-}
-
 bool FriendsModule::Initialize()
 {
 	sRedisProxy.addEventListener("OnRedisAuth", (EventCallback)&FriendsModule::onRedisAuth, this);
@@ -294,11 +287,34 @@ void FriendsModule::ClearPlayerRecord()
 
 int32 FriendsModule::onRedisAuth(Event& e)
 {
+	char szBuffer[64] = { 0 };
+	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
 	return 0;
 }
 
 int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
 {
+	for (uint32 i = 0; i < e.backstr.size(); i += 2)
+	{
+		std::string keystr = e.backstr[i];
+		std::string valuestr = e.backstr[i + 1];
+		uint32 plrUserId = Shared::strtoint32(keystr);
+		if (FindPlrRecord(plrUserId)) {
+			continue;
+		}
+
+		Json::Reader jsonReader;
+		Json::Value root;
+		jsonReader.parse(valuestr.c_str(), root);
+		Json::Value userJson = root["user"];
+		PlayerRecord* aPlrRecd = new PlayerRecord;
+		aPlrRecd->mUserId = userJson["userId"].asUInt();
+		aPlrRecd->mName = userJson["name"].asString();
+		AddPlrRecord(aPlrRecd);
+	}
+	std::map<uint32, PlayerRecord*>& mapPlayer = GetMapPlayer();
+	LOG_DEBUG(LogSystem::csl_color_green, "load plr count: %d", mapPlayer.size());
 	return 0;
 }
 

@@ -30,6 +30,8 @@ public:
 	PlayerRecord* AddPlrRecord(PlayerRecord* aPlrRecord);
 	PlayerRecord* FindPlrRecord(uint32 userId);
 
+	std::map<uint32, PlayerRecord*>& GetMapPlayer() { return mMapPlrRecords; }
+
 	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
 	bool DelFriends(uint32 tarUserId);
 	bool MutualBindFriend(Player* tar, Player* frd);
@@ -40,7 +42,6 @@ public:
 
 	void DoFriendsList(Player* aPlr);
 
-	void LoadAllPlayer();
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);

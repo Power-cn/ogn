@@ -132,9 +132,9 @@ public:
 id = 0;
 accountId = 0;
 name = "";
-property;
 createTime = 0;
 onlinetotaltime = 0;
+datas;
 datastr = "";
 
 	}
@@ -143,9 +143,9 @@ datastr = "";
 CHECK(bytes << id);
 CHECK(bytes << accountId);
 CHECK(bytes << name);
-CHECK(bytes << property);
 CHECK(bytes << createTime);
 CHECK(bytes << onlinetotaltime);
+CHECK(bytes << datas);
 CHECK(bytes << datastr);
 
 		return true;
@@ -155,9 +155,9 @@ CHECK(bytes << datastr);
 CHECK(bytes >> id);
 CHECK(bytes >> accountId);
 CHECK(bytes >> name);
-CHECK(bytes >> property);
 CHECK(bytes >> createTime);
 CHECK(bytes >> onlinetotaltime);
+CHECK(bytes >> datas);
 CHECK(bytes >> datastr);
 
 		return true;
@@ -166,9 +166,9 @@ public:
 uint32 id;
 uint32 accountId;
 std::string name;
-BinaryStream property;
 uint32 createTime;
 uint32 onlinetotaltime;
+BinaryStream datas;
 std::string datastr;
 
 };

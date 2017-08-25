@@ -165,7 +165,7 @@ int32 SessionHandler::onNetQueryRoleReq(Player* aPlr, NetQueryRoleReq* req)
 				info.accountId = role.id;
 				info.name = role.name;
 				DBUser& dbUser = retRoles[i];
-				info.property.write(dbUser.property.datas(), dbUser.property.wpos());
+				info.datas.write(dbUser.datas.datas(), dbUser.datas.wpos());
 				info.createTime = dbUser.createTime;
 				info.onlinetotaltime = dbUser.onlinetotaltime;
 				res.roleInfos.push_back(info);
@@ -184,7 +184,7 @@ int32 SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* n
 		DBRoleInfo& info = nfy->roleInfos[i];
 		DBUser dbRole;
 		dbRole.id = info.id;
-		dbRole.property.write(info.property.datas(), info.property.wpos());
+		dbRole.datas.write(info.datas.datas(), info.datas.wpos());
 		dbRole.onlinetotaltime = info.onlinetotaltime;
 		dbRole.datastr = info.datastr;
 		uint32 updateRows = 0;
@@ -284,9 +284,9 @@ int SessionHandler::DoQueryRole(NetLoginReq* req, NetLoginRes& res)
 				info.id = dbUser.id;
 				info.accountId = dbUser.accountId;
 				info.name = dbUser.name;
-				info.property.write(dbUser.property.datas(), dbUser.property.wpos());
 				info.createTime = dbUser.createTime;
 				info.onlinetotaltime = dbUser.onlinetotaltime;
+				info.datas.write(dbUser.datas.datas(), dbUser.datas.wpos());
 				//info.datastr = dbUser.datastr;
 				res.roleInfos.push_back(info);
 			}
@@ -336,7 +336,7 @@ int SessionHandler::DoCreateRole(NetCreateRoleReq* req, NetCreateRoleRes& res)
 		info.id = role.id;
 		info.accountId = role.id;
 		info.name = role.name;
-		info.property.write(role.property.datas(), role.property.wpos());
+		info.datas.write(role.datas.datas(), role.datas.wpos());
 	}
 	return 1;
 }
@@ -363,9 +363,9 @@ int SessionHandler::DoSelectRole(NetSelectRoleReq* req, NetSelectRoleRes& res)
 			info.id = role.id;
 			info.accountId = role.accountId;
 			info.name = role.name;
-			info.property.write(role.property.datas(), role.property.wpos());
 			info.createTime = role.createTime;
 			info.onlinetotaltime = role.onlinetotaltime;
+			info.datas.write(role.datas.datas(), role.datas.wpos());
 			info.datastr = role.datastr;
 			res.result = 0;
 		}

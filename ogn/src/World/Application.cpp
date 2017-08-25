@@ -318,7 +318,7 @@ void Application::doPlayerSave(Player* plr, Dictionary& bytes)
 	DBRoleInfo info;
 	info.accountId = plr->getAccId();
 	info.id = plr->getUserId();
-	info.property.write(stream.datas(), stream.wpos());
+	info.datas.write(stream.datas(), stream.wpos());
 	info.datastr = datastr;
 	if (plr->GetOnline()) {
 		info.onlinetotaltime = plr->GetOnlineTime() + (DateTime::Now() - plr->GetOnlineTimer());

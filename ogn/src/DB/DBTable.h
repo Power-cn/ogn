@@ -29,9 +29,9 @@ public:
 public:
 	uint32 accountId = 0;
 	std::string name;
-	BinaryStream property;
 	uint32 createTime = 0;
 	uint32 onlinetotaltime = 0;
+	BinaryStream datas;
 	std::string datastr;
 
 	DECLARE_TABLE(DBUser)

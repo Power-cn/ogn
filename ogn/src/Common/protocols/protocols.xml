@@ -15,9 +15,9 @@
       <member type="uint32" name="id" />
       <member type="uint32" name="accountId" />
       <member type="string" name="name" />
-      <member type="BinaryStream" name="property" />
       <member type="uint32" name="createTime" />
       <member type="uint32" name="onlinetotaltime" />
+      <member type="BinaryStream" name="datas" />
       <member type="string" name="datastr" />
     </element>
 
