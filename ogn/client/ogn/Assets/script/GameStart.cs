@@ -88,7 +88,7 @@ public class GameStart : MonoBehaviour {
 
 	}
 
-    public void Connect(string host, short port)
+    public void ConnectSvr()
     {
         if (socketClient != null)
         {
@@ -99,7 +99,7 @@ public class GameStart : MonoBehaviour {
             socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
             return;
         }
-        socketClient = sNetwork.Connect(host, port);
+        socketClient = sNetwork.Connect("127.0.0.1", 13380);
         socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
         socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
         socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
@@ -153,7 +153,7 @@ public class GameStart : MonoBehaviour {
 
         BinaryStream bit = new BinaryStream(se.data);
         packet.deSerialize(bit);
-        sHandler.dispatchEvent(packet.MsgID, socketClient, packet);
+        sHandler.dispatchEvent(packet.MsgID, se.socket, packet);
 
         return 0;
     }

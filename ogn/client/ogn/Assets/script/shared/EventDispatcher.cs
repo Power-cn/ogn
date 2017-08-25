@@ -16,14 +16,14 @@ public class EventRegister
     public static int s_id = 0;
     public int id = 0;
     public string name = "";
-    public EventDispatcher.EventCallBack callback = null;
+    public EventDispatcher.CallBack callback = null;
     public Object param = null;
 
     public EventRegister()
     {
         this.id = ++s_id;
     }
-    public bool equalListener(string name, EventDispatcher.EventCallBack callback)
+    public bool equalListener(string name, EventDispatcher.CallBack callback)
     {
         if (this.name == name && this.callback == callback)
 		    return true;
@@ -31,19 +31,42 @@ public class EventRegister
 	    return false;
     }
 }
-public class EventDispatcher
-{
-    public delegate int EventCallBack(EventTarget e);
-    public delegate int EventCallBackProcess(Object lprama, Object wprama);
-    protected Dictionary<string, List<EventRegister>> listener = new Dictionary<string, List<EventRegister>>();
-    protected Dictionary<int, List<EventCallBackProcess>> listener_ = new Dictionary<int, List<EventCallBackProcess>>();
 
-    public EventDispatcher()
+public class EventInvoke
+{
+    public virtual void Invoke(Object p1, Object p2)
     {
 
     }
+}
 
-    public int addEventListener(string name, EventCallBack callback, Object param = null)
+public class EventCallBack<T1, T2> : EventInvoke
+{
+    public delegate int Callback(T1 lprama, T2 wprama);
+    public Callback callback;
+    public EventCallBack(Callback cb)
+    {
+        callback = cb;
+    }
+    public override void Invoke(Object t1, Object t2)
+    {
+        T1 p1 = (T1)t1;
+        T2 p2 = (T2)t2;
+        callback.Invoke(p1, p2);
+    }
+}
+
+public class EventDispatcher
+{
+    public delegate int CallBack(EventTarget e);
+    protected Dictionary<string, List<EventRegister>> listener = new Dictionary<string, List<EventRegister>>();
+    protected Dictionary<int, List<EventInvoke>> listener_ = new Dictionary<int, List<EventInvoke>>();
+
+    public EventDispatcher() {
+
+    }
+
+    public int addEventListener(string name, CallBack callback, Object param = null)
     {
         EventRegister lis = new EventRegister();
         lis.name = name;
@@ -63,25 +86,22 @@ public class EventDispatcher
         return lis.id;
     }
 
-    public int addEventListener(int id, EventCallBackProcess callback)
+    public int addEventListener(int id, EventInvoke callback)
     {
-        EventCallBackProcess c = callback as EventCallBackProcess;
-        List<EventCallBackProcess> listeners = null;
+        List<EventInvoke> listeners = null;
         if (listener_.ContainsKey(id)) {
             listeners = listener_[id];
         }
         else
         {
-            listeners = new List<EventCallBackProcess>();
+            listeners = new List<EventInvoke>();
             listener_[id] = listeners;
         }
-
-        listeners.Add(c);
-
+        listeners.Add(callback);
         return 0;
     }
 
-    public int removeEventListener(string name, EventCallBack callback)
+    public int removeEventListener(string name, CallBack callback)
     {
         List<EventRegister> listeners = null;
         if (!listener.ContainsKey(name))
@@ -117,13 +137,12 @@ public class EventDispatcher
 
     public int dispatchEvent(int id, Object lparam, Object wparam)
     {
-        List<EventCallBackProcess> listeners = null;
+        List<EventInvoke> listeners = null;
         if (!listener_.ContainsKey(id))
             return 0;
 
         listeners = listener_[id];
-        for (int i = 0; i < listeners.Count; ++i)
-        {
+        for (int i = 0; i < listeners.Count; ++i) {
             listeners[i].Invoke(lparam, wparam);
         }
         return 0;

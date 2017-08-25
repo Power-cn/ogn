@@ -262,7 +262,11 @@ public class SocketAngent : EventDispatcher
 
 public class SocketClient : SocketAngent
 {
-
+    public void SendPacket(Packet packet)
+    {
+        if (socket == null) return;
+        socket.SendPacket(packet);
+    }
 }
 
 public class SocketListener : SocketAngent

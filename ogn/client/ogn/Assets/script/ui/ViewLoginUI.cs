@@ -28,7 +28,7 @@ public class ViewLoginUI : MonoBehaviour
     {
         if (GameStart.socketClient == null)
         {
-            GameStart.gameStart.Connect("127.0.0.1", 13380);
+            GameStart.gameStart.ConnectSvr();
             return;
         }
         NetLoginReq req = new NetLoginReq();
