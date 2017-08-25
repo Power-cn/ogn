@@ -13,8 +13,8 @@ public class PlayerManager : Singleton<PlayerManager>
         set { mLocalPlayer = value; }
     }
 
-    public Dictionary<int, Player> dictAccIdPlayer = new Dictionary<int, Player>();
-    public Dictionary<int, Player> dictUserIdPlayer = new Dictionary<int, Player>();
+    public Dictionary<uint, Player> dictAccIdPlayer = new Dictionary<uint, Player>();
+    public Dictionary<uint, Player> dictUserIdPlayer = new Dictionary<uint, Player>();
     public Dictionary<string, Player> dictNamePlayer = new Dictionary<string, Player>();
     public bool isLocalPlayer(long guid)
     {
@@ -27,14 +27,14 @@ public class PlayerManager : Singleton<PlayerManager>
         return localPlayer;
     }
 
-    public Player FindPlayerByAccId(int accId)
+    public Player FindPlayerByAccId(uint accId)
     {
         if (dictAccIdPlayer.ContainsKey(accId))
             return dictAccIdPlayer[accId];
         return null;
     }
 
-    public Player FindPlayerByUserId(int userId)
+    public Player FindPlayerByUserId(uint userId)
     {
         if (dictUserIdPlayer.ContainsKey(userId))
             return dictUserIdPlayer[userId];
@@ -63,7 +63,7 @@ public class PlayerManager : Singleton<PlayerManager>
         return aPlr;
     }
 
-    public void RemovePlayer(int accId)
+    public void RemovePlayer(uint accId)
     {
         Player aPlr = FindPlayerByAccId(accId);
         if (aPlr == null) return;

@@ -50,12 +50,10 @@ public class EventDispatcher
 	    lis.callback = callback;
 	    lis.param = param;
         List<EventRegister> listeners = null;
-        if (listener.ContainsKey(name))
-        {
+        if (listener.ContainsKey(name)) {
             listeners = listener[name];
         }
-        else
-        {
+        else {
             listeners = new List<EventRegister>();
             listener[name] = listeners;
         }
@@ -69,8 +67,7 @@ public class EventDispatcher
     {
         EventCallBackProcess c = callback as EventCallBackProcess;
         List<EventCallBackProcess> listeners = null;
-        if (listener_.ContainsKey(id))
-        {
+        if (listener_.ContainsKey(id)) {
             listeners = listener_[id];
         }
         else

@@ -30,6 +30,7 @@ public partial class SocketHandler : EventDispatcher
         {
             LocalPlayer localPlayer = PlayerManager.Instance.CreateLocalPlayer();
             localPlayer.Guid = res.guid;
+            
             localPlayer.AccId = res.accInfo.id;
             localPlayer.Name = res.accInfo.user;
             localPlayer.client = GameStart.socketClient.socket;
@@ -105,7 +106,7 @@ public partial class SocketHandler : EventDispatcher
 
         //    }
 
-        //    ViewMainUI viewMainUI = GameStart.uiMgr.getUIPlane("main_ui").GetComponent<ViewMainUI>();
+        //    ViewMainUI viewMainUI = GameStart.uiMgr.getWindow("main_ui").GetComponent<ViewMainUI>();
         //    viewMainUI.RefreshInfo(PlayerManager.playerMgr.localPlayer);
         //    return 1;
         //}

@@ -10,7 +10,7 @@ public class GameStart : MonoBehaviour {
 
     public static GameStart gameStart = new GameStart();
     public static SocketClient socketClient;
-    public static Network network = Network.Instance;
+    public static Network sNetwork = Network.Instance;
     public static SocketHandler sHandler = new SocketHandler();
     public static PlayerManager sPlrMgr = PlayerManager.Instance;
     public static ConfigManager sCfgMgr = ConfigManager.Instance;
@@ -76,7 +76,7 @@ public class GameStart : MonoBehaviour {
 
 	// Update is called once per frame
 	void Update () {
-        network.update();
+        sNetwork.update();
         World.Instance.update();
         //Handles.DrawLine
 
@@ -99,7 +99,7 @@ public class GameStart : MonoBehaviour {
             socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
             return;
         }
-        socketClient = network.Connect(host, port);
+        socketClient = sNetwork.Connect(host, port);
         socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
         socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
         socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
@@ -108,7 +108,7 @@ public class GameStart : MonoBehaviour {
     }
     public void reConnect()
     {
-        network.reConnect(socketClient);
+        sNetwork.reConnect(socketClient);
     }
 
     protected int onConnect(EventTarget e)

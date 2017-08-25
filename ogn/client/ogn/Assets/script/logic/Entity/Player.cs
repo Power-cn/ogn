@@ -2,14 +2,14 @@
 using System.Collections;
 using System.Collections.Generic;
 public class Player : Entity{
-    protected int mAccId;
-    protected int mUserId;
-    public int AccId
+    protected uint mAccId;
+    protected uint mUserId;
+    public uint AccId
     {
         get { return mAccId; }
         set { mAccId = value; }
     }
-    public int UserId
+    public uint UserId
     {
         get { return mUserId; }
         set { mUserId = value; }

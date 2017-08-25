@@ -63,8 +63,8 @@ public class Variant
         public ushort value_uint16;
         public int value_int32;
         public uint value_uint32;
-        public Int64 value_int64;
-        public UInt64 value_uint64;
+        public long value_int64;
+        public ulong value_uint64;
         public float value_float32;
         public double value_float64;
         public string value_string;
@@ -125,13 +125,13 @@ public class Variant
         mValue.value_uint32 = value;
     }
 
-    public Variant(Int64 value)
+    public Variant(long value)
     {
         mType = TypeInt64;
         mValue.value_int64 = value;
     }
 
-    public Variant(UInt64 value)
+    public Variant(ulong value)
     {
         mType = TypeUint64;
         mValue.value_uint64 = value;
@@ -200,13 +200,13 @@ public class Variant
             return mValue.value_uint32;
         return 0;
     }
-    public Int64 GetInt64()
+    public long GetInt64()
     {
         if (mType == TypeInt64)
             return mValue.value_int64;
         return 0;
     }
-    public UInt64 GetUint64()
+    public ulong GetUint64()
     {
         if (mType == TypeBoolean)
             return mValue.value_uint64;

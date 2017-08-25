@@ -26,7 +26,6 @@ public class UIManager : MonoBehaviour {
             dictUIPlane.Add(node.Attributes["name"].Value, obj);
         }
         openWindow("ui_login");
-
     }
 
     // Update is called once per frame
@@ -39,7 +38,7 @@ public class UIManager : MonoBehaviour {
         if (currentWindow != null)
             currentWindow.SetActive(false);
 
-        currentWindow = getUIPlane(name);
+        currentWindow = getWindow(name);
         currentWindow.SetActive(true);
         return currentWindow;
     }
@@ -53,11 +52,11 @@ public class UIManager : MonoBehaviour {
         if (name == "")
             return currentWindow;
 
-        getUIPlane(name).SetActive(false);
+        getWindow(name).SetActive(false);
         return null;
     }
 
-    public GameObject getUIPlane(string name) {
+    public GameObject getWindow(string name) {
         if (dictUIPlane.ContainsKey(name))
             return dictUIPlane[name];
         return null;
