@@ -298,7 +298,6 @@ int32 FriendsModule::onRedisAuth(Event& e)
 int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
 {
 	float64 s0 = DateTime::GetNowAppUS();
-	float64 ss = s0 - Shared::strtofloat64(e.parstr[0]);
 	for (uint32 i = 0; i < e.backstr.size(); i += 2)
 	{
 		std::string keystr = e.backstr[i];

@@ -253,6 +253,12 @@ bool Player::onLoadJson(Json::Value& root)
 	Json::Value userJson = root["user"]; 
 	uint32 offline_time = userJson["offline"].asUInt();
 	std::string name = userJson["name"].asString();
+
+	uint64 dbytes = userJson["DownloadBytes"].asUInt();
+	uint64 ubytes = userJson["UploadBytes"].asUInt();
+
+	setDownloadBytes(dbytes);
+	setUploadBytes(ubytes);
 	SetOfflineTimer(offline_time);
 
 	return true;
@@ -300,6 +306,11 @@ bool Player::onSavejson(Dictionary& dict)
 
 bool Player::onSavejson(Json::Value& root)
 {
+	if (getSession()) {
+		setTotalDownloadBytes(getDownloadBytes() + getSession()->getDownloadBytes());
+		setTotalUploadBytes(getUploadBytes() + getSession()->getUploadBytes());
+	}
+
 	Json::Value userJson;
 	userJson["accId"] = getAccId();
 	userJson["userId"] = getUserId();
@@ -308,6 +319,8 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["offline"] = GetOfflineTimer();
 	userJson["lasthost"] = getHost();
 	userJson["onlinetotaltime"] = GetOnlineTime();
+	userJson["DownloadBytes"] = (uint32)(getTotalDownloadBytes());
+	userJson["UploadBytes"] = (uint32)(getTotalUploadBytes());
 
 	root["user"] = userJson;
 	return true;

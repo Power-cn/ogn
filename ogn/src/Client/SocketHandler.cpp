@@ -4,16 +4,16 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	for (auto itr : mapRobotJson)
-	{
-		RobotJson& robotJson = itr.second;
-		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	}
-	for (int i = 0; i < mapRobotJson.size(); ++i)
-	{
-		createRobot();
-	}
+	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	//for (auto itr : mapRobotJson)
+	//{
+	//	RobotJson& robotJson = itr.second;
+	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	//}
+	//for (int i = 0; i < mapRobotJson.size(); ++i)
+	//{
+	//	createRobot();
+	//}
 	//createRobot();
 }
 

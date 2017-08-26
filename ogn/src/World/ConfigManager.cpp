@@ -127,7 +127,7 @@ void ConfigManager::loadMapJson(const std::string& path)
 
 		mapJson.Row = v["Row"].asUInt();
 		mapJson.Col = v["Col"].asUInt();
-		mapJson.Cell = v["Cell"].asDouble();
+		mapJson.Cell = v["Cell"].asFloat();
 		mapJson.LogicRow = v["LogicRow"].asUInt();
 		mapJson.LogicCol = v["LogicCol"].asUInt();
 		mapJson.ViewCell = v["ViewCell"].asUInt();
@@ -223,12 +223,12 @@ void ConfigManager::loadPropertyJson(const std::string& path)
 
 		PropertyJson propertyJson;
 		propertyJson.ID = v["ID"].asUInt();
-		propertyJson.Speed = v["Speed"].asDouble();
+		propertyJson.Speed = v["Speed"].asFloat();
 		propertyJson.MaxHp = v["MaxHp"].asUInt();
 		propertyJson.MaxMp = v["MaxMp"].asUInt();
 		propertyJson.Attack = v["Attack"].asUInt();
 		propertyJson.Defense = v["Defense"].asUInt();
-		propertyJson.SpeedUp = v["SpeedUp"].asDouble();
+		propertyJson.SpeedUp = v["SpeedUp"].asFloat();
 		propertyJson.MaxHpUp = v["MaxHpUp"].asUInt();
 		propertyJson.MaxMpUp = v["MaxMpUp"].asUInt();
 		propertyJson.AttackUp = v["AttackUp"].asUInt();

@@ -363,7 +363,7 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	if (ssn == NULL)
 		break;
-
+	ssn->addUploadBytes(packetCount + sizeof(uint32));
 	Packet* pack = sPacketMgr.Alloc(msgId);
 	if (pack == NULL) break;
 

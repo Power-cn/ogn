@@ -16,8 +16,9 @@ public:
 	void setSocket(Socket* s) { mSocket = s; }
 	Socket* getSocket() { return mSocket; }
 	uint32 getSocketId();
+	uint64 getDownloadBytes() { return mDownloadBytes; }
+	uint64 getUploadBytes() { return mUploadBytes; }
 
-	void sendPacket(Packet& packet);
 	void sendBuffer(void* data, int32 count);
 	void sendPacketToDB(Packet& packet);
 
@@ -25,6 +26,8 @@ public:
 	void sendBufferToWorld(void* data, int32 count);
 	const std::string& getHost() { return mHost; }
 	void setHost(const std::string& host) { mHost = host; }
+	void addDownloadBytes(uint32 bytes) { mDownloadBytes += bytes; }
+	void addUploadBytes(uint32 bytes) { mUploadBytes += bytes; }
 protected:
 	static		uint32 sId;
 protected:
@@ -32,4 +35,6 @@ protected:
 	Player*		mPlayer;
 	Socket*		mSocket;
 	std::string mHost;
+	uint64		mDownloadBytes;
+	uint64		mUploadBytes;
 };

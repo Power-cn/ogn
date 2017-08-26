@@ -96,13 +96,25 @@ public:
 	void SetOnlineTimer(uint32 t) { mOnlineTimer = t; }
 	void SetOfflineTimer(uint32 t) { mOfflineTimer = t; }
 	void SetOnlineTime(uint32 t) { mOnlineTime = t; }
+	void setDownloadBytes(uint64 bytes) { mDownloadBytes = bytes; }
+	void setUploadBytes(uint64 bytes) { mUploadBytes = bytes; }
+	void setTotalDownloadBytes(uint64 bytes) { mTotalDownloadBytes = bytes; }
+	void setTotalUploadBytes(uint64 bytes) { mTotalUploadBytes = bytes; }
 
 	uint32 GetOnlineTimer() { return mOnlineTimer; }
 	uint32 GetOfflineTimer() { return mOfflineTimer; }
 	uint32 GetOnlineTime() { return mOnlineTime; }
+
+	uint64 getDownloadBytes() { return mDownloadBytes; }
+	uint64 getUploadBytes() { return mUploadBytes; }
+	uint64 getTotalDownloadBytes() { return mTotalDownloadBytes; }
+	uint64 getTotalUploadBytes() { return mTotalUploadBytes; }
 protected:
 	uint32				mOnlineTimer;
 	uint32				mOfflineTimer;
 	uint32				mOnlineTime; // 在线总时长
-
+	uint64				mDownloadBytes = 0;
+	uint64				mUploadBytes = 0;
+	uint64				mTotalDownloadBytes = 0;
+	uint64				mTotalUploadBytes = 0;
 };
