@@ -34,21 +34,36 @@ public class EventRegister
 
 public class EventInvoke
 {
-    public virtual void Invoke(Object p1, Object p2)
+    public virtual void Invoke(object p1)
+    {
+
+    }
+
+    public virtual void Invoke(object p1, object p2)
+    {
+
+    }
+
+    public virtual void Invoke(object p1, object p2, object p3)
+    {
+
+    }
+
+    public virtual void Invoke(object p1, object p2, object p3, object p4)
     {
 
     }
 }
 
-public class EventCallBack<T1, T2> : EventInvoke
+public class EventCallBack2<T1, T2> : EventInvoke
 {
     public delegate int Callback(T1 lprama, T2 wprama);
     public Callback callback;
-    public EventCallBack(Callback cb)
+    public EventCallBack2(Callback cb)
     {
         callback = cb;
     }
-    public override void Invoke(Object t1, Object t2)
+    public override void Invoke(object t1, object t2)
     {
         T1 p1 = (T1)t1;
         T2 p2 = (T2)t2;
@@ -66,7 +81,7 @@ public class EventDispatcher
 
     }
 
-    public int addEventListener(string name, CallBack callback, Object param = null)
+    public int addEventListener(string name, CallBack callback, object param = null)
     {
         EventRegister lis = new EventRegister();
         lis.name = name;
