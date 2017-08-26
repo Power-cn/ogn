@@ -35,11 +35,11 @@ bool WorldModule::Update(float time, float delay)
 		ent->Destroy();
 	}
 
-	float64 s1 = DateTime::GetNowAppUS() - s0;
-	if (s1 >= 0.02f)
-	{
-		LOG_ERROR("Update delay: %0.3f", s1);
-	}
+	//float64 s1 = DateTime::GetNowAppUS() - s0;
+	//if (s1 >= 0.02f)
+	//{
+	//	LOG_ERROR("Update delay: %0.3f", s1);
+	//}
 	return true;
 }
 

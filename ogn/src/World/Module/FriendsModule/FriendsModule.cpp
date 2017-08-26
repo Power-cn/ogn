@@ -289,12 +289,16 @@ int32 FriendsModule::onRedisAuth(Event& e)
 {
 	char szBuffer[64] = { 0 };
 	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
+	float64 s0 = DateTime::GetNowAppUS();
 	sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
+
 	return 0;
 }
 
 int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
 {
+	float64 s0 = DateTime::GetNowAppUS();
+	float64 ss = s0 - Shared::strtofloat64(e.parstr[0]);
 	for (uint32 i = 0; i < e.backstr.size(); i += 2)
 	{
 		std::string keystr = e.backstr[i];
@@ -313,7 +317,7 @@ int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
 		aPlrRecd->mName = userJson["name"].asString();
 		AddPlrRecord(aPlrRecd);
 	}
-	std::map<uint32, PlayerRecord*>& mapPlayer = GetMapPlayer();
+	MapPlayerRecord& mapPlayer = GetMapPlayer();
 	LOG_DEBUG(LogSystem::csl_color_green, "load plr count: %d", mapPlayer.size());
 	return 0;
 }

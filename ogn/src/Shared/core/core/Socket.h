@@ -40,6 +40,7 @@ public:
 	void sendPacket(Packet& packet);
 	void sendPacket(void* data, int32 count);
 	void sendBuffer(void* data, int32 count);
+	void sendBuffer(BinaryStream& bytes);
 	const char* getIP() { return mIP.c_str(); }
 	short getPort() { return mPort; }
 private:

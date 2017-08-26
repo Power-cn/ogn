@@ -12,6 +12,8 @@ public:
 	Player* mPlayer = NULL;
 };
 
+typedef std::map<uint32, Friends*> MapFriends;
+typedef std::map<uint32, PlayerRecord*> MapPlayerRecord;
 
 class FriendsModule : public Module
 {
@@ -30,7 +32,7 @@ public:
 	PlayerRecord* AddPlrRecord(PlayerRecord* aPlrRecord);
 	PlayerRecord* FindPlrRecord(uint32 userId);
 
-	std::map<uint32, PlayerRecord*>& GetMapPlayer() { return mMapPlrRecords; }
+	MapPlayerRecord& GetMapPlayer() { return mMapPlrRecords; }
 
 	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
 	bool DelFriends(uint32 tarUserId);
@@ -58,6 +60,6 @@ protected:
 	int32 onRedisAllPlr(RedisEvent& e);
 	int32 onRedisFindPlr(RedisEvent& e);
 public:
-	std::map<uint32, Friends*>					mMapFriends;
-	std::map<uint32, PlayerRecord*>				mMapPlrRecords;
+	MapFriends					mMapFriends;
+	MapPlayerRecord				mMapPlrRecords;
 };

@@ -177,6 +177,20 @@ std::string Shared::int64tostr(int64 val)
 	return std::string(buf);
 }
 
+std::string Shared::float32tostr(float32 val)
+{
+	int8 buf[32] = { 0 };
+	sprintf_s(buf, 32, "%f", val);
+	return std::string(buf);
+}
+
+std::string Shared::float64tostr(float64 val)
+{
+	int8 buf[64] = { 0 };
+	sprintf_s(buf, 64, "%f", val);
+	return std::string(buf);
+}
+
 int32 Shared::strtoint32(const std::string& val)
 {
 	return ::atoi(val.c_str());
@@ -187,6 +201,16 @@ int64 Shared::strtoint64(const std::string& val)
 	return ::_atoi64(val.c_str());
 }
 
+
+float32 Shared::strtofloat32(const std::string& val)
+{
+	return ::atof(val.c_str());
+}
+
+float64 Shared::strtofloat64(const std::string& val)
+{
+	return ::atof(val.c_str());
+}
 
 std::string Shared::hosttoaddr(const std::string& host)
 {

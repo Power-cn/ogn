@@ -28,6 +28,11 @@ void Socket::sendBuffer(void* data, int32 count)
 	network->postSend(this, data, count);
 }
 
+void Socket::sendBuffer(BinaryStream& bytes)
+{
+	sendBuffer(bytes.datas(), bytes.wpos());
+}
+
 void Socket::sendPacket(Packet& packet)
 {
 	network->postSend(this, packet);
