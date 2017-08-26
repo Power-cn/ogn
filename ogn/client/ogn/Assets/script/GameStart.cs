@@ -8,8 +8,7 @@ using System.Collections.Generic;
 
 public class GameStart : MonoBehaviour {
 
-    public static GameStart gameStart = new GameStart();
-    public static SocketClient socketClient;
+    public static GameStart sGame;
     public static Network sNetwork = Network.Instance;
     public static SocketHandler sHandler = new SocketHandler();
     public static PlayerManager sPlrMgr = PlayerManager.Instance;
@@ -27,8 +26,23 @@ public class GameStart : MonoBehaviour {
     public static GameObject castSprite;
     public static float cell = 0.5f;
     public static Download download;
-	// Use this for initialization
+    // Use this for initialization
+    protected SocketClient socketClient;
+    protected bool mConnect = false;
+    public bool isConnect
+    {
+        get { return mConnect; }
+        set { mConnect = value; }
+    }
 
+    public SocketEntity socket
+    {
+        get { return socketClient.socket; }
+    }
+    public void SendPacket(Packet packet)
+    {
+        SendPacket(packet, socketClient.socket);
+    }
     public void SendPacket(Packet packet, SocketEntity socket)
     {
         byte[] send_data = new byte[Shared.MAX_PACKET_LENGTH];
@@ -68,7 +82,7 @@ public class GameStart : MonoBehaviour {
     }
 
 	void Start () {
-
+        sGame = this;
         //download = gameObject.AddComponent<Download>();
         //download.func = onDownload;
         onDownload();
@@ -90,16 +104,12 @@ public class GameStart : MonoBehaviour {
 
     public void ConnectSvr()
     {
-        if (socketClient != null)
-        {
+        if (socketClient != null) {
             reConnect();
-            socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
-            socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
-            socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
-            socketClient.addEventListener(SocketEvent.EXCEPTION, this.onException);
-            return;
         }
-        socketClient = sNetwork.Connect("127.0.0.1", 13380);
+        else {
+            socketClient = sNetwork.Connect("127.0.0.1", 13380);
+        }
         socketClient.addEventListener(SocketEvent.CONNECT, this.onConnect);
         socketClient.addEventListener(SocketEvent.RECV, this.onRecv);
         socketClient.addEventListener(SocketEvent.EXIT, this.onExit);
@@ -113,6 +123,7 @@ public class GameStart : MonoBehaviour {
 
     protected int onConnect(EventTarget e)
     {
+        isConnect = true;
         Debug.Log("Connect Successful...");
 
         return 0;
@@ -120,6 +131,7 @@ public class GameStart : MonoBehaviour {
 
     protected int onExit(EventTarget e)
     {
+        isConnect = false;
         this.reConnect();
 
         Debug.Log("Disconnect...");
@@ -129,6 +141,7 @@ public class GameStart : MonoBehaviour {
 
     protected int onException(EventTarget e)
     {
+        isConnect = false;
         SocketEvent se = e as SocketEvent;
         this.reConnect();
         Debug.Log(System.Text.Encoding.Default.GetString(se.data));
@@ -153,7 +166,7 @@ public class GameStart : MonoBehaviour {
 
         BinaryStream bit = new BinaryStream(se.data);
         packet.deSerialize(bit);
-        sHandler.dispatchEvent(packet.MsgID, se.socket, packet);
+        sHandler.dispatchEvent(packet.MsgID, packet);
 
         return 0;
     }

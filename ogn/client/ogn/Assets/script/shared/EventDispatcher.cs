@@ -17,7 +17,7 @@ public class EventRegister
     public int id = 0;
     public string name = "";
     public EventDispatcher.CallBack callback = null;
-    public Object param = null;
+    public object param = null;
 
     public EventRegister()
     {
@@ -52,6 +52,21 @@ public class EventInvoke
     public virtual void Invoke(object p1, object p2, object p3, object p4)
     {
 
+    }
+}
+
+public class EventCallBack1<T1> : EventInvoke
+{
+    public delegate int Callback(T1 lprama);
+    public Callback callback;
+    public EventCallBack1(Callback cb)
+    {
+        callback = cb;
+    }
+    public override void Invoke(object t1)
+    {
+        T1 p1 = (T1)t1;
+        callback.Invoke(p1);
     }
 }
 
@@ -150,7 +165,7 @@ public class EventDispatcher
         return 0;
     }
 
-    public int dispatchEvent(int id, Object lparam, Object wparam)
+    public int dispatchEvent(int id, object p1)
     {
         List<EventInvoke> listeners = null;
         if (!listener_.ContainsKey(id))
@@ -158,7 +173,21 @@ public class EventDispatcher
 
         listeners = listener_[id];
         for (int i = 0; i < listeners.Count; ++i) {
-            listeners[i].Invoke(lparam, wparam);
+            listeners[i].Invoke(p1);
+        }
+        return 0;
+    }
+
+    public int dispatchEvent(int id, object p1, object p2)
+    {
+        List<EventInvoke> listeners = null;
+        if (!listener_.ContainsKey(id))
+            return 0;
+
+        listeners = listener_[id];
+        for (int i = 0; i < listeners.Count; ++i)
+        {
+            listeners[i].Invoke(p1, p2);
         }
         return 0;
     }

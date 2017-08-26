@@ -83,5 +83,4 @@ public class PlayerManager : Singleton<PlayerManager>
             dictAccIdPlayer.Remove(aPlr.AccId);
         }
     }
-
 }

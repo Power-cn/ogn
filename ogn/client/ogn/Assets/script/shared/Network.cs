@@ -183,6 +183,10 @@ public class SocketEntity
     {
         this.SendBuffer(data, data.Length);
     }
+    public void SendBuffer(BinaryStream bytes)
+    {
+        SendBuffer(bytes.buffer, bytes.wpos);
+    }
 
     public void SendBuffer(byte[] data, int length, int index = 0)
     {

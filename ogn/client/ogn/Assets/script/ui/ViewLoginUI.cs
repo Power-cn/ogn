@@ -26,15 +26,14 @@ public class ViewLoginUI : MonoBehaviour
 
     void onLoginClick(Button button)
     {
-        if (GameStart.socketClient == null)
+        if (GameStart.sGame.isConnect == false)
         {
-            GameStart.gameStart.ConnectSvr();
+            GameStart.sGame.ConnectSvr();
             return;
         }
         NetLoginReq req = new NetLoginReq();
         req.user = inputUser.text;
         req.password = inputPwd.text;
-        GameStart.gameStart.SendPacket(req, GameStart.socketClient.socket);
-        //GameStart.textDebug.text = "onLoginClick";
+        GameStart.sGame.SendPacket(req);
     }
 }

@@ -67,12 +67,12 @@ public class NpcConfig
 
 public class MapConfig
 {
-   	public int				ID;
-	public string			Name;
-    byte                   Type;
+   	public int ID;
+	public string Name;
+    byte Type;
     public int Row;
     public int Col;
-    public double            Cell;
+    public double Cell;
     public int LogicRow;
     public int LogicCol;
     public int ViewCell;

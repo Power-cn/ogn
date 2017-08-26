@@ -12,7 +12,6 @@ public class UIManager : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 
-
         XmlDocument doc = new XmlDocument();
         TextAsset text = AssetManager.Instance .getTextAssetAsset("config/ui_config");
         doc.LoadXml(System.Text.Encoding.UTF8.GetString(text.bytes));

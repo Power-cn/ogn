@@ -12,7 +12,7 @@ public class LocalPlayer : Player {
     public override void  SendPacket(Packet packet)
     {
         if (client == null) return;
-        GameStart.gameStart.SendPacket(packet, client);
+        GameStart.sGame.SendPacket(packet, client);
     }
 
 }

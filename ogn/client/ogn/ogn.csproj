@@ -73,6 +73,7 @@
   <ItemGroup>
     <Compile Include="Assets\script\ConstDef.cs" />
     <Compile Include="Assets\script\GameStart.cs" />
+    <Compile Include="Assets\script\SocketHandler\LoginHandler.cs" />
     <Compile Include="Assets\script\SocketHandler\SocketHandler.cs" />
     <Compile Include="Assets\script\SocketHandler\Test.cs" />
     <Compile Include="Assets\script\logic\AssetManager.cs" />

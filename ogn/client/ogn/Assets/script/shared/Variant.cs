@@ -26,7 +26,7 @@ public class Variant
     public const int TypeMemory = 15;
 
 
-    public static int GetTypeForString(string str)
+    public static int convert(string str)
     {
         if (str == "bool")
             return TypeBoolean;
