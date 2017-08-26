@@ -7,6 +7,8 @@ RobotManager::RobotManager()
 	mMapData = new char[100 * 100];
 	memset(mMapData, 0, 100 * 100);
 
+	addEventListener(ID_NetSessionLeaveNotify, (EventCallbackProcess)&RobotManager::onNetSessionLeaveNotify, this);
+
 	//addEventListener(ID_NetPingNotify, (EventCallbackProcess)&RobotManager::onNetPingNotify, this);
 	addEventListener(ID_NetLoginRes, (EventCallbackProcess)&RobotManager::onNetLoginRes, this);
 	addEventListener(ID_NetCreateRoleRes, (EventCallbackProcess)&RobotManager::onNetCreateRoleRes, this);
@@ -80,6 +82,12 @@ void RobotManager::update(float32 time, float32 delay)
 	{
 		itr.second->update(time, delay);
 	}
+}
+
+int RobotManager::onNetSessionLeaveNotify(Robot* robot, NetSessionLeaveNotify* nfy)
+{
+	LOG_ERROR(__FUNCTION__);
+	return 0;
 }
 
 int RobotManager::onNetPingNotify(Robot* robot, NetPingNotify* nfy)

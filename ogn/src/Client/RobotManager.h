@@ -11,6 +11,8 @@ public:
 	Robot* getRobat(Socket* socket);
 	void update(float32 time, float32 delay);
 protected:
+	int onNetSessionLeaveNotify(Robot* robot, NetSessionLeaveNotify* nfy);
+	
 	int onNetPingNotify(Robot* robot, NetPingNotify* nfy);
 	int onNetLoginRes(Robot* robot, NetLoginRes* res);
 	int onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res);

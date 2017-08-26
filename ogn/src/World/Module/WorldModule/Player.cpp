@@ -237,7 +237,7 @@ bool Player::onLoadJson(Dictionary& dict)
 {
 	std::string jsonstr;
 	if (dict.ContainsKey("datastr"))
-		jsonstr = dict["json"].valueString();
+		jsonstr = dict["datastr"].valueString();
 	Json::Reader jsonReader;
 	Json::Value& root = GetJson();
 	root.clear();
