@@ -1,16 +1,16 @@
 /*
 Navicat MySQL Data Transfer
 
-Source Server         : ogn
+Source Server         : ognsvr
 Source Server Version : 50717
-Source Host           : localhost:3306
-Source Database       : ogn
+Source Host           : 112.74.49.74:3306
+Source Database       : game
 
 Target Server Type    : MYSQL
 Target Server Version : 50717
 File Encoding         : 65001
 
-Date: 2017-06-09 20:22:49
+Date: 2017-08-25 14:50:37
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -28,12 +28,22 @@ CREATE TABLE `account` (
   `phone` varchar(32) NOT NULL,
   `createTime` int(11) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=643 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=6949 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
--- Records of account
+-- Table structure for product
 -- ----------------------------
-INSERT INTO `account` VALUES ('641', 'robot1', '', '', '', '', '0');
+DROP TABLE IF EXISTS `product`;
+CREATE TABLE `product` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `productId` int(11) DEFAULT NULL,
+  `userId` int(11) DEFAULT NULL,
+  `buyUserId` int(11) DEFAULT NULL,
+  `shelvesTime` int(11) DEFAULT NULL,
+  `unShelvesTime` int(11) DEFAULT NULL,
+  `datastr` varchar(4096) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
 
 -- ----------------------------
 -- Table structure for user
@@ -43,13 +53,9 @@ CREATE TABLE `user` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `accountId` int(11) NOT NULL,
   `name` varchar(32) NOT NULL,
-  `property` blob NOT NULL,
   `createTime` int(11) NOT NULL,
+  `onlinetotaltime` int(11) NOT NULL,
+  `datas` blob NOT NULL,
+  `datastr` varchar(8192) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=642 DEFAULT CHARSET=utf8;
-
--- ----------------------------
--- Records of user
--- ----------------------------
-INSERT INTO `user` VALUES ('640', '641', 'robot1', 0x0000000B06000000020C0006726F626F74310600000004070000000206000000050700000001060000000606000000000600000007060000000006000000080A40A0000006000000090201060000000A0301060000000D0600000064060000000E06000000640C00046A736F6E0C004F7B0A202020226C617374686F737422203A20223132372E302E302E31222C0A202020226F66666C696E6522203A20313439363939363435302C0A202020227465737422203A202274657374220A7D0A, '0');
-INSERT INTO `user` VALUES ('641', '642', 'robot1', '', '0');
+) ENGINE=InnoDB AUTO_INCREMENT=4948 DEFAULT CHARSET=utf8;
