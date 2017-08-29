@@ -304,7 +304,7 @@ int RobotManager::onNetMailListNotify(Robot* robot, NetMailListNotify* nfy)
 	for (uint32 i = 0; i < nfy->mailInfos.size(); ++i)
 	{
 		MailInfo& info = nfy->mailInfos[i];
-		LOG_INFO("title:%s\n content:%s\n\n", info.title.c_str(), info.content.c_str());
+		LOG_INFO("\ntitle:%s\ncontent:%s\n", info.title.c_str(), info.content.c_str());
 	}
 	return  0;
 }

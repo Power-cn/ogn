@@ -178,6 +178,7 @@ Module* Application::getModule(const std::string& name)
 	auto itr = mMapModule.find(name);
 	if (itr != mMapModule.end())
 		return itr->second;
+	LOG_ERROR("%s == NULL", name.c_str());
 	return NULL;
 }
 
