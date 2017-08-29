@@ -216,6 +216,7 @@ void PropertyHelper::setGold(Player* aPlr, int32 value)
 	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
 	if (aPro == NULL)	return;
 	aPro->mGold = value;
+	sRank.RankAdd(RT_Gold, aPlr->getUserId(), aPro->mGold);
 	aPlr->addChangeValue(ep_Gold, value);
 }
 
@@ -224,6 +225,7 @@ void PropertyHelper::addGold(Player* aPlr, int32 value)
 	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
 	if (aPro == NULL)	return;
 	aPro->mGold += value;
+	sRank.RankAdd(RT_Gold, aPlr->getUserId(), aPro->mGold);
 	aPlr->addChangeValue(ep_Gold, aPro->mGold);
 }
 

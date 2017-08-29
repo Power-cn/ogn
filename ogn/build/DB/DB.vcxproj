@@ -102,7 +102,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -118,7 +118,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN64;_DEBUG</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -136,7 +136,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -156,7 +156,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN64</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/json/include;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/modules/libmysql/src;../../src/Shared;../../src/DB;../../src/Shared/core/core;../../src/Shared/core/json;../../src/Shared/core/math;../../src/Common;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

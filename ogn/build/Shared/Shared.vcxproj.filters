@@ -30,12 +30,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_batchallocator.h">
-      <Filter>json</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\Shared\core\json\src\lib_json\json_tool.h">
-      <Filter>json</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\Shared\core\zlib\crc32.h">
       <Filter>zlib</Filter>
     </ClInclude>
@@ -231,28 +225,11 @@
     <ClInclude Include="..\..\src\Shared\core\core\IOCP.h">
       <Filter>core</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\json\json_batchallocator.h">
+      <Filter>json</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\json_valueiterator.inl">
-      <Filter>json</Filter>
-    </None>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalarray.inl">
-      <Filter>json</Filter>
-    </None>
-    <None Include="..\..\src\Shared\core\json\src\lib_json\json_internalmap.inl">
-      <Filter>json</Filter>
-    </None>
-  </ItemGroup>
-  <ItemGroup>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_reader.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_value.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\Shared\core\json\src\lib_json\json_writer.cpp">
-      <Filter>json</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\zlib\adler32.c">
       <Filter>zlib</Filter>
     </ClCompile>
@@ -448,5 +425,25 @@
     <ClCompile Include="..\..\src\Shared\core\core\IOCP.cpp">
       <Filter>core</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\json\json_reader.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\json\json_value.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\json\json_writer.cpp">
+      <Filter>json</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\src\Shared\core\json\json_internalarray.inl">
+      <Filter>json</Filter>
+    </None>
+    <None Include="..\..\src\Shared\core\json\json_internalmap.inl">
+      <Filter>json</Filter>
+    </None>
+    <None Include="..\..\src\Shared\core\json\json_valueiterator.inl">
+      <Filter>json</Filter>
+    </None>
   </ItemGroup>
 </Project>

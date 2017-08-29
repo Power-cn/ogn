@@ -179,7 +179,7 @@ int RobotManager::onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res)
 	req.accId = res->roleInfo.accountId;
 	req.userId = res->roleInfo.id;
 	robot->sendPacket(req);
-	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%0.16llx", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
+	LOG_DEBUG(LogSystem::csl_color_green, "create userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
 	return 0;
 }
 
@@ -191,7 +191,7 @@ int RobotManager::onNetSelectRoleRes(Robot* robot, NetSelectRoleRes* res)
 		return 0;
 	}
 
-	LOG_DEBUG(LogSystem::csl_color_green, "select userId:%d user:%s guid:%0.16llx", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
+	LOG_DEBUG(LogSystem::csl_color_green, "select userId:%d user:%s guid:%llu", res->roleInfo.id, res->roleInfo.name.c_str(), robot->mGuid);
 	return 0;
 }
 

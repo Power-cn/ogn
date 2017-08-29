@@ -118,6 +118,8 @@
 #include "./Module/ShopModule/Shop.h"
 #include "./Module/ShopModule/ShopModule.h"
 
+#include "./Module/RankModule/RankModule.h"
+
 #include "Utils.h"
 #include "DBHandler.h"
 #include "SessionHandler.h"
@@ -141,6 +143,7 @@
 #define sRoom (*GetModule(RoomModule))
 #define sGame (*GetModule(GameModule))
 #define sShop (*GetModule(ShopModule))
+#define sRank (*GetModule(RankModule))
 
 
 #define RegDBEvent(id, cb, thisObject) RegisterEventProcess(GetDBServer(), id, cb, thisObject)

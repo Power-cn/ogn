@@ -4,18 +4,19 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	for (auto itr : mapRobotJson)
-	{
-		RobotJson& robotJson = itr.second;
-		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	}
-	float64 t0 = DateTime::GetNowAppUS();
-	for (int i = 0; i < mapRobotJson.size(); ++i)
-	{
-		createRobot();
-	}
-	float64 t1 = DateTime::GetNowAppUS() - t0;
+	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	//for (auto itr : mapRobotJson)
+	//{
+	//	RobotJson& robotJson = itr.second;
+	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	//}
+	//float64 t0 = DateTime::GetNowAppUS();
+	//for (int i = 0; i < mapRobotJson.size(); ++i)
+	//{
+	//	createRobot();
+	//}
+	//float64 t1 = DateTime::GetNowAppUS() - t0;
+	//LOG_DEBUG(LogSystem::csl_color_red, "t1 = %f", t1);
 	int aaaa = 0;
 	//createRobot();
 }
@@ -96,6 +97,10 @@ void SocketHandler::createRobot()
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 	float64 t1 = DateTime::GetNowAppUS();
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);
+	if (client == NULL) {
+		LOG_ERROR("创建连接失败");
+		return;
+	}
 	float64 t2 = DateTime::GetNowAppUS() - t1;
 	mListSocketClient.push_back(client);
 	mIndex++;

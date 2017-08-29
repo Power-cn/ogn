@@ -1,4 +1,4 @@
-#include <json/writer.h>
+#include "json/writer.h"
 #include <utility>
 #include <assert.h>
 #include <stdio.h>
@@ -39,6 +39,17 @@ static void uintToString( unsigned int value,
    while ( value != 0 );
 }
 
+static void uint64ToString(uint64_t value,
+	char *&current)
+{
+	*--current = 0;
+	do
+	{
+		*--current = (value % 10) + '0';
+		value /= 10;
+	} while (value != 0);
+}
+
 std::string valueToString( Int value )
 {
    char buffer[32];
@@ -61,6 +72,15 @@ std::string valueToString( UInt value )
    uintToString( value, current );
    assert( current >= buffer );
    return current;
+}
+
+std::string valueToString(uint64_t value)
+{
+	char buffer[64];
+	char *current = buffer + sizeof(buffer);
+	uint64ToString(value, current);
+	assert(current >= buffer);
+	return current;
 }
 
 std::string valueToString( double value )
@@ -199,7 +219,7 @@ FastWriter::write( const Value &root )
 {
    document_ = "";
    writeValue( root );
-   document_ += "\n";
+   //document_ += "\n";
    return document_;
 }
 
@@ -218,6 +238,9 @@ FastWriter::writeValue( const Value &value )
    case uintValue:
       document_ += valueToString( value.asUInt() );
       break;
+   case uint64Value:
+	   document_ += valueToString( value.asUInt64() );
+	   break;
    case realValue:
       document_ += valueToString( value.asDouble() );
       break;
@@ -301,6 +324,9 @@ StyledWriter::writeValue( const Value &value )
    case uintValue:
       pushValue( valueToString( value.asUInt() ) );
       break;
+   case uint64Value:
+	   pushValue(valueToString(value.asUInt64()));
+	   break;
    case realValue:
       pushValue( valueToString( value.asDouble() ) );
       break;
@@ -577,6 +603,9 @@ StyledStreamWriter::writeValue( const Value &value )
    case uintValue:
       pushValue( valueToString( value.asUInt() ) );
       break;
+   case uint64Value:
+	   pushValue(valueToString(value.asUInt64()));
+	   break;
    case realValue:
       pushValue( valueToString( value.asDouble() ) );
       break;

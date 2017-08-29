@@ -1,6 +1,6 @@
 #include <iostream>
-#include <json/value.h>
-#include <json/writer.h>
+#include "json/value.h"
+#include "json/writer.h"
 #include <utility>
 #include <stdexcept>
 #include <cstring>
@@ -330,6 +330,16 @@ Value::Value( UInt value )
    value_.uint_ = value;
 }
 
+Value::Value(uint64_t value)
+	: type_(uint64Value)
+	, comments_(0)
+# ifdef JSON_VALUE_USE_INTERNAL_MAP
+	, itemIsUsed_(0)
+#endif
+{
+	value_.uint64t_ = value;
+}
+
 Value::Value( double value )
    : type_( realValue )
    , comments_( 0 )
@@ -427,6 +437,7 @@ Value::Value( const Value &other )
    case nullValue:
    case intValue:
    case uintValue:
+   case uint64Value:
    case realValue:
    case booleanValue:
       value_ = other.value_;
@@ -476,6 +487,7 @@ Value::~Value()
    case nullValue:
    case intValue:
    case uintValue:
+   case uint64Value:
    case realValue:
    case booleanValue:
       break;
@@ -739,6 +751,19 @@ Value::asInt() const
    return 0; // unreachable;
 }
 
+uint64_t
+Value::asUInt64() const
+{
+	switch (type_)
+	{
+	case uint64Value:
+		return value_.uint64t_;
+	default:
+		JSON_ASSERT_UNREACHABLE;
+	}
+	return 0; // unreachable;
+}
+
 Value::UInt 
 Value::asUInt() const
 {
@@ -766,6 +791,12 @@ Value::asUInt() const
    return 0; // unreachable;
 }
 
+float
+Value::asFloat() const
+{
+	return asDouble();
+}
+
 double 
 Value::asDouble() const
 {
@@ -789,31 +820,6 @@ Value::asDouble() const
       JSON_ASSERT_UNREACHABLE;
    }
    return 0; // unreachable;
-}
-
-float
-Value::asFloat() const
-{
-	switch (type_)
-	{
-	case nullValue:
-		return 0.f;
-	case intValue:
-		return (float)value_.int_;
-	case uintValue:
-		return (float)value_.uint_;
-	case realValue:
-		return (float)value_.real_;
-	case booleanValue:
-		return value_.bool_ ? 1.f : 0.f;
-	case stringValue:
-	case arrayValue:
-	case objectValue:
-		JSON_ASSERT_MESSAGE(false, "Type is not convertible to float");
-	default:
-		JSON_ASSERT_UNREACHABLE;
-	}
-	return 0.f; // unreachable;
 }
 
 bool 
@@ -1380,19 +1386,17 @@ Value::getComment( CommentPlacement placement ) const
    return "";
 }
 
-
-std::string 
-Value::toStyledString(bool easy) const
+std::string
+Value::toStyledString(bool easy /* = false */) const
 {
 	if (easy)
 	{
 		FastWriter writer;
 		return writer.write(*this);
 	}
-   StyledWriter writer;
-   return writer.write(*this);
+	StyledWriter writer;
+	return writer.write(*this);
 }
-
 
 Value::const_iterator 
 Value::begin() const

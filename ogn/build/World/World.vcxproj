@@ -42,6 +42,7 @@
     <ClCompile Include="..\..\src\World\Module\Mailmodule\MailModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp" />
     <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RankModule\RankModule.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp" />
     <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp" />
@@ -97,6 +98,7 @@
     <ClInclude Include="..\..\src\World\Module\Mailmodule\MailModule.h" />
     <ClInclude Include="..\..\src\World\Module\MapModule\Map.h" />
     <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h" />
+    <ClInclude Include="..\..\src\World\Module\RankModule\RankModule.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h" />
     <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h" />
@@ -224,7 +226,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -245,7 +247,7 @@
       <Optimization>Disabled</Optimization>
       <PreprocessorDefinitions>_DEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -263,7 +265,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -288,7 +290,7 @@
       <IntrinsicFunctions>true</IntrinsicFunctions>
       <PreprocessorDefinitions>NDEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <SDLCheck>true</SDLCheck>
-      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json/include;../../src/Common</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>

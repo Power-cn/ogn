@@ -4,6 +4,7 @@
 # include "forwards.h"
 # include <string>
 # include <vector>
+# include <stdint.h>
 
 # ifndef JSON_USE_CPPTL_SMALLMAP
 #  include <map>
@@ -29,7 +30,8 @@ namespace Json {
       stringValue,   ///< UTF-8 string value
       booleanValue,  ///< bool value
       arrayValue,    ///< array value (ordered list)
-      objectValue    ///< object value (collection of name/value pairs).
+      objectValue,   ///< object value (collection of name/value pairs).
+	  uint64Value,
    };
 
    enum CommentPlacement
@@ -183,7 +185,8 @@ namespace Json {
       */
       Value( ValueType type = nullValue );
       Value( Int value );
-      Value( UInt value );
+	  Value( UInt value );
+	  Value( uint64_t value );
       Value( double value );
       Value( const char *value );
       Value( const char *beginValue, const char *endValue );
@@ -230,9 +233,10 @@ namespace Json {
       CppTL::ConstString asConstString() const;
 # endif
       Int asInt() const;
-      UInt asUInt() const;
-      double asDouble() const;
+	  UInt asUInt() const;
+	  uint64_t asUInt64() const;
 	  float asFloat() const;
+      double asDouble() const;
       bool asBool() const;
 
       bool isNull() const;
@@ -370,7 +374,6 @@ namespace Json {
       std::string getComment( CommentPlacement placement ) const;
 
       std::string toStyledString(bool easy = false) const;
-
       const_iterator begin() const;
       const_iterator end() const;
 
@@ -430,6 +433,7 @@ namespace Json {
          double real_;
          bool bool_;
          char *string_;
+		 uint64_t uint64t_;
 # ifdef JSON_VALUE_USE_INTERNAL_MAP
          ValueInternalArray *array_;
          ValueInternalMap *map_;
@@ -445,6 +449,7 @@ namespace Json {
 # endif
       CommentInfo *comments_;
    };
+
 
    /** \brief Experimental and untested: represents an element of the "path" to access a node.
     */

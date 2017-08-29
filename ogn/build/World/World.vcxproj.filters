@@ -79,6 +79,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{9aefecb8-1487-47f9-8f5d-ab7305c377c1}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\RankModule">
+      <UniqueIdentifier>{53b4b3df-c1a5-42fe-b85f-3944a48f7f01}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\main.cpp">
@@ -224,6 +227,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\ShopModule\ShopHandler.cpp">
       <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RankModule\RankModule.cpp">
+      <Filter>Module\RankModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -385,6 +391,9 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\ShopModule\ShopHandler.h">
       <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RankModule\RankModule.h">
+      <Filter>Module\RankModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

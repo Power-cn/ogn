@@ -5,6 +5,7 @@
 # include <vector>
 # include <string>
 # include <iostream>
+# include <stdint.h>
 
 namespace Json {
 
@@ -158,7 +159,8 @@ namespace Json {
    };
 
    std::string JSON_API valueToString( Int value );
-   std::string JSON_API valueToString( UInt value );
+   std::string JSON_API valueToString( UInt value);
+   std::string JSON_API valueToString( uint64_t value );
    std::string JSON_API valueToString( double value );
    std::string JSON_API valueToString( bool value );
    std::string JSON_API valueToQuotedString( const char *value );
