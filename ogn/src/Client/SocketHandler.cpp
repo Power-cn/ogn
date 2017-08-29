@@ -4,16 +4,19 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	//for (auto itr : mapRobotJson)
-	//{
-	//	RobotJson& robotJson = itr.second;
-	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	//}
-	//for (int i = 0; i < mapRobotJson.size(); ++i)
-	//{
-	//	createRobot();
-	//}
+	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	for (auto itr : mapRobotJson)
+	{
+		RobotJson& robotJson = itr.second;
+		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	}
+	float64 t0 = DateTime::GetNowAppUS();
+	for (int i = 0; i < mapRobotJson.size(); ++i)
+	{
+		createRobot();
+	}
+	float64 t1 = DateTime::GetNowAppUS() - t0;
+	int aaaa = 0;
 	//createRobot();
 }
 
@@ -91,8 +94,9 @@ void SocketHandler::createRobot()
 	char szBuf[32] = { 0 };
 	sprintf_s(szBuf, 32, "Gate");
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
-
+	float64 t1 = DateTime::GetNowAppUS();
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);
+	float64 t2 = DateTime::GetNowAppUS() - t1;
 	mListSocketClient.push_back(client);
 	mIndex++;
 
