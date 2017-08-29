@@ -144,6 +144,7 @@
 #define sGame (*GetModule(GameModule))
 #define sShop (*GetModule(ShopModule))
 #define sRank (*GetModule(RankModule))
+#define sMails (*GetModule(MailModule))
 
 
 #define RegDBEvent(id, cb, thisObject) RegisterEventProcess(GetDBServer(), id, cb, thisObject)

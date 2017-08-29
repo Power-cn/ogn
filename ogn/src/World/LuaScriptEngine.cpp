@@ -91,6 +91,11 @@ ShopModule* luaShop()
 	return &sShop;
 }
 
+MailModule* luaMail()
+{
+	return &sMails;
+}
+
 //luabind::object GetTestTable(lua_State* luaState)
 //{
 //	luabind::object obj = luabind::newtable(luaState);

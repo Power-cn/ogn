@@ -88,6 +88,15 @@
       <member type="uint32" name="shelvesTime" comment="" />
       <member type="uint32" name="unShelvesTime" comment="" />
     </element>
+
+    <element name="MailInfo" parent="object">
+      <member type="string" name="fromUserName" />
+      <member type="string" name="title" />
+      <member type="string" name="content" />
+      <member type="string" name="datastr" />
+      <member type="uint8" name="isDown" comment="" />
+      <member type="uint8" name="isRead" comment="" />
+    </element>
     
   </class>
 
@@ -491,6 +500,10 @@
 
     <element id="ID_NetProductListRes" name="NetProductListRes" >
       <member type="vector" name="productInfos" element="ProductInfo"/>
+    </element>
+
+    <element id="ID_NetMailListNotify" name="NetMailListNotify" >
+      <member type="vector" name="mailInfos" element="MailInfo"/>
     </element>
     
     <element id="ID_NetEnd" name="NetEnd" >

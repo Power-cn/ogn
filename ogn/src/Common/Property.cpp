@@ -38,6 +38,7 @@ REGISTER_PROPERTY(ep_Mp)
 REGISTER_PROPERTY(ep_Attack)
 REGISTER_PROPERTY(ep_Defense)
 REGISTER_PROPERTY(ep_Gold)
+REGISTER_PROPERTY(ep_Diamond)
 
 bool EntityProperty::operator >> (BinaryStream& bytes)
 {
@@ -69,6 +70,7 @@ bool PlayerProperty::operator >> (BinaryStream& bytes)
 {
 	CHECK_RETURN(EntityProperty::operator >> (bytes), false);
 	CHECK_RETURN(bytes << mGold, false);
+	CHECK_RETURN(bytes << mDiamond, false);
 	return true;
 }
 
@@ -76,6 +78,7 @@ bool PlayerProperty::operator<<(BinaryStream& bytes)
 {
 	CHECK_RETURN(EntityProperty::operator << (bytes), false);
 	CHECK_RETURN(bytes >> mGold, false);
+	CHECK_RETURN(bytes >> mDiamond, false);
 	return true;
 }
 
@@ -242,6 +245,39 @@ bool PropertyHelper::hasGold(Player* aPlr, int32 value)
 		return true;
 	return false;
 }
+
+void PropertyHelper::setDiamond(Player* aPlr, int32 value)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return;
+	aPro->mDiamond = value;
+	sRank.RankAdd(RT_Diamond, aPlr->getUserId(), aPro->mDiamond);
+	aPlr->addChangeValue(ep_Diamond, value);
+}
+
+void PropertyHelper::addDiamond(Player* aPlr, int32 value)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return;
+	aPro->mDiamond += value;
+	sRank.RankAdd(RT_Diamond, aPlr->getUserId(), aPro->mDiamond);
+	aPlr->addChangeValue(ep_Diamond, aPro->mDiamond);
+}
+
+int32 PropertyHelper::getDiamond(Player* aPlr)
+{
+	PlayerProperty* aPro = CastProperty(aPlr, PlayerProperty);
+	if (aPro == NULL)	return 0;
+	return (int32)aPro->mDiamond;
+}
+
+bool PropertyHelper::hasDiamond(Player* aPlr, int32 value)
+{
+	if (getDiamond(aPlr) >= value)
+		return true;
+	return false;
+}
+
 
 uint32 PropertyHelper::CalculateMaxHp(Entity* ent)
 {

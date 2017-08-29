@@ -4,6 +4,7 @@ enum RankType
 {
 	RT_None, 
 	RT_Gold,
+	RT_Diamond,
 };
 
 class RankModule : public Module

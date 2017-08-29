@@ -28,6 +28,8 @@ RobotManager::RobotManager()
 	addEventListener(ID_NetFriendListRes, (EventCallbackProcess)&RobotManager::onNetFriendListRes, this);
 	addEventListener(ID_NetProductListRes, (EventCallbackProcess)&RobotManager::onNetProductListRes, this);
 
+	addEventListener(ID_NetMailListNotify, (EventCallbackProcess)&RobotManager::onNetMailListNotify, this);
+
 	INSTANCE(CmdDispatcher);
 	INSTANCE(CmdDispatcher).addEventListener("gm", (EventCallback)&RobotManager::onGmCmd, this);
 	INSTANCE(CmdDispatcher).addEventListener("login", (EventCallback)&RobotManager::onLogin, this);
@@ -295,6 +297,16 @@ int RobotManager::onNetProductListRes(Robot* robot, NetProductListRes* res)
 		LOG_DEBUG(LogSystem::csl_color_green, "\ninsId:%d\npductId:%d\nsellUid:%d\n", info.productInsId, info.productId, info.sellUserId);
 	}
 	return 0;
+}
+
+int RobotManager::onNetMailListNotify(Robot* robot, NetMailListNotify* nfy)
+{
+	for (uint32 i = 0; i < nfy->mailInfos.size(); ++i)
+	{
+		MailInfo& info = nfy->mailInfos[i];
+		LOG_INFO("title:%s\n content:%s\n\n", info.title.c_str(), info.content.c_str());
+	}
+	return  0;
 }
 
 int32 RobotManager::onGmCmd(CmdEvent& e)

@@ -20,6 +20,7 @@ enum EnumProperty
 	ep_Attack,
 	ep_Defense,
 	ep_Gold,
+	ep_Diamond,
 };
 
 class Property : public Object
@@ -76,6 +77,7 @@ protected:
 	virtual bool operator << (BinaryStream& bytes);
 public:
 	uint64			mGold = 0;			// ½ð±Ò
+	uint64			mDiamond = 0;		// ×êÊ¯
 };
 
 class Entity;
@@ -112,6 +114,11 @@ public:
 	void addGold(Player* aPlr, int32 value);
 	int32 getGold(Player* aPlr);
 	bool hasGold(Player* aPlr, int32 value);
+
+	void setDiamond(Player* aPlr, int32 value);
+	void addDiamond(Player* aPlr, int32 value);
+	int32 getDiamond(Player* aPlr);
+	bool hasDiamond(Player* aPlr, int32 value);
 
 	uint32 CalculateMaxHp(Entity* ent);
 	uint32 CalculateMaxMp(Entity* ent);

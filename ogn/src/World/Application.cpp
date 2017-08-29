@@ -97,6 +97,7 @@ bool Application::Initialize()
 	addModule(new GameModule);
 	addModule(new ShopModule);
 	addModule(new RankModule);
+	addModule(new MailModule);
 	for (auto itr : mMapModule)
 		itr.second->Initialize();
 

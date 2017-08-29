@@ -83,6 +83,7 @@ ID_NetSellProductReq,
 ID_NetSellProductRes,
 ID_NetProductListReq,
 ID_NetProductListRes,
+ID_NetMailListNotify,
 ID_NetEnd,
 
 }
@@ -169,6 +170,7 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSellProductReq, "
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSellProductRes, "NetSellProductRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetProductListReq, "NetProductListReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetProductListRes, "NetProductListRes");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetMailListNotify, "NetMailListNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetEnd, "NetEnd");
 
     }
@@ -671,6 +673,51 @@ public uint sellUserId;
 public uint buyUserId;
 public uint shelvesTime;
 public uint unShelvesTime;
+
+}
+public class MailInfo : Header
+{
+	public MailInfo()
+	{
+fromUserName = "";
+title = "";
+content = "";
+datastr = "";
+isDown = 0;
+isRead = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(fromUserName);
+bytes.Write(title);
+bytes.Write(content);
+bytes.Write(datastr);
+bytes.Write(isDown);
+bytes.Write(isRead);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref fromUserName);
+bytes.Read(ref title);
+bytes.Read(ref content);
+bytes.Read(ref datastr);
+bytes.Read(ref isDown);
+bytes.Read(ref isRead);
+
+		return true;
+	}
+
+public string fromUserName;
+public string title;
+public string content;
+public string datastr;
+public sbyte isDown;
+public sbyte isRead;
 
 }
 public class NetFirst : Packet
@@ -3109,6 +3156,44 @@ for (int i = 0; i < productInfos_TEMP; ++i)
 	}
 
 public List<ProductInfo> productInfos;
+
+}
+public class NetMailListNotify : Packet
+{
+	public NetMailListNotify():base((int)PACKET_ID_ENUM.ID_NetMailListNotify)
+	{
+mailInfos = new List<MailInfo>();
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+int mailInfos_TEMP = mailInfos.Count;
+bytes.Write(mailInfos_TEMP);
+for (int i = 0; i < mailInfos_TEMP; ++i)
+{
+	bytes.Write(mailInfos[i]);
+}
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+int mailInfos_TEMP = 0;
+bytes.Read(ref mailInfos_TEMP);
+for (int i = 0; i < mailInfos_TEMP; ++i)
+{
+	MailInfo info_mailInfos;
+	info_mailInfos = new MailInfo();
+	bytes.Read(info_mailInfos);
+	mailInfos.Add(info_mailInfos);
+}
+
+		return true;
+	}
+
+public List<MailInfo> mailInfos;
 
 }
 public class NetEnd : Packet

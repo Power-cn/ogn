@@ -17,12 +17,15 @@ private:
 class Mail
 {
 public:
-	Mail();
-	~Mail();
-protected:
-	MailType					mMailType = MailT_None;
-	uint32						mFromUserId = 0;
-	uint32						mTargetUserId = 0;
-	std::string					mTitle;
-	std::string					mContent;
+	bool operator >> (Json::Value& json);
+	bool operator << (Json::Value& json);
+public:
+	MailType					mailType = MailT_None;
+	uint32						fromUserId = 0;
+	uint32						targetUserId = 0;
+	std::string					title;
+	std::string					content;
+	std::string					datastr;
+	bool						isDown = false; // 是否领取
+	bool						isRead = false; // 是否已读
 };

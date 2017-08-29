@@ -50,6 +50,7 @@ void LuaScript::bindScript()
 			luabind::def("luaGame", &luaGame),
 			luabind::def("luaFriends", &luaFriends),
 			luabind::def("luaShop", &luaShop),
+			luabind::def("luaMail", &luaMail),
 			//luabind::def("GetTestTable", &GetTestTable),
 			//luabind::def("GetTestTable1", &GetTestTable1),
 			//luabind::def("GetTestTable", &GetTestTable, mLuaState),
@@ -229,6 +230,9 @@ void LuaScript::bindScript()
 			.def("DoFindProductList", &ShopModule::DoFindProductList)
 			,
 
+			luabind::class_<MailModule, Module>("MailModule")
+			.def("SendMail", (void (MailModule::*)(cstring&, cstring&))&MailModule::SendMail)
+			,
 		luabind::class_<CardJson>("CardJson")
 		.def_readonly("ID", &CardJson::ID)
 		.def_readonly("Number", &CardJson::Number)

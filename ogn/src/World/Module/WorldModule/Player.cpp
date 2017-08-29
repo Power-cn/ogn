@@ -321,7 +321,8 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["onlinetotaltime"] = GetOnlineTime();
 	userJson["DownloadBytes"] = (uint32)(getTotalDownloadBytes());
 	userJson["UploadBytes"] = (uint32)(getTotalUploadBytes());
-	userJson["glod"] = sProperty.getGold(this);
+	userJson["gold"] = sProperty.getGold(this);
+	userJson["diamond"] = sProperty.getDiamond(this);
 
 	root["user"] = userJson;
 	return true;
