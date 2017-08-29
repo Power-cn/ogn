@@ -167,6 +167,11 @@ public class SocketEntity
     public CircleBuffer buffer = new CircleBuffer();
     public bool sending = false;
 
+    public uint socketId
+    {
+        get { return (uint)socket.Handle; }
+    }
+
     public void SendPacket(Packet packet)
     {
         byte[] send_data = new byte[4096];
@@ -275,7 +280,11 @@ public class SocketClient : SocketAngent
 
 public class SocketListener : SocketAngent
 {
-
+    public Dictionary<uint, SocketEntity> dictSocket = new Dictionary<uint, SocketEntity>();
+    public void SendPacket(SocketEntity socketEnt, Packet packet)
+    {
+        socketEnt.SendPacket(packet);
+    }
 }
 
 

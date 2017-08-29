@@ -80,7 +80,7 @@ public class Variant
 
     public Variant(Variant other)
     {
-
+        Copy(other);
     }
 
     public Variant(bool value)
@@ -301,6 +301,50 @@ public class Variant
     {
         mType = TypeString;
         mValue.value_string = value;
+    }
+
+    public void Copy(Variant other)
+    {
+        mType = other.mType;
+        switch (mType)
+        {
+            case Variant.TypeBoolean:
+                mValue.value_bool = other.mValue.value_bool;
+                break;
+            case Variant.TypeInt8:
+                mValue.value_uint8 = other.mValue.value_uint8;
+                break;
+            case Variant.TypeUint8:
+                mValue.value_bool = other.mValue.value_bool;
+                break;
+            case Variant.TypeInt16:
+                mValue.value_int16 = other.mValue.value_int16;
+                break;
+            case Variant.TypeUint16:
+                mValue.value_uint16 = other.mValue.value_uint16;
+                break;
+            case Variant.TypeInt32:
+                mValue.value_int32 = other.mValue.value_int32;
+                break;
+            case Variant.TypeUint32:
+                mValue.value_uint32 = other.mValue.value_uint32;
+                break;
+            case Variant.TypeInt64:
+                mValue.value_int64 = other.mValue.value_int64;
+                break;
+            case Variant.TypeUint64:
+                mValue.value_uint64 = other.mValue.value_uint64;
+                break;
+            case Variant.TypeFloat32:
+                mValue.value_float32 = other.mValue.value_float32;
+                break;
+            case Variant.TypeFloat64:
+                mValue.value_float64 = other.mValue.value_float64;
+                break;
+            case Variant.TypeString:
+                mValue.value_string = other.mValue.value_string;
+                break;
+        }
     }
 
     public static bool operator ==(Variant v0, Variant v1)

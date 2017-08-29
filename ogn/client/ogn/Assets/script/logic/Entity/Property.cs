@@ -51,5 +51,4 @@ public class EntityProperty : Property
         bitStream.Read(ref dir);
         return true;
     }
-
 }
