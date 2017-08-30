@@ -149,7 +149,7 @@ int32 MailModule::onRedisAllPlr(RedisEvent& e)
 			AddMail(userId, aMail);
 		}
 	}
-
+	LOG_DEBUG(LogSystem::csl_color_green, "加载邮件数据完成!");
 	return 0;
 }
 

@@ -301,12 +301,15 @@ int RobotManager::onNetProductListRes(Robot* robot, NetProductListRes* res)
 
 int RobotManager::onNetMailListNotify(Robot* robot, NetMailListNotify* nfy)
 {
-	LOG_INFO("mail count:%d", nfy->mailInfos.size());
+	char szBuffer[256] = {};
+	sprintf_s(szBuffer, 256, "mail count:%d", nfy->mailInfos.size());
 	for (uint32 i = 0; i < nfy->mailInfos.size(); ++i)
 	{
+		int32 len = strlen(szBuffer);
 		MailInfo& info = nfy->mailInfos[i];
-		LOG_INFO("\ntitle:%s\ncontent:%s", info.title.c_str(), info.content.c_str());
+		sprintf_s(szBuffer + len, 256 - len, "\ntitle:%s\ncontent:%s", info.title.c_str(), info.content.c_str());
 	}
+	LOG_DEBUG(LogSystem::csl_color_green, szBuffer);
 	return  0;
 }
 
