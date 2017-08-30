@@ -170,7 +170,7 @@ int32 EventDispatcher::dispatch(Event& event)
 				result = 1;
 				if (lis->thisObject == NULL || lis->callback == NULL)
 					continue;
-				return (lis->thisObject->*(lis->callback))(event);
+				(lis->thisObject->*(lis->callback))(event);
 			}
 			catch (std::string e)
 			{

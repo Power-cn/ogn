@@ -20,6 +20,7 @@ void MailModule::SendMail(Mail& aMail)
 		if (aPlrRcd == NULL) return;
 
 		AddMail(aMail.targetUserId, aMail);
+		NotifyAddMail(aMail.targetUserId);
 	}
 		break;
 	case MailT_Total: {
@@ -27,7 +28,10 @@ void MailModule::SendMail(Mail& aMail)
 		for (auto itr : mapPlayer)
 		{
 			PlayerRecord* aPlrRcd = itr.second;
+			if (aPlrRcd == NULL) continue;
+
 			AddMail(aPlrRcd->GetUserId(), aMail);
+			NotifyAddMail(aPlrRcd->GetUserId());
 		}
 	}
 		break;
@@ -41,6 +45,37 @@ void MailModule::SendMail(cstring& title, cstring& conent)
 	aMail.mailType = MailT_Total;
 	aMail.title = title;
 	aMail.content = conent;
+	SendMail(aMail);
+}
+
+void MailModule::SendMail(MailType mType, uint32 fromUserId, uint32 targetUserId, cstring& title, cstring& conent, cstring& datastr)
+{
+	Mail aMail = {};
+	aMail.mailType = mType;
+	aMail.fromUserId = fromUserId;
+	aMail.targetUserId = targetUserId;
+	aMail.title = title;
+	aMail.content = conent;
+	aMail.datastr = datastr;
+	SendMail(aMail);
+}
+
+void MailModule::SendMail(Player* aPlr, MailType mType, cstring& tarName, cstring& title, cstring& conent, cstring& datastr)
+{
+	Mail aMail = {};
+	aMail.mailType = mType;
+	aMail.fromUserId = aPlr->getUserId();
+
+	PlayerRecord* aPlrRcd = sFriends.FindPlrRecord(tarName);
+	if (aPlrRcd == NULL)
+	{
+		LOG_ERROR("aPlrRcd == NULL");
+		return;
+	}
+	aMail.targetUserId = aPlrRcd->GetUserId();
+	aMail.title = title;
+	aMail.content = conent;
+	aMail.datastr = datastr;
 	SendMail(aMail);
 }
 
@@ -107,7 +142,7 @@ int32 MailModule::onRedisAllPlr(RedisEvent& e)
 		jsonReader.parse(valuestr.c_str(), root);
 
 		uint32 userId = Shared::strtoint32(keystr);
-		for (uint32 j = 0; j < root.size(); ++i)
+		for (uint32 j = 0; j < root.size(); ++j)
 		{
 			Mail aMail;
 			aMail << root[j];
@@ -132,8 +167,15 @@ void MailModule::AddMail(uint32 userId, Mail& aMail)
 		lstMail.push_back(aMail);
 		mMapMail[userId] = lstMail;
 	}
+}
+
+void MailModule::NotifyAddMail(uint32 userId)
+{
+	auto itr = mMapMail.find(userId);
+	if (itr == mMapMail.end()) return;
+
 	{
-		std::vector<Mail>& lstMail = mMapMail[userId];
+		std::vector<Mail>& lstMail = itr->second;
 		std::string str = WriteJson(lstMail);
 		char szBuffer[4096] = {};
 		sprintf_s(szBuffer, 4096, "hmset %s %d %s", sMail, userId, str.c_str());

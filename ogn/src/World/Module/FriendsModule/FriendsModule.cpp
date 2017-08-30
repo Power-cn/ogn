@@ -90,6 +90,7 @@ PlayerRecord* FriendsModule::AddPlrRecord(PlayerRecord* aPlrRecord)
 {
 	if (FindPlrRecord(aPlrRecord->GetUserId())) return NULL;
 	mMapPlrRecords[aPlrRecord->GetUserId()] = aPlrRecord;
+	mMapPlayerNameRecord[aPlrRecord->GetName()] = aPlrRecord;
 	return aPlrRecord;
 }
 
@@ -97,6 +98,13 @@ PlayerRecord* FriendsModule::FindPlrRecord(uint32 userId)
 {
 	auto itr = mMapPlrRecords.find(userId);
 	if (itr == mMapPlrRecords.end()) return NULL;
+	return itr->second;
+}
+
+PlayerRecord* FriendsModule::FindPlrRecord(cstring& name)
+{
+	auto itr = mMapPlayerNameRecord.find(name);
+	if (itr == mMapPlayerNameRecord.end()) return NULL;
 	return itr->second;
 }
 

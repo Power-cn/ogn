@@ -10,6 +10,8 @@ public:
 public:
 	void SendMail(Mail& aMail);
 	void SendMail(cstring& title, cstring& conent);
+	void SendMail(MailType mType, uint32 fromUserId, uint32 targetUserId, cstring& title, cstring& conent, cstring& datastr);
+	void SendMail(Player* aPlr, MailType mType, cstring& tarName, cstring& title, cstring& conent, cstring& datastr);
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
@@ -24,6 +26,7 @@ protected:
 	int32 onRedisAllPlr(RedisEvent& e);
 protected:
 	void AddMail(uint32 userId, Mail& aMail);
+	void NotifyAddMail(uint32 userId);
 	std::vector<Mail>* FindMail(uint32 userId);
 	std::string WriteJson(std::vector<Mail>& lstMail);
 	void ReadJson(std::vector<Mail>& lstMail, cstring& jsonstr);

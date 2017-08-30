@@ -31,6 +31,11 @@ void LuaScript::bindScript()
 	LUA_ENUM(mLuaState, EC_TARGET);
 	lua_setglobal(mLuaState, "EnumChannel");
 
+	lua_newtable(mLuaState);
+	LUA_ENUM(mLuaState, MailT_Target);
+	LUA_ENUM(mLuaState, MailT_Total);
+	lua_setglobal(mLuaState, "MailType");
+
 	luabind::module(mLuaState)
 		[
 			luabind::def("luaObject", &luaObject),
@@ -197,16 +202,16 @@ void LuaScript::bindScript()
 		.def("DoOperateCallReq", &GameModule::DoOperateCallReq)
 		.def("DoOperateCompareReq", &GameModule::DoOperateCompareReq)
 		,
-			luabind::class_<Friend>("Friend")
-			.def_readonly("mUserId", &Friend::mUserId)
-			.def_readonly("mGroupId", &Friend::mGroupId)
-			,
-			luabind::class_<Friends>("Friends")
-			.def("GetUserId", &Friends::GetUserId)
-			.def("FindFriend", &Friends::FindFriend)
-			.def("GetFriend", &Friends::GetFriend)
-			.def("GetFriendsCount", &Friends::GetFriendsCount)
-			,
+		luabind::class_<Friend>("Friend")
+		.def_readonly("mUserId", &Friend::mUserId)
+		.def_readonly("mGroupId", &Friend::mGroupId)
+		,
+		luabind::class_<Friends>("Friends")
+		.def("GetUserId", &Friends::GetUserId)
+		.def("FindFriend", &Friends::FindFriend)
+		.def("GetFriend", &Friends::GetFriend)
+		.def("GetFriendsCount", &Friends::GetFriendsCount)
+		,
 		luabind::class_<FriendsModule, Module>("FriendsModule")
 		.def("MutualBindFriend", &FriendsModule::MutualBindFriend)
 		.def("MutualDebindFriend", &FriendsModule::MutualDebindFriend)
@@ -215,24 +220,37 @@ void LuaScript::bindScript()
 		.def("DoFriendsList", &FriendsModule::DoFriendsList)
 		,
 
-			luabind::class_<Product>("Product")
-			.def_readonly("mInsId", &Product::mInsId)
-			.def_readonly("mProductId", &Product::mProductId)
-			.def_readonly("mUserId", &Product::mUserId)
-			.def_readonly("mBuyUserId", &Product::mBuyUserId)
-			.def_readonly("mShelvesTime", &Product::mShelvesTime)
-			.def_readonly("mUnshelvesTime", &Product::mUnshelvesTime)
-			,
+		luabind::class_<Product>("Product")
+		.def_readonly("mInsId", &Product::mInsId)
+		.def_readonly("mProductId", &Product::mProductId)
+		.def_readonly("mUserId", &Product::mUserId)
+		.def_readonly("mBuyUserId", &Product::mBuyUserId)
+		.def_readonly("mShelvesTime", &Product::mShelvesTime)
+		.def_readonly("mUnshelvesTime", &Product::mUnshelvesTime)
+		,
 
-			luabind::class_<ShopModule, Module>("ShopModule")
-			.def("FindProduct", &ShopModule::FindProduct)
-			.def("DoAddProduct", &ShopModule::DoAddProduct)
-			.def("DoFindProductList", &ShopModule::DoFindProductList)
-			,
+		luabind::class_<ShopModule, Module>("ShopModule")
+		.def("FindProduct", &ShopModule::FindProduct)
+		.def("DoAddProduct", &ShopModule::DoAddProduct)
+		.def("DoFindProductList", &ShopModule::DoFindProductList)
+		,
 
-			luabind::class_<MailModule, Module>("MailModule")
-			.def("SendMail", (void (MailModule::*)(cstring&, cstring&))&MailModule::SendMail)
-			,
+		luabind::class_<Mail>("Mail")
+		.def_readonly("mailType", &Mail::mailType)
+		.def_readonly("fromUserId", &Mail::fromUserId)
+		.def_readonly("targetUserId", &Mail::targetUserId)
+		.def_readonly("title", &Mail::title)
+		.def_readonly("content", &Mail::content)
+		.def_readonly("datastr", &Mail::datastr)
+		.def_readonly("isDown", &Mail::isDown)
+		.def_readonly("isRead", &Mail::isRead)
+		,
+
+		luabind::class_<MailModule, Module>("MailModule")
+		.def("SendMail", (void (MailModule::*)(cstring&, cstring&))&MailModule::SendMail)
+		.def("SendMail", (void (MailModule::*)(MailType, uint32, uint32, cstring&, cstring&, cstring&))&MailModule::SendMail)
+		.def("SendMail", (void (MailModule::*)(Player* ,MailType, cstring&, cstring&, cstring&, cstring&))&MailModule::SendMail)
+		,
 		luabind::class_<CardJson>("CardJson")
 		.def_readonly("ID", &CardJson::ID)
 		.def_readonly("Number", &CardJson::Number)

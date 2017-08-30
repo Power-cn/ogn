@@ -14,6 +14,7 @@ public:
 
 typedef std::map<uint32, Friends*> MapFriends;
 typedef std::map<uint32, PlayerRecord*> MapPlayerRecord;
+typedef std::map<std::string, PlayerRecord*> MapPlayerNameRecord;
 
 class FriendsModule : public Module
 {
@@ -31,6 +32,7 @@ public:
 
 	PlayerRecord* AddPlrRecord(PlayerRecord* aPlrRecord);
 	PlayerRecord* FindPlrRecord(uint32 userId);
+	PlayerRecord* FindPlrRecord(cstring& name);
 
 	MapPlayerRecord& GetMapPlayer() { return mMapPlrRecords; }
 
@@ -62,4 +64,5 @@ protected:
 public:
 	MapFriends					mMapFriends;
 	MapPlayerRecord				mMapPlrRecords;
+	MapPlayerNameRecord			mMapPlayerNameRecord;
 };
