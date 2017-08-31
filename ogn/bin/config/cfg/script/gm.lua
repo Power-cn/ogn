@@ -192,3 +192,21 @@ fun=function (play, s1, s2, s3)
 	sShop:DoFindProductList(play, tonumber(s1), tonumber(s2));
 end
 });
+
+RegGm(
+{
+name = "sendmail1";
+fun=function (play, s1, s2, s3)
+	local sMails = luaMail();
+	sMails:SendMail(s1, s2);
+end
+});
+
+RegGm(
+{
+name = "sendmail2";
+fun=function (play, s1, s2, s3)
+	local sMails = luaMail();
+	sMails:SendMail(play, MailType.MailT_Target, s1, s2, s3, "");
+end
+});
