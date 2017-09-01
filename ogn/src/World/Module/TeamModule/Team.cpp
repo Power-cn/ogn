@@ -6,7 +6,6 @@ Team::Team():
 mInstanceId(++sId),
 mLeader(NULL)
 {
-	mScript = "team";
 }
 
 Team::~Team()

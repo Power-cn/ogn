@@ -47,7 +47,6 @@ public:
 
 	uint32 getPlayerCount();
 	TeamEntity* getPlayerEntity(uint32 idx);
-	cstring& GetScript() { return mScript; }
 protected:
 	TeamEntity*	ChooseLeader();
 protected:
@@ -58,7 +57,6 @@ protected:
 protected:
 	static uint32 sId;
 protected:
-	std::string					mScript;
 	uint32						mInstanceId;
 	TeamEntity*					mLeader;
 	std::vector<TeamEntity*>	mTeamEntityList;
