@@ -60,7 +60,7 @@ bool Application::Initialize()
 	INSTANCE(CmdDispatcher).addEventListener("addfrd", (EventCallback)&Application::onAddFrd, this);
 
 	INSTANCE(CmdDispatcher).addEventListener("test", (EventCallback)&Application::onTest, this);
-
+	INSTANCE(CmdDispatcher).addEventListener("dump", (EventCallback)&Application::onDump, this);
 
 	INSTANCE(ConfigManager);
 	INSTANCE(SessionManager);
@@ -589,6 +589,22 @@ int32 Application::onTest(CmdEvent& e)
 	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®2,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
 	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
 	//int ret2 = LuaEngine::Call(sScriptCard, "CompareStringCard", "√∑ª®A,√∑ª®K,√∑ª®Q", "∫ÏÃ“A,∫ÏÃ“K,∫ÏÃ“Q");
+	return 0;
+}
+
+int32 Application::onDump(CmdEvent& e)
+{
+	try
+	{
+		int* p = NULL;
+
+		*p = 100;
+	}
+	catch (...)
+	{
+		int aaa = 10;
+	}
+	
 	return 0;
 }
 

@@ -47,7 +47,7 @@ public:
 	int32 onClose(CmdEvent& e);
 	int32 onAddFrd(CmdEvent& e);
 	int32 onTest(CmdEvent& e);
-	
+	int32 onDump(CmdEvent& e);
 protected:
 	int32 onRedisConnect(RedisEvent& e);
 	int32 onRedisAuth(RedisEvent& e);
