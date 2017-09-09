@@ -25,6 +25,7 @@ int32 callback(int32 ctrlType)
 
 bool Application::Initialize()
 {
+	RTTI::getRTTI("Object");
 	std::string str = "11212#aaaa#111";
 	std::vector<std::string> dest;
 	Shared::split(str, dest, "#");

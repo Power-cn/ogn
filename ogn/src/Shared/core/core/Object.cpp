@@ -6,7 +6,6 @@ Object::Object(void)
 {
 }
 
-
 Object::~Object(void)
 {
 }
@@ -21,14 +20,19 @@ RTTI* Object::getThisClass()
 	return &classObject;
 }
 
+Object* Object::createInstance()
+{
+	return getThisClass()->createObject();
+}
+
 RTTI* Object::getBaseClass()
 {
-	return classObject.mBaseClass;
+	return getThisClass()->mBaseClass;
 }
 
 const char* Object::getClassName()
 {
-	return "Object";
+	return getThisClass()->mClassName.c_str();
 }
 
 bool Object::operator<<(BinaryStream& bytes)

@@ -2,68 +2,51 @@
 
 typedef Object* (*CreateObjectFunction)();
 
-std::map<std::string, RTTI*>* msClassDict = NULL;
+std::map<std::string, RTTI*>* msRTTI = NULL;
 
-
-RTTI::RTTI(const char* className, int objectSize, void* pfnCreateObject, RTTI* baseClass, RTTI* nextClass):
+RTTI::RTTI(cstring& className, int objectSize, void* pfnCreateObject, RTTI* baseClass, RTTI* nextClass):
 mClassName(className),
 mObjectSize(objectSize),
 mPfnCreateObject((CreateObjectFunction)pfnCreateObject),
 mBaseClass(baseClass),
 mNextClass(nextClass)
 {
-	static std::map<std::string, RTTI*> mClassDict;
-	if (msClassDict == NULL)
-		msClassDict = &mClassDict;
-
-	msClassDict->insert(std::make_pair(className, this));
+	static std::map<std::string, RTTI*> sRTTI;
+	if (msRTTI == NULL) msRTTI = &sRTTI;
+	msRTTI->insert(std::make_pair(className, this));
 }
 
 RTTI::~RTTI(void)
 {
-	std::map<std::string, RTTI*>::iterator itr = msClassDict->find(this->mClassName);
-	if (itr != msClassDict->end())
-		msClassDict->erase(itr);
+	msRTTI->erase(mClassName);
 }
 
 Object* RTTI::createObject()
 {
-	if (mPfnCreateObject == NULL)
-		return NULL;
-
-	return mPfnCreateObject();
+	return mPfnCreateObject ? mPfnCreateObject() : NULL;
 }
 
-Object* RTTI::createObject( const char* className )
+Object* RTTI::createObject(cstring& className)
 {
 	RTTI* rtti = getRTTI(className);
-	if (rtti == NULL)
-		return NULL;
-	
+	if (rtti == NULL) return NULL;
 	return rtti->mPfnCreateObject();
 }
 
-RTTI* RTTI::getRTTI( const char* className )
+RTTI* RTTI::getRTTI(cstring& className)
 {
-	RTTI* rtti = NULL;
-	if (msClassDict == NULL)
-		return rtti;
-
-	std::map<std::string, RTTI*>::iterator itr = msClassDict->find(className);
-	if (itr != msClassDict->end())
-		rtti = itr->second;
-	return rtti;
+	auto itr = msRTTI->find(className);
+	if (itr == msRTTI->end()) return NULL;
+	return itr->second;
 }
 
-Object* RTTI::dynamicCast(Object* object, const char* className )
+Object* RTTI::dynamicCast(Object* object, cstring& className)
 {
 	RTTI* rtti = object->getThisClass();
-	while (rtti)
-	{
+	while (rtti) {
 		if (rtti->mClassName == className)
 			return object;
 		rtti = rtti->mBaseClass;
 	}
-
 	return NULL;
 }
