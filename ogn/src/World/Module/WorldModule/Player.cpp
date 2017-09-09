@@ -257,6 +257,11 @@ bool Player::onLoadJson(Json::Value& root)
 	uint64 dbytes = userJson["DownloadBytes"].asUInt();
 	uint64 ubytes = userJson["UploadBytes"].asUInt();
 
+	Json::Value& oldNameJson = userJson["oldNames"];
+	for (uint32 i = 0; i < oldNameJson.size(); ++i) {
+		AddOldName(oldNameJson[i].asCString());
+	}
+
 	setDownloadBytes(dbytes);
 	setUploadBytes(ubytes);
 	SetOfflineTimer(offline_time);
@@ -323,6 +328,12 @@ bool Player::onSavejson(Json::Value& root)
 	userJson["UploadBytes"] = (uint32)(getTotalUploadBytes());
 	userJson["gold"] = sProperty.getGold(this);
 	userJson["diamond"] = sProperty.getDiamond(this);
+
+	Json::Value oldNameJson;
+	for (uint32 i = 0; i < mOldNames.size(); ++i) {
+		oldNameJson[i] = mOldNames[i];
+	}
+	userJson["oldNames"] = oldNameJson;
 
 	root["user"] = userJson;
 	return true;
@@ -452,4 +463,9 @@ void Player::OnEnter()
 void Player::OnLeave()
 {
 	LuaEngine::Call(this, sScriptPlayer, "OnLeave", getUserId());
+}
+
+void Player::AddOldName(cstring& oldName)
+{
+	mOldNames.push_back(oldName);
 }

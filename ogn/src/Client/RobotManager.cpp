@@ -36,6 +36,7 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher).addEventListener("crole", (EventCallback)&RobotManager::onCreate, this);
 	INSTANCE(CmdDispatcher).addEventListener("select", (EventCallback)&RobotManager::onSelect, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&RobotManager::onClose, this);
+	INSTANCE(CmdDispatcher).addEventListener("sendmsg", (EventCallback)&RobotManager::onSendMsg, this);
 
 
 }
@@ -261,6 +262,9 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 {
 	switch (nfy->channelType)
 	{
+	case EC_WORLD:
+		LOG_DEBUG(LogSystem::csl_color_green, "世界频道:%s", nfy->chatMsg.c_str());
+		break;
 	case EC_SYSTEM:
 		LOG_DEBUG(LogSystem::csl_color_green, "系统频道:%s", nfy->chatMsg.c_str());
 		break;
@@ -268,7 +272,7 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 		LOG_DEBUG(LogSystem::csl_color_green, "房间频道:%s", nfy->chatMsg.c_str());
 		break;
 	case EC_TARGET:
-		LOG_DEBUG(LogSystem::csl_color_green, "%s", nfy->chatMsg.c_str());
+		LOG_DEBUG(LogSystem::csl_color_green, "[%s]%s", nfy->from.c_str(), nfy->chatMsg.c_str());
 		break;
 	default:
 		LOG_DEBUG(LogSystem::csl_color_green, "self[%s][%s]:%s", robot->user.c_str(), nfy->from.c_str(), nfy->chatMsg.c_str());
@@ -362,5 +366,16 @@ int32 RobotManager::onClose(CmdEvent& e)
 {
 	if (mCurRobot == NULL) return 0;
 	INSTANCE(Network).closesocket(mCurRobot->mSocket->getSocketId());
+	return 0;
+}
+
+int32 RobotManager::onSendMsg(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+	NetChatMsgNotify nfy;
+	nfy.channelType = Shared::strtoint32(e.cmdExecute->params[0]);
+	nfy.chatMsg = e.cmdExecute->params[1];
+	nfy.to = e.cmdExecute->params[2];
+	mCurRobot->sendPacket(nfy);
 	return 0;
 }

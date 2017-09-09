@@ -109,6 +109,7 @@ public:
 	uint64 getUploadBytes() { return mUploadBytes; }
 	uint64 getTotalDownloadBytes() { return mTotalDownloadBytes; }
 	uint64 getTotalUploadBytes() { return mTotalUploadBytes; }
+	void AddOldName(cstring& oldName);
 protected:
 	uint32				mOnlineTimer;
 	uint32				mOfflineTimer;
@@ -117,4 +118,5 @@ protected:
 	uint64				mUploadBytes = 0;
 	uint64				mTotalDownloadBytes = 0;
 	uint64				mTotalUploadBytes = 0;
+	std::vector<std::string> mOldNames;
 };

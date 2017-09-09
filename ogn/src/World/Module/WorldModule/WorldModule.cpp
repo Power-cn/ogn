@@ -284,11 +284,14 @@ bool WorldModule::ChangeName(Entity* ent, cstring& sname)
 		return false;
 	
 	mMapNameEntity.erase(itr);
+	std::string oldName = ent->getName();
 	ent->setName(sname);
 	mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
 	if (ent->getEntityType() == ET_Player) {
+		Player* aPlr = (Player*)ent;
+		aPlr->AddOldName(oldName);
 		Dictionary dict;
-		sApp.doPlayerSave((Player*)ent, dict);
+		sApp.doPlayerSave(aPlr, dict);
 	}
 	return true;
 }
