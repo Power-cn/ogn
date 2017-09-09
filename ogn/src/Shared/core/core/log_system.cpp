@@ -170,7 +170,7 @@ bool LogSystem::assertFail( const char* pszExpression, const char* pszFile, cons
 {
 	char szTempBuffer[1024] = {0};
 	sprintf_s(szTempBuffer, sizeof(szTempBuffer), "Expression: %s\r\nFile: %s\r\nFunc: %s\r\nLine: %d\r\n", pszExpression, pszFile, pszFunction, iLine);
-#ifdef WIN32
+#ifdef WIN32 || WIN64
 	int iButtonResult = ::MessageBoxA(
 		NULL, 
 		szTempBuffer, 
@@ -210,8 +210,9 @@ void LogSystem::debug( int color, const char* formt, ... )
 {
 	va_list va;
 	va_start(va, formt);
-	m_mutex.lock();
 	vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
+	va_end(va);
+
 	stContent st;
 
 	std::string now_time = "";
@@ -223,18 +224,19 @@ void LogSystem::debug( int color, const char* formt, ... )
 	st.context += m_buffer;
 	st.level = logLevel_debug;
 	st.color = color;
+
+	m_mutex.lock();
 	m_contexts.push(st);
 	m_mutex.unlock();
 
-	va_end(va);
 }
 
 void LogSystem::error_line( const char* formt, const char* file, const int line, const char* func, ... )
 {
 	va_list va;
 	va_start(va, formt);
-	m_mutex.lock();
 	int buf_len = vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
+	va_end(va);
 
 	buf_len = sprintf_s(m_buffer, LOG_BUFFER_SIZE - buf_len, "file:%s line:%d func:%s e:%s", file, line, func, m_buffer);
 	stContent st;
@@ -248,19 +250,20 @@ void LogSystem::error_line( const char* formt, const char* file, const int line,
 	st.context += m_buffer;
 	st.level = logLevel_error;
 	st.color = 0;
+
+	m_mutex.lock();
 	m_contexts.push(st);
 	m_mutex.unlock();
 
-	va_end(va);
 }
 
 void LogSystem::debug_line( int color, const char* formt, const char* file, const int line, const char* func, ... )
 {
 	va_list va;
 	va_start(va, formt);
-	m_mutex.lock();
 	int buf_len = vsnprintf(m_buffer, LOG_BUFFER_SIZE, formt, va);
-	
+	va_end(va);
+
 	buf_len = sprintf_s(m_buffer, LOG_BUFFER_SIZE - buf_len, "file:%s line:%d func:%s e:%s", file, line, func, m_buffer);
 	stContent st;
 
@@ -273,10 +276,10 @@ void LogSystem::debug_line( int color, const char* formt, const char* file, cons
 	st.context += m_buffer;
 	st.level = logLevel_debug;
 	st.color = color;
+
+	m_mutex.lock();
 	m_contexts.push(st);
 	m_mutex.unlock();
-
-	va_end(va);
 }
 
 #pragma warning(pop)

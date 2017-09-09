@@ -21,6 +21,4 @@ protected:
 	int32 onNetGmMsg(Player* aPlr, NetGmMsg* msg);
 	int32 onNetEntityMoveNotify(Player* player, NetEntityMoveNotify* nfy);
 	int32 onNetEntityMoveToNotify(Player* player, NetEntityMoveToNotify* nfy);
-
-	int32 OnRedisFindName(RedisEvent& e);
 };

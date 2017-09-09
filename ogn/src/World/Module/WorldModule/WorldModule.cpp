@@ -275,13 +275,20 @@ void WorldModule::removeNpc(Npc* npc)
 
 bool WorldModule::ChangeName(Entity* ent, cstring& sname)
 {
-	auto itr = mMapNameEntity.find(ent->getName());
-	if (itr != mMapNameEntity.end())
-	{
+	if (ent->GetNameStr() == sname) return false;
+	if (sFriends.FindPlrRecord(sname))
 		return false;
-		mMapNameEntity.erase(itr);
-		ent->setName(sname);
-		mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
+
+	auto itr = mMapNameEntity.find(ent->getName());
+	if (itr == mMapNameEntity.end())
+		return false;
+	
+	mMapNameEntity.erase(itr);
+	ent->setName(sname);
+	mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
+	if (ent->getEntityType() == ET_Player) {
+		Dictionary dict;
+		sApp.doPlayerSave((Player*)ent, dict);
 	}
 	return true;
 }

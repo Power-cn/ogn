@@ -107,13 +107,6 @@ int32 SessionHandler::onNetCreateRoleReq(Player* aPlr, NetCreateRoleReq* req)
 		return 0;
 	}
 
-	char szBuffer[256] = { 0 };
-	sprintf_s(szBuffer, 256, "hmset %s %d %s", sUserIdToName, res.roleInfo.id, res.roleInfo.name.c_str());
-	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
-	sprintf_s(szBuffer, 256, "hmset %s %s %d", sNameToUserId, res.roleInfo.name.c_str(), res.roleInfo.id);
-	sRedisProxy.sendCmd(szBuffer, NULL, NULL);
-
 	aPlr->sendPacket(res);
 	LOG_DEBUG(LogSystem::csl_color_red_blue, "accId[%d] insert role[%s]", req->accId, res.roleInfo.name.c_str());
 	return 1;
@@ -187,8 +180,9 @@ int32 SessionHandler::onNetPlayerSaveNotify(Player* aPlr, NetPlayerSaveNotify* n
 		dbRole.datas.write(info.datas.datas(), info.datas.wpos());
 		dbRole.onlinetotaltime = info.onlinetotaltime;
 		dbRole.datastr = info.datastr;
+		dbRole.name = info.name;
 		uint32 updateRows = 0;
-		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "property, onlinetotaltime, datastr");
+		const int8* err = sApp.getDBConnector()->doUpdate(dbRole, "id", updateRows, "name, property, onlinetotaltime, datastr");
 		if (!err) return 0;
 		LOG_ERROR(err);
 	}

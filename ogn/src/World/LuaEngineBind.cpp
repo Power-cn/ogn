@@ -115,6 +115,7 @@ void LuaScript::bindScript()
 		.def("FindPlrByUserId", &WorldModule::FindPlrByUserId)
 
 		.def("GetPlrCount", &WorldModule::GetPlrCount)
+		.def("ChangeName", &WorldModule::ChangeName)
 		,
 
 		luabind::class_<RoomPlayer>("RoomPlayer")
