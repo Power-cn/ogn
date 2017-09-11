@@ -286,6 +286,11 @@ bool WorldModule::ChangeName(Entity* ent, cstring& sname)
 	mMapNameEntity.erase(itr);
 	std::string oldName = ent->getName();
 	ent->setName(sname);
+	Event e;
+	e.event = "OnChangeName";
+	e.params.push_back((void*)oldName.c_str());
+	e.params.push_back((void*)ent->getName());
+	sWorld.dispatch(e);
 	mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
 	if (ent->getEntityType() == ET_Player) {
 		Player* aPlr = (Player*)ent;

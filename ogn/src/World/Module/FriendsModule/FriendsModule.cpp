@@ -179,6 +179,7 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 bool FriendsModule::Initialize()
 {
 	sRedisProxy.addEventListener("OnRedisAuth", (EventCallback)&FriendsModule::onRedisAuth, this);
+	sWorld.addEventListener("OnChangeName", (EventCallback)&FriendsModule::onChangeName, this);
 	return true;
 }
 
@@ -206,34 +207,6 @@ bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
 		aPlrRcd->mPlayer = player;
 	}
 
-	Friends* frds = GetFriends(player->getUserId());
-	if (frds == NULL)
-	{
-		return true;
-	}
-
-	for (Friend* frd : frds->GetFriends())
-	{
-		PlayerRecord* aPlrRcd = FindPlrRecord(frd->mUserId);
-		if (aPlrRcd == NULL) {
-			aPlrRcd = new PlayerRecord;
-			aPlrRcd->mUserId = frd->mUserId;
-			AddPlrRecord(aPlrRcd);
-		}
-
-		Player* aPlr = sWorld.FindPlrByUserId(frd->mUserId);
-		if (aPlr) {
-			aPlrRcd->mPlayer = aPlr;
-		}
-		else {
-			char szBuffer[64] = { 0 };
-			sprintf_s(szBuffer, 64, "hget %s %d", sUser, frd->mUserId);
-			std::vector<std::string> parstr;
-			parstr.push_back(Shared::int32tostr(player->getUserId()));
-			parstr.push_back(Shared::int32tostr(frd->mUserId));
-			sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisFindPlr, this, parstr);
-		}
-	}
 	return true;
 }
 
@@ -245,8 +218,6 @@ bool FriendsModule::onLeaveWorld(Player* player, Dictionary& dict)
 			aPlrRcd->mPlayer = NULL;
 		}
 	}
-
-	DelFriends(player->getUserId());
 	return true;
 }
 
@@ -282,6 +253,9 @@ bool FriendsModule::onSave(Player* player, Dictionary& bytes)
 		arrayVal.append(frdJson);
 	}
 	root["friends"] = arrayVal;
+	if (player->CanDestroy()) {
+		DelFriends(player->getUserId());
+	}
 	return true;
 }
 
@@ -329,21 +303,15 @@ int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
 	return 0;
 }
 
-int32 FriendsModule::onRedisFindPlr(RedisEvent& e)
+int32 FriendsModule::onChangeName(Event& e)
 {
-	if (e.backstr.size() <= 0) return 0;
-	Json::Reader jsonReader;
-	Json::Value root;
-	if (!jsonReader.parse(e.backstr[0].c_str(), root))
-		return 0;
-	Json::Value userJson = root["user"];
-
-	uint32 tarUserId = Shared::strtoint32(e.parstr[0]);
-	uint32 frdUserId = Shared::strtoint32(e.parstr[1]);
-
-	PlayerRecord* aPlrRcd = FindPlrRecord(frdUserId);
-	if (aPlrRcd) {
-		aPlrRcd->mName = userJson["name"].asString();
+	std::string oldName = (char*)e.params[0];
+	std::string newName = (char*)e.params[1];
+	auto itr = mMapPlayerNameRecord.find(oldName);
+	if (itr != mMapPlayerNameRecord.end())
+	{
+		mMapPlayerNameRecord[newName] = itr->second;
+		mMapPlayerNameRecord.erase(itr);
 	}
 	return 0;
 }

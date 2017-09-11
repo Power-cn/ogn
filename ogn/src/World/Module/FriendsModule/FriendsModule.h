@@ -60,7 +60,7 @@ protected:
 protected:
 	int32 onRedisAuth(Event& e);
 	int32 onRedisAllPlr(RedisEvent& e);
-	int32 onRedisFindPlr(RedisEvent& e);
+	int32 onChangeName(Event& e);
 public:
 	MapFriends					mMapFriends;
 	MapPlayerRecord				mMapPlrRecords;
