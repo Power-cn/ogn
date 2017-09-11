@@ -24,10 +24,10 @@ bool HasRecord(const std::string& record_list, const std::string& record)
 
 void releaseResult(DBQueryResult* result)
 {
-	for (int32 i = 0; i < result->length; ++i)
+	for (uint32 i = 0; i < result->length; ++i)
 	{
 		DBRowResult& rowResult = result->rows[i];
-		for (int32 j = 0; j < rowResult.fieldCount; ++j)
+		for (uint32 j = 0; j < rowResult.fieldCount; ++j)
 		{
 			DBField& field = rowResult.fields[j];
 			SAFE_DELETE_ARRAY(field.dataptr);
@@ -238,7 +238,7 @@ bool GetQuerySqlCmd(char* sql_cmd, uint32& size_, DBRecord& query_record, uint32
 	char str_value_[SQL_CMD_COUNT] = { 0 };
 	bool all_return = return_record_names.length() == 0 ? true : false;
 	uint32 where_length_ = 0;
-	for (int i = 0; i < descriptor.recordCount; ++i)
+	for (uint32 i = 0; i < descriptor.recordCount; ++i)
 	{
 		FieldDescriptor& record = descriptor.records[i];
 
@@ -305,7 +305,7 @@ bool GetInsertSqlCmd(int8* sql_cmd, uint32& size, DBRecord& insert_record, const
 
 	bool empty_compare = compare_record_names.length() == 0 ? true : false;
 	
-	for (int32 i = 0; i < descriptor.recordCount; ++i)
+	for (uint32 i = 0; i < descriptor.recordCount; ++i)
 	{
 		value_str_size_ = 0;
 
@@ -366,7 +366,7 @@ bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const 
 	uint32 where_size_ = 0;
 	uint32 set_size_ = 0;
 
-	for (int32 i = 0; i < descriptor.recordCount; ++i)
+	for (uint32 i = 0; i < descriptor.recordCount; ++i)
 	{
 		int8 value_[SQL_CMD_COUNT] = { 0 };
 		uint32 value_size_ = 0;
@@ -439,7 +439,7 @@ bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const
 	char value_[SQL_CMD_COUNT] = { 0 };
 	uint32 value_size_ = 0;
 
-	for (int32 i = 0; i < descriptor.recordCount; ++i)
+	for (uint32 i = 0; i < descriptor.recordCount; ++i)
 	{
 		FieldDescriptor& record = descriptor.records[i];
 		if (HasRecord(compare_record_names, record.field))
@@ -480,7 +480,7 @@ bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const
 
 FieldDescriptor* TableDescriptor::getFieldDescriptor(const std::string& field) const
 {
-	for (int32 i = 0; i < recordCount; ++i)
+	for (uint32 i = 0; i < recordCount; ++i)
 	{
 		if (field == records[i].field)
 			return &records[i];

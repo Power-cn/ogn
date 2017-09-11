@@ -4,12 +4,11 @@ typedef Object* (*CreateObjectFunction)();
 
 std::map<std::string, RTTI*>* msRTTI = NULL;
 
-RTTI::RTTI(cstring& className, int objectSize, void* pfnCreateObject, RTTI* baseClass, RTTI* nextClass):
+RTTI::RTTI(cstring& className, int objectSize, void* pfnCreateObject, RTTI* baseClass):
 mClassName(className),
 mObjectSize(objectSize),
 mPfnCreateObject((CreateObjectFunction)pfnCreateObject),
-mBaseClass(baseClass),
-mNextClass(nextClass)
+mBaseClass(baseClass)
 {
 	static std::map<std::string, RTTI*> sRTTI;
 	if (msRTTI == NULL) msRTTI = &sRTTI;

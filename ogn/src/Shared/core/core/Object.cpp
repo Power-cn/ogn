@@ -1,6 +1,6 @@
 #include "Shared.hpp"
 
-RTTI Object::classObject("Object", sizeof(class Object), Object::createObject, NULL, NULL);
+RTTI Object::classObject("Object", sizeof(class Object), Object::createObject, NULL);
 
 Object::Object(void)
 {

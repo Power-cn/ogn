@@ -30,6 +30,7 @@ public:
 	static RTTI classObject;
 	static Object* createObject();
 	virtual RTTI* getThisClass();
+public:
 	virtual Object* createInstance();
 	virtual RTTI* getBaseClass();
 	virtual const char* getClassName();

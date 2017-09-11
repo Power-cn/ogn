@@ -5,7 +5,7 @@ class Object;
 class RTTI
 {
 public:
-	RTTI(cstring& className, int objectSize, void* pfnCreateObject, RTTI* baseClass, RTTI* nextClass);
+	RTTI(cstring& className, int objectSize, void* pfnCreateObject, RTTI* baseClass);
 	~RTTI(void);
 	Object* createObject();
 	static Object* createObject(cstring& className);
@@ -16,7 +16,6 @@ public:
 	int mObjectSize;
 	Object* (*mPfnCreateObject)();
 	RTTI* mBaseClass;
-	RTTI* mNextClass;
 };
 
 #define DYNAMIC_CAST(object, class_name) RTTI::dynamicCast(object, #class_name)
@@ -29,7 +28,7 @@ public: \
 
 
 #define IMPLEMENT_CLASS(class_name, base_class_name) \
-	RTTI class_name::class##class_name(#class_name, sizeof(class class_name), class_name::createObject, &base_class_name::class##base_class_name, NULL); \
-	Object* class_name::createObject() { return new class_name; } \
-	RTTI* class_name::getThisClass() { return &class##class_name; }
+RTTI class_name::class##class_name(#class_name, sizeof(class class_name), class_name::createObject, &base_class_name::class##base_class_name); \
+Object* class_name::createObject() { return new class_name; } \
+RTTI* class_name::getThisClass() { return &class##class_name; }
 
