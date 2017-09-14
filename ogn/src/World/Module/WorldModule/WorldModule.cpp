@@ -8,11 +8,13 @@ WorldModule::WorldModule()
 
 WorldModule::~WorldModule()
 {
-	while (mMapEntity.size() > 0)
-	{
-		auto itr = mMapEntity.begin();
-		removeEntity(itr->second->getGuid());
-	}
+	Destroy();
+}
+
+bool WorldModule::Initialize()
+{
+	sRedisProxy.addEventListener("OnRedisAuth", (EventCallback)&WorldModule::onRedisAuth, this);
+	return true;
 }
 
 bool WorldModule::Update(float time, float delay)
@@ -43,9 +45,28 @@ bool WorldModule::Update(float time, float delay)
 	return true;
 }
 
+bool WorldModule::Destroy()
+{
+	ClearEntity();
+	ClearPlayerRecord();
+	return true;
+}
+
 bool WorldModule::onEnterWorld(Player* player, Dictionary& dict)
 {
 	LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] enter world", player->getName());
+	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
+	if (aPlrRcd == NULL)
+	{
+		aPlrRcd = new PlayerRecord;
+		aPlrRcd->mUserId = player->getUserId();
+		aPlrRcd->mPlayer = player;
+		AddPlrRecord(aPlrRcd);
+	}
+	else {
+		aPlrRcd->mPlayer = player;
+	}
+
 	return true;
 }
 
@@ -55,6 +76,14 @@ bool WorldModule::onLeaveWorld(Player* player, Dictionary& dict)
 		LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] destroy", player->getName());
 	else
 		LOG_DEBUG(LogSystem::csl_color_blue, "player [%s] leave world", player->getName());
+
+	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
+	if (aPlrRcd) {
+		if (player->CanDestroy()) {
+			aPlrRcd->mPlayer = NULL;
+		}
+	}
+
 	return true;
 }
 
@@ -202,6 +231,53 @@ Player* WorldModule::FindPlrByUserId(uint32 userId)
 	return NULL;
 }
 
+PlayerRecord* WorldModule::AddPlrRecord(PlayerRecord* aPlrRecord)
+{
+	if (FindPlrRecord(aPlrRecord->GetUserId())) return NULL;
+	mMapPlrRecords[aPlrRecord->GetUserId()] = aPlrRecord;
+	mMapPlayerNameRecord[aPlrRecord->GetName()] = aPlrRecord;
+	return aPlrRecord;
+}
+
+PlayerRecord* WorldModule::FindPlrRecord(uint32 userId)
+{
+	auto itr = mMapPlrRecords.find(userId);
+	if (itr == mMapPlrRecords.end()) return NULL;
+	return itr->second;
+}
+
+PlayerRecord* WorldModule::FindPlrRecord(cstring& name)
+{
+	auto itr = mMapPlayerNameRecord.find(name);
+	if (itr == mMapPlayerNameRecord.end()) return NULL;
+	return itr->second;
+}
+
+void WorldModule::ClearPlayerRecord()
+{
+	for (auto& itr : mMapPlrRecords) {
+		delete itr.second;
+	}
+	mMapPlrRecords.clear();
+}
+
+void WorldModule::ClearEntity()
+{
+	while (mMapEntity.size() > 0)
+	{
+		auto itr = mMapEntity.begin();
+		removeEntity(itr->second->getGuid());
+	}
+}
+
+void WorldModule::DelPlrRecord(uint32 userId)
+{
+	auto itr = mMapPlrRecords.find(userId);
+	if (itr == mMapPlrRecords.end()) return;
+	delete itr->second;
+	mMapPlrRecords.erase(itr);
+}
+
 Npc* WorldModule::addNpc(Npc* npc)
 {
 	addEntity(npc);
@@ -276,28 +352,40 @@ void WorldModule::removeNpc(Npc* npc)
 bool WorldModule::ChangeName(Entity* ent, cstring& sname)
 {
 	if (ent->GetNameStr() == sname) return false;
-	if (sFriends.FindPlrRecord(sname))
+	if (FindPlrRecord(sname))
 		return false;
-
-	auto itr = mMapNameEntity.find(ent->getName());
-	if (itr == mMapNameEntity.end())
-		return false;
+	{
+		auto itr = mMapNameEntity.find(ent->getName());
+		if (itr == mMapNameEntity.end())
+			return false;
+		mMapNameEntity.erase(itr);
+	}
 	
-	mMapNameEntity.erase(itr);
 	std::string oldName = ent->getName();
 	ent->setName(sname);
-	Event e;
-	e.event = "OnChangeName";
-	e.params.push_back((void*)oldName.c_str());
-	e.params.push_back((void*)ent->getName());
-	sWorld.dispatch(e);
-	mMapNameEntity.insert(std::make_pair(ent->getName(), ent));
+	mMapNameEntity[ent->getName()] = ent;
+
+	{
+		auto itr = mMapPlayerNameRecord.find(oldName);
+		if (itr != mMapPlayerNameRecord.end())
+		{
+			mMapPlayerNameRecord[sname] = itr->second;
+			mMapPlayerNameRecord.erase(itr);
+		}
+	}
+
 	if (ent->getEntityType() == ET_Player) {
 		Player* aPlr = (Player*)ent;
 		aPlr->AddOldName(oldName);
 		Dictionary dict;
 		sApp.doPlayerSave(aPlr, dict);
 	}
+
+	Event e;
+	e.event = "OnChangeName";
+	e.params.push_back((void*)oldName.c_str());
+	e.params.push_back((void*)ent->getName());
+	sWorld.dispatch(e);
 	return true;
 }
 
@@ -352,4 +440,60 @@ void WorldModule::sendPacketToMsg(EnumChannel ec, const std::string& msg, Player
 	nfy.channelType = ec;
 	nfy.from = self->getName();
 	sendPacketToTarget((EnumChannel)ec, nfy, self);
+}
+
+int32 WorldModule::onRedisAuth(Event& e)
+{
+	char szBuffer[64] = { 0 };
+	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
+	float64 s0 = DateTime::GetNowAppUS();
+	sRedisProxy.sendCmd(szBuffer, (EventCallback)&WorldModule::onRedisAllPlr, this);
+
+	return 0;
+}
+
+int32 WorldModule::onRedisAllPlr(RedisEvent& e)
+{
+	float64 s0 = DateTime::GetNowAppUS();
+	for (uint32 i = 0; i < e.backstr.size(); i += 2)
+	{
+		std::string keystr = e.backstr[i];
+		std::string valuestr = e.backstr[i + 1];
+		uint32 plrUserId = Shared::strtoint32(keystr);
+		if (FindPlrRecord(plrUserId)) {
+			continue;
+		}
+
+		Json::Reader jsonReader;
+		Json::Value root;
+		jsonReader.parse(valuestr.c_str(), root);
+		Json::Value userJson = root["user"];
+		PlayerRecord* aPlrRecd = new PlayerRecord;
+		aPlrRecd->mUserId = userJson["userId"].asUInt();
+		aPlrRecd->mName = userJson["name"].asString();
+		AddPlrRecord(aPlrRecd);
+	}
+	MapPlayerRecord& mapPlayer = GetMapPlayer();
+	LOG_DEBUG(LogSystem::csl_color_green, "加载%u个玩家数据完成!", mapPlayer.size());
+	return 0;
+}
+
+uint32 PlayerRecord::GetUserId()
+{
+	if (mPlayer) {
+		return mPlayer->getUserId();
+	}
+	return mUserId;
+}
+
+const std::string& PlayerRecord::GetName()
+{
+	if (mPlayer == NULL) return mName;
+	return mPlayer->GetNameStr();
+}
+
+bool PlayerRecord::GetOnline()
+{
+	if (mPlayer == NULL) return false;
+	return mPlayer->GetOnline();
 }

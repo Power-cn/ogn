@@ -1,5 +1,19 @@
 #pragma once
 
+class PlayerRecord
+{
+public:
+	uint32 GetUserId();
+	const std::string& GetName();
+	bool GetOnline();
+public:
+	uint32 mUserId = 0;
+	std::string mName;
+	Player* mPlayer = NULL;
+};
+typedef std::map<uint32, PlayerRecord*> MapPlayerRecord;
+typedef std::map<std::string, PlayerRecord*> MapPlayerNameRecord;
+
 class WorldModule : public Module
 {
 	DECLARE_CLASS(WorldModule)
@@ -7,9 +21,9 @@ public:
 	WorldModule();
 	~WorldModule();
 protected:
-	virtual bool Initialize() { return true; }
+	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
-	virtual bool Destroy() { return true; }
+	virtual bool Destroy();
 	virtual bool onEnterWorld(Player* player, Dictionary& dict);
 	virtual bool onLeaveWorld(Player* player, Dictionary& dict);
 public:
@@ -41,6 +55,10 @@ public:
 	Player* FindPlrByAccId(uint32 accId);
 	Player* FindPlrByUserId(uint32 userId);
 
+	PlayerRecord* AddPlrRecord(PlayerRecord* aPlrRecord);
+	PlayerRecord* FindPlrRecord(uint32 userId);
+	PlayerRecord* FindPlrRecord(cstring& name);
+
 	Npc* addNpc(Npc* npc);
 	
 	Npc* FindNpcByCfgId(uint32 cfgId);
@@ -49,15 +67,23 @@ public:
 
 	void DestroyEnt(Guid guid);
 	void DestroyEnt(Entity* ent);
+	void DelPlrRecord(uint32 userId);
+	void ClearPlayerRecord();
+	void ClearEntity();
 
 	uint32 GetPlrCount() { return (uint32)mMapPlayer.size(); }
 
 	std::map<uint32, Player*>& getMapPlayer() { return mMapPlayer; }
+	MapPlayerRecord& GetMapPlayer() { return mMapPlrRecords; }
+protected:
+	int32 onRedisAuth(Event& e);
+	int32 onRedisAllPlr(RedisEvent& e);
 protected:
 	std::map<Guid, Entity*>							mMapEntity;
 	std::map<std::string, Entity*>					mMapNameEntity;
 	std::map<uint32, Player*>						mMapPlayer;
 	std::map<uint32, Player*>						mMapUserIdPlayer;
 	std::map<uint32, Npc*>							mMapNpc;
-
+	MapPlayerRecord				mMapPlrRecords;
+	MapPlayerNameRecord			mMapPlayerNameRecord;
 };

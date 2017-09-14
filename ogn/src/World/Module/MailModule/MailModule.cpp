@@ -16,7 +16,7 @@ void MailModule::SendMail(Mail& aMail)
 	switch (aMail.mailType)
 	{
 	case MailT_Target: {
-		PlayerRecord* aPlrRcd = sFriends.FindPlrRecord(aMail.targetUserId);
+		PlayerRecord* aPlrRcd = sWorld.FindPlrRecord(aMail.targetUserId);
 		if (aPlrRcd == NULL) return;
 
 		AddMail(aMail.targetUserId, aMail);
@@ -24,7 +24,7 @@ void MailModule::SendMail(Mail& aMail)
 	}
 		break;
 	case MailT_Total: {
-		MapPlayerRecord& mapPlayer = sFriends.GetMapPlayer();
+		MapPlayerRecord& mapPlayer = sWorld.GetMapPlayer();
 		for (auto itr : mapPlayer)
 		{
 			PlayerRecord* aPlrRcd = itr.second;
@@ -66,7 +66,7 @@ void MailModule::SendMail(Player* aPlr, MailType mType, cstring& tarName, cstrin
 	aMail.mailType = mType;
 	aMail.fromUserId = aPlr->getUserId();
 
-	PlayerRecord* aPlrRcd = sFriends.FindPlrRecord(tarName);
+	PlayerRecord* aPlrRcd = sWorld.FindPlrRecord(tarName);
 	if (aPlrRcd == NULL)
 	{
 		LOG_ERROR("aPlrRcd == NULL");
@@ -149,7 +149,7 @@ int32 MailModule::onRedisAllPlr(RedisEvent& e)
 			AddMail(userId, aMail);
 		}
 	}
-	LOG_DEBUG(LogSystem::csl_color_green, "加载邮件数据完成!");
+	LOG_DEBUG(LogSystem::csl_color_green, "加载%u个玩家邮件数据完成!", mMapMail.size());
 	return 0;
 }
 
@@ -226,7 +226,7 @@ void MailModule::SendPlrMail(Player* aPlr, std::vector<Mail>& lstMail)
 	for (Mail& aMail : lstMail)
 	{
 		MailInfo info;
-		PlayerRecord* aPlrRcd = sFriends.FindPlrRecord(aMail.fromUserId);
+		PlayerRecord* aPlrRcd = sWorld.FindPlrRecord(aMail.fromUserId);
 		if (aPlrRcd)
 		{
 			info.fromUserName = aPlrRcd->GetName();

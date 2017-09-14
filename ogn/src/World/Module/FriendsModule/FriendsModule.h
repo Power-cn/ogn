@@ -1,20 +1,6 @@
 #pragma once
 
-class PlayerRecord
-{
-public:
-	uint32 GetUserId();
-	const std::string& GetName();
-	bool GetOnline();
-public:
-	uint32 mUserId = 0;
-	std::string mName;
-	Player* mPlayer = NULL;
-};
-
 typedef std::map<uint32, Friends*> MapFriends;
-typedef std::map<uint32, PlayerRecord*> MapPlayerRecord;
-typedef std::map<std::string, PlayerRecord*> MapPlayerNameRecord;
 
 class FriendsModule : public Module
 {
@@ -30,22 +16,13 @@ public:
 	Friends* AddFriends(Friends* frds);
 	Friends* GetFriends(uint32 userId);
 
-	PlayerRecord* AddPlrRecord(PlayerRecord* aPlrRecord);
-	PlayerRecord* FindPlrRecord(uint32 userId);
-	PlayerRecord* FindPlrRecord(cstring& name);
-
-	MapPlayerRecord& GetMapPlayer() { return mMapPlrRecords; }
-
 	bool DelFriend(uint32 tarUserId, uint32 frdUserId);
 	bool DelFriends(uint32 tarUserId);
 	bool MutualBindFriend(Player* tar, Player* frd);
 	bool MutualDebindFriend(uint32 tarUserId, uint32 frdUserId);
 
 	void ClearFriends();
-	void DelPlrRecord(uint32 userId);
-
 	void DoFriendsList(Player* aPlr);
-
 protected:
 	virtual bool Initialize();
 	virtual bool Update(float time, float delay);
@@ -56,13 +33,8 @@ protected:
 	virtual bool onLoad(Player* player, Dictionary& bytes);
 	virtual bool onSave(Player* player, Dictionary& bytes);
 protected:
-	void ClearPlayerRecord(); 
-protected:
 	int32 onRedisAuth(Event& e);
-	int32 onRedisAllPlr(RedisEvent& e);
 	int32 onChangeName(Event& e);
 public:
 	MapFriends					mMapFriends;
-	MapPlayerRecord				mMapPlrRecords;
-	MapPlayerNameRecord			mMapPlayerNameRecord;
 };

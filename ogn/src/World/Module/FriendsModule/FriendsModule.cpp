@@ -9,7 +9,6 @@ FriendsModule::FriendsModule()
 
 FriendsModule::~FriendsModule()
 {
-	ClearPlayerRecord();
 }
 
 Friends* FriendsModule::AddFriends(Friends* frds)
@@ -86,28 +85,6 @@ Friends* FriendsModule::GetFriends(uint32 userId)
 	return itr->second;
 }
 
-PlayerRecord* FriendsModule::AddPlrRecord(PlayerRecord* aPlrRecord)
-{
-	if (FindPlrRecord(aPlrRecord->GetUserId())) return NULL;
-	mMapPlrRecords[aPlrRecord->GetUserId()] = aPlrRecord;
-	mMapPlayerNameRecord[aPlrRecord->GetName()] = aPlrRecord;
-	return aPlrRecord;
-}
-
-PlayerRecord* FriendsModule::FindPlrRecord(uint32 userId)
-{
-	auto itr = mMapPlrRecords.find(userId);
-	if (itr == mMapPlrRecords.end()) return NULL;
-	return itr->second;
-}
-
-PlayerRecord* FriendsModule::FindPlrRecord(cstring& name)
-{
-	auto itr = mMapPlayerNameRecord.find(name);
-	if (itr == mMapPlayerNameRecord.end()) return NULL;
-	return itr->second;
-}
-
 bool FriendsModule::MutualBindFriend(Player* tar, Player* frd)
 {
 	if (FindFriend(tar->getUserId(), frd->getUserId()))
@@ -142,14 +119,6 @@ void FriendsModule::ClearFriends()
 	mMapFriends.clear();
 }
 
-void FriendsModule::DelPlrRecord(uint32 userId)
-{
-	auto itr = mMapPlrRecords.find(userId);
-	if (itr == mMapPlrRecords.end()) return;
-	delete itr->second;
-	mMapPlrRecords.erase(itr);
-}
-
 void FriendsModule::DoFriendsList(Player* aPlr)
 {
 	NetFriendListRes res;
@@ -162,7 +131,7 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 
 	for (Friend* frd : frds->GetFriends())
 	{
-		PlayerRecord* aPlrRecrd = FindPlrRecord(frd->mUserId);
+		PlayerRecord* aPlrRecrd = sWorld.FindPlrRecord(frd->mUserId);
 		if (aPlrRecrd)
 		{
 			FriendInfo info;
@@ -179,7 +148,7 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 bool FriendsModule::Initialize()
 {
 	sRedisProxy.addEventListener("OnRedisAuth", (EventCallback)&FriendsModule::onRedisAuth, this);
-	sWorld.addEventListener("OnChangeName", (EventCallback)&FriendsModule::onChangeName, this);
+	//sWorld.addEventListener("OnChangeName", (EventCallback)&FriendsModule::onChangeName, this);
 	return true;
 }
 
@@ -194,30 +163,12 @@ bool FriendsModule::Destroy()
 }
 
 bool FriendsModule::onEnterWorld(Player* player, Dictionary& dict)
-{
-	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
-	if (aPlrRcd == NULL)
-	{
-		aPlrRcd = new PlayerRecord;
-		aPlrRcd->mUserId = player->getUserId();
-		aPlrRcd->mPlayer = player;
-		AddPlrRecord(aPlrRcd);
-	}
-	else {
-		aPlrRcd->mPlayer = player;
-	}
-
+{	
 	return true;
 }
 
 bool FriendsModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
-	PlayerRecord* aPlrRcd = FindPlrRecord(player->getUserId());
-	if (aPlrRcd) {
-		if (player->CanDestroy()) {
-			aPlrRcd->mPlayer = NULL;
-		}
-	}
 	return true;
 }
 
@@ -259,79 +210,18 @@ bool FriendsModule::onSave(Player* player, Dictionary& bytes)
 	return true;
 }
 
-void FriendsModule::ClearPlayerRecord()
-{
-	for (auto& itr: mMapPlrRecords) {
-		delete itr.second;
-	}
-	mMapPlrRecords.clear();
-}
 
 int32 FriendsModule::onRedisAuth(Event& e)
 {
-	char szBuffer[64] = { 0 };
-	sprintf_s(szBuffer, 64, "hgetall %s", sUser);
-	float64 s0 = DateTime::GetNowAppUS();
-	sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
+	//char szBuffer[64] = { 0 };
+	//sprintf_s(szBuffer, 64, "hgetall %s", sUser);
+	//float64 s0 = DateTime::GetNowAppUS();
+	//sRedisProxy.sendCmd(szBuffer, (EventCallback)&FriendsModule::onRedisAllPlr, this);
 
-	return 0;
-}
-
-int32 FriendsModule::onRedisAllPlr(RedisEvent& e)
-{
-	float64 s0 = DateTime::GetNowAppUS();
-	for (uint32 i = 0; i < e.backstr.size(); i += 2)
-	{
-		std::string keystr = e.backstr[i];
-		std::string valuestr = e.backstr[i + 1];
-		uint32 plrUserId = Shared::strtoint32(keystr);
-		if (FindPlrRecord(plrUserId)) {
-			continue;
-		}
-
-		Json::Reader jsonReader;
-		Json::Value root;
-		jsonReader.parse(valuestr.c_str(), root);
-		Json::Value userJson = root["user"];
-		PlayerRecord* aPlrRecd = new PlayerRecord;
-		aPlrRecd->mUserId = userJson["userId"].asUInt();
-		aPlrRecd->mName = userJson["name"].asString();
-		AddPlrRecord(aPlrRecd);
-	}
-	MapPlayerRecord& mapPlayer = GetMapPlayer();
-	LOG_DEBUG(LogSystem::csl_color_green, "load plr count: %d", mapPlayer.size());
 	return 0;
 }
 
 int32 FriendsModule::onChangeName(Event& e)
 {
-	std::string oldName = (char*)e.params[0];
-	std::string newName = (char*)e.params[1];
-	auto itr = mMapPlayerNameRecord.find(oldName);
-	if (itr != mMapPlayerNameRecord.end())
-	{
-		mMapPlayerNameRecord[newName] = itr->second;
-		mMapPlayerNameRecord.erase(itr);
-	}
 	return 0;
-}
-
-uint32 PlayerRecord::GetUserId()
-{
-	if (mPlayer) {
-		return mPlayer->getUserId();
-	}
-	return mUserId;
-}
-
-const std::string& PlayerRecord::GetName()
-{
-	if (mPlayer == NULL) return mName;
-	return mPlayer->GetNameStr();
-}
-
-bool PlayerRecord::GetOnline()
-{
-	if (mPlayer == NULL) return false;
-	return mPlayer->GetOnline();
 }
