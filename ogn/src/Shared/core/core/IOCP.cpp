@@ -95,7 +95,7 @@ SocketClient* IOCP::connect(const std::string& host, short port)
 
 	SOCKADDR_IN& addr = client->getSockaddr();
 	addr.sin_family = AF_INET;
-	addr.sin_addr.s_addr = inet_addr(host.c_str());
+	addr.sin_addr.s_addr = Shared::inet_addr(host.c_str());
 	addr.sin_port = htons(port);
 
 	SOCKADDR_IN local;

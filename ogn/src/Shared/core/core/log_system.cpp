@@ -170,7 +170,7 @@ bool LogSystem::assertFail( const char* pszExpression, const char* pszFile, cons
 {
 	char szTempBuffer[1024] = {0};
 	sprintf_s(szTempBuffer, sizeof(szTempBuffer), "Expression: %s\r\nFile: %s\r\nFunc: %s\r\nLine: %d\r\n", pszExpression, pszFile, pszFunction, iLine);
-#ifdef WIN32 || WIN64
+#if (defined(WIN32) || defined(WIN64))
 	int iButtonResult = ::MessageBoxA(
 		NULL, 
 		szTempBuffer, 

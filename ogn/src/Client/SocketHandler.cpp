@@ -4,17 +4,17 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	for (auto itr : mapRobotJson)
-	{
-		RobotJson& robotJson = itr.second;
-		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	}
-	float64 t0 = DateTime::GetNowAppUS();
-	for (int i = 0; i < mapRobotJson.size(); ++i)
-	{
-		createRobot();
-	}
+	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	//for (auto itr : mapRobotJson)
+	//{
+	//	RobotJson& robotJson = itr.second;
+	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+	//}
+	//float64 t0 = DateTime::GetNowAppUS();
+	//for (int i = 0; i < 500; ++i)
+	//{
+	//	createRobot();
+	//}
 	//float64 t1 = DateTime::GetNowAppUS() - t0;
 	//LOG_DEBUG(LogSystem::csl_color_red, "t1 = %f", t1);
 	int aaaa = 0;
@@ -77,9 +77,9 @@ int SocketHandler::onExit(SocketEvent& e)
 int SocketHandler::onException(SocketEvent& e)
 {
 	LOG_ERROR(__FUNCTION__);
-	delete e.targetDispatcher;
-
+	int err = GetLastError();
 	createRobot();
+	mListSocketClient.erase((SocketClient*)e.targetDispatcher);
 	return 0;
 }
 
@@ -96,13 +96,14 @@ void SocketHandler::createRobot()
 	sprintf_s(szBuf, 32, "Gate");
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 	float64 t1 = DateTime::GetNowAppUS();
+	LOG_INFO("connect: %s %d", cfg.Host.c_str(), cfg.Port);
 	SocketClient* client = INSTANCE(Network).connect(cfg.Host.c_str(), cfg.Port);
 	if (client == NULL) {
 		LOG_ERROR("创建连接失败");
 		return;
 	}
 	float64 t2 = DateTime::GetNowAppUS() - t1;
-	mListSocketClient.push_back(client);
+	mListSocketClient.insert(client);
 	mIndex++;
 
 	client->addEventListener(SocketEvent::CONNECT, (EventCallback)&SocketHandler::onConnect, this);

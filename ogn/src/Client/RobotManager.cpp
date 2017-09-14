@@ -9,7 +9,7 @@ RobotManager::RobotManager()
 
 	addEventListener(ID_NetSessionLeaveNotify, (EventCallbackProcess)&RobotManager::onNetSessionLeaveNotify, this);
 
-	//addEventListener(ID_NetPingNotify, (EventCallbackProcess)&RobotManager::onNetPingNotify, this);
+	addEventListener(ID_NetPingNotify, (EventCallbackProcess)&RobotManager::onNetPingNotify, this);
 	addEventListener(ID_NetLoginRes, (EventCallbackProcess)&RobotManager::onNetLoginRes, this);
 	addEventListener(ID_NetCreateRoleRes, (EventCallbackProcess)&RobotManager::onNetCreateRoleRes, this);
 	addEventListener(ID_NetSelectRoleRes, (EventCallbackProcess)&RobotManager::onNetSelectRoleRes, this);
@@ -37,7 +37,7 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher).addEventListener("select", (EventCallback)&RobotManager::onSelect, this);
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&RobotManager::onClose, this);
 	INSTANCE(CmdDispatcher).addEventListener("sendmsg", (EventCallback)&RobotManager::onSendMsg, this);
-
+	INSTANCE(CmdDispatcher).addEventListener("ping", (EventCallback)&RobotManager::onPing, this);
 
 }
 
@@ -97,7 +97,7 @@ int RobotManager::onNetPingNotify(Robot* robot, NetPingNotify* nfy)
 {
 	std::string str;
 	DateTime::Now(str);
-	LOG_INFO("[%s] ping [%d]", str.c_str(), GetTickCount() - nfy->time);
+	LOG_INFO("ping [%d]", GetTickCount() - nfy->time);
 
 	return 0;
 }
@@ -106,6 +106,10 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 {
 	if (res->result == NResultSuccess)
 	{
+		NetPingNotify nfy;
+		nfy.time = GetTickCount();
+		robot->sendPacket(nfy);
+
 		robot->mGuid = res->guid;
 		mCurRobot->mAccountId = res->accInfo.id;
 		LOG_DEBUG(LogSystem::csl_color_green, "user:%s accId:%d guid:%llu", res->accInfo.user.c_str(), res->accInfo.id, res->guid);
@@ -376,6 +380,15 @@ int32 RobotManager::onSendMsg(CmdEvent& e)
 	nfy.channelType = Shared::strtoint32(e.cmdExecute->params[0]);
 	nfy.chatMsg = e.cmdExecute->params[1];
 	nfy.to = e.cmdExecute->params[2];
+	mCurRobot->sendPacket(nfy);
+	return 0;
+}
+
+int32 RobotManager::onPing(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+	NetPingNotify nfy;
+	nfy.time = GetTickCount();
 	mCurRobot->sendPacket(nfy);
 	return 0;
 }
