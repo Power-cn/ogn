@@ -128,7 +128,11 @@ void FriendsModule::DoFriendsList(Player* aPlr)
 		aPlr->sendPacket(res);
 		return;
 	}
-
+	for (auto& itr : frds->GetGroups())
+	{
+		res.gruopNames.push_back(itr.first);
+		res.gruopIds.push_back(itr.second);
+	}
 	for (Friend* frd : frds->GetFriends())
 	{
 		PlayerRecord* aPlrRecrd = sWorld.FindPlrRecord(frd->mUserId);

@@ -31,6 +31,7 @@ public:
 	uint32 GetGroupsCount() { return (uint32)mGroups.size(); }
 
 	std::map<std::string, uint32>& GetGroups() { return mGroups; }
+	sstring GetGroupName(uint32 groupId);
 protected:
 	uint32								mUserId;
 	std::list<Friend*>					mFriends;

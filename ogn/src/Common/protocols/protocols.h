@@ -241,9 +241,9 @@ leaderInsId = 0;
 CHECK(bytes << teamId);
 CHECK(bytes << leaderInsId);
 uint32 teamEntityInfos_Size = (uint32)teamEntityInfos.size();
-bytes << teamEntityInfos_Size;
+CHECK(bytes << teamEntityInfos_Size);
 for (uint32 teamEntityInfos_i = 0; teamEntityInfos_i < teamEntityInfos_Size; ++teamEntityInfos_i) {
-	bytes << teamEntityInfos[teamEntityInfos_i];
+	CHECK(bytes << teamEntityInfos[teamEntityInfos_i]);
 }
 
 		return true;
@@ -253,10 +253,10 @@ for (uint32 teamEntityInfos_i = 0; teamEntityInfos_i < teamEntityInfos_Size; ++t
 CHECK(bytes >> teamId);
 CHECK(bytes >> leaderInsId);
 uint32 teamEntityInfos_Size = 0;
-bytes >> teamEntityInfos_Size;
+CHECK(bytes >> teamEntityInfos_Size);
 for (uint32 teamEntityInfos_i = 0; teamEntityInfos_i < teamEntityInfos_Size; ++teamEntityInfos_i) {
 	TeamEntityInfo teamEntityInfos_info;
-	bytes >> teamEntityInfos_info;
+	CHECK(bytes >> teamEntityInfos_info);
 	teamEntityInfos.push_back(teamEntityInfos_info);
 }
 
@@ -327,9 +327,9 @@ CHECK(bytes << password);
 CHECK(bytes << name);
 CHECK(bytes << maxCount);
 uint32 roomPlayerInfos_Size = (uint32)roomPlayerInfos.size();
-bytes << roomPlayerInfos_Size;
+CHECK(bytes << roomPlayerInfos_Size);
 for (uint32 roomPlayerInfos_i = 0; roomPlayerInfos_i < roomPlayerInfos_Size; ++roomPlayerInfos_i) {
-	bytes << roomPlayerInfos[roomPlayerInfos_i];
+	CHECK(bytes << roomPlayerInfos[roomPlayerInfos_i]);
 }
 
 		return true;
@@ -342,10 +342,10 @@ CHECK(bytes >> password);
 CHECK(bytes >> name);
 CHECK(bytes >> maxCount);
 uint32 roomPlayerInfos_Size = 0;
-bytes >> roomPlayerInfos_Size;
+CHECK(bytes >> roomPlayerInfos_Size);
 for (uint32 roomPlayerInfos_i = 0; roomPlayerInfos_i < roomPlayerInfos_Size; ++roomPlayerInfos_i) {
 	RoomPlayerInfo roomPlayerInfos_info;
-	bytes >> roomPlayerInfos_info;
+	CHECK(bytes >> roomPlayerInfos_info);
 	roomPlayerInfos.push_back(roomPlayerInfos_info);
 }
 
@@ -373,9 +373,9 @@ userGold = 0;
 	bool operator >> (BinaryStream& bytes) {
 CHECK(bytes << userId);
 uint32 cards_Size = (uint32)cards.size();
-bytes << cards_Size;
+CHECK(bytes << cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
-	bytes << cards[cards_i];
+	CHECK(bytes << cards[cards_i]);
 }
 CHECK(bytes << userGold);
 
@@ -385,10 +385,10 @@ CHECK(bytes << userGold);
 	bool operator << (BinaryStream& bytes) {
 CHECK(bytes >> userId);
 uint32 cards_Size = 0;
-bytes >> cards_Size;
+CHECK(bytes >> cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
 	uint8 cards_info;
-	bytes >> cards_info;
+	CHECK(bytes >> cards_info);
 	cards.push_back(cards_info);
 }
 CHECK(bytes >> userGold);
@@ -427,9 +427,9 @@ CHECK(bytes << curUseGold);
 CHECK(bytes << curMaxUseGold);
 CHECK(bytes << round);
 uint32 gameEntInfos_Size = (uint32)gameEntInfos.size();
-bytes << gameEntInfos_Size;
+CHECK(bytes << gameEntInfos_Size);
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
-	bytes << gameEntInfos[gameEntInfos_i];
+	CHECK(bytes << gameEntInfos[gameEntInfos_i]);
 }
 
 		return true;
@@ -445,10 +445,10 @@ CHECK(bytes >> curUseGold);
 CHECK(bytes >> curMaxUseGold);
 CHECK(bytes >> round);
 uint32 gameEntInfos_Size = 0;
-bytes >> gameEntInfos_Size;
+CHECK(bytes >> gameEntInfos_Size);
 for (uint32 gameEntInfos_i = 0; gameEntInfos_i < gameEntInfos_Size; ++gameEntInfos_i) {
 	GameEntityInfo gameEntInfos_info;
-	bytes >> gameEntInfos_info;
+	CHECK(bytes >> gameEntInfos_info);
 	gameEntInfos.push_back(gameEntInfos_info);
 }
 
@@ -736,9 +736,9 @@ CHECK(bytes << result);
 CHECK(bytes << guid);
 CHECK(bytes << accInfo);
 uint32 roleInfos_Size = (uint32)roleInfos.size();
-bytes << roleInfos_Size;
+CHECK(bytes << roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
-	bytes << roleInfos[roleInfos_i];
+	CHECK(bytes << roleInfos[roleInfos_i]);
 }
 
 		return true;
@@ -749,10 +749,10 @@ CHECK(bytes >> result);
 CHECK(bytes >> guid);
 CHECK(bytes >> accInfo);
 uint32 roleInfos_Size = 0;
-bytes >> roleInfos_Size;
+CHECK(bytes >> roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
 	DBRoleInfo roleInfos_info;
-	bytes >> roleInfos_info;
+	CHECK(bytes >> roleInfos_info);
 	roleInfos.push_back(roleInfos_info);
 }
 
@@ -778,9 +778,9 @@ accountId = 0;
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << accountId);
 uint32 roleInfos_Size = (uint32)roleInfos.size();
-bytes << roleInfos_Size;
+CHECK(bytes << roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
-	bytes << roleInfos[roleInfos_i];
+	CHECK(bytes << roleInfos[roleInfos_i]);
 }
 
 		return true;
@@ -789,10 +789,10 @@ for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> accountId);
 uint32 roleInfos_Size = 0;
-bytes >> roleInfos_Size;
+CHECK(bytes >> roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
 	DBRoleInfo roleInfos_info;
-	bytes >> roleInfos_info;
+	CHECK(bytes >> roleInfos_info);
 	roleInfos.push_back(roleInfos_info);
 }
 
@@ -992,9 +992,9 @@ name = "";
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << name);
 uint32 gmParams_Size = (uint32)gmParams.size();
-bytes << gmParams_Size;
+CHECK(bytes << gmParams_Size);
 for (uint32 gmParams_i = 0; gmParams_i < gmParams_Size; ++gmParams_i) {
-	bytes << gmParams[gmParams_i];
+	CHECK(bytes << gmParams[gmParams_i]);
 }
 
 		return true;
@@ -1003,10 +1003,10 @@ for (uint32 gmParams_i = 0; gmParams_i < gmParams_Size; ++gmParams_i) {
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> name);
 uint32 gmParams_Size = 0;
-bytes >> gmParams_Size;
+CHECK(bytes >> gmParams_Size);
 for (uint32 gmParams_i = 0; gmParams_i < gmParams_Size; ++gmParams_i) {
 	std::string gmParams_info;
-	bytes >> gmParams_info;
+	CHECK(bytes >> gmParams_info);
 	gmParams.push_back(gmParams_info);
 }
 
@@ -1062,9 +1062,9 @@ accountId = 0;
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << accountId);
 uint32 roleInfos_Size = (uint32)roleInfos.size();
-bytes << roleInfos_Size;
+CHECK(bytes << roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
-	bytes << roleInfos[roleInfos_i];
+	CHECK(bytes << roleInfos[roleInfos_i]);
 }
 
 		return true;
@@ -1073,10 +1073,10 @@ for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> accountId);
 uint32 roleInfos_Size = 0;
-bytes >> roleInfos_Size;
+CHECK(bytes >> roleInfos_Size);
 for (uint32 roleInfos_i = 0; roleInfos_i < roleInfos_Size; ++roleInfos_i) {
 	DBRoleInfo roleInfos_info;
-	bytes >> roleInfos_info;
+	CHECK(bytes >> roleInfos_info);
 	roleInfos.push_back(roleInfos_info);
 }
 
@@ -1608,9 +1608,9 @@ msgId = 0;
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << msgId);
 uint32 msgParams_Size = (uint32)msgParams.size();
-bytes << msgParams_Size;
+CHECK(bytes << msgParams_Size);
 for (uint32 msgParams_i = 0; msgParams_i < msgParams_Size; ++msgParams_i) {
-	bytes << msgParams[msgParams_i];
+	CHECK(bytes << msgParams[msgParams_i]);
 }
 
 		return true;
@@ -1619,10 +1619,10 @@ for (uint32 msgParams_i = 0; msgParams_i < msgParams_Size; ++msgParams_i) {
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> msgId);
 uint32 msgParams_Size = 0;
-bytes >> msgParams_Size;
+CHECK(bytes >> msgParams_Size);
 for (uint32 msgParams_i = 0; msgParams_i < msgParams_Size; ++msgParams_i) {
 	std::string msgParams_info;
-	bytes >> msgParams_info;
+	CHECK(bytes >> msgParams_info);
 	msgParams.push_back(msgParams_info);
 }
 
@@ -1812,9 +1812,9 @@ public:
 
 	bool OnSerialize(BinaryStream& bytes) {
 uint32 teamInfos_Size = (uint32)teamInfos.size();
-bytes << teamInfos_Size;
+CHECK(bytes << teamInfos_Size);
 for (uint32 teamInfos_i = 0; teamInfos_i < teamInfos_Size; ++teamInfos_i) {
-	bytes << teamInfos[teamInfos_i];
+	CHECK(bytes << teamInfos[teamInfos_i]);
 }
 
 		return true;
@@ -1822,10 +1822,10 @@ for (uint32 teamInfos_i = 0; teamInfos_i < teamInfos_Size; ++teamInfos_i) {
 
 	bool OnDeserialize(BinaryStream& bytes) {
 uint32 teamInfos_Size = 0;
-bytes >> teamInfos_Size;
+CHECK(bytes >> teamInfos_Size);
 for (uint32 teamInfos_i = 0; teamInfos_i < teamInfos_Size; ++teamInfos_i) {
 	TeamInfo teamInfos_info;
-	bytes >> teamInfos_info;
+	CHECK(bytes >> teamInfos_info);
 	teamInfos.push_back(teamInfos_info);
 }
 
@@ -2110,9 +2110,9 @@ public:
 
 	bool OnSerialize(BinaryStream& bytes) {
 uint32 roomInfoInfos_Size = (uint32)roomInfoInfos.size();
-bytes << roomInfoInfos_Size;
+CHECK(bytes << roomInfoInfos_Size);
 for (uint32 roomInfoInfos_i = 0; roomInfoInfos_i < roomInfoInfos_Size; ++roomInfoInfos_i) {
-	bytes << roomInfoInfos[roomInfoInfos_i];
+	CHECK(bytes << roomInfoInfos[roomInfoInfos_i]);
 }
 
 		return true;
@@ -2120,10 +2120,10 @@ for (uint32 roomInfoInfos_i = 0; roomInfoInfos_i < roomInfoInfos_Size; ++roomInf
 
 	bool OnDeserialize(BinaryStream& bytes) {
 uint32 roomInfoInfos_Size = 0;
-bytes >> roomInfoInfos_Size;
+CHECK(bytes >> roomInfoInfos_Size);
 for (uint32 roomInfoInfos_i = 0; roomInfoInfos_i < roomInfoInfos_Size; ++roomInfoInfos_i) {
 	RoomInfo roomInfoInfos_info;
-	bytes >> roomInfoInfos_info;
+	CHECK(bytes >> roomInfoInfos_info);
 	roomInfoInfos.push_back(roomInfoInfos_info);
 }
 
@@ -2366,9 +2366,9 @@ result = 0;
 	bool OnSerialize(BinaryStream& bytes) {
 CHECK(bytes << result);
 uint32 cards_Size = (uint32)cards.size();
-bytes << cards_Size;
+CHECK(bytes << cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
-	bytes << cards[cards_i];
+	CHECK(bytes << cards[cards_i]);
 }
 
 		return true;
@@ -2377,10 +2377,10 @@ for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
 	bool OnDeserialize(BinaryStream& bytes) {
 CHECK(bytes >> result);
 uint32 cards_Size = 0;
-bytes >> cards_Size;
+CHECK(bytes >> cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
 	uint8 cards_info;
-	bytes >> cards_info;
+	CHECK(bytes >> cards_info);
 	cards.push_back(cards_info);
 }
 
@@ -2613,17 +2613,17 @@ speakTime = 0;
 CHECK(bytes << result);
 CHECK(bytes << userId);
 uint32 cards_Size = (uint32)cards.size();
-bytes << cards_Size;
+CHECK(bytes << cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
-	bytes << cards[cards_i];
+	CHECK(bytes << cards[cards_i]);
 }
 CHECK(bytes << gold);
 CHECK(bytes << state);
 CHECK(bytes << tarUserId);
 uint32 tarCards_Size = (uint32)tarCards.size();
-bytes << tarCards_Size;
+CHECK(bytes << tarCards_Size);
 for (uint32 tarCards_i = 0; tarCards_i < tarCards_Size; ++tarCards_i) {
-	bytes << tarCards[tarCards_i];
+	CHECK(bytes << tarCards[tarCards_i]);
 }
 CHECK(bytes << tarState);
 CHECK(bytes << nextSpeakUserId);
@@ -2636,20 +2636,20 @@ CHECK(bytes << speakTime);
 CHECK(bytes >> result);
 CHECK(bytes >> userId);
 uint32 cards_Size = 0;
-bytes >> cards_Size;
+CHECK(bytes >> cards_Size);
 for (uint32 cards_i = 0; cards_i < cards_Size; ++cards_i) {
 	uint8 cards_info;
-	bytes >> cards_info;
+	CHECK(bytes >> cards_info);
 	cards.push_back(cards_info);
 }
 CHECK(bytes >> gold);
 CHECK(bytes >> state);
 CHECK(bytes >> tarUserId);
 uint32 tarCards_Size = 0;
-bytes >> tarCards_Size;
+CHECK(bytes >> tarCards_Size);
 for (uint32 tarCards_i = 0; tarCards_i < tarCards_Size; ++tarCards_i) {
 	uint8 tarCards_info;
-	bytes >> tarCards_info;
+	CHECK(bytes >> tarCards_info);
 	tarCards.push_back(tarCards_info);
 }
 CHECK(bytes >> tarState);
@@ -2774,30 +2774,58 @@ public:
 	Packet(ID_NetFriendListRes) {
 
 
+
+
 	}
 
 	bool OnSerialize(BinaryStream& bytes) {
+uint32 gruopIds_Size = (uint32)gruopIds.size();
+CHECK(bytes << gruopIds_Size);
+for (uint32 gruopIds_i = 0; gruopIds_i < gruopIds_Size; ++gruopIds_i) {
+	CHECK(bytes << gruopIds[gruopIds_i]);
+}
+uint32 gruopNames_Size = (uint32)gruopNames.size();
+CHECK(bytes << gruopNames_Size);
+for (uint32 gruopNames_i = 0; gruopNames_i < gruopNames_Size; ++gruopNames_i) {
+	CHECK(bytes << gruopNames[gruopNames_i]);
+}
 uint32 friendInfos_Size = (uint32)friendInfos.size();
-bytes << friendInfos_Size;
+CHECK(bytes << friendInfos_Size);
 for (uint32 friendInfos_i = 0; friendInfos_i < friendInfos_Size; ++friendInfos_i) {
-	bytes << friendInfos[friendInfos_i];
+	CHECK(bytes << friendInfos[friendInfos_i]);
 }
 
 		return true;
 	}
 
 	bool OnDeserialize(BinaryStream& bytes) {
+uint32 gruopIds_Size = 0;
+CHECK(bytes >> gruopIds_Size);
+for (uint32 gruopIds_i = 0; gruopIds_i < gruopIds_Size; ++gruopIds_i) {
+	uint32 gruopIds_info;
+	CHECK(bytes >> gruopIds_info);
+	gruopIds.push_back(gruopIds_info);
+}
+uint32 gruopNames_Size = 0;
+CHECK(bytes >> gruopNames_Size);
+for (uint32 gruopNames_i = 0; gruopNames_i < gruopNames_Size; ++gruopNames_i) {
+	std::string gruopNames_info;
+	CHECK(bytes >> gruopNames_info);
+	gruopNames.push_back(gruopNames_info);
+}
 uint32 friendInfos_Size = 0;
-bytes >> friendInfos_Size;
+CHECK(bytes >> friendInfos_Size);
 for (uint32 friendInfos_i = 0; friendInfos_i < friendInfos_Size; ++friendInfos_i) {
 	FriendInfo friendInfos_info;
-	bytes >> friendInfos_info;
+	CHECK(bytes >> friendInfos_info);
 	friendInfos.push_back(friendInfos_info);
 }
 
 		return true;
 	}
 public:
+std::vector<uint32> gruopIds;
+std::vector<std::string> gruopNames;
 std::vector<FriendInfo> friendInfos;
 
 };
@@ -2892,9 +2920,9 @@ public:
 
 	bool OnSerialize(BinaryStream& bytes) {
 uint32 productInfos_Size = (uint32)productInfos.size();
-bytes << productInfos_Size;
+CHECK(bytes << productInfos_Size);
 for (uint32 productInfos_i = 0; productInfos_i < productInfos_Size; ++productInfos_i) {
-	bytes << productInfos[productInfos_i];
+	CHECK(bytes << productInfos[productInfos_i]);
 }
 
 		return true;
@@ -2902,10 +2930,10 @@ for (uint32 productInfos_i = 0; productInfos_i < productInfos_Size; ++productInf
 
 	bool OnDeserialize(BinaryStream& bytes) {
 uint32 productInfos_Size = 0;
-bytes >> productInfos_Size;
+CHECK(bytes >> productInfos_Size);
 for (uint32 productInfos_i = 0; productInfos_i < productInfos_Size; ++productInfos_i) {
 	ProductInfo productInfos_info;
-	bytes >> productInfos_info;
+	CHECK(bytes >> productInfos_info);
 	productInfos.push_back(productInfos_info);
 }
 
@@ -2926,9 +2954,9 @@ public:
 
 	bool OnSerialize(BinaryStream& bytes) {
 uint32 mailInfos_Size = (uint32)mailInfos.size();
-bytes << mailInfos_Size;
+CHECK(bytes << mailInfos_Size);
 for (uint32 mailInfos_i = 0; mailInfos_i < mailInfos_Size; ++mailInfos_i) {
-	bytes << mailInfos[mailInfos_i];
+	CHECK(bytes << mailInfos[mailInfos_i]);
 }
 
 		return true;
@@ -2936,10 +2964,10 @@ for (uint32 mailInfos_i = 0; mailInfos_i < mailInfos_Size; ++mailInfos_i) {
 
 	bool OnDeserialize(BinaryStream& bytes) {
 uint32 mailInfos_Size = 0;
-bytes >> mailInfos_Size;
+CHECK(bytes >> mailInfos_Size);
 for (uint32 mailInfos_i = 0; mailInfos_i < mailInfos_Size; ++mailInfos_i) {
 	MailInfo mailInfos_info;
-	bytes >> mailInfos_info;
+	CHECK(bytes >> mailInfos_info);
 	mailInfos.push_back(mailInfos_info);
 }
 

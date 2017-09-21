@@ -287,11 +287,16 @@ int RobotManager::onNetChatMsgNotify(Robot* robot, NetChatMsgNotify* nfy)
 
 int RobotManager::onNetFriendListRes(Robot* robot, NetFriendListRes* res)
 {
+	std::map<uint32, std::string> groups;
+	for (uint32 i = 0; i < res->gruopIds.size(); ++i) {
+		groups[res->gruopIds[i]] = res->gruopNames[i];
+	}
+
 	LOG_DEBUG(LogSystem::csl_color_green, "好友个数:%d", res->friendInfos.size());
 	for (uint32 i = 0 ; i < res->friendInfos.size(); ++i)
 	{
 		FriendInfo& info = res->friendInfos[i];
-		LOG_DEBUG(LogSystem::csl_color_green, "\ngroupId:%d\nuserId:%d\nname:%s\n%s\n", info.groupId, info.userId, info.name.c_str(), info.state == 1 ? "在线" : "离线");
+		LOG_DEBUG(LogSystem::csl_color_green, "\ngroupId:%s\nuserId:%d\nname:%s\n%s\n", groups[info.groupId].c_str(), info.userId, info.name.c_str(), info.state == 1 ? "在线" : "离线");
 	}
 	return 0;
 }

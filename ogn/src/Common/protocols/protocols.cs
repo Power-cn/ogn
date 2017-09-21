@@ -3003,12 +3003,26 @@ public class NetFriendListRes : Packet
 {
 	public NetFriendListRes():base((int)PACKET_ID_ENUM.ID_NetFriendListRes)
 	{
+gruopIds = new List<uint>();
+gruopNames = new List<string>();
 friendInfos = new List<FriendInfo>();
 
 	}
 
 	protected override bool OnSerialize(BinaryStream bytes)
 	{
+int gruopIds_TEMP = gruopIds.Count;
+bytes.Write(gruopIds_TEMP);
+for (int i = 0; i < gruopIds_TEMP; ++i)
+{
+	bytes.Write(gruopIds[i]);
+}
+int gruopNames_TEMP = gruopNames.Count;
+bytes.Write(gruopNames_TEMP);
+for (int i = 0; i < gruopNames_TEMP; ++i)
+{
+	bytes.Write(gruopNames[i]);
+}
 int friendInfos_TEMP = friendInfos.Count;
 bytes.Write(friendInfos_TEMP);
 for (int i = 0; i < friendInfos_TEMP; ++i)
@@ -3021,6 +3035,24 @@ for (int i = 0; i < friendInfos_TEMP; ++i)
 
 	protected override bool OnDeserialize(BinaryStream bytes)
 	{
+int gruopIds_TEMP = 0;
+bytes.Read(ref gruopIds_TEMP);
+for (int i = 0; i < gruopIds_TEMP; ++i)
+{
+	uint info_gruopIds;
+	info_gruopIds = 0;
+	bytes.Read(ref info_gruopIds);
+	gruopIds.Add(info_gruopIds);
+}
+int gruopNames_TEMP = 0;
+bytes.Read(ref gruopNames_TEMP);
+for (int i = 0; i < gruopNames_TEMP; ++i)
+{
+	string info_gruopNames;
+	info_gruopNames = "";
+	bytes.Read(ref info_gruopNames);
+	gruopNames.Add(info_gruopNames);
+}
 int friendInfos_TEMP = 0;
 bytes.Read(ref friendInfos_TEMP);
 for (int i = 0; i < friendInfos_TEMP; ++i)
@@ -3034,6 +3066,8 @@ for (int i = 0; i < friendInfos_TEMP; ++i)
 		return true;
 	}
 
+public List<uint> gruopIds;
+public List<string> gruopNames;
 public List<FriendInfo> friendInfos;
 
 }

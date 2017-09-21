@@ -82,6 +82,7 @@ typedef	unsigned __int64				uint64;
 typedef float							float32;
 typedef double							float64;
 typedef const std::string				cstring;
+typedef std::string						sstring;
 
 #else
 #include <ext/hash_map>

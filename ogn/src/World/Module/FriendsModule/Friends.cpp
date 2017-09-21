@@ -18,7 +18,7 @@ bool Friend::operator << (Json::Value& json)
 Friends::Friends(uint32 tarUserId):
 mUserId(tarUserId)
 {
-
+	mGroups["ÎÒµÄºÃÓÑ"] = 0;
 }
 
 Friends::~Friends()
@@ -78,6 +78,16 @@ Friend* Friends::GetFriend(uint32 idx)
 		i++;
 	}
 	return NULL;
+}
+
+sstring Friends::GetGroupName(uint32 groupId)
+{
+	for (auto& itr : mGroups) {
+		if (itr.second == groupId) {
+			return itr.first;
+		}
+	}
+	return "";
 }
 
 void Friends::ClearFriends()

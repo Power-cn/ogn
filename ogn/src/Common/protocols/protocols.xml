@@ -481,6 +481,8 @@
     </element>
     
     <element id="ID_NetFriendListRes" name="NetFriendListRes" >
+      <member type="vector" name="gruopIds" element="uint32"/>
+      <member type="vector" name="gruopNames" element="string"/>
       <member type="vector" name="friendInfos" element="FriendInfo"/>
     </element>
 
