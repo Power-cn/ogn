@@ -107,7 +107,7 @@ std::set<Session*>* SessionManager::getSessionsBySocket(uint32 socketId)
 	return NULL;
 }
 
-void SessionManager::removeSessionsBySocket(uint32 socketId, Session* ssn)
+void SessionManager::removeSsnsBySocket(uint32 socketId, Session* ssn)
 {
 	auto itr = mMapSocketSessions.find(socketId);
 	if (itr != mMapSocketSessions.end())

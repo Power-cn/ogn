@@ -5,7 +5,7 @@
     <element name="DBAccountInfo" parent="object">
       <member type="uint32" name="id" />
       <member type="string" name="user" />
-      <member type="BinaryStream" name="password" />
+      <member type="Stream" name="password" />
       <member type="string" name="name" />
       <member type="string" name="email" />
       <member type="string" name="phone" />
@@ -17,7 +17,7 @@
       <member type="string" name="name" />
       <member type="uint32" name="createTime" />
       <member type="uint32" name="onlinetotaltime" />
-      <member type="BinaryStream" name="datas" />
+      <member type="Stream" name="datas" />
       <member type="string" name="datastr" />
     </element>
 
@@ -194,12 +194,12 @@
     
     <element id="ID_NetPropertyRes" name="NetPropertyRes" >
       <member type="int64" name="guid" />
-      <member type="BinaryStream" name="property" />
+      <member type="Stream" name="property" />
     </element>
 
     <element id="ID_NetEntityPropertyNotify" name="NetEntityPropertyNotify" >
       <member type="int64" name="guid" />
-      <member type="BinaryStream" name="property" />
+      <member type="Stream" name="property" />
     </element>
 
     <element id="ID_NetEntityEnterMapNotify" name="NetEntityEnterMapNotify" >
@@ -282,7 +282,7 @@
       <member type="string" name="to" />
       <member type="int8" name="channelType" />
       <member type="string" name="chatMsg" />
-      <member type="BinaryStream" name="chatData" />
+      <member type="Stream" name="chatData" />
     </element>
 
     <element id="ID_NetResponseMsgNotify" name="NetResponseMsgNotify" >

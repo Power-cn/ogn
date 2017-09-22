@@ -90,7 +90,7 @@ public:
 	DBAccountInfo() {
 id = 0;
 user = "";
-password;
+
 name = "";
 email = "";
 phone = "";
@@ -136,7 +136,7 @@ accountId = 0;
 name = "";
 createTime = 0;
 onlinetotaltime = 0;
-datas;
+
 datastr = "";
 
 	}
@@ -1142,7 +1142,7 @@ public:
 	NetPropertyRes():
 	Packet(ID_NetPropertyRes) {
 guid = 0;
-property;
+
 
 	}
 
@@ -1170,7 +1170,7 @@ public:
 	NetEntityPropertyNotify():
 	Packet(ID_NetEntityPropertyNotify) {
 guid = 0;
-property;
+
 
 	}
 
@@ -1589,7 +1589,7 @@ from = "";
 to = "";
 channelType = 0;
 chatMsg = "";
-chatData;
+
 
 	}
 

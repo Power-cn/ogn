@@ -15,7 +15,7 @@ public:
 	
 	Session* addSessionsBySocket(uint32 socketId, Session* ssn);
 	std::set<Session*>* getSessionsBySocket(uint32 socketId);
-	void removeSessionsBySocket(uint32 socketId, Session* ssn);
+	void removeSsnsBySocket(uint32 socketId, Session* ssn);
 	std::map<uint32, std::set<Session*>>& getMapSocketSessions() { return mMapSocketSessions; }
 	Socket* addSktsBySsn(SessionID sessionId, Socket* skt);
 	std::set<Socket*>* getSktsBySsn(SessionID sessionId);

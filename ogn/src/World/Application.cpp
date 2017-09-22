@@ -295,7 +295,7 @@ void Application::doSessionLeaveWorld(Session* ssn)
 	ssn->sendPacketToDB(nfy);
 	ssn->sendPacketToWorld(nfy);
 
-	sSsnMgr.removeSessionsBySocket(ssn->getSocketId(), ssn);
+	sSsnMgr.removeSsnsBySocket(ssn->getSocketId(), ssn);
 	sSsnMgr.removeSession(ssn->getSsnId());
 }
 
