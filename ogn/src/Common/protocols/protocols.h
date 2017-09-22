@@ -5,6 +5,7 @@ ID_NetFirst,
 ID_NetSessionEnterNotify,
 ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
+ID_NetPingGateNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
 ID_NetPlayerSaveNotify,
@@ -672,6 +673,30 @@ class NetPingNotify : public Packet {
 public:
 	NetPingNotify():
 	Packet(ID_NetPingNotify) {
+time = 0;
+
+	}
+
+	bool OnSerialize(BinaryStream& bytes) {
+CHECK(bytes << time);
+
+		return true;
+	}
+
+	bool OnDeserialize(BinaryStream& bytes) {
+CHECK(bytes >> time);
+
+		return true;
+	}
+public:
+uint32 time;
+
+};
+
+class NetPingGateNotify : public Packet {
+public:
+	NetPingGateNotify():
+	Packet(ID_NetPingGateNotify) {
 time = 0;
 
 	}
@@ -3004,6 +3029,7 @@ REGISTER_PACKET_HELPER(ID_NetFirst, NetFirst);
 REGISTER_PACKET_HELPER(ID_NetSessionEnterNotify, NetSessionEnterNotify);
 REGISTER_PACKET_HELPER(ID_NetSessionLeaveNotify, NetSessionLeaveNotify);
 REGISTER_PACKET_HELPER(ID_NetPingNotify, NetPingNotify);
+REGISTER_PACKET_HELPER(ID_NetPingGateNotify, NetPingGateNotify);
 REGISTER_PACKET_HELPER(ID_NetLoginReq, NetLoginReq);
 REGISTER_PACKET_HELPER(ID_NetLoginRes, NetLoginRes);
 REGISTER_PACKET_HELPER(ID_NetPlayerSaveNotify, NetPlayerSaveNotify);

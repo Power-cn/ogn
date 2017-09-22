@@ -9,6 +9,7 @@ ID_NetFirst,
 ID_NetSessionEnterNotify,
 ID_NetSessionLeaveNotify,
 ID_NetPingNotify,
+ID_NetPingGateNotify,
 ID_NetLoginReq,
 ID_NetLoginRes,
 ID_NetPlayerSaveNotify,
@@ -96,6 +97,7 @@ PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetFirst, "NetFirst"
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSessionEnterNotify, "NetSessionEnterNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetSessionLeaveNotify, "NetSessionLeaveNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPingNotify, "NetPingNotify");
+PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPingGateNotify, "NetPingGateNotify");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginReq, "NetLoginReq");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetLoginRes, "NetLoginRes");
 PacketHelper.instance.RegisterPacket((int)PACKET_ID_ENUM.ID_NetPlayerSaveNotify, "NetPlayerSaveNotify");
@@ -802,6 +804,31 @@ public string msg;
 public class NetPingNotify : Packet
 {
 	public NetPingNotify():base((int)PACKET_ID_ENUM.ID_NetPingNotify)
+	{
+time = 0;
+
+	}
+
+	protected override bool OnSerialize(BinaryStream bytes)
+	{
+bytes.Write(time);
+
+		return true;
+	}
+
+	protected override bool OnDeserialize(BinaryStream bytes)
+	{
+bytes.Read(ref time);
+
+		return true;
+	}
+
+public uint time;
+
+}
+public class NetPingGateNotify : Packet
+{
+	public NetPingGateNotify():base((int)PACKET_ID_ENUM.ID_NetPingGateNotify)
 	{
 time = 0;
 

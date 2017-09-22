@@ -14,6 +14,7 @@ protected:
 	int onNetSessionLeaveNotify(Robot* robot, NetSessionLeaveNotify* nfy);
 	
 	int onNetPingNotify(Robot* robot, NetPingNotify* nfy);
+	int onNetPingGateNotify(Robot* robot, NetPingNotify* nfy);
 	int onNetLoginRes(Robot* robot, NetLoginRes* res);
 	int onNetCreateRoleRes(Robot* robot, NetCreateRoleRes* res);
 	int onNetSelectRoleRes(Robot* robot, NetSelectRoleRes* res);
@@ -37,6 +38,7 @@ protected:
 	int32 onClose(CmdEvent& e);
 	int32 onSendMsg(CmdEvent& e);
 	int32 onPing(CmdEvent& e);
+	int32 onPingGate(CmdEvent& e);
 protected:
 	std::map<Socket*, Robot*>		mMapSocketRobat;
 	std::map<int32, Robot*>			mMapRobat;

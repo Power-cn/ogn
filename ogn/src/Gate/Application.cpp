@@ -155,6 +155,16 @@ int Application::onGateRecv(SocketEvent& e)
 	int32 rpos = out.wpos();
 	CHECK_RETURN(out >> msgId, 0);
 	out.rpos(rpos);
+	if (msgId == ID_NetPingGateNotify) {
+		char* datastr = (char*)e.data;
+		int32 count = e.count;
+		char* dataptr = new char[count];
+		memcpy(dataptr, datastr, count);
+		Shared::XOR(dataptr, count, sKey);
+		ssn->sendBuffer(dataptr, count);
+		delete[] dataptr;
+	}
+
 	DEBUG_DEBUG(LogSystem::csl_color_green_blue, "ssnId:%0.16llx c to s %s size:%d", ssn->getSsnId(), INSTANCE(PacketManager).GetName(msgId).c_str(), e.count);
 #endif // _DEBUG
 

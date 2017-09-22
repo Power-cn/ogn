@@ -10,6 +10,7 @@ RobotManager::RobotManager()
 	addEventListener(ID_NetSessionLeaveNotify, (EventCallbackProcess)&RobotManager::onNetSessionLeaveNotify, this);
 
 	addEventListener(ID_NetPingNotify, (EventCallbackProcess)&RobotManager::onNetPingNotify, this);
+	addEventListener(ID_NetPingGateNotify, (EventCallbackProcess)&RobotManager::onNetPingGateNotify, this);
 	addEventListener(ID_NetLoginRes, (EventCallbackProcess)&RobotManager::onNetLoginRes, this);
 	addEventListener(ID_NetCreateRoleRes, (EventCallbackProcess)&RobotManager::onNetCreateRoleRes, this);
 	addEventListener(ID_NetSelectRoleRes, (EventCallbackProcess)&RobotManager::onNetSelectRoleRes, this);
@@ -38,6 +39,7 @@ RobotManager::RobotManager()
 	INSTANCE(CmdDispatcher).addEventListener("close", (EventCallback)&RobotManager::onClose, this);
 	INSTANCE(CmdDispatcher).addEventListener("sendmsg", (EventCallback)&RobotManager::onSendMsg, this);
 	INSTANCE(CmdDispatcher).addEventListener("ping", (EventCallback)&RobotManager::onPing, this);
+	INSTANCE(CmdDispatcher).addEventListener("pinggate", (EventCallback)&RobotManager::onPingGate, this);
 
 }
 
@@ -99,6 +101,14 @@ int RobotManager::onNetPingNotify(Robot* robot, NetPingNotify* nfy)
 	DateTime::Now(str);
 	LOG_INFO("ping [%d]", GetTickCount() - nfy->time);
 
+	return 0;
+}
+
+int RobotManager::onNetPingGateNotify(Robot* robot, NetPingNotify* nfy)
+{
+	std::string str;
+	DateTime::Now(str);
+	LOG_INFO("pinggate [%d]", GetTickCount() - nfy->time);
 	return 0;
 }
 
@@ -393,6 +403,15 @@ int32 RobotManager::onPing(CmdEvent& e)
 {
 	if (mCurRobot == NULL) return 0;
 	NetPingNotify nfy;
+	nfy.time = GetTickCount();
+	mCurRobot->sendPacket(nfy);
+	return 0;
+}
+
+int32 RobotManager::onPingGate(CmdEvent& e)
+{
+	if (mCurRobot == NULL) return 0;
+	NetPingGateNotify nfy;
 	nfy.time = GetTickCount();
 	mCurRobot->sendPacket(nfy);
 	return 0;

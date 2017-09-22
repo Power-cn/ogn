@@ -97,6 +97,7 @@ void SocketHandler::createRobot()
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig(szBuf);
 	float64 t1 = DateTime::GetNowAppUS();
 	LOG_INFO("connect: %s %d", cfg.Host.c_str(), cfg.Port);
+	
 	SocketClient* client = INSTANCE(Network).connect("127.0.0.1", cfg.Port);
 	if (client == NULL) {
 		LOG_ERROR("创建连接失败");

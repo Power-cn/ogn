@@ -119,6 +119,10 @@
       <member type="uint32" name="time" />
     </element>
 
+    <element id="ID_NetPingGateNotify" name="NetPingGateNotify" >
+      <member type="uint32" name="time" />
+    </element>
+    
     <element id="ID_NetLoginReq" name="NetLoginReq" >
 		  <member type="string" name="user" />
       <member type="string" name="password" />
