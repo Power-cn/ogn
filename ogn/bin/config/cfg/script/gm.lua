@@ -210,3 +210,21 @@ fun=function (play, s1, s2, s3)
 	sMails:SendMail(play, MailType.MailT_Target, s1, s2, s3, "");
 end
 });
+
+RegGm(
+{
+name = "changename";
+fun=function (play, s1, s2, s3)
+	local sWorld = luaWorld();
+	sWorld:ChangeName(play, s1);
+end
+});
+
+RegGm(
+{
+name = "sendmsg";
+fun=function (play, s1, s2, s3)
+	local sWorld = luaWorld();
+	sWorld:sendPacketToMsg(tonumber(s1), s2, play);
+end
+});
