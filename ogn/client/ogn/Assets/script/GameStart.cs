@@ -125,7 +125,15 @@ public class GameStart : MonoBehaviour {
     {
         isConnect = true;
         Debug.Log("Connect Successful...");
-
+        GameObject obj = uiMgr.getWindow("ui_login");
+        if (obj != null)
+        {
+            ViewLoginUI view = obj.GetComponent<ViewLoginUI>();
+            if (view != null)
+            {
+                view.doLogin();
+            }
+        }
         return 0;
     }
 
