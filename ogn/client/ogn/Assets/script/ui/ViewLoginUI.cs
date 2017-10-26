@@ -31,9 +31,14 @@ public class ViewLoginUI : MonoBehaviour
             GameStart.sGame.ConnectSvr();
             return;
         }
+        doLogin();
+    }
+    public void doLogin()
+    {
         NetLoginReq req = new NetLoginReq();
         req.user = inputUser.text;
         req.password = inputPwd.text;
         GameStart.sGame.SendPacket(req);
     }
+
 }

@@ -58,6 +58,16 @@ public class UIManager : MonoBehaviour {
     public GameObject getWindow(string name) {
         if (dictUIPlane.ContainsKey(name))
             return dictUIPlane[name];
+
         return null;
     }
+
+    //public T GetComponent<T>(string name)
+    //{
+    //    GameObject obj = getWindow(name);
+    //    if (obj != null)
+    //        return obj as T;
+    //    return null;
+    //}
+
 }
