@@ -51,15 +51,15 @@ public:
 	Network*						network = NULL;
 	SocketAngent*					angent = NULL;
 public:
-	CircularBuffer*					readStream;
+	CircularBuffer*					readStream = NULL;
 	IO_OVERLAPPED					readOverlapped;
 	IO_OVERLAPPED					writeOverlapped;
 	std::queue<object_bytes>		sendQueue;
 	bool							startSend = false;
 	uint32							postCount = 0;
 protected:
-	int32							mSocketId;
+	int32							mSocketId = 0;
+	int16							mPort = 0;
 	std::string						mIP;
-	int16							mPort;
 };
 

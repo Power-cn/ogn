@@ -133,8 +133,7 @@ bool IOCP::loop()
 		mMutex.lock();
 		uint32 queueSize = (uint32)mQueueEvent.size();
 		mMutex.unlock();
-		if (queueSize <= 0)
-			break;
+		if (queueSize == 0) break;
 
 		mMutex.lock();
 		QueueResponse response = mQueueEvent.front();
@@ -162,6 +161,9 @@ bool IOCP::loop()
 			break;
 		case IOState_Send:
 			DoWrite(ioOverlapped->socket);
+			break;
+		default:
+			LOG_ERROR(__FUNCTION__);
 			break;
 		}
 	}

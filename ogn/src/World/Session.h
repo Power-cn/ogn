@@ -35,6 +35,6 @@ protected:
 	Player*		mPlayer;
 	Socket*		mSocket;
 	std::string mHost;
-	uint64		mDownloadBytes;
-	uint64		mUploadBytes;
+	uint64		mDownloadBytes = 0;
+	uint64		mUploadBytes = 0;
 };

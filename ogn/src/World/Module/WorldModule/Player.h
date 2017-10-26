@@ -111,9 +111,9 @@ public:
 	uint64 getTotalUploadBytes() { return mTotalUploadBytes; }
 	void AddOldName(cstring& oldName);
 protected:
-	uint32				mOnlineTimer;
-	uint32				mOfflineTimer;
-	uint32				mOnlineTime; // 在线总时长
+	uint32				mOnlineTimer = 0;
+	uint32				mOfflineTimer = 0;
+	uint32				mOnlineTime = 0; // 在线总时长
 	uint64				mDownloadBytes = 0;
 	uint64				mUploadBytes = 0;
 	uint64				mTotalDownloadBytes = 0;

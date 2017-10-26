@@ -60,10 +60,7 @@ uint32 CircularBuffer::get_data_length()
 
 bool CircularBuffer::Push(void* ptr, const uint32 uiCount)
 {
-	if (uiCount <= 0)
-	{
-		return false;
-	}
+	if (uiCount == 0) return false;
 
 	if (m_uiCount - get_data_length() < uiCount)
 	{
@@ -105,10 +102,7 @@ bool CircularBuffer::Push(void* ptr, const uint32 uiCount)
 
 bool CircularBuffer::Pop(void* ptr, int32 size_, uint32 uiCount)
 {
-	if (uiCount <= 0)
-	{
-		return false;
-	}
+	if (uiCount == 0) return false;
 
 	if (size_ < uiCount)
 	{
@@ -176,10 +170,7 @@ bool CircularBuffer::Pop(void* ptr, int32 size_, uint32 uiCount)
 
 bool CircularBuffer::Read(void* ptr, int32 size_, uint32 uiCount)
 {
-	if (uiCount <= 0)
-	{
-		return false;
-	}
+	if (uiCount == 0) return false;
 
 	if (size_ < uiCount)
 	{

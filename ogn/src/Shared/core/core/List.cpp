@@ -141,7 +141,7 @@ void listRemoveNode(List* list, ListNode* node)
 			else
 			{
 				head->prev->next = head->next;
-				head->prev = head->prev;
+				head->next->prev = head->prev;
 			}
 
 			listNodeRelease(list, node);

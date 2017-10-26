@@ -293,13 +293,13 @@ bool GameModule::DoOperateGiveup(Player* aPlr)
 	}
 	aGameEnt->SetState(GS_Giveup);
 	GameGoldenFlower* aGame = (GameGoldenFlower*)FindPlrGameModle(aPlr->getUserId());
-	if (aGame) {
-		aGame->OnGiveup(aGameEnt);
-	}
+	if (aGame == NULL) return false;
+	aGame->OnGiveup(aGameEnt);
 	if (aGame->GetCurSpeak() == aPlr->getUserId())
 	{
 		aGame->DoNext();
 	}
+	
 	aRoom->sendPacketToAll(res);
 
 	uint32 winer = 0;

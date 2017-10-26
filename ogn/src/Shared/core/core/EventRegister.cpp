@@ -1,8 +1,8 @@
 #include "Shared.hpp"
-int EventRegister::s_id = 0;
+uint32 EventRegister::sId = 0;
 
 EventRegister::EventRegister() :
-id(++s_id)
+id(++sId)
 {
 }
 

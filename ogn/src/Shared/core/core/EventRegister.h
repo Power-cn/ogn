@@ -8,13 +8,13 @@ typedef int (Object::*EventCallback) (Event& e);
 class EventRegister
 {
 public:
-	static int s_id;
+	static uint32 sId;
 public:
-	int id;
+	uint32 id = 0;
 	std::string event;
-	Object* thisObject;
-	EventCallback callback;
-	void* param;
+	Object* thisObject = NULL;
+	EventCallback callback = NULL;
+	void* param = NULL;
 public:
 	EventRegister();
 	~EventRegister();

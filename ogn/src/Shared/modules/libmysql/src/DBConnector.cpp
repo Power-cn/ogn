@@ -211,7 +211,7 @@ int8* DBConnector::doQuery(const std::string& tablename, uint32& result_count)
 	MYSQL_RES*  result_ = mysql_store_result(mMysql);
 	if (result_ == NULL) {
 		const int8* err = mysql_error(mMysql);
-		if (err || strlen(err) == 0)
+		if (!err || strlen(err) == 0)
 			return NULL;
 		return (int8*)err;
 	}
@@ -240,7 +240,7 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 	MYSQL_RES*  result_ = mysql_store_result(mMysql);
 	if (result_ == NULL) {
 		const int8* err = mysql_error(mMysql);
-		if (err || strlen(err) == 0)
+		if (!err || strlen(err) == 0)
 			return NULL;
 		return (int8*)err;
 	}

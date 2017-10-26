@@ -74,6 +74,7 @@ bool BlockStream::write(void* bytes, int32 count)
 	int32 idx = mWriteIndex / mBlockCount;
 	int32 idxCount = mWriteIndex % mBlockCount;
 	ListNode* listNode = listGetNode(mBlockList, idx);
+	if (listNode == NULL) return false;
 	if (mBlockCount - idxCount >= count)
 	{
 		memcpy_s((int8*)listNode->value + idxCount, mBlockCount - idxCount, bytes, count);
@@ -112,7 +113,7 @@ bool BlockStream::read(void* bytes, int32 count)
 	int32 idx = mReadIndex / mBlockCount;
 	int32 idxCount = mReadIndex % mBlockCount;
 	ListNode* listNode = listGetNode(mBlockList, idx);
-
+	if (listNode == NULL) return false;
 	if (mBlockCount - idxCount >= count)
 	{
 		memcpy_s(bytes, count, (int8*)listNode->value + idxCount, count);
