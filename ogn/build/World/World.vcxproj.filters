@@ -84,9 +84,6 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\..\src\World\main.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\Session.cpp">
       <Filter>Session</Filter>
     </ClCompile>
@@ -132,17 +129,11 @@
     <ClCompile Include="..\..\src\Common\Property.cpp">
       <Filter>Common</Filter>
     </ClCompile>
-    <ClCompile Include="..\..\src\World\Application.cpp">
-      <Filter>源文件</Filter>
-    </ClCompile>
     <ClCompile Include="..\..\src\World\LuaEngine.cpp">
       <Filter>Script</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\World\LuaEngineBind.cpp">
       <Filter>Script</Filter>
-    </ClCompile>
-    <ClCompile Include="..\..\src\World\ConfigManager.cpp">
-      <Filter>源文件</Filter>
     </ClCompile>
     <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp">
       <Filter>Script</Filter>
@@ -231,6 +222,18 @@
     <ClCompile Include="..\..\src\World\Module\RankModule\RankModule.cpp">
       <Filter>Module\RankModule</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\World\ConfigManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Visual.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\World\Session.h">
@@ -238,9 +241,6 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\SessionManager.h">
       <Filter>Session</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\stdafx.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Common\protocols\protocols.h">
       <Filter>Common</Filter>
@@ -287,14 +287,8 @@
     <ClInclude Include="..\..\src\Common\Property.h">
       <Filter>Common</Filter>
     </ClInclude>
-    <ClInclude Include="..\..\src\World\Application.h">
-      <Filter>头文件</Filter>
-    </ClInclude>
     <ClInclude Include="..\..\src\World\LuaEngine.h">
       <Filter>Script</Filter>
-    </ClInclude>
-    <ClInclude Include="..\..\src\World\ConfigManager.h">
-      <Filter>头文件</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\World\LuaScriptEngine.h">
       <Filter>Script</Filter>
@@ -394,6 +388,18 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\RankModule\RankModule.h">
       <Filter>Module\RankModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\ConfigManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Application.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\stdafx.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Visual.h">
+      <Filter>Module\WorldModule\Entity</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

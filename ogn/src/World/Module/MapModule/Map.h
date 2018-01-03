@@ -46,12 +46,6 @@ public:
 
 	void checkMapEntityView(Entity* entity);
 	bool getEntityMapCells(Entity* ent, std::vector<MapCell*>& mapCells);
-
-	void addEntityToView(Entity* entity, Entity* target);
-	void removeEntityToView(Entity* entity, Entity* target);
-	void removeEntityToView(Entity* entity);
-	EntitySet* getEntityView(Guid guid);
-	bool checkTargetInView(Entity* entity, Entity* target);
 	void sendPacketToAll(Packet& packet);
 
 	bool MapCellToMapLogicCell(int32 x, int32 y, int32& outX, int32& outY);
@@ -78,7 +72,6 @@ protected:
 	static	uint32	sId;
 protected:
 	std::map<Guid, Entity*>					mMapEntity;
-	std::map<Guid, EntitySet>				mMapViewEntity;
 	std::map<Guid, uint8>					mMapEntityLine;
 	std::map<uint8, EntitySet>				mMapEntitySetLine;
 public:

@@ -129,7 +129,6 @@ public:
 	uint8 getEntityType() { return entityType; }
 	uint8 getSex() { return mSex; }
 
-	uint32 getViewCount();
 	uint32 getMapId();
 	uint32 getMapInsId();
 
@@ -138,10 +137,10 @@ public:
 	Property* getProperty(const std::string& name);
 	Property* addProperty(Property* property);
 	Variant& getVariant(const Variant& value);
-	EntitySet* getView();
 
 	Dictionary& getDictProperty() { mDictProperty; }
 	Map* getMap() { return mMap; }
+	Visual& GetVisual() { return mVisual; }
 protected:
 	int32 onTimerChangeProperty(TimerEvent& e);
 	int32 onTimerCheckView(TimerEvent& e);
@@ -154,6 +153,7 @@ protected:
 	Dictionary								mDictChangePro;
 	bool									mCheckView;
 	bool									mCanDestroy;
+	Visual									mVisual;
 };
 
 #define EntityGetProperty(tar, class_name) (class_name*)(tar)->getProperty(#class_name)

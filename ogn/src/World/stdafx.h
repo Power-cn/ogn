@@ -80,6 +80,7 @@
 #include "ItemModule.h"
 
 
+#include "./Module/WorldModule/Visual.h"
 #include "./Module/WorldModule/Entity.h"
 #include "./Module/WorldModule/Player.h"
 #include "./Module/WorldModule/Npc.h"

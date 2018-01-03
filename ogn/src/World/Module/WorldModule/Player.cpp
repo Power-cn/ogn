@@ -55,14 +55,11 @@ void Player::sendPacketToView(Packet& packet)
 	if (!getMap())
 		return;
 
-	EntitySet* setEntity = getMap()->getEntityView(getGuid());
-	if (!setEntity)
-		return;
-
+	EntitySet& setEntity = GetVisual().GetEntitySet();
 	static char sPacketBuffer[PACKET_MAX_LENGTH] = { 0 };
 	BinaryStream in(sPacketBuffer, PACKET_MAX_LENGTH);
 	in << packet;
-	for (auto itr : *setEntity)
+	for (auto itr : setEntity)
 		itr->sendBuffer(in.datas(), in.wpos());
 }
 

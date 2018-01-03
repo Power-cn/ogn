@@ -62,6 +62,7 @@
     <ClCompile Include="..\..\src\World\Module\WorldModule\Npc.cpp" />
     <ClCompile Include="..\..\src\World\Module\WorldModule\Player.cpp" />
     <ClCompile Include="..\..\src\World\Module\WorldModule\PlayerHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Visual.cpp" />
     <ClCompile Include="..\..\src\World\Module\WorldModule\WorldModule.cpp" />
     <ClCompile Include="..\..\src\World\LuaEngine.cpp" />
     <ClCompile Include="..\..\src\World\LuaEngineBind.cpp" />
@@ -118,6 +119,7 @@
     <ClInclude Include="..\..\src\World\Module\WorldModule\Npc.h" />
     <ClInclude Include="..\..\src\World\Module\WorldModule\Player.h" />
     <ClInclude Include="..\..\src\World\Module\WorldModule\PlayerHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Visual.h" />
     <ClInclude Include="..\..\src\World\Module\WorldModule\WorldModule.h" />
     <ClInclude Include="..\..\src\World\LuaEngine.h" />
     <ClInclude Include="..\..\src\World\Session.h" />

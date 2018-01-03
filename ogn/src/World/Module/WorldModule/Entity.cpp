@@ -159,18 +159,6 @@ void Entity::addChangeValue(const Variant& key, const Variant& value)
 	mDictChangePro[key] = value;
 }
 
-EntitySet* Entity::getView()
-{
-	if (mMap == NULL)
-		return NULL;
-	return mMap->getEntityView(getGuid());
-}
-
-uint32 Entity::getViewCount()
-{
-	return getView() ? (uint32)getView()->size() : 0;
-}
-
 uint32 Entity::getMapId()
 {
 	return mMap ? mMap->getMapId() : 0;
@@ -320,7 +308,7 @@ int32 Entity::onTimerCheckView(TimerEvent& e)
 
 		if (s1 >= 0.01)
 		{
-			int32 c = getViewCount();
+			int32 c = GetVisual().GetViewCount();
 			LOG_ERROR("[%s] %0.3f viewCount:%d", this->getName(), s1, c);
 		}
 		mCheckView = false;

@@ -113,15 +113,12 @@ bool Map::onEntityEnter(Entity* entity)
 
 bool Map::onEntityLeave(Entity* entity)
 {
-	EntitySet* lstView = getEntityView(entity->getGuid());
-	if (lstView)
+	EntitySet& lstView = entity->GetVisual().GetEntitySet();
+	EntitySet copyView = lstView;
+	for (auto itr : copyView)
 	{
-		EntitySet copyView = (*lstView);
-		for (auto itr : copyView)
-		{
-			onEntityLeaveView(itr, entity);
-			onEntityLeaveView(entity, itr);
-		}
+		onEntityLeaveView(itr, entity);
+		onEntityLeaveView(entity, itr);
 	}
 
 	entity->onLeaveMap();
@@ -137,10 +134,9 @@ bool Map::onEntityLeave(Entity* entity)
 
 bool Map::onEntityEnterView(Entity* entity, Entity* target)
 {
-	if (checkTargetInView(entity, target))
+	if (entity->GetVisual().CheckView(target))
 		return true;
-	
-	addEntityToView(entity, target);
+	entity->GetVisual().EnterView(target);
 	entity->onEnterView(target);
 
 	return true;
@@ -148,11 +144,11 @@ bool Map::onEntityEnterView(Entity* entity, Entity* target)
 
 bool Map::onEntityLeaveView(Entity* entity, Entity* target)
 {
-	if (!checkTargetInView(entity, target))
+	if (!entity->GetVisual().CheckView(target))
 		return true;
 
 	target->onLeaveView(entity);
-	removeEntityToView(entity, target);
+	entity->GetVisual().LeaveView(target);
 	return true;
 }
 
@@ -204,17 +200,17 @@ void Map::checkMapUnitView(Entity* entity)
 		Entity* target = itr.second;
 		if (checkUnitView(entity, target))
 		{
-			if (!checkTargetInView(entity, target))
+			if (!entity->GetVisual().CheckView(target))
 				onEntityEnterView(entity, target);
 
-			if (!checkTargetInView(target, entity))
+			if (!target->GetVisual().CheckView(entity))
 				onEntityEnterView(target, entity);
 		}
 		else
 		{
-			if (checkTargetInView(entity, target))
+			if (entity->GetVisual().CheckView(target))
 				onEntityLeaveView(entity, target);
-			if (checkTargetInView(target, entity))
+			if (target->GetVisual().CheckView(entity))
 				onEntityLeaveView(target, entity);
 		}
 	}
@@ -222,52 +218,33 @@ void Map::checkMapUnitView(Entity* entity)
 
 void Map::checkMapEntityView(Entity* entity)
 {
-	EntitySet* lstView = entity->getView();
-	if (lstView)
-	{
-		EntitySet copyView = *lstView;
-		std::vector<MapCell*> mapCells;
-		getEntityMapCells(entity, mapCells);
+	EntitySet& lstView = entity->GetVisual().GetEntitySet();
+	EntitySet copyView = lstView;
+	std::vector<MapCell*> mapCells;
+	getEntityMapCells(entity, mapCells);
 
-		for (auto mapCell : mapCells)
+	for (auto mapCell : mapCells)
+	{
+		for (auto ent : mapCell->objects)
 		{
-			for (auto ent : mapCell->objects)
+			if (checkEntityLine(entity, ent))
 			{
-				if (checkEntityLine(entity, ent))
+				auto entItr = copyView.find(ent);
+				if (entItr != copyView.end() && entity->getLine() == ent->getLine())
+					copyView.erase(entItr);
+				else
 				{
-					auto entItr = std::find(copyView.begin(), copyView.end(), ent);
-					if (entItr != copyView.end() && entity->getLine() == ent->getLine())
-						copyView.erase(entItr);
-					else
-					{
-						onEntityEnterView(entity, ent);
-						onEntityEnterView(ent, entity);
-					}
+					onEntityEnterView(entity, ent);
+					onEntityEnterView(ent, entity);
 				}
 			}
 		}
-
-		for (auto ent : copyView)
-		{
-			onEntityLeaveView(entity, ent);
-			onEntityLeaveView(ent, entity);
-		}
 	}
-	else
+
+	for (auto ent : copyView)
 	{
-		std::vector<MapCell*> mapCells;
-		getEntityMapCells(entity, mapCells);
-
-		for (auto mapCell : mapCells)
-		{
-			for (auto ent : mapCell->objects)
-			{
-				if (!checkEntityLine(entity, ent)) continue;
-
-				onEntityEnterView(entity, ent);
-				onEntityEnterView(ent, entity);
-			}
-		}
+		onEntityLeaveView(entity, ent);
+		onEntityLeaveView(ent, entity);
 	}
 }
 
@@ -288,64 +265,6 @@ bool Map::getEntityMapCells(Entity* ent, std::vector<MapCell*>& mapCells)
 		}
 	}
 	return true;
-}
-
-void Map::addEntityToView(Entity* entity, Entity* target)
-{
-	auto itr = mMapViewEntity.find(entity->getGuid());
-	if (itr != mMapViewEntity.end())
-	{
-		EntitySet& lstUnit = itr->second;
-		lstUnit.insert(target);
-	}
-	else
-	{
-		EntitySet lstUnit;
-		lstUnit.insert(target);
-		mMapViewEntity.insert(std::make_pair(entity->getGuid(), lstUnit));
-	}
-}
-
-void Map::removeEntityToView(Entity* entity, Entity* target)
-{
-	auto itr = mMapViewEntity.find(entity->getGuid());
-	if (itr != mMapViewEntity.end())
-	{
-		EntitySet& lstUnit = itr->second;
-		auto delItr = std::find(lstUnit.begin(), lstUnit.end(), target);
-		if (delItr != lstUnit.end())
-			lstUnit.erase(delItr);
-
-		if (lstUnit.size() <= 0)
-			mMapViewEntity.erase(itr);
-	}
-}
-
-void Map::removeEntityToView(Entity* entity)
-{
-	auto itr = mMapViewEntity.find(entity->getGuid());
-	if (itr != mMapViewEntity.end())
-		mMapViewEntity.erase(itr);
-}
-
-EntitySet* Map::getEntityView(Guid guid)
-{
-	auto itr = mMapViewEntity.find(guid);
-	if (itr != mMapViewEntity.end())
-		return &itr->second;
-	return NULL;
-}
-
-bool Map::checkTargetInView(Entity* entity, Entity* target)
-{
-	EntitySet* lstView = getEntityView(entity->getGuid());
-	if (!lstView)
-		return false;
-	
-	auto itr = std::find(lstView->begin(), lstView->end(), target);
-	if (itr != lstView->end())
-		return true;
-	return false;
 }
 
 void Map::sendPacketToAll(Packet& packet)
