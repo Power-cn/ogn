@@ -29,6 +29,7 @@ int32 SessionHandler::onNetProductListReq(Socket* sck, NetProductListReq* req)
 	if (err)
 	{
 		LOG_ERROR(err);
+		return 0;
 	}
 	DBProduct* dbProducts = swapQueryResult<DBProduct>(result);
 	for (uint32 i = 0; i < result->length; ++i)

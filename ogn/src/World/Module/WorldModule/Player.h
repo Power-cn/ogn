@@ -12,16 +12,6 @@ enum UserStatus : uint8
 class Player : public Entity
 {
 	friend class Application;
-protected:
-	uint32				accountId;
-	uint32				userId;
-	std::string			user;
-	std::string			password;
-	Session*			ssn;
-	UserStatus			mUserStatus;
-	Json::Value			mJson;
-	bool				mOnline;
-	std::string			mHost;
 public:
 	Player();
 	~Player();
@@ -110,6 +100,17 @@ public:
 	uint64 getTotalDownloadBytes() { return mTotalDownloadBytes; }
 	uint64 getTotalUploadBytes() { return mTotalUploadBytes; }
 	void AddOldName(cstring& oldName);
+
+protected:
+	uint32				accountId;
+	uint32				userId;
+	std::string			user;
+	std::string			password;
+	Session*			ssn;
+	UserStatus			mUserStatus;
+	Json::Value			mJson;
+	bool				mOnline;
+	std::string			mHost;
 protected:
 	uint32				mOnlineTimer = 0;
 	uint32				mOfflineTimer = 0;

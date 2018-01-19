@@ -113,7 +113,7 @@ int32 DBHandler::onNetSelectRoleRes(Player* aPlr, NetSelectRoleRes* res)
 	sWorld.addPlayerByName(aPlr);
 
 	Dictionary dict;
-	if (info.datas.wpos() <= 0)
+	if (info.datas.wpos() <= 0) // 没有角色创建角色
 		aPlr->DoCreateCharacter(dict, info);
 	else
 		info.datas >> dict;
