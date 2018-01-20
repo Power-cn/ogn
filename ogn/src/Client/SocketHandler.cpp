@@ -59,7 +59,7 @@ int SocketHandler::onRecv(SocketEvent& e)
 
 	Robot* robot = INSTANCE(RobotManager).getRobat(e.socket);
 	if (robot)
-		INSTANCE(RobotManager).dispatch(pack->getMsgId(), robot, pack);
+		INSTANCE(RobotManager).Dispatch(pack->getMsgId(), robot, pack);
 
 	INSTANCE(PacketManager).Free(pack);
 	return 0;

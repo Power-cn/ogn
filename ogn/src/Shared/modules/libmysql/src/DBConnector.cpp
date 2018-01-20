@@ -388,7 +388,7 @@ void DBConnector::update(float time, float delay)
 		DBEvent dbEvent;
 		dbEvent.event = DBEvent::QUERY;
 		dbEvent.result = result;
-		result->record->dispatch(dbEvent);
+		result->record->Dispatch(dbEvent);
 		
 		delete result;
 	}
@@ -403,7 +403,7 @@ void DBConnector::update(float time, float delay)
 		DBEvent dbEvent;
 		dbEvent.event = DBEvent::INSERT;
 		dbEvent.result =result;
-		result->record->dispatch(dbEvent);
+		result->record->Dispatch(dbEvent);
 		delete result;
 	}
 
@@ -417,7 +417,7 @@ void DBConnector::update(float time, float delay)
 		DBEvent dbEvent;
 		dbEvent.event = DBEvent::UPDATE;
 		dbEvent.result = result;
-		result->record->dispatch(dbEvent);
+		result->record->Dispatch(dbEvent);
 		delete result;
 	}
 
@@ -431,7 +431,7 @@ void DBConnector::update(float time, float delay)
 		DBEvent dbEvent;
 		dbEvent.event = DBEvent::REMOVE;
 		dbEvent.result = result;
-		result->record->dispatch(dbEvent);
+		result->record->Dispatch(dbEvent);
 
 		delete result;
 	}

@@ -4,16 +4,8 @@ class Event;
 class BinaryStream;
 class Object;
 
-class Parameter
-{
-public:
-	Parameter() {}
-	virtual ~Parameter() {}
-};
-
 typedef int (Object::*EventCallback) (Event& e);
 typedef int (Object::*EventCallbackProcess) (void* lparam, void* wparam);
-typedef int (Object::*EventDispatcherCallback) (Parameter& par);
 
 #define CastEventCallback(func) (EventCallback)(func)
 #define CastEventCallbackProcess(func) (EventCallbackProcess)(func)

@@ -31,16 +31,16 @@ int32 EventDispatcher::addEventListener(const std::string& name, EventCallback c
 	lis->callback = callback;
 	lis->param = param;
 
-	std::map<std::string, std::vector<EventRegister*>>::iterator itr = this->mMapListener.find(name);
+	auto itr = this->mMapListener.find(name);
 	std::vector<EventRegister*>* listeners = NULL;
 	if (itr != this->mMapListener.end())
 	{
-		listeners = &(itr->second);
-		listeners->push_back(lis);
+		VectorEventRegister& listeners = itr->second;
+		listeners.push_back(lis);
 	}
 	else
 	{
-		std::vector<EventRegister*> ls;
+		VectorEventRegister ls;
 		ls.push_back(lis);
 		this->mMapListener.insert(std::make_pair(name, ls));
 	}
@@ -50,9 +50,9 @@ int32 EventDispatcher::addEventListener(const std::string& name, EventCallback c
 
 int32 EventDispatcher::addEventListener(int32 id, EventCallbackProcess callback, Object* thisObject)
 {
-	auto itr = listener_.find(id);
+	auto itr = mMapCallbackListener.find(id);
 	std::vector<std::pair<Object*, EventCallbackProcess>>* listeners = NULL;
-	if (itr != this->listener_.end())
+	if (itr != this->mMapCallbackListener.end())
 	{
 		listeners = &(itr->second);
 		listeners->push_back(std::make_pair(thisObject, callback));
@@ -61,39 +61,7 @@ int32 EventDispatcher::addEventListener(int32 id, EventCallbackProcess callback,
 	{
 		std::vector<std::pair<Object*, EventCallbackProcess>> lst;
 		lst.push_back(std::make_pair(thisObject, callback));
-		listener_.insert(std::make_pair(id, lst));
-	}
-	return 0;
-}
-
-int32 EventDispatcher::addEventListener(int32 id, EventDispatcherCallback callback, Object* thisObject)
-{
-	auto itr = mMapEventDispatcher.find(id);
-	if (itr != mMapEventDispatcher.end())
-	{
-		std::vector<std::pair<Object*, EventDispatcherCallback>>& lst = itr->second;
-		lst.push_back(std::make_pair(thisObject, callback));
-	}
-	else
-	{
-		std::vector<std::pair<Object *, EventDispatcherCallback>> lst;
-		lst.push_back(std::make_pair(thisObject, callback));
-		mMapEventDispatcher.insert(std::make_pair(id, lst));
-	}
-	return 0;
-}
-
-int32 EventDispatcher::dispatch(int32 id, Parameter& par)
-{
-	auto itr = mMapEventDispatcher.find(id);
-	if (itr == mMapEventDispatcher.end())
-		return 0;
-
-	auto lst = itr->second;
-
-	for (auto pa : lst) {
-		if (pa.first == NULL || pa.second == NULL) continue;
-		(pa.first->*(pa.second))(par);
+		mMapCallbackListener.insert(std::make_pair(id, lst));
 	}
 	return 0;
 }
@@ -104,21 +72,20 @@ int32 EventDispatcher::removeEventListener(const std::string& name, EventCallbac
 	std::vector<EventRegister*>* listeners = NULL;
 	if (itr != this->mMapListener.end())
 	{
-		listeners = &(itr->second);
+		VectorEventRegister& listeners = itr->second;
 
-		for (auto l_itr = listeners->begin();
-			l_itr != listeners->end();
+		for (auto l_itr = listeners.begin();
+			l_itr != listeners.end();
 			++l_itr)
 		{
 			EventRegister* lis = (*l_itr);
 			if (lis->equalListener(name.c_str(), callback, thisObject))
 			{
-				listeners->erase(l_itr);
-				if (listeners->size() <= 0)
+				listeners.erase(l_itr);
+				if (listeners.size() <= 0)
 					this->mMapListener.erase(itr);
 				delete lis;
 				return 0;
-
 			}
 		}
 	}
@@ -128,8 +95,8 @@ int32 EventDispatcher::removeEventListener(const std::string& name, EventCallbac
 
 int32 EventDispatcher::removeEventListener(int32 id, EventCallbackProcess callback, Object* thisObject)
 {
-	auto itr = listener_.find(id);
-	if (itr != listener_.end())
+	auto itr = mMapCallbackListener.find(id);
+	if (itr != mMapCallbackListener.end())
 	{
 		auto& itrListeners = itr->second;
 		for (auto itrList = itrListeners.begin(); itrList != itrListeners.end(); ++itrList)
@@ -142,35 +109,30 @@ int32 EventDispatcher::removeEventListener(int32 id, EventCallbackProcess callba
 		}
 
 		if (itrListeners.size() <= 0)
-			listener_.erase(itr);
+			mMapCallbackListener.erase(itr);
 	}
 
 	return 0;
 }
 
-int32 EventDispatcher::dispatch(Event& event)
+int32 EventDispatcher::Dispatch(Event& event)
 {
 	int32 result = 0;
 	auto itr = this->mMapListener.find(event.event);
 	std::vector<EventRegister*>* listeners = NULL;
 	if (itr != this->mMapListener.end())
 	{
-		listeners = &(itr->second);
-
-		for (auto l_itr = listeners->begin();
-			l_itr != listeners->end();
-			++l_itr)
+		VectorEventRegister& listeners = itr->second;
+		for (auto eventRgr : listeners)
 		{
-			EventRegister* lis = (*l_itr);
 			event.targetDispatcher = this;
-			event.targetRegister = lis;
-			event.param = lis->param;
+			event.targetRegister = eventRgr;
+			event.param = eventRgr->param;
 			try
 			{
-				result = 1;
-				if (lis->thisObject == NULL || lis->callback == NULL)
+				if (eventRgr->thisObject == NULL || eventRgr->callback == NULL)
 					continue;
-				(lis->thisObject->*(lis->callback))(event);
+				result = (eventRgr->thisObject->*(eventRgr->callback))(event);
 			}
 			catch (std::string e)
 			{
@@ -182,24 +144,17 @@ int32 EventDispatcher::dispatch(Event& event)
 	return result;
 }
 
-int32 EventDispatcher::dispatch(int32 id, void* lparam, void* wparam)
+int32 EventDispatcher::Dispatch(int32 id, void* lparam, void* wparam)
 {
 	int32 result = 0;
-	auto itr = listener_.find(id);
-	std::vector<std::pair<Object*, EventCallbackProcess>>* listeners = NULL;
-	if (itr != this->listener_.end())
+	auto itr = mMapCallbackListener.find(id);
+	if (itr != this->mMapCallbackListener.end())
 	{
-		listeners = &(itr->second);
-
-		for (std::vector<std::pair<Object*, EventCallbackProcess>>::iterator l_itr = listeners->begin();
-			l_itr != listeners->end();
-			++l_itr)
+		VertorEventCallbackProcess& listeners = itr->second;
+		for (auto& callbackPair : listeners)
 		{
-			std::pair<Object*, EventCallbackProcess>& lis = (*l_itr);
-			if (lis.second == NULL || lis.first == NULL) continue;
-
-			(lis.first->*(lis.second))(lparam, wparam);
-			result = 1;
+			if (callbackPair.second == NULL || callbackPair.first == NULL) continue;
+			result = (callbackPair.first->*(callbackPair.second))(lparam, wparam);
 		}
 	}
 	return result;

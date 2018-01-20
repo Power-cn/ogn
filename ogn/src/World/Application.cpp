@@ -381,14 +381,14 @@ int Application::onWorldRecv(SocketEvent& e)
 
 	if (checkSessionMessage(msgId))
 	{
-		if (worldServer->dispatch(pack->getMsgId(), ssn, pack) == 0)
+		if (worldServer->Dispatch(pack->getMsgId(), ssn, pack) == 0)
 			LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
 	}
 	else
 	{
 		Player* plr = ssn->getPlayer();
 		if (plr) {
-			if (worldServer->dispatch(pack->getMsgId(), plr, pack) == 0)
+			if (worldServer->Dispatch(pack->getMsgId(), plr, pack) == 0)
 				LOG_WARN("[%s] not register func", sPacketMgr.GetName(msgId).c_str());
 		}
 		else {
@@ -481,12 +481,12 @@ int Application::onDBRecv(SocketEvent & e)
 
 			if (msgId == ID_NetLoginRes)
 			{
-				if (dbServer->dispatch(pack->getMsgId(), ssn, pack) == 0)
+				if (dbServer->Dispatch(pack->getMsgId(), ssn, pack) == 0)
 					LOG_WARN("[%d] not register func");
 			}
 			else if (ssn->getPlayer())
 			{
-				if (dbServer->dispatch(pack->getMsgId(), ssn->getPlayer(), pack) == 0)
+				if (dbServer->Dispatch(pack->getMsgId(), ssn->getPlayer(), pack) == 0)
 					LOG_WARN("[%d] not register func");
 			}
 
@@ -506,7 +506,7 @@ int Application::onDBRecv(SocketEvent & e)
 		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
 		out >> (*pack);
-		dbServer->dispatch(pack->getMsgId(), e.socket, pack);
+		dbServer->Dispatch(pack->getMsgId(), e.socket, pack);
 		sPacketMgr.Free(pack);
 	}
 		break;
@@ -517,7 +517,7 @@ int Application::onDBRecv(SocketEvent & e)
 		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
 		out >> (*pack);
-		dbServer->dispatch(pack->getMsgId(), aPlr, pack);
+		dbServer->Dispatch(pack->getMsgId(), aPlr, pack);
 		sPacketMgr.Free(pack);
 	}
 		break;
@@ -636,7 +636,7 @@ int32 Application::onRedisAuth(RedisEvent& e)
 
 	Event redisEvent;
 	redisEvent.event = "OnRedisAuth";
-	sRedisProxy.dispatch(redisEvent);
+	sRedisProxy.Dispatch(redisEvent);
 	return 0;
 }
 

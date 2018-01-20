@@ -385,7 +385,7 @@ bool WorldModule::ChangeName(Entity* ent, cstring& sname)
 	e.event = "OnChangeName";
 	e.params.push_back((void*)oldName.c_str());
 	e.params.push_back((void*)ent->getName());
-	sWorld.dispatch(e);
+	sWorld.Dispatch(e);
 	return true;
 }
 

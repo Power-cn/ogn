@@ -208,7 +208,7 @@ void RedisProxy::loop()
 	RedisEvent* redisEvent = mRedisResponse.front();
 	mRedisResponse.pop_front();
 	mMutex.unlock();
-	dispatch(*redisEvent);
+	Dispatch(*redisEvent);
 	delete redisEvent;
 }
 

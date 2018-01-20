@@ -167,8 +167,8 @@ void Network::OnAccept(SocketListener* listener, Socket* socket)
 	event.event = SocketEvent::ACCEPT;
 	event.socket = socket;
 	listener->addSocket(socket);
-	socket->dispatch(event);
-	listener->dispatch(event);
+	socket->Dispatch(event);
+	listener->Dispatch(event);
 }
 
 void Network::OnConnect(SocketClient* client, Socket* socket)
@@ -177,8 +177,8 @@ void Network::OnConnect(SocketClient* client, Socket* socket)
 	event.event = SocketEvent::CONNECT;
 	event.socket = socket;
 
-	socket->dispatch(event);
-	client->dispatch(event);
+	socket->Dispatch(event);
+	client->Dispatch(event);
 }
 
 void Network::OnRecv(Socket* socket)
@@ -231,8 +231,8 @@ void Network::OnRecv(Socket* socket)
 					event.data = (void*)data;
 					event.count = len;
 
-					angent->dispatch(event);
-					socket->dispatch(event);
+					angent->Dispatch(event);
+					socket->Dispatch(event);
 					recvPacket = true;
 				}
 				else
@@ -258,8 +258,8 @@ void Network::OnSend(Socket* socket)
 	event.data = ioOverlapped.dataBuffer;
 	event.count = ioOverlapped.dwBytesTransferred;
 
-	angent->dispatch(event);
-	socket->dispatch(event);
+	angent->Dispatch(event);
+	socket->Dispatch(event);
 }
 
 void Network::OnExit(Socket* socket)
@@ -276,12 +276,12 @@ void Network::OnExit(Socket* socket)
 	event.socket = socket;
 
 	if (client)
-		client->dispatch(event);
+		client->Dispatch(event);
 
 	if (listener)
-		listener->dispatch(event);
+		listener->Dispatch(event);
 
-	socket->dispatch(event);
+	socket->Dispatch(event);
 
 	DelSocket(socketId);
 
@@ -298,8 +298,8 @@ void Network::OnException(Socket* socket)
 	SocketAngent* angent = socket->angent;
 	SocketEvent se;
 	se.event = SocketEvent::EXCEPTION;
-	socket->dispatch(se);
-	angent->dispatch(se);
+	socket->Dispatch(se);
+	angent->Dispatch(se);
 	DelSocket(socketId);
 	DelClient(socketId);
 }

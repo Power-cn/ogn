@@ -68,7 +68,7 @@ void Timer::update(float32 time, float32 delay)
 			TimerEvent te;
 			te.event = TimerEvent::TIMER;
 			te.timerDispatcher = &timerDispatcher;
-			timerDispatcher.dispatch(te);
+			timerDispatcher.Dispatch(te);
 			timerDispatcher.currentTime = time + (t - timerDispatcher.second);
 		}
 	}

@@ -156,7 +156,7 @@ int32 Application::onDBRecv(SocketEvent& e)
 			out >> (*pack);
 
 			if (msgId == ID_NetSessionEnterNotify || msgId == ID_NetSessionLeaveNotify || msgId == ID_NetLoginReq)
-				dbServer->dispatch(pack->getMsgId(), ssn, pack);
+				dbServer->Dispatch(pack->getMsgId(), ssn, pack);
 
 			sPacketMgr.Free(pack);
 			return 0;
@@ -175,7 +175,7 @@ int32 Application::onDBRecv(SocketEvent& e)
 		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
 		out >> (*pack);
-		dbServer->dispatch(pack->getMsgId(), e.socket, pack);
+		dbServer->Dispatch(pack->getMsgId(), e.socket, pack);
 		sPacketMgr.Free(pack);
 	}
 		break;
@@ -186,7 +186,7 @@ int32 Application::onDBRecv(SocketEvent& e)
 		Packet* pack = sPacketMgr.Alloc(msgId);
 		if (pack == NULL) break;
 		out >> (*pack);
-		dbServer->dispatch(pack->getMsgId(), aPlr, pack);
+		dbServer->Dispatch(pack->getMsgId(), aPlr, pack);
 		sPacketMgr.Free(pack);
 	}
 		break;

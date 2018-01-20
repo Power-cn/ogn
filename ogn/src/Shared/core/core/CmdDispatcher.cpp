@@ -96,6 +96,6 @@ void CmdDispatcher::update(float32 time, float32 delay)
 	if (cmd->cmd == "clear") {
 		system("cls");
 	}
-	this->dispatch(e);
+	this->Dispatch(e);
 	delete cmd;
 }
