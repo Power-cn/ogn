@@ -9,9 +9,6 @@ class ConfigManager
 {
 
 public:
-
-
-public:
 	ConfigManager();
 	~ConfigManager();
 	bool reloadConfig();
@@ -43,6 +40,8 @@ public:
 	std::map<int32, RobotJson>& getMapRobotJson() { return mMapRobotJson; }
 	TaskJson* getTaskJson(uint32 id);
 	TaskStepJson* getTaskStepJson(uint32 id);
+	MapTaskStepJson* GetTaskSteps(uint32 taskId);
+	bool GetTaskStepIsEndStep(uint32 ID);
 	CardJson* getCardJson(uint32 id);
 	CardJson* getCardJsonByName(cstring& name);
 	GameLevelJson* getGameLevelJson(uint32 id);
@@ -61,7 +60,7 @@ protected:
 	std::map<int32, RobotJson>							mMapRobotJson;
 	std::map<int32, TaskJson>							mMapTaskJson;
 	std::map<int32, TaskStepJson>						mMapTaskStepJson;
-	std::map<int32, std::map<int32, TaskStepJson*>>		mMapTaskStepJsonMap;
+	std::map<int32, MapTaskStepJson>					mMapTaskStepJsonMap;
 	std::map<int32, CardJson>							mMapCard;
 	std::map<std::string, CardJson*>					mMapNameCard;
 	std::map<int32, GameLevelJson>						mMapGameLevelJson;

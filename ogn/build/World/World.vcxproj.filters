@@ -82,6 +82,9 @@
     <Filter Include="Module\RankModule">
       <UniqueIdentifier>{53b4b3df-c1a5-42fe-b85f-3944a48f7f01}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Module\TaskModule">
+      <UniqueIdentifier>{aae3e7d9-534d-4e02-a23f-eff1046d1f39}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\World\Session.cpp">
@@ -233,6 +236,12 @@
     </ClCompile>
     <ClCompile Include="..\..\src\World\Module\WorldModule\Visual.cpp">
       <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskModule.cpp">
+      <Filter>Module\TaskModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskNode.cpp">
+      <Filter>Module\TaskModule</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -400,6 +409,12 @@
     </ClInclude>
     <ClInclude Include="..\..\src\World\Module\WorldModule\Visual.h">
       <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskModule.h">
+      <Filter>Module\TaskModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskNode.h">
+      <Filter>Module\TaskModule</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

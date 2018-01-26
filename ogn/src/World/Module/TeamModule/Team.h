@@ -4,6 +4,7 @@
 
 class Player;
 class Packet;
+#define TEAM_MAX_COUNT 5
 
 class TeamEntity
 {
@@ -14,15 +15,14 @@ public:
 	const std::string& getName() { return mName; }
 	uint32 getUserId() { return mUserId; }
 	void setUserId(uint32 rId) { mUserId = rId; }
-	bool getDel() { return mIsdel; }
-	void setDel(bool del) { mIsdel = del; }
 protected:
 	Player*			mPlayer;
 	std::string		mName;
 	uint32			mUserId;
-	bool			mIsdel;
 };
 
+typedef std::list<TeamEntity*> TeamEntityArray;
+typedef std::set<TeamEntity*> TeamEntitySet;
 class Team
 {
 	friend class TeamModule;
@@ -30,14 +30,13 @@ public:
 	Team();
 	~Team();
 	void Update();
-	uint32 getId() { return mInstanceId; }
+	uint32 GetInsId() { return mInstanceId; }
 	void sendPacketToAll(Packet& packet);
-	Player* getLeader() { return mLeader ? mLeader->getPlayer() : NULL; }
-	TeamEntity* getLeaderEntity() { return mLeader; }
+	Player* GetLeader() { return mLeader ? mLeader->getPlayer() : NULL; }
+	TeamEntity* GetLeaderEntity() { return mLeader; }
 	bool addPlayer(Player* player, bool isLeader = false);
-	bool destoryPlayer(uint32 userId);
-	bool removePlayer(uint32 userId);
-	TeamEntity* getPlayer(uint32 userId);
+	bool RemovePlayer(uint32 userId);
+	TeamEntity* GetTeamEntity(uint32 userId);
 	bool ChangeLeader(Player* newLeader);
 
 	int32 CanAddTeam(Player* tar);
@@ -45,8 +44,11 @@ public:
 	void onEnterWorld(Player* player);
 	void onLeaveWorld(Player* player);
 
-	uint32 getPlayerCount();
-	TeamEntity* getPlayerEntity(uint32 idx);
+	uint32 GetPlayerCount();
+	TeamEntity* FindTeamEntity(uint32 idx);
+	bool GetValid() { return mValid; }
+	void SetValid(bool valid) { mValid = valid; }
+	bool IsFull();
 protected:
 	TeamEntity*	ChooseLeader();
 protected:
@@ -59,5 +61,7 @@ protected:
 protected:
 	uint32						mInstanceId;
 	TeamEntity*					mLeader;
-	std::vector<TeamEntity*>	mTeamEntityList;
+	TeamEntityArray				mTeamEntityList;
+	TeamEntitySet				mDelTeamEntitySet;
+	bool						mValid = true;
 };

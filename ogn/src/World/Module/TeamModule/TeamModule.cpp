@@ -17,19 +17,11 @@ bool TeamModule::Update(float time, float delay)
 	{
 		Team* team = itr.second;
 		team->Update();
-		if (team->getPlayerCount() <= 0)
+		if (team->GetPlayerCount() <= 0 || !team->GetValid())
 			DestroyTeam(team);
 	}
 
-	while (mDelTeamList.size() > 0)
-	{
-		Team* aTeam = mDelTeamList.front();
-		mDelTeamList.pop_front();
-		RemoveTeam(aTeam->getId());
-		delete aTeam;
-	}
-	mDelTeamList.clear();
-
+	ClearDelTeamArray();
 	return true;
 }
 
@@ -38,12 +30,7 @@ bool TeamModule::Destroy()
 	for (auto itr : mMapTeam)
 		delete itr.second;
 	mMapTeam.clear();
-	while (mDelTeamList.size() > 0)
-	{
-		Team* aTeam = mDelTeamList.front();
-		delete aTeam;
-	}
-	mDelTeamList.clear();
+	ClearDelTeamArray();
 	return true;
 }
 
@@ -78,14 +65,14 @@ Team* TeamModule::CreateTeam(Player* leader)
 
 void TeamModule::DestroyTeam(Team* team)
 {
-	mDelTeamList.push_back(team);
+	mDelTeamList.insert(team);
 }
 
 Team* TeamModule::AddTeam(Team* team)
 {
-	if (FindTeamById(team->getId()))
+	if (FindTeamById(team->GetInsId()))
 		return NULL;
-	mMapTeam.insert(std::make_pair(team->getId(), team));
+	mMapTeam.insert(std::make_pair(team->GetInsId(), team));
 	return team;
 }
 
@@ -108,8 +95,11 @@ Team* TeamModule::FindTeamById(uint32 teamId)
 Team* TeamModule::FindPlayerTeam(uint32 userid)
 {
 	auto itr = mMapPlayerTeam.find(userid);
-	if (itr != mMapPlayerTeam.end())
-		return itr->second;
+	if (itr != mMapPlayerTeam.end()) {
+		Team* aTeam = itr->second;
+		if (aTeam && aTeam->GetValid())
+			return aTeam;
+	}
 
 	return NULL;
 }
@@ -120,18 +110,16 @@ bool TeamModule::AddPlayerTeam(uint32 userid, Team* team)
 	if (itr != mMapPlayerTeam.end())
 		return false;
 
-	mMapPlayerTeam.insert(std::make_pair(userid, team));
+	mMapPlayerTeam[userid] = team;
 	return true;
 }
 
 void TeamModule::RemovePlayerTeam(uint32 userid)
 {
-	auto itr = mMapPlayerTeam.find(userid);
-	if (itr != mMapPlayerTeam.end())
-		mMapPlayerTeam.erase(itr);
+	mMapPlayerTeam.erase(userid);
 }
 
-bool TeamModule::doPlayerAddTeam(Player* player, Team* team, bool isLeader /* = false */)
+bool TeamModule::DoPlayerAddTeam(Player* player, Team* team, bool isLeader /* = false */)
 {
 	if (FindPlayerTeam(player->getUserId()))
 		return false;
@@ -142,19 +130,37 @@ bool TeamModule::doPlayerAddTeam(Player* player, Team* team, bool isLeader /* = 
 	return true;
 }
 
-bool TeamModule::doPlayerRemoveTeam(uint32 userId, Team* team)
+bool TeamModule::DoPlayerRemoveTeam(uint32 userId, Team* team)
 {
-	TeamEntity* teny = team->getPlayer(userId);
+	TeamEntity* teny = team->GetTeamEntity(userId);
 	if (teny && teny->getPlayer())
 		team->OnLeave(teny->getPlayer()->getUserId());
 
-	if (!team->destoryPlayer(userId))
+	if (!team->RemovePlayer(userId))
 		return false;
 	RemovePlayerTeam(userId);
 
-	if (team->getPlayerCount() <= 0)
-		DestroyTeam(team);
+	if (team->GetPlayerCount() <= 0)
+		team->SetValid(false);
+	return true;
+}
 
+bool TeamModule::DoFreeTeam(uint32 teamId)
+{
+	Team* aTeam = FindTeamById(teamId);
+	if (aTeam == NULL) return false;
+	std::list<uint32> plrIDs;
+	for (uint32 i = 0; i < aTeam->GetPlayerCount(); ++i)
+	{
+		TeamEntity* aEnt = aTeam->FindTeamEntity(i);
+		if (aEnt == NULL) continue;
+		plrIDs.push_back(aEnt->getUserId());
+	}
+
+	for (uint32 plrId : plrIDs)
+	{
+		DoPlayerRemoveTeam(plrId, aTeam);
+	}
 	return true;
 }
 
@@ -162,7 +168,7 @@ void TeamModule::DoCreateTeamReq(Player* aPlr)
 {
 	Team* aTeam = CreateTeam(aPlr);
 	if (aTeam == NULL) return;
-	doPlayerAddTeam(aPlr, aTeam);
+	DoPlayerAddTeam(aPlr, aTeam);
 }
 
 void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
@@ -181,7 +187,7 @@ void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 
 	if (tm0 && !tm1)
 	{
-		Player* leader = tm0->getLeader();
+		Player* leader = tm0->GetLeader();
 		if (leader == NULL)
 			return ;
 
@@ -194,7 +200,7 @@ void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 
 	if (!tm0 && tm1)
 	{
-		Player* leader = tm1->getLeader();
+		Player* leader = tm1->GetLeader();
 		if (leader == NULL)
 			return ;
 
@@ -211,8 +217,8 @@ void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 		Team* tm = CreateTeam(aPlr);
 		if (tm == NULL)
 			return ;
-		doPlayerAddTeam(aPlr, tm);
-		doPlayerAddTeam(target, tm);
+		DoPlayerAddTeam(aPlr, tm);
+		DoPlayerAddTeam(target, tm);
 
 		NetOrganizeTeamRes res;
 		res.name = aPlr->getName();
@@ -253,7 +259,7 @@ void TeamModule::DoAgreeTeamReq(Player* aPlr, cstring& tarName, uint8 isJoin)
 
 		if (tm1->CanAddTeam(aPlr) == 0)
 		{
-			doPlayerAddTeam(aPlr, tm1);
+			DoPlayerAddTeam(aPlr, tm1);
 			return;
 		}
 	}
@@ -273,7 +279,7 @@ void TeamModule::DoAgreeTeamReq(Player* aPlr, cstring& tarName, uint8 isJoin)
 			return;
 		}
 
-		if (tm0->getLeader() != aPlr)
+		if (tm0->GetLeader() != aPlr)
 		{
 			// 不是队长不能同意加入;
 			aPlr->sendRespnoseMsg(MC_AgreeAddTeamNotLeader);
@@ -281,7 +287,7 @@ void TeamModule::DoAgreeTeamReq(Player* aPlr, cstring& tarName, uint8 isJoin)
 		}
 		if (tm0->CanAddTeam(target) == 0)
 		{
-			doPlayerAddTeam(target, tm0);
+			DoPlayerAddTeam(target, tm0);
 			return;
 		}
 	}
@@ -300,4 +306,14 @@ void TeamModule::sendPacketToTeam(Packet& packet, Player* player)
 	if (tm == NULL)
 		return;
 	tm->sendPacketToAll(packet);
+}
+
+void TeamModule::ClearDelTeamArray()
+{
+	for (Team* aTeam : mDelTeamList)
+	{
+		RemoveTeam(aTeam->GetInsId());
+		delete aTeam;
+	}
+	mDelTeamList.clear();
 }

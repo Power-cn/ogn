@@ -121,6 +121,9 @@
 
 #include "./Module/RankModule/RankModule.h"
 
+#include "./Module/TaskModule/TaskNode.h"
+#include "./Module/TaskModule/TaskModule.h"
+
 #include "Utils.h"
 #include "DBHandler.h"
 #include "SessionHandler.h"

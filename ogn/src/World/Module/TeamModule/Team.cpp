@@ -10,23 +10,19 @@ mLeader(NULL)
 
 Team::~Team()
 {
-
+	for (TeamEntity* tEnt: mTeamEntityList)
+		delete tEnt;
+	mTeamEntityList.clear();
+	for (TeamEntity* tEnt : mDelTeamEntitySet)
+		delete tEnt;
+	mDelTeamEntitySet.clear();
 }
 
 void Team::Update()
 {
-	std::queue<uint32> delQueue;
-	for (TeamEntity* tEnt: mTeamEntityList)
-	{
-		if (tEnt->getDel())
-			delQueue.push(tEnt->getUserId());
-	}
-
-	while (delQueue.size() > 0)
-	{
-		removePlayer(delQueue.front());
-		delQueue.pop();
-	}
+	for (TeamEntity* tEnt: mDelTeamEntitySet)
+		delete tEnt;
+	mDelTeamEntitySet.clear();
 }
 
 void Team::sendPacketToAll(Packet& packet)
@@ -36,21 +32,23 @@ void Team::sendPacketToAll(Packet& packet)
 	in << packet;
 	for (TeamEntity* tEnt : mTeamEntityList)
 	{
-		if (tEnt->getPlayer() && !tEnt->getDel())
+		if (tEnt->getPlayer())
 			tEnt->getPlayer()->sendBuffer(in.datas(), in.wpos());
 	}
 }
 
 bool Team::addPlayer(Player* player, bool isLeader /* = false */)
 {
-	if (getPlayer(player->getUserId()))
+	if (GetTeamEntity(player->getUserId()))
 		return false;
+	if (IsFull()) return false;
 
+	if (isLeader && mLeader)
+		return false;
 	TeamEntity* eny = new TeamEntity;
 	eny->setPlayer(player);
 	eny->setName(player->getName());
 	eny->setUserId(player->getUserId());
-	eny->setDel(false);
 	if (isLeader) {
 		mLeader = eny;
 	}
@@ -58,36 +56,22 @@ bool Team::addPlayer(Player* player, bool isLeader /* = false */)
 	return true;
 }
 
-bool Team::destoryPlayer(uint32 userId)
+bool Team::RemovePlayer(uint32 userId)
 {
-	TeamEntity* tEnt = getPlayer(userId);
+	TeamEntity* tEnt = GetTeamEntity(userId);
 	if (tEnt == NULL) return false;
-	tEnt->setDel(true);
+	mTeamEntityList.remove(tEnt);
+	if (mTeamEntityList.size() == 0)
+		mLeader = NULL;
+
+	mDelTeamEntitySet.insert(tEnt);
 	return true;
 }
 
-bool Team::removePlayer(uint32 userId)
-{
-	for (std::vector<TeamEntity *>::iterator itr = mTeamEntityList.begin();
-		 itr != mTeamEntityList.end();
-		 ++itr)
-	{
-		if ((*itr)->getUserId() == userId)
-		{
-			delete (*itr);
-			mTeamEntityList.erase(itr);
-			return true;
-		}
-	}
-
-	return false;
-}
-
-TeamEntity* Team::getPlayer(uint32 userId)
+TeamEntity* Team::GetTeamEntity(uint32 userId)
 {
 	for (TeamEntity* tEnt : mTeamEntityList)
 	{
-		if (!tEnt->getDel()) continue;
 		if (tEnt->getUserId() == userId) return tEnt;
 	}
 	return NULL;
@@ -95,7 +79,7 @@ TeamEntity* Team::getPlayer(uint32 userId)
 
 void Team::onEnterWorld(Player* player)
 {
-	TeamEntity* teny = getPlayer(player->getUserId());
+	TeamEntity* teny = GetTeamEntity(player->getUserId());
 	if (teny == NULL)
 		return;
 	teny->setPlayer(player);
@@ -103,37 +87,33 @@ void Team::onEnterWorld(Player* player)
 
 void Team::onLeaveWorld(Player* player)
 {
-	TeamEntity* teny = getPlayer(player->getUserId());
+	TeamEntity* teny = GetTeamEntity(player->getUserId());
 	if (teny == NULL)
 		return;
 	teny->setPlayer(NULL);
 
-	if (getLeader() == player)
+	if (GetLeader() == player)
 	{
 		TeamEntity* nteny = ChooseLeader();
-		if (nteny == NULL) return;
+		if (nteny == NULL) {
+			sTeam.DoFreeTeam(GetInsId());
+			return;
+		}
 		ChangeLeader(nteny->getPlayer());
 	}
 }
 
 
-uint32 Team::getPlayerCount()
+uint32 Team::GetPlayerCount()
 {
-	uint32 count = 0;
-	for (TeamEntity* tEnt : mTeamEntityList)
-	{
-		if (tEnt->getDel()) continue;
-		count++;
-	}
-	return count;
+	return (uint32)mTeamEntityList.size();
 }
 
-TeamEntity* Team::getPlayerEntity(uint32 idx)
+TeamEntity* Team::FindTeamEntity(uint32 idx)
 {
 	uint32 count = 0;
 	for (TeamEntity* tEnt : mTeamEntityList)
 	{
-		if (tEnt->getDel()) continue;
 		if (count == idx)
 			return tEnt;
 		count++;
@@ -141,16 +121,22 @@ TeamEntity* Team::getPlayerEntity(uint32 idx)
 	return NULL;
 }
 
+bool Team::IsFull()
+{
+	if (mTeamEntityList.size() >= TEAM_MAX_COUNT) return true;
+	return false;
+}
+
 bool Team::ChangeLeader(Player* newLeader)
 {
-	TeamEntity* teny = getPlayer(newLeader->getUserId());
+	TeamEntity* teny = GetTeamEntity(newLeader->getUserId());
 	if (teny == NULL)
 		return false;
 
-	if (getLeader() == newLeader)
+	if (GetLeader() == newLeader)
 		return false;
 	
-	Player* lastLader = getLeader();
+	Player* lastLader = GetLeader();
 	mLeader = teny;
 	OnChangeLeader(lastLader->getUserId(), newLeader->getUserId());
 	return true;
@@ -158,6 +144,10 @@ bool Team::ChangeLeader(Player* newLeader)
 
 int32 Team::CanAddTeam(Player* tar)
 {
+	if (GetTeamEntity(tar->getUserId()))
+		return 1;
+	if (IsFull()) return 1;
+
 	return 0;
 }
 
@@ -168,7 +158,6 @@ TeamEntity* Team::ChooseLeader()
 
 	for (TeamEntity* tEnt : mTeamEntityList)
 	{
-		if (tEnt->getDel()) continue;
 		if (tEnt->getPlayer() && mLeader != tEnt)
 			return tEnt;
 	}
@@ -177,24 +166,24 @@ TeamEntity* Team::ChooseLeader()
 
 bool Team::OnCreate(uint32 userId)
 {
-	LuaEngine::Call(sScriptTeam, "OnCreate", getId(), userId);
+	LuaEngine::Call(sScriptTeam, "OnCreate", GetInsId(), userId);
 	return true;
 }
 
 bool Team::OnEnter(uint32 userId)
 {
-	LuaEngine::Call(sScriptTeam, "OnEnter", getId(), userId);
+	LuaEngine::Call(sScriptTeam, "OnEnter", GetInsId(), userId);
 	return true;
 }
 
 bool Team::OnLeave(uint32 userId)
 {
-	LuaEngine::Call(sScriptTeam, "OnLeave", getId(), userId);
+	LuaEngine::Call(sScriptTeam, "OnLeave", GetInsId(), userId);
 	return true;
 }
 
 bool Team::OnChangeLeader(uint32 oldUserId, uint32 newUserId)
 {
-	LuaEngine::Call(sScriptTeam, "OnChangeLeader", getId(), oldUserId, newUserId);
+	LuaEngine::Call(sScriptTeam, "OnChangeLeader", GetInsId(), oldUserId, newUserId);
 	return true;
 }

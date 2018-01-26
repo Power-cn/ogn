@@ -73,20 +73,22 @@ struct RobotJson
 	std::string			Password;
 };
 
-
-struct TaskJson
-{
-	uint32				ID;
-	uint32				Next;
-	std::string			Name;
-};
-
 struct TaskStepJson
 {
 	uint32				ID;
-	uint32				TaskId;
 	std::string			Name;
-	uint32				Step;
+	uint32				TaskId;
+	uint32				TaskStepId;
+};
+typedef std::map<int32, TaskStepJson*> MapTaskStepJson;
+
+struct TaskJson
+{
+	uint32 ID;
+	std::string			Name;
+	uint32				NextTaskId;
+	uint32				PrevTaskId;
+	bool				IsMain;
 };
 
 struct CardJson

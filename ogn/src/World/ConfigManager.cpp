@@ -278,9 +278,10 @@ void ConfigManager::loadTaskJson(const std::string& path)
 
 		TaskJson taskJson;
 		taskJson.ID = v["ID"].asUInt();
-		taskJson.Next = v["Next"].asUInt();
 		taskJson.Name = v["Name"].asString();
-		mMapTaskJson.insert(std::make_pair(taskJson.ID, taskJson));
+		taskJson.NextTaskId = v["NextTaskId"].asUInt();
+		taskJson.PrevTaskId = v["PrevTaskId"].asUInt();
+		mMapTaskJson[taskJson.ID] = taskJson;
 	}
 }
 
@@ -302,23 +303,23 @@ void ConfigManager::loadTaskStepJson(const std::string& path)
 
 		TaskStepJson taskStepJson;
 		taskStepJson.ID = v["ID"].asUInt();
-		taskStepJson.TaskId = v["TaskId"].asUInt();
 		taskStepJson.Name = v["Name"].asString();
-		taskStepJson.Step = v["Step"].asUInt();
-		mMapTaskStepJson.insert(std::make_pair(taskStepJson.ID, taskStepJson));
+		taskStepJson.TaskId = v["TaskId"].asUInt();
+		taskStepJson.TaskStepId = v["TaskStepId"].asUInt();
+		mMapTaskStepJson[taskStepJson.ID] = taskStepJson;
 
 		TaskStepJson* taskStep = &mMapTaskStepJson[taskStepJson.ID];
 		auto itr = mMapTaskStepJsonMap.find(taskStepJson.TaskId);
 		if (itr != mMapTaskStepJsonMap.end())
 		{
 			auto& mapTaskStep = itr->second;
-			mapTaskStep.insert(std::make_pair(taskStepJson.Step, taskStep));
+			mapTaskStep[taskStepJson.TaskStepId] = taskStep;
 		}
 		else
 		{
 			std::map<int32, TaskStepJson*> mapTaskStep;
-			mapTaskStep.insert(std::make_pair(taskStepJson.Step, taskStep));
-			mMapTaskStepJsonMap.insert(std::make_pair(taskStepJson.TaskId, mapTaskStep));
+			mapTaskStep[taskStepJson.TaskStepId] = taskStep;
+			mMapTaskStepJsonMap[taskStepJson.TaskId] = mapTaskStep;
 		}
 	}
 }
@@ -481,6 +482,26 @@ TaskStepJson* ConfigManager::getTaskStepJson(uint32 id)
 		return &itr->second;
 
 	return NULL;
+}
+
+MapTaskStepJson* ConfigManager::GetTaskSteps(uint32 taskId)
+{
+	auto itr = mMapTaskStepJsonMap.find(taskId);
+	if (itr != mMapTaskStepJsonMap.end())
+		return &itr->second;
+	return NULL;
+}
+
+bool ConfigManager::GetTaskStepIsEndStep(uint32 ID)
+{
+	TaskStepJson* taskStep = getTaskStepJson(ID);
+	if (taskStep == NULL) return false;
+	MapTaskStepJson* mapTaskStepJson = GetTaskSteps(taskStep->TaskId);
+	if (mapTaskStepJson == NULL) return false;
+	auto itr = mapTaskStepJson->find(taskStep->TaskStepId + 1);
+	if (itr != mapTaskStepJson->end())
+		return false;
+	return true;
 }
 
 CardJson* ConfigManager::getCardJson(uint32 id)

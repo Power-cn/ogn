@@ -26,10 +26,11 @@ public:
 	Team* AddTeam(Team* team);
 	Team* FindTeamById(uint32 teamId);
 	Team* FindPlayerTeam(uint32 userid);
-
 	bool AddPlayerTeam(uint32 userid, Team* team);
-	bool doPlayerAddTeam(Player* player, Team* team, bool isLeader = false);
-	bool doPlayerRemoveTeam(uint32 userId, Team* team);
+public:
+	bool DoPlayerAddTeam(Player* player, Team* team, bool isLeader = false);
+	bool DoPlayerRemoveTeam(uint32 userId, Team* team);
+	bool DoFreeTeam(uint32 teamId);
 public:
 	void DoCreateTeamReq(Player* aPlr);
 	void DoOrganizeTeamReq(Player* aPlr, cstring& tarName);
@@ -38,7 +39,9 @@ public:
 	void sendPacketToAll(Packet& packet);
 	void sendPacketToTeam(Packet& packet, Player* player);
 protected:
+	void ClearDelTeamArray();
+protected:
 	std::map<uint32, Team*>								mMapTeam;
 	std::map<uint32, Team*>								mMapPlayerTeam;
-	std::list<Team*>									mDelTeamList;
+	std::set<Team*>										mDelTeamList;
 };

@@ -482,12 +482,12 @@ int Application::onDBRecv(SocketEvent & e)
 			if (msgId == ID_NetLoginRes)
 			{
 				if (dbServer->Dispatch(pack->getMsgId(), ssn, pack) == 0)
-					LOG_WARN("[%d] not register func");
+					LOG_WARN("[%s] not register func", sPacketMgr.GetName(pack->getMsgId()).c_str());
 			}
 			else if (ssn->getPlayer())
 			{
 				if (dbServer->Dispatch(pack->getMsgId(), ssn->getPlayer(), pack) == 0)
-					LOG_WARN("[%d] not register func");
+					LOG_WARN("[%s] not register func", sPacketMgr.GetName(pack->getMsgId()).c_str());
 			}
 
 
