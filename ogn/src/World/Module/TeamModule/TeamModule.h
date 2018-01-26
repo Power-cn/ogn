@@ -25,7 +25,7 @@ public:
 	Team* CreateTeam(Player* leader);
 	Team* AddTeam(Team* team);
 	Team* FindTeamById(uint32 teamId);
-	Team* FindPlayerTeam(uint32 userid);
+	Team* FindTeamByUserId(uint32 userId);
 	bool AddPlayerTeam(uint32 userid, Team* team);
 public:
 	bool DoPlayerAddTeam(Player* player, Team* team, bool isLeader = false);

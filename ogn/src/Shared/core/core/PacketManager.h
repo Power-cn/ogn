@@ -8,7 +8,7 @@ public:
 	PacketHelper() {}
 	virtual ~PacketHelper() {}
 	virtual void* Alloc() = 0;
-	virtual void Free() = 0;
+	virtual void Free(void*& ptr) = 0;
 	virtual const char* GetName() = 0;
 };
 
@@ -16,14 +16,13 @@ template<class T>
 class PacketRegister : public PacketHelper
 {
 public:
-	PacketRegister(const std::string& name) { mName = name; mPtr = NULL; };
-	virtual ~PacketRegister() { Free(); }
-	virtual void* Alloc() { if (!mPtr) mPtr = new T; return mPtr; }
-	virtual void Free() { delete mPtr; mPtr = NULL; }
+	PacketRegister(const std::string& name) { mName = name; };
+	virtual ~PacketRegister() { }
+	virtual void* Alloc() {  return new T; }
+	virtual void Free(void*& ptr) { delete ((T*)ptr); ptr = NULL; }
 	virtual const char* GetName() { return mName.c_str(); }
 protected:
 	std::string			mName;
-	T*					mPtr;
 };
 
 class PacketManager
@@ -38,6 +37,7 @@ public:
 	std::string GetName(uint32 msgId);
 	PacketHelper* Find(uint32 msgId);
 private:
+	std::set<Packet*>										mPacketSet;
 	std::map<uint32, PacketHelper*>							mMapPacketHelper;
 };
 

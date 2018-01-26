@@ -29,14 +29,17 @@ class Team
 public:
 	Team();
 	~Team();
-	void Update();
 	uint32 GetInsId() { return mInstanceId; }
+
+	void Update();
 	void sendPacketToAll(Packet& packet);
 	Player* GetLeader() { return mLeader ? mLeader->getPlayer() : NULL; }
 	TeamEntity* GetLeaderEntity() { return mLeader; }
+	TeamEntity* GetTeamEntity(uint32 userId);
+	TeamEntity* FindTeamEntity(uint32 idx);
+
 	bool addPlayer(Player* player, bool isLeader = false);
 	bool RemovePlayer(uint32 userId);
-	TeamEntity* GetTeamEntity(uint32 userId);
 	bool ChangeLeader(Player* newLeader);
 
 	int32 CanAddTeam(Player* tar);
@@ -45,7 +48,6 @@ public:
 	void onLeaveWorld(Player* player);
 
 	uint32 GetPlayerCount();
-	TeamEntity* FindTeamEntity(uint32 idx);
 	bool GetValid() { return mValid; }
 	void SetValid(bool valid) { mValid = valid; }
 	bool IsFull();

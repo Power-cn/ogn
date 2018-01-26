@@ -17,16 +17,7 @@ mLine(0)
 
 Entity::~Entity()
 {
-	delete mStatus;
-	mStatus = NULL;
 
-	while (mMapProperty.size())
-	{
-		auto itr = mMapProperty.begin();
-		delete itr->second;
-		mMapProperty.erase(itr);
-	}
-	GetModule(WarModule)->DestroyWar(this);
 }
 
 bool Entity::Initialize()
@@ -50,6 +41,17 @@ bool Entity::Update(float time, float delay)
 
 bool Entity::Destroy()
 {
+	delete mStatus;
+	mStatus = NULL;
+
+	while (mMapProperty.size())
+	{
+		auto itr = mMapProperty.begin();
+		delete itr->second;
+		mMapProperty.erase(itr);
+	}
+	GetModule(WarModule)->DestroyWar(this);
+
 	sWorld.removeEntity(getGuid());
 	return true;
 }
@@ -61,14 +63,16 @@ bool Entity::CanDestroy()
 
 bool Entity::changeMapByMapInsId(int32 mapInsId)
 {
-	Map* map = GetModule(MapModule)->getMap(mapInsId);
-	return changeMapByMap(map);
+	Map* aMap = sMap.getMap(mapInsId);
+	if (aMap == NULL) return false;
+	return changeMapByMap(aMap);
 }
 
 bool Entity::changeMapByMapId(int32 mapId)
 {
-	Map* map = GetModule(MapModule)->getMapByMapId(mapId);
-	return changeMapByMap(map);
+	Map* aMap = sMap.getMapByMapId(mapId);
+	if (aMap == NULL) return false;
+	return changeMapByMap(aMap);
 }
 
 bool Entity::changeMapByMap(Map* map)

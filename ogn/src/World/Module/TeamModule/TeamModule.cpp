@@ -36,7 +36,7 @@ bool TeamModule::Destroy()
 
 bool TeamModule::onEnterWorld(Player* player, Dictionary& dict)
 {
-	Team* tm = FindPlayerTeam(player->getUserId());
+	Team* tm = FindTeamByUserId(player->getUserId());
 	if (tm == NULL)
 		return true;
 
@@ -46,7 +46,7 @@ bool TeamModule::onEnterWorld(Player* player, Dictionary& dict)
 
 bool TeamModule::onLeaveWorld(Player* player, Dictionary& dict)
 {
-	Team* tm = FindPlayerTeam(player->getUserId());
+	Team* tm = FindTeamByUserId(player->getUserId());
 	if (tm == NULL)
 		return true;
 
@@ -56,7 +56,7 @@ bool TeamModule::onLeaveWorld(Player* player, Dictionary& dict)
 
 Team* TeamModule::CreateTeam(Player* leader)
 {
-	if (FindPlayerTeam(leader->getUserId())) return NULL;
+	if (FindTeamByUserId(leader->getUserId())) return NULL;
 	Team* t = new Team();
 	AddTeam(t);
 	t->OnCreate(leader->getUserId());
@@ -92,9 +92,9 @@ Team* TeamModule::FindTeamById(uint32 teamId)
 	return NULL;
 }
 
-Team* TeamModule::FindPlayerTeam(uint32 userid)
+Team* TeamModule::FindTeamByUserId(uint32 userId)
 {
-	auto itr = mMapPlayerTeam.find(userid);
+	auto itr = mMapPlayerTeam.find(userId);
 	if (itr != mMapPlayerTeam.end()) {
 		Team* aTeam = itr->second;
 		if (aTeam && aTeam->GetValid())
@@ -121,7 +121,7 @@ void TeamModule::RemovePlayerTeam(uint32 userid)
 
 bool TeamModule::DoPlayerAddTeam(Player* player, Team* team, bool isLeader /* = false */)
 {
-	if (FindPlayerTeam(player->getUserId()))
+	if (FindTeamByUserId(player->getUserId()))
 		return false;
 	if (!team->addPlayer(player, isLeader))
 		return false;
@@ -177,8 +177,8 @@ void TeamModule::DoOrganizeTeamReq(Player* aPlr, cstring& tarName)
 	if (!target)
 		return ;
 
-	Team* tm0 = FindPlayerTeam(aPlr->getUserId());
-	Team* tm1 = FindPlayerTeam(target->getUserId());
+	Team* tm0 = FindTeamByUserId(aPlr->getUserId());
+	Team* tm1 = FindTeamByUserId(target->getUserId());
 	if (tm0 && tm1)
 	{
 		// 已经有队伍 ;
@@ -234,8 +234,8 @@ void TeamModule::DoAgreeTeamReq(Player* aPlr, cstring& tarName, uint8 isJoin)
 	if (!target)
 		return;
 
-	Team* tm0 = FindPlayerTeam(aPlr->getUserId());
-	Team* tm1 = FindPlayerTeam(target->getUserId());
+	Team* tm0 = FindTeamByUserId(aPlr->getUserId());
+	Team* tm1 = FindTeamByUserId(target->getUserId());
 
 	if (tm0 && tm1)
 		return;
@@ -302,7 +302,7 @@ void TeamModule::sendPacketToAll(Packet& packet)
 
 void TeamModule::sendPacketToTeam(Packet& packet, Player* player)
 {
-	Team* tm = FindPlayerTeam(player->getUserId());
+	Team* tm = FindTeamByUserId(player->getUserId());
 	if (tm == NULL)
 		return;
 	tm->sendPacketToAll(packet);

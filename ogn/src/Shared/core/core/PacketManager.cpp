@@ -11,6 +11,11 @@ PacketManager::PacketManager( void )
 
 PacketManager::~PacketManager( void )
 {
+	std::set<Packet *> packetSet = mPacketSet;
+	for (Packet* aPacket : packetSet)
+		Free(aPacket);
+	mPacketSet.clear();
+
 	for (auto itr : mMapPacketHelper)
 		delete itr.second;
 	mMapPacketHelper.clear();
@@ -25,7 +30,7 @@ bool PacketManager::RegisterPacket(uint32 msgId, PacketHelper* helper )
 		return false;
 	}
 
-	mMapPacketHelper.insert(std::make_pair(msgId, helper));
+	mMapPacketHelper[msgId] = helper;
 	return true;
 }
 
@@ -44,16 +49,22 @@ Packet* PacketManager::Alloc(uint32 msgId)
 	PacketHelper* packet_helper = Find(msgId);
 	if (packet_helper == NULL)
 		return NULL;
-	return (Packet*)packet_helper->Alloc();
+	Packet* aPacket = (Packet*)packet_helper->Alloc();
+	if (aPacket)
+		mPacketSet.insert(aPacket);
+	return aPacket;
 }
 
 void PacketManager::Free(Packet*& pack)
 {
 	auto itr = mMapPacketHelper.find(pack->getMsgId());
 	if (itr == mMapPacketHelper.end()) return;
-
-	itr->second->Free();
-	pack = NULL;
+	mPacketSet.erase(pack);
+	PacketHelper* aPacketHelper = itr->second;
+	if (aPacketHelper){
+		aPacketHelper->Free((void*&)pack);
+		pack = NULL;
+	}
 }
 
 std::string PacketManager::GetName(uint32 uiID)
