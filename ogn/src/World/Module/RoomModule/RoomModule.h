@@ -8,7 +8,7 @@ public:
 	virtual ~RoomModule();
 
 public:
-	void sendPacketToTeam(Packet& packet, Player* player);
+	void sendPacketToRoom(Packet& packet, Player* player);
 
 	Room* Create(Player* aPlr);
 	void Remove(uint32 roomId);

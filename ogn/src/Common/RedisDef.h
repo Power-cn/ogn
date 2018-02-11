@@ -9,3 +9,6 @@ static const char* sDiamondRank = "Rank:sDiamondRank";
 
 
 static const char* sMail = "Mail:sMail";
+
+static const char* sAccountName = "Name:Account";
+static const char* sUserName = "Name:User";

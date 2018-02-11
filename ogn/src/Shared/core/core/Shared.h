@@ -209,11 +209,15 @@ namespace Shared
 
 	//////////////////////////////////////////////////////////////////////////
 	std::string int32tostr(int32 val);
+	std::string uint32tostr(uint32 val);
 	std::string int64tostr(int64 val);
+	std::string uint64tostr(uint64 val);
 	std::string float32tostr(float32 val);
 	std::string float64tostr(float64 val);
 	int32 strtoint32(const std::string& val);
+	uint32 strtouint32(const std::string& val);
 	int64 strtoint64(const std::string& val);
+	uint64 strtouint64(const std::string& val);
 	float32 strtofloat32(const std::string& val);
 	float64 strtofloat64(const std::string& val);
 	//////////////////////////////////////////////////////////////////////////

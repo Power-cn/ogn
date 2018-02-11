@@ -11,7 +11,7 @@ RoomModule::~RoomModule()
 
 }
 
-void RoomModule::sendPacketToTeam(Packet& packet, Player* player)
+void RoomModule::sendPacketToRoom(Packet& packet, Player* player)
 {
 	Room* aRoom = FindPlayerRoom(player->getUserId());
 	if (aRoom == NULL) return;

@@ -187,6 +187,11 @@ void Entity::setMapInsId(uint32 mapInsId)
 		setMap(m);
 }
 
+cstring Entity::getGuidStr()
+{
+	return Shared::uint64tostr(getGuid());
+}
+
 Property* Entity::getProperty(const std::string& name)
 {
 	auto itr = mMapProperty.find(name);

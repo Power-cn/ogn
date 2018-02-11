@@ -133,6 +133,7 @@ public:
 	uint32 getMapInsId();
 
 	Guid getGuid() { return mGuid; }
+	cstring getGuidStr();
 
 	Property* getProperty(const std::string& name);
 	Property* addProperty(Property* property);

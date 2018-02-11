@@ -170,10 +170,24 @@ std::string Shared::int32tostr(int32 val)
 	return std::string(buf);
 }
 
+std::string Shared::uint32tostr(uint32 val)
+{
+	int8 buf[32] = { 0 };
+	sprintf_s(buf, 32, "%u", val);
+	return std::string(buf);
+}
+
 std::string Shared::int64tostr(int64 val)
 {
 	int8 buf[64] = {0};
 	sprintf_s(buf, 64, "%I64d", val);
+	return std::string(buf);
+}
+
+std::string Shared::uint64tostr(uint64 val)
+{
+	int8 buf[64] = { 0 };
+	sprintf_s(buf, 64, "%llu", val);
 	return std::string(buf);
 }
 
@@ -196,11 +210,21 @@ int32 Shared::strtoint32(const std::string& val)
 	return ::atoi(val.c_str());
 }
 
+uint32 Shared::strtouint32(const std::string& val)
+{
+	return (uint32)::atoi(val.c_str());
+}
+
 int64 Shared::strtoint64(const std::string& val)
 {
 	return ::_atoi64(val.c_str());
 }
 
+
+uint64 Shared::strtouint64(const std::string& val)
+{
+	return (uint64)::_atoi64(val.c_str());
+}
 
 float32 Shared::strtofloat32(const std::string& val)
 {
