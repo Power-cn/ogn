@@ -82,7 +82,7 @@ void Player::sendPacketToTeam(Packet& packet)
 
 void Player::sendPacketToRoom(Packet& packet)
 {
-	sRoom.sendPacketToTeam(packet, this);
+	sRoom.sendPacketToRoom(packet, this);
 }
 
 void Player::sendPacketToTarget(Packet& packet, Entity* tar)

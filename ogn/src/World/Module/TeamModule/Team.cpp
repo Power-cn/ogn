@@ -13,16 +13,12 @@ Team::~Team()
 	for (TeamEntity* tEnt: mTeamEntityList)
 		delete tEnt;
 	mTeamEntityList.clear();
-	for (TeamEntity* tEnt : mDelTeamEntitySet)
-		delete tEnt;
-	mDelTeamEntitySet.clear();
+	ClearDelTeamEntitySet();
 }
 
 void Team::Update()
 {
-	for (TeamEntity* tEnt: mDelTeamEntitySet)
-		delete tEnt;
-	mDelTeamEntitySet.clear();
+	ClearDelTeamEntitySet();
 }
 
 void Team::sendPacketToAll(Packet& packet)
@@ -162,6 +158,13 @@ TeamEntity* Team::ChooseLeader()
 			return tEnt;
 	}
 	return NULL;
+}
+
+void Team::ClearDelTeamEntitySet()
+{
+	for (TeamEntity* tEnt : mDelTeamEntitySet)
+		delete tEnt;
+	mDelTeamEntitySet.clear();
 }
 
 bool Team::OnCreate(uint32 userId)

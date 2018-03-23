@@ -1,7 +1,5 @@
 #pragma once
 
-#include "Shared.h"
-
 class Player;
 class Packet;
 #define TEAM_MAX_COUNT 5
@@ -53,6 +51,7 @@ public:
 	bool IsFull();
 protected:
 	TeamEntity*	ChooseLeader();
+	void ClearDelTeamEntitySet();
 protected:
 	bool OnCreate(uint32 userId);
 	bool OnEnter(uint32 userId);
