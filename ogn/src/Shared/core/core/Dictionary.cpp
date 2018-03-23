@@ -13,12 +13,6 @@ Dictionary::Dictionary(const Dictionary& other)
 	}
 }
 
-Dictionary::~Dictionary()
-{
-
-}
-
-
 Dictionary& Dictionary::operator=(const Dictionary& other)
 {
 	mMapVariant.clear();
@@ -27,6 +21,11 @@ Dictionary& Dictionary::operator=(const Dictionary& other)
 		Add((Variant&)itr.first, itr.second);
 	}
 	return *this;
+}
+
+Dictionary::~Dictionary()
+{
+
 }
 
 void Dictionary::Add(const Variant& key, const Variant& value)
