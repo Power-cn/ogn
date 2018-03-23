@@ -55,7 +55,7 @@ bool Map::checkEntityLine(Entity* ent, Entity* tar)
 uint32 Map::sId = 0;
 Map::Map():
 mInstanceId(++sId),
-mMapJson(NULL),
+mMapCfgId(0),
 mMapBytes(NULL),
 mMapCells(NULL)
 {
@@ -68,19 +68,26 @@ Map::~Map()
 	SAFE_DELETE_ARRAY(mMapCells);
 }
 
+uint8 Map::getMapType()
+{
+	MapJson* cfg = sCfgMgr.getMapJson(getMapId());
+	if (cfg == NULL) return 0;
+	return cfg->Type;
+}
+
 bool Map::Initalize()
 {
 	SAFE_DELETE_ARRAY(mMapBytes);
 	SAFE_DELETE_ARRAY(mMapCells);
-	if (mMapJson == NULL)
-		return false;
+	MapJson* cfg = sCfgMgr.getMapJson(getMapId());
+	if (cfg == NULL) return false;
 
-	mRow = mMapJson->Row;
-	mCol = mMapJson->Col;
-	mCellSize = mMapJson->Cell;
-	mCellRow = mMapJson->LogicRow;
-	mCellCol = mMapJson->LogicCol;
-	mViewCell = mMapJson->ViewCell;
+	mRow = cfg->Row;
+	mCol = cfg->Col;
+	mCellSize = cfg->Cell;
+	mCellRow = cfg->LogicRow;
+	mCellCol = cfg->LogicCol;
+	mViewCell = cfg->ViewCell;
 
 	mMapBytes = new int8[mRow * mCol];
 	memset(mMapBytes, 0, mRow * mCol);
@@ -227,6 +234,11 @@ void Map::checkMapEntityView(Entity* entity)
 	{
 		for (auto ent : mapCell->objects)
 		{
+			if (ent->getEntityType() != ET_Player &&
+				entity->getEntityType() != ET_Player) {
+				continue;
+			}
+
 			if (checkEntityLine(entity, ent))
 			{
 				auto entItr = copyView.find(ent);
@@ -243,6 +255,10 @@ void Map::checkMapEntityView(Entity* entity)
 
 	for (auto ent : copyView)
 	{
+		if (ent->getEntityType() != ET_Player &&
+			entity->getEntityType() != ET_Player) {
+			continue;
+		}
 		onEntityLeaveView(entity, ent);
 		onEntityLeaveView(ent, entity);
 	}
@@ -339,13 +355,15 @@ void Map::delEntityToMapCell(Entity* entity, MapCell* cell)
 
 uint8 Map::getEnterLine()
 {
+	MapJson* cfg = sCfgMgr.getMapJson(getMapId());
+	if (cfg == NULL) return 0;
 	uint8 maxLine = 0;
 	for (auto itr : mMapEntitySetLine)
 	{
 		maxLine++;
 		if (itr.first == 0) continue;
 		EntitySet& entSet = itr.second;
-		if (entSet.size() < mMapJson->LineMax)
+		if (entSet.size() < cfg->LineMax)
 			return itr.first;
 	}
 	return maxLine;

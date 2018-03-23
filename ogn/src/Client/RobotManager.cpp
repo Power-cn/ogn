@@ -175,7 +175,6 @@ int RobotManager::onNetLoginRes(Robot* robot, NetLoginRes* res)
 		//msgNfy.channelType = 1;
 		//robot->sendPacket(msgNfy);
 
-		//INSTANCE(SocketHandler).createRobot();
 	}
 	else
 	{
@@ -354,7 +353,7 @@ int32 RobotManager::onLogin(CmdEvent& e)
 {
 	std::string user = e.cmdExecute->params[0];
 	INSTANCE(SocketHandler).PushUser(user);
-	INSTANCE(SocketHandler).createRobot();
+	INSTANCE(SocketHandler).createRobot(user, "");
 	return 0;
 }
 

@@ -18,28 +18,32 @@ MapModule::~MapModule()
 
 bool MapModule::Initialize()
 {
-	std::map<int32, MapJson>& mapMapJson = INSTANCE(ConfigManager).getMapMapJson();
+	std::map<int32, MapJson>& mapMapJson = sCfgMgr.getMapMapJson();
 
 	for (auto itr : mapMapJson)
 	{
 		MapJson& mapJson = itr.second;
 		if (mapJson.Type == MT_BigMap)
 		{
-			Map* m = new Map;
-			m->mMapJson = &mapMapJson[itr.first];
-			m->Initalize();
-			if (addMap(m))
-				LOG_DEBUG(LogSystem::csl_color_green, "create map success id:%d instanceId:%d ", m->getMapId(), m->getGuid());
-			else
-				delete m;
+			Map* aMap = new Map;
+			aMap->setMapCfgId(mapJson.ID);
+			aMap->Initalize();
+			if (addMap(aMap)) {
+				LOG_DEBUG(LogSystem::csl_color_green, "create map success id:%d instanceId:%d ", aMap->getMapId(), aMap->getGuid());
+			}
+			else {
+				delete aMap;
+			}
 		}
 	}
 
 	for (auto itr : mMapBigMap)
 	{
 		Map* map = itr.second;
-		MapJson& mapJson = *map->mMapJson;
-		std::vector<NpcJson*>* npcJsons = INSTANCE(ConfigManager).getNpcJsons(mapJson.ID);
+		MapJson* mapJson = sCfgMgr.getMapJson(map->getMapId());
+		if (mapJson == NULL) continue;
+
+		std::vector<NpcJson*>* npcJsons = INSTANCE(ConfigManager).getNpcJsons(mapJson->ID);
 		if (npcJsons)
 		{
 			for (uint32 i = 0; i < npcJsons->size(); ++i)
@@ -63,7 +67,7 @@ bool MapModule::Initialize()
 				npc->setCellTarY(npc->getCellY());
 				npc->setDirPosition(D_DOWNRIGHT);
 
-				GetModule(WorldModule)->addNpc(npc);
+				sWorld.addNpc(npc);
 				map->onEntityEnter(npc);
 			}
 		}

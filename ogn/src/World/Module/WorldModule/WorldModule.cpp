@@ -281,8 +281,8 @@ void WorldModule::DelPlrRecord(uint32 userId)
 Npc* WorldModule::addNpc(Npc* npc)
 {
 	addEntity(npc);
-	auto itr = mMapPlayer.find(npc->getNpcId());
-	if (itr != mMapPlayer.end())
+	auto itr = mMapNpc.find(npc->getNpcId());
+	if (itr != mMapNpc.end())
 		return NULL;
 
 	mMapNpc.insert(std::make_pair(npc->getNpcId(), npc));

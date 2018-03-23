@@ -4,12 +4,13 @@ SocketHandler::SocketHandler()
 {
 	mIndex = 0;
 
-	//std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
-	//for (auto itr : mapRobotJson)
-	//{
-	//	RobotJson& robotJson = itr.second;
-	//	mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
-	//}
+	std::map<int32, RobotJson>& mapRobotJson = INSTANCE(ConfigManager).getMapRobotJson();
+	for (auto itr : mapRobotJson)
+	{
+		RobotJson& robotJson = itr.second;
+		mUsers.push(std::make_pair(robotJson.User, robotJson.Password));
+		createRobot(robotJson.User, robotJson.Password);
+	}
 	//float64 t0 = DateTime::GetNowAppUS();
 	//for (int i = 0; i < 500; ++i)
 	//{
@@ -23,11 +24,16 @@ SocketHandler::SocketHandler()
 
 int SocketHandler::onConnect(SocketEvent& e)
 {
+	SocketClient* socketClient = (SocketClient*)e.targetDispatcher;
 	Robot* robot = new Robot(e.socket);
 	INSTANCE(RobotManager).add(e.socket, robot);
 	std::pair<std::string, std::string>& pa = mUsers.front();
-	robot->doLogin(pa.first, pa.second);
-	mUsers.pop();
+
+	auto itr = mClientMap.find(socketClient);
+	if (itr == mClientMap.end()) return 0;
+
+	robot->doLogin(itr->second.first, itr->second.second);
+	//mUsers.pop();
 	if (!INSTANCE(RobotManager).mCurRobot) {
 		INSTANCE(RobotManager).mCurRobot = robot;
 		mCreate = false;
@@ -78,15 +84,12 @@ int SocketHandler::onException(SocketEvent& e)
 {
 	LOG_ERROR(__FUNCTION__);
 	int err = GetLastError();
-	createRobot();
 	mListSocketClient.erase((SocketClient*)e.targetDispatcher);
 	return 0;
 }
 
-void SocketHandler::createRobot()
+void SocketHandler::createRobot(const std::string& user, const std::string& pwd)
 {
-	if (mUsers.size() <= 0)
-		return;
 	mCreate = true;
 	std::pair<std::string, std::string>& pa = mUsers.front();
 	//LOG_INFO("createRobot: %s", pa.first.c_str());
@@ -103,6 +106,7 @@ void SocketHandler::createRobot()
 		LOG_ERROR("创建连接失败");
 		return;
 	}
+	mClientMap.insert(std::make_pair(client, std::make_pair(user, pwd)));
 	float64 t2 = DateTime::GetNowAppUS() - t1;
 	mListSocketClient.insert(client);
 	mIndex++;

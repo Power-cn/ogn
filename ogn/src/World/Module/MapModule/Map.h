@@ -25,8 +25,9 @@ public:
 	~Map();
 public:
 	uint32 getGuid() { return mInstanceId; }
-	uint32 getMapId() { return mMapJson ? mMapJson->ID : 0; }
-	uint8 getMapType() { return mMapJson ? mMapJson->Type : 0; }
+	uint32 getMapId() { return mMapCfgId; }
+	void setMapCfgId(uint32 cfgId) { mMapCfgId = cfgId; }
+	uint8 getMapType();
 
 	bool Initalize();
 
@@ -76,7 +77,7 @@ protected:
 	std::map<uint8, EntitySet>				mMapEntitySetLine;
 public:
 	uint32			mInstanceId;
-	MapJson*		mMapJson;
+	uint32			mMapCfgId;
 	uint32			mRow;
 	uint32			mCol;
 	uint32			mCellRow;

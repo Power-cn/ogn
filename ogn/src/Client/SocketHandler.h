@@ -11,7 +11,7 @@ public:
 	int onExit(SocketEvent& e);
 	int onException(SocketEvent& e);
 public:
-	void createRobot();
+	void createRobot(const std::string& user, const std::string& pwd);
 	void PushUser(cstring& user);
 public:
 	std::map<int32, Socket*> clients;
@@ -19,4 +19,5 @@ public:
 	std::queue<std::pair<std::string, std::string>> mUsers;
 	int32	mIndex;
 	bool	mCreate = false;
+	std::map<SocketClient*, std::pair<std::string, std::string>> mClientMap;
 };
