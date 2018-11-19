@@ -115,6 +115,7 @@ bool Application::Initialize()
 
 	OnInitialize();
 
+	uint32 ret = LuaEngine::CallScript("gm", "test1", 1, 2);
 
 	return true;
 }

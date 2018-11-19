@@ -18,7 +18,7 @@ bool StartRedisServer()
 	si.dwFlags = STARTF_USESHOWWINDOW;
 	si.wShowWindow = TRUE; //TRUE表示显示创建的进程的窗口  
 	char szBuffer[MAX_PATH] = { 0 };
-	sprintf_s(szBuffer, MAX_PATH, "%s %s", "redis-64.3.0.503\\redis-server.exe", "redis-64.3.0.503\\redis.windows.conf");
+	sprintf_s(szBuffer, MAX_PATH, "%s %s", "..\\redis-64.3.0.503\\redis-server.exe", "..\\redis-64.3.0.503\\redis.windows.conf");
 	if (!CreateProcessA(NULL, szBuffer, NULL, NULL, false, CREATE_NEW_CONSOLE, NULL, NULL, &si, &pi))
 	{
 		int error = GetLastError();
