@@ -1,0 +1,312 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup Label="ProjectConfigurations">
+    <ProjectConfiguration Include="Debug|Win32">
+      <Configuration>Debug</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|Win32">
+      <Configuration>Release</Configuration>
+      <Platform>Win32</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Debug|x64">
+      <Configuration>Debug</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+    <ProjectConfiguration Include="Release|x64">
+      <Configuration>Release</Configuration>
+      <Platform>x64</Platform>
+    </ProjectConfiguration>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\Common\Property.cpp" />
+    <ClCompile Include="..\..\src\Common\Utils.cpp" />
+    <ClCompile Include="..\..\src\World\Application.cpp" />
+    <ClCompile Include="..\..\src\World\Backpack.cpp" />
+    <ClCompile Include="..\..\src\World\BackpackModule.cpp" />
+    <ClCompile Include="..\..\src\World\ConfigManager.cpp" />
+    <ClCompile Include="..\..\src\World\DBHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Item.cpp" />
+    <ClCompile Include="..\..\src\World\ItemModule.cpp" />
+    <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp" />
+    <ClCompile Include="..\..\src\World\main.cpp" />
+    <ClCompile Include="..\..\src\World\Module.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp" />
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp" />
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\MailModule\Mail.cpp" />
+    <ClCompile Include="..\..\src\World\Module\Mailmodule\MailModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp" />
+    <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RankModule\RankModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp" />
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\Shop.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskNode.cpp" />
+    <ClCompile Include="..\..\src\World\Module\TeamModule\Team.cpp" />
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WarModule\War.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarModule.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Entity.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Npc.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Player.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\PlayerHandler.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Visual.cpp" />
+    <ClCompile Include="..\..\src\World\Module\WorldModule\WorldModule.cpp" />
+    <ClCompile Include="..\..\src\World\LuaEngine.cpp" />
+    <ClCompile Include="..\..\src\World\LuaEngineBind.cpp" />
+    <ClCompile Include="..\..\src\World\Session.cpp" />
+    <ClCompile Include="..\..\src\World\SessionHandler.cpp" />
+    <ClCompile Include="..\..\src\World\SessionManager.cpp" />
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\Common\Channel.h" />
+    <ClInclude Include="..\..\src\Common\ConstDef.h" />
+    <ClInclude Include="..\..\src\Common\MsgCode.h" />
+    <ClInclude Include="..\..\src\Common\Property.h" />
+    <ClInclude Include="..\..\src\Common\protocols\protocols.h" />
+    <ClInclude Include="..\..\src\Common\RedisDef.h" />
+    <ClInclude Include="..\..\src\Common\Utils.h" />
+    <ClInclude Include="..\..\src\World\Application.h" />
+    <ClInclude Include="..\..\src\World\Backpack.h" />
+    <ClInclude Include="..\..\src\World\BackpackModule.h" />
+    <ClInclude Include="..\..\src\World\CfgDef.h" />
+    <ClInclude Include="..\..\src\World\ConfigManager.h" />
+    <ClInclude Include="..\..\src\World\DBHandler.h" />
+    <ClInclude Include="..\..\src\World\Item.h" />
+    <ClInclude Include="..\..\src\World\ItemModule.h" />
+    <ClInclude Include="..\..\src\World\LuaScriptEngine.h" />
+    <ClInclude Include="..\..\src\World\Module.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h" />
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h" />
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h" />
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h" />
+    <ClInclude Include="..\..\src\World\Module\MailModule\Mail.h" />
+    <ClInclude Include="..\..\src\World\Module\Mailmodule\MailModule.h" />
+    <ClInclude Include="..\..\src\World\Module\MapModule\Map.h" />
+    <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h" />
+    <ClInclude Include="..\..\src\World\Module\RankModule\RankModule.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h" />
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\Shop.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopModule.h" />
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskModule.h" />
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskNode.h" />
+    <ClInclude Include="..\..\src\World\Module\TeamModule\Team.h" />
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamModule.h" />
+    <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h" />
+    <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h" />
+    <ClInclude Include="..\..\src\World\Module\WarModule\War.h" />
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarModule.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Entity.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Npc.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Player.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\PlayerHandler.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Visual.h" />
+    <ClInclude Include="..\..\src\World\Module\WorldModule\WorldModule.h" />
+    <ClInclude Include="..\..\src\World\LuaEngine.h" />
+    <ClInclude Include="..\..\src\World\Session.h" />
+    <ClInclude Include="..\..\src\World\SessionHandler.h" />
+    <ClInclude Include="..\..\src\World\SessionManager.h" />
+    <ClInclude Include="..\..\src\World\stdafx.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\bin\World\config.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+    <Xml Include="..\..\src\Common\protocols\protocols.xml">
+      <SubType>Designer</SubType>
+    </Xml>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\config\cfg\script\card.lua" />
+    <None Include="..\..\bin\config\cfg\script\game.lua" />
+    <None Include="..\..\bin\config\cfg\script\global.lua" />
+    <None Include="..\..\bin\config\cfg\script\gm.lua" />
+    <None Include="..\..\bin\config\cfg\script\player.lua" />
+    <None Include="..\..\bin\config\cfg\script\room.lua" />
+    <None Include="..\..\bin\config\cfg\script\team.lua" />
+  </ItemGroup>
+  <PropertyGroup Label="Globals">
+    <ProjectGuid>{5A2CA0EF-D312-432C-BBB7-848FF027D79F}</ProjectGuid>
+    <Keyword>Win32Proj</Keyword>
+    <RootNamespace>World</RootNamespace>
+    <WindowsTargetPlatformVersion>8.1</WindowsTargetPlatformVersion>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>MultiByte</CharacterSet>
+    <UseOfMfc>false</UseOfMfc>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>true</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
+    <ConfigurationType>Application</ConfigurationType>
+    <UseDebugLibraries>false</UseDebugLibraries>
+    <PlatformToolset>v140</PlatformToolset>
+    <WholeProgramOptimization>true</WholeProgramOptimization>
+    <CharacterSet>Unicode</CharacterSet>
+  </PropertyGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
+  <ImportGroup Label="ExtensionSettings">
+  </ImportGroup>
+  <ImportGroup Label="Shared">
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <ImportGroup Label="PropertySheets" Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <Import Project="$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props" Condition="exists('$(UserRootDir)\Microsoft.Cpp.$(Platform).user.props')" Label="LocalAppDataPlatform" />
+  </ImportGroup>
+  <PropertyGroup Label="UserMacros" />
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../bin/$(ProjectName)/</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+    <TargetName>$(ProjectName)_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <LinkIncremental>true</LinkIncremental>
+    <OutDir>../../bin/$(ProjectName)/</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+    <TargetName>$(ProjectName)64_d</TargetName>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../bin/$(ProjectName)/</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+  </PropertyGroup>
+  <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <LinkIncremental>false</LinkIncremental>
+    <OutDir>../../bin/$(ProjectName)/</OutDir>
+    <IntDir>../../obj/$(ProjectName)/$(Configuration)/$(Platform)</IntDir>
+    <TargetName>$(ProjectName)64</TargetName>
+  </PropertyGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>WIN32;_DEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../src/Shared/modules/libs;../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
+    <ClCompile>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <WarningLevel>Level3</WarningLevel>
+      <Optimization>Disabled</Optimization>
+      <PreprocessorDefinitions>_DEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../src/Shared/modules/libs;../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../src/Shared/modules/libs;../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalDependencies>%(AdditionalDependencies)</AdditionalDependencies>
+    </Link>
+    <PreBuildEvent>
+      <Command>
+      </Command>
+    </PreBuildEvent>
+  </ItemDefinitionGroup>
+  <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
+    <ClCompile>
+      <WarningLevel>Level3</WarningLevel>
+      <PrecompiledHeader>
+      </PrecompiledHeader>
+      <Optimization>MaxSpeed</Optimization>
+      <FunctionLevelLinking>true</FunctionLevelLinking>
+      <IntrinsicFunctions>true</IntrinsicFunctions>
+      <PreprocessorDefinitions>NDEBUG;WIN64;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
+      <SDLCheck>true</SDLCheck>
+      <AdditionalIncludeDirectories>../../src/Shared/core/core;../../src/World;../../src/Shared/modules/luabind;../../src/Shared/modules/boost-1.47.0;../../src/Shared/modules/lua/src;../../src/Shared/core/json;../../src/Common</AdditionalIncludeDirectories>
+    </ClCompile>
+    <Link>
+      <SubSystem>Console</SubSystem>
+      <EnableCOMDATFolding>true</EnableCOMDATFolding>
+      <OptimizeReferences>true</OptimizeReferences>
+      <GenerateDebugInformation>true</GenerateDebugInformation>
+      <AdditionalLibraryDirectories>../../src/Shared/modules/libs;../../lib;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+    </Link>
+  </ItemDefinitionGroup>
+  <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
+  <ImportGroup Label="ExtensionTargets">
+  </ImportGroup>
+</Project>

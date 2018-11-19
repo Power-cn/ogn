@@ -1,0 +1,6 @@
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\bin\Debug\ExcelToJson.exe.config
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\bin\Debug\ExcelToJson.exe
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\bin\Debug\ExcelToJson.pdb
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.csprojResolveAssemblyReference.cache
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.exe
+E:\git\ogn\ogn\tools\ExcelToJson\ExcelToJson\obj\Debug\ExcelToJson.pdb

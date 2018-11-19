@@ -1,0 +1,449 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="源文件">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="头文件">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="资源文件">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+    <Filter Include="Session">
+      <UniqueIdentifier>{60ad3983-e365-411b-ab4b-7049c3dc719c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Common">
+      <UniqueIdentifier>{715a6521-8933-49bf-b40d-2e52f8568fe1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Script">
+      <UniqueIdentifier>{884598f3-ffd5-44e2-9ff1-e082354a1d06}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module">
+      <UniqueIdentifier>{960981c9-6b80-4825-a7bd-669db5e0770b}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\MapModule">
+      <UniqueIdentifier>{dbdfeabb-b654-4d68-a5ef-359fb5c3e860}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\MapModule\map">
+      <UniqueIdentifier>{8588201a-8e83-4491-a10b-709cd0d5e71f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Handler">
+      <UniqueIdentifier>{8186e7af-6e60-4f55-8ce8-309ee28335ba}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\TeamModule">
+      <UniqueIdentifier>{8a4c6b80-290b-4c6c-b15d-2e582a02e788}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\TeamModule\team">
+      <UniqueIdentifier>{c2d4d6d6-cdf2-43b0-8711-168e8b9c386c}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\BackpackModule">
+      <UniqueIdentifier>{97ca9c29-8012-431b-a513-8c740bcc52d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\ItemModule">
+      <UniqueIdentifier>{baed9fac-3624-49e0-9345-b1f4f49fc046}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule">
+      <UniqueIdentifier>{6bc23a8c-333e-44cf-a259-921a059288ce}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule\Entity">
+      <UniqueIdentifier>{0ce61455-96bb-4e12-8042-17aab902da93}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WorldModule\Entity\npc">
+      <UniqueIdentifier>{338f817e-023d-4295-b5d9-ca47a34b4630}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\WarModule">
+      <UniqueIdentifier>{b61e8e76-9200-467d-bbdd-fd0c1a9553e9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\FriendsModule">
+      <UniqueIdentifier>{0a2a4552-bef4-442b-b090-64412b72a96d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\RoomModule">
+      <UniqueIdentifier>{5db9781f-9036-4509-bfb2-33a00420abeb}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\GameModule">
+      <UniqueIdentifier>{da9d63f7-ab6e-4e54-b1ae-84b031edb429}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="lua">
+      <UniqueIdentifier>{b4dd97af-a76c-4b85-a5fe-ac353c372e7d}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\MailModule">
+      <UniqueIdentifier>{e5c3e78b-142d-47f2-84d3-ab978d6d848e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\ShopModule">
+      <UniqueIdentifier>{f0092cf8-961d-43eb-b424-7b3147b55298}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="src">
+      <UniqueIdentifier>{9aefecb8-1487-47f9-8f5d-ab7305c377c1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\RankModule">
+      <UniqueIdentifier>{53b4b3df-c1a5-42fe-b85f-3944a48f7f01}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Module\TaskModule">
+      <UniqueIdentifier>{aae3e7d9-534d-4e02-a23f-eff1046d1f39}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\..\src\World\Session.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\SessionManager.cpp">
+      <Filter>Session</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\DBHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\SessionHandler.cpp">
+      <Filter>Handler</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\BackpackModule.cpp">
+      <Filter>Module\BackpackModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Backpack.cpp">
+      <Filter>Module\BackpackModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Item.cpp">
+      <Filter>Module\ItemModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\ItemModule.cpp">
+      <Filter>Module\ItemModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module.cpp">
+      <Filter>Module</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Common\Utils.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarModule.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\War.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\EntityStatus.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\Skill.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Common\Property.cpp">
+      <Filter>Common</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaEngineBind.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\LuaScriptEngine.cpp">
+      <Filter>Script</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsModule.cpp">
+      <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\Friends.cpp">
+      <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\Room.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomModule.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomHandler.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\Team.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamHandler.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TeamModule\TeamModule.cpp">
+      <Filter>Module\TeamModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameModule.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MapModule\Map.cpp">
+      <Filter>Module\MapModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MapModule\MapModule.cpp">
+      <Filter>Module\MapModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\WorldModule.cpp">
+      <Filter>Module\WorldModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Player.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Entity.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Npc.cpp">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\PlayerHandler.cpp">
+      <Filter>Module\WorldModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameGoldenFlower.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RoomModule\RoomMatch.cpp">
+      <Filter>Module\RoomModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameHandler.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\GameModule\GameComponent.cpp">
+      <Filter>Module\GameModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WarModule\WarHandler.cpp">
+      <Filter>Module\WarModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\FriendsModule\FriendsHandler.cpp">
+      <Filter>Module\FriendsModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\Mailmodule\MailModule.cpp">
+      <Filter>Module\MailModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\MailModule\Mail.cpp">
+      <Filter>Module\MailModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopModule.cpp">
+      <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\Shop.cpp">
+      <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\ShopModule\ShopHandler.cpp">
+      <Filter>Module\ShopModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\RankModule\RankModule.cpp">
+      <Filter>Module\RankModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\ConfigManager.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Application.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\main.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\WorldModule\Visual.cpp">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskModule.cpp">
+      <Filter>Module\TaskModule</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\World\Module\TaskModule\TaskNode.cpp">
+      <Filter>Module\TaskModule</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\..\src\World\Session.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\SessionManager.h">
+      <Filter>Session</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\protocols\protocols.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\DBHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\SessionHandler.h">
+      <Filter>Handler</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\BackpackModule.h">
+      <Filter>Module\BackpackModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Backpack.h">
+      <Filter>Module\BackpackModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Item.h">
+      <Filter>Module\ItemModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\ItemModule.h">
+      <Filter>Module\ItemModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\MsgCode.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module.h">
+      <Filter>Module</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Utils.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarModule.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\War.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\EntityStatus.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\Skill.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Property.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\LuaEngine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\LuaScriptEngine.h">
+      <Filter>Script</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsModule.h">
+      <Filter>Module\FriendsModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\Friends.h">
+      <Filter>Module\FriendsModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\RedisDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\Room.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomModule.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomHandler.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\Team.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamHandler.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TeamModule\TeamModule.h">
+      <Filter>Module\TeamModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameModule.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MapModule\Map.h">
+      <Filter>Module\MapModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MapModule\MapModule.h">
+      <Filter>Module\MapModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\WorldModule.h">
+      <Filter>Module\WorldModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Player.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Entity.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Npc.h">
+      <Filter>Module\WorldModule\Entity\npc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\PlayerHandler.h">
+      <Filter>Module\WorldModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameGoldenFlower.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\ConstDef.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RoomModule\RoomMatch.h">
+      <Filter>Module\RoomModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Common\Channel.h">
+      <Filter>Common</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameHandler.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\GameModule\GameComponent.h">
+      <Filter>Module\GameModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WarModule\WarHandler.h">
+      <Filter>Module\WarModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\FriendsModule\FriendsHandler.h">
+      <Filter>Module\FriendsModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\Mailmodule\MailModule.h">
+      <Filter>Module\MailModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\MailModule\Mail.h">
+      <Filter>Module\MailModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopModule.h">
+      <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\Shop.h">
+      <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\CfgDef.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\ShopModule\ShopHandler.h">
+      <Filter>Module\ShopModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\RankModule\RankModule.h">
+      <Filter>Module\RankModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\ConfigManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Application.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\stdafx.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\WorldModule\Visual.h">
+      <Filter>Module\WorldModule\Entity</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskModule.h">
+      <Filter>Module\TaskModule</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\World\Module\TaskModule\TaskNode.h">
+      <Filter>Module\TaskModule</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <Xml Include="..\..\src\Common\protocols\protocols.xml">
+      <Filter>Common</Filter>
+    </Xml>
+    <Xml Include="..\..\bin\World\config.xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="..\..\bin\config\cfg\script\card.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\game.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\global.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\gm.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\player.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\room.lua">
+      <Filter>lua</Filter>
+    </None>
+    <None Include="..\..\bin\config\cfg\script\team.lua">
+      <Filter>lua</Filter>
+    </None>
+  </ItemGroup>
+</Project>
