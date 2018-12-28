@@ -33,6 +33,12 @@
     <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBRecord.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBAngent.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBRequest.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBConnector.h">
@@ -48,6 +54,12 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\mysql.hpp">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBAngent.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBRequest.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

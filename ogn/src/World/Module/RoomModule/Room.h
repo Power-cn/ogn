@@ -9,7 +9,7 @@ enum RoomPlayerState :  char
 	RPS_Observed,			// ¹ÛÕ½ÖÐ
 };
 
-class RoomPlayer
+class RoomPlayer : public Object
 {
 public:
 	Player*			mPlayer = NULL;
@@ -28,7 +28,7 @@ public:
 	bool operator >> (RoomPlayerInfo& info);
 };
 
-class Room
+class Room : public Object
 {
 	friend class RoomModule;
 public:

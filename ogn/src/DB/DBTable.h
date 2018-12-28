@@ -5,6 +5,7 @@
 
 class DBAccount :public DBRecord
 {
+	DECLARE_CLASS(DBAccount);
 public:
 	virtual bool operator >> (BinaryStream& bytes);
 	virtual bool operator << (BinaryStream& bytes);
@@ -17,11 +18,12 @@ public:
 	std::string phone;
 	uint32 createTime = 0;
 
-	DECLARE_TABLE(DBAccount)
+	DECLARE_TABLE(DBAccount);
 };
 
 class DBUser : public DBRecord
 {
+	DECLARE_CLASS(DBUser)
 public:
 	virtual bool operator >> (BinaryStream& bytes);
 	virtual bool operator << (BinaryStream& bytes);
@@ -34,11 +36,12 @@ public:
 	BinaryStream datas;
 	std::string datastr;
 
-	DECLARE_TABLE(DBUser)
+	DECLARE_TABLE(DBUser);
 };
 
 class DBProduct : public DBRecord
 {
+	DECLARE_CLASS(DBProduct);
 public:
 	virtual bool operator >> (BinaryStream& bytes);
 	virtual bool operator << (BinaryStream& bytes);
@@ -51,7 +54,7 @@ public:
 	uint32 unShelvesTime = 0;
 	std::string datastr;
 
-	DECLARE_TABLE(DBProduct)
+	DECLARE_TABLE(DBProduct);
 };
 
 #pragma pack()

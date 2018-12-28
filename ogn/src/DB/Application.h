@@ -26,6 +26,7 @@ protected:
 protected:
 	int32 RedisConnect(RedisEvent& e);
 	int32 RedisAuth(RedisEvent& e);
+	int32 onMysql(DBEvent& e);
 protected:
 	SocketListener* dbServer;
 	DBConnector* dbConnector;

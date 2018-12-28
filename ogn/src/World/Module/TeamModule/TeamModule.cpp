@@ -78,10 +78,7 @@ Team* TeamModule::AddTeam(Team* team)
 
 void TeamModule::RemoveTeam(uint32 teamId)
 {
-	auto itr = mMapTeam.find(teamId);
-	if (itr != mMapTeam.end()){
-		mMapTeam.erase(itr);
-	}
+	mMapTeam.erase(teamId);
 }
 
 Team* TeamModule::FindTeamById(uint32 teamId)

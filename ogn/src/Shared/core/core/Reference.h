@@ -13,6 +13,6 @@ protected:
 	void deleteThis();
 protected:
 	static std::set<Reference*> setRefMgr;
-	int mCount;
+	int mCount = 0;
 };
 

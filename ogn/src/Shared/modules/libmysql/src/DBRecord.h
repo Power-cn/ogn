@@ -26,7 +26,7 @@ struct TableDescriptor
 
 class DBRecord : public EventDispatcher
 {
-	DECLARE_CLASS(DBRecord)
+	DECLARE_CLASS(DBRecord);
 public:
 	static TableDescriptor& getDescriptor() { static TableDescriptor desc; return desc; }
 	virtual TableDescriptor& getThisDescriptor()  { return DBRecord::getDescriptor(); }
@@ -70,7 +70,7 @@ T* swapQueryResult(DBQueryResult* result)
 			FieldDescriptor* record = descriptor_.getFieldDescriptor(result->fields[j]);
 			if (record == NULL) continue;
 			DBField& field = rowResult.fields[j];
-			GetValueRecord(dest[i], (const FieldDescriptor&)*record, field.dataptr, field.length);
+			GetValueRecord(&dest[i], (const FieldDescriptor&)*record, field.dataptr, field.length);
 		}
 	}
 	return dest;
@@ -157,9 +157,9 @@ public:\
 
 
 
-void GetRecordValue(DBRecord& record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
-void GetValueRecord(DBRecord& record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
-bool GetQuerySqlCmd(char* sql_cmd, uint32& size, DBRecord& query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
-bool GetInsertSqlCmd(char* sql_cmd, uint32& size, DBRecord& insert_record, const std::string& compare_record_names);
-bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord& update_record, const std::string& compare_record_names, const std::string& update_record_names);
-bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord& delete_record, const std::string& compare_record_names);
+void GetRecordValue(DBRecord* record, const FieldDescriptor& field, uint32 valuestrlength, int8* valuestr, uint32& valuesize);
+void GetValueRecord(DBRecord* record, const FieldDescriptor& field, const int8* valuestr, uint32 valuesize);
+bool GetQuerySqlCmd(char* sql_cmd, uint32& size, DBRecord* query_record, uint32 result_max_count, const std::string& compare_record_names, const std::string& return_record_names);
+bool GetInsertSqlCmd(char* sql_cmd, uint32& size, DBRecord* insert_record, const std::string& compare_record_names);
+bool GetUpdateSqlCmd(char* sql_cmd, int32& size, DBRecord* update_record, const std::string& compare_record_names, const std::string& update_record_names);
+bool GetDeleteSqlCmd(char* sql_cmd, uint32& size, DBRecord* delete_record, const std::string& compare_record_names);

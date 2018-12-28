@@ -162,6 +162,7 @@ bool Application::Update()
 			LOG_DEBUG(LogSystem::csl_color_green, "connect DB Port:%d fail...", cf.Port);
 		}
 	}
+	sObjectMgr.Update();
 	return true;
 }
 

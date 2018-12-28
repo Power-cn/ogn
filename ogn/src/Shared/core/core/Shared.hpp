@@ -2,6 +2,7 @@
 
 #include "Shared.h"
 #include "Object.hpp"
+#include "ObjectManager.h"
 
 #include "EventListener.h"
 #include "EventRegister.h"

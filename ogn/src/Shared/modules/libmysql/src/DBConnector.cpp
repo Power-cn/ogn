@@ -167,7 +167,7 @@ int8* DBConnector::doQuery(const DBRecord& query_record, std::vector<DBRecord*>&
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 sql_size_ = 0;
-	if (!GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, NULL, NULL))
+	if (!GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord*)&query_record, result_max_count, NULL, NULL))
 	{
 		return "";
 	}
@@ -178,7 +178,7 @@ int8* DBConnector::doQuery(const DBRecord& query_record, std::vector<DBRecord*>&
 {
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 sql_size_ = 0;
-	GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord&)query_record, result_max_count, compare_record_names.c_str(), return_record_names.c_str());
+	GetQuerySqlCmd(sql_cmd_, sql_size_, (DBRecord*)&query_record, result_max_count, compare_record_names.c_str(), return_record_names.c_str());
 	return doQuery(sql_cmd_, result_records, result_count, result_max_count);
 }
 
@@ -271,7 +271,7 @@ int8* DBConnector::doQuery(const std::string& sqlstr, std::vector<DBRecord *>& r
 			{
 				FieldDescriptor* record = descriptor_.getFieldDescriptor(fields[idxCol]);
 				if (record == NULL) continue;
-				GetValueRecord(*result_records[idxRow], (const FieldDescriptor&)*record, row_[idxCol], lengths[idxCol]);
+				GetValueRecord(result_records[idxRow], (const FieldDescriptor&)*record, row_[idxCol], lengths[idxCol]);
 			}
 		}
 	}
@@ -322,7 +322,7 @@ int8* DBConnector::doInsert(const DBRecord& insert_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 size_ = 0;
 
-	if (!GetInsertSqlCmd(sql_cmd_, size_, (DBRecord&)insert_record, compare_record_names.c_str()))
+	if (!GetInsertSqlCmd(sql_cmd_, size_, (DBRecord*)&insert_record, compare_record_names.c_str()))
 		return "error get insert sql cmd .";
 
 	if (int err = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))
@@ -339,7 +339,7 @@ int8* DBConnector::doUpdate(const DBRecord& update_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	int32 size_ = 0;
 
-	if (!GetUpdateSqlCmd(sql_cmd_, size_, (DBRecord&)update_record, compare_record_names.c_str(), update_record_names.c_str()))
+	if (!GetUpdateSqlCmd(sql_cmd_, size_, (DBRecord*)&update_record, compare_record_names.c_str(), update_record_names.c_str()))
 		return "";
 
 	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))
@@ -360,7 +360,7 @@ int8* DBConnector::doDelete(const DBRecord& delete_record, const std::string& co
 	char sql_cmd_[SQL_CMD_COUNT] = { 0 };
 	uint32 size_ = 0;
 
-	if (!GetDeleteSqlCmd(sql_cmd_, size_, (DBRecord&)delete_record, compare_record_names))
+	if (!GetDeleteSqlCmd(sql_cmd_, size_, (DBRecord*)&delete_record, compare_record_names))
 		return "";
 
 	if (int iError = mysql_real_query(mMysql, sql_cmd_, (unsigned long)strlen(sql_cmd_)))

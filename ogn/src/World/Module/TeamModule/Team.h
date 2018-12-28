@@ -21,7 +21,7 @@ protected:
 
 typedef std::list<TeamEntity*> TeamEntityArray;
 typedef std::set<TeamEntity*> TeamEntitySet;
-class Team
+class Team : public Object
 {
 	friend class TeamModule;
 public:

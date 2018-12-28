@@ -64,3 +64,4 @@
 #define sSsnMgr INSTANCE(SessionManager)
 #define sPlrMgr INSTANCE(PlayerManager)
 #define sPacketMgr INSTANCE(PacketManager)
+#define sDBAngent INSTANCE(DBAngent)

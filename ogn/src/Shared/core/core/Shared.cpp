@@ -621,3 +621,19 @@ std::string Shared::ConvertHex(char* datas, int32 length)
 	sprintf_s(szBuffer + len, tlen - len, "\n");
 	return szBuffer;
 }
+
+std::string Shared::tolower(const std::string& str)
+{
+	std::string tmpstr = str;
+	for (size_t i = 0; i < tmpstr.length(); ++i)
+		tmpstr[i] = (char)::tolower(tmpstr[i]);
+	return tmpstr;
+}
+
+std::string Shared::toupper(const std::string& str)
+{
+	std::string tmpstr = str;
+	for (size_t i = 0; i < tmpstr.length(); ++i)
+		tmpstr[i] = (char)::toupper(tmpstr[i]);
+	return tmpstr;
+}

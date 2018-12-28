@@ -5,3 +5,6 @@
 #include "DBRecord.h"
 #include "DBProxy.h"
 #include "DBConnector.h"
+#include "DBRequest.h"
+#include "DBAngent.h"
+

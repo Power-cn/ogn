@@ -139,6 +139,7 @@
 #define sRedisProxy INSTANCE(RedisProxy)
 #define sLua INSTANCE(LuaEngine)
 #define sProperty INSTANCE(PropertyHelper)
+#define sObjectMgr INSTANCE(ObjectManager)
 
 #define sWorld (*GetModule(WorldModule))
 #define sMap (*GetModule(MapModule))

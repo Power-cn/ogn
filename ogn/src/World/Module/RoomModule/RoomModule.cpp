@@ -8,7 +8,7 @@ RoomModule::RoomModule()
 
 RoomModule::~RoomModule()
 {
-
+	Destroy();
 }
 
 void RoomModule::sendPacketToRoom(Packet& packet, Player* player)
@@ -197,7 +197,7 @@ void RoomModule::RemoveRoom(uint32 roomId)
 {
 	auto itr = mMapRoom.find(roomId);
 	if (itr != mMapRoom.end()) {
-		delete itr->second;
+		mSetDelRoom.insert(itr->second);
 		mMapRoom.erase(itr);
 	}
 }
@@ -404,6 +404,7 @@ bool RoomModule::Initialize()
 bool RoomModule::Update(float time, float delay)
 {
 	MatchUpdate();
+	FreeRooms();
 	return true;
 }
 
@@ -428,6 +429,7 @@ void RoomModule::ClearRoom()
 	for (auto& itr : mMapRoom)
 		delete itr.second;
 	mMapRoom.clear();
+	FreeRooms();
 }
 
 RoomMatch* RoomModule::FindRoomMatch(uint32 userId)
@@ -489,5 +491,13 @@ void RoomModule::MatchUpdate()
 			break;
 		}
 	}
+}
+
+void RoomModule::FreeRooms()
+{
+	for (auto itr : mSetDelRoom) {
+		delete itr;
+	}
+	mSetDelRoom.clear();
 }
 

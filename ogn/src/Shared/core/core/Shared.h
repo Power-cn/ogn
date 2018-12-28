@@ -157,8 +157,21 @@ typedef void*			varptr;
 #define Guid64
 #ifdef Guid64
 typedef uint64					Guid;
+
+union _Guid
+{
+	uint64	Data;
+	uint8	Data1[8];
+};
+
 #else 
 typedef uint32					Guid;
+union _Guid
+{
+	uint32	Data;
+	uint8	Data1[4];
+};
+
 #endif // Guid64
 
 #define Session64
@@ -253,7 +266,8 @@ namespace Shared
 
 	void XOR(char* input, int len, cstring& key);
 	std::string ConvertHex(char* datas, int32 length);
-
+	std::string tolower(const std::string& str);
+	std::string toupper(const std::string& str);
 };
 
 //

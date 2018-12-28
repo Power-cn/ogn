@@ -54,6 +54,7 @@
     <ClInclude Include="..\..\src\Shared\core\core\Network.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Object.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Object.hpp" />
+    <ClInclude Include="..\..\src\Shared\core\core\ObjectManager.h" />
     <ClInclude Include="..\..\src\Shared\core\core\Packet.h" />
     <ClInclude Include="..\..\src\Shared\core\core\PacketManager.h" />
     <ClInclude Include="..\..\src\Shared\core\core\RedisProxy.h" />
@@ -121,6 +122,7 @@
     <ClCompile Include="..\..\src\Shared\core\core\Mutex.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Network.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Object.cpp" />
+    <ClCompile Include="..\..\src\Shared\core\core\ObjectManager.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\Packet.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\PacketManager.cpp" />
     <ClCompile Include="..\..\src\Shared\core\core\RedisProxy.cpp" />

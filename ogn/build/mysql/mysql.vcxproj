@@ -158,16 +158,20 @@
     <Text Include="ReadMe.txt" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBAngent.cpp" />
     <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBConnector.cpp" />
     <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBEvent.cpp" />
     <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBProxy.cpp" />
     <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBRecord.cpp" />
+    <ClCompile Include="..\..\src\Shared\modules\libmysql\src\DBRequest.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBAngent.h" />
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBConnector.h" />
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBEvent.h" />
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBProxy.h" />
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBRecord.h" />
+    <ClInclude Include="..\..\src\Shared\modules\libmysql\src\DBRequest.h" />
     <ClInclude Include="..\..\src\Shared\modules\libmysql\src\mysql.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

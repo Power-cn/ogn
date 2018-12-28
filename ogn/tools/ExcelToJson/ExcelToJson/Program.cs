@@ -48,6 +48,9 @@ namespace ExcelToJson
             //var json = new JObject();
             foreach (string tableName in tableNames)
             {
+                if (tableName != "Shelve" && tableName != "OffShelve")
+                    continue;
+
                 JsonData json = new JsonData();
                 JsonData table = new JsonData();
                 StructData data = new StructData();

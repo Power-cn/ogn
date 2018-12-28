@@ -35,11 +35,11 @@
 		}, {
 			"ID": 5,
 			"Name": "Mysql",
-			"Host": "112.74.49.74",
+			"Host": "127.0.0.1",
 			"Port": 3306,
 			"User": "root",
 			"Password": "123456",
-			"DbName": "game"
+			"DbName": "ogn"
 		}, {
 			"ID": 6,
 			"Name": "Redis",

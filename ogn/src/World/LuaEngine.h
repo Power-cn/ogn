@@ -125,6 +125,34 @@ public:
 		}
 		return false;
 	}
+
+	template <class... TArg>
+	static uint32 CallScript(const std::string& name, const std::string& func, TArg&&... args)
+	{
+		LuaScript* luaScript = INSTANCE(LuaEngine).getScript(name);
+		if (!luaScript)	return false;
+
+		lua_State* luaState = luaScript->getLuaState();
+		if (!luaState) return false;
+
+		try {
+			int ret = luabind::call_function<int>(luaState, func.c_str(), std::forward<TArg>(args)...);
+			return ret;
+		}
+		catch (luabind::error& e)
+		{
+			LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), e.what());
+			return 0;
+		}
+		catch (const char* msg)
+		{
+			LOG_ERROR("lua:%s func:%s error: %s", name.c_str(), func.c_str(), msg);
+			return 0;
+		}
+
+		return 0;
+	}
+
 public:
 	static Object* sCurrentObject;
 protected:

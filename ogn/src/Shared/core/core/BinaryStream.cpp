@@ -11,8 +11,10 @@ mIsDel(false)
 	mIsDel = true;
 	if (mCount <= 0)
 		mBytes = NULL;
-	else
+	else {
 		mBytes = new int8[mCount];
+		memset(mBytes, 0, mCount);
+	}
 }
 
 BinaryStream::BinaryStream(void* ptr, int32 count, bool isDel):

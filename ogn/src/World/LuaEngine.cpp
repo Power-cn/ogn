@@ -73,7 +73,8 @@ LuaScript* LuaEngine::loadScript(cstring& path)
 
 LuaScript* LuaEngine::getScript(cstring& name)
 {
-	auto itr = mMapLuaScript.find(name);
+	std::string tmpname = Shared::tolower(name);
+	auto itr = mMapLuaScript.find(tmpname);
 	if (itr != mMapLuaScript.end())
 		return itr->second;
 

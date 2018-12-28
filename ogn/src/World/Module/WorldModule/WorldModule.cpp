@@ -153,7 +153,8 @@ void WorldModule::removeEntity(Entity* ent)
 {
 	mMapEntity.erase(ent->getGuid());
 	mMapNameEntity.erase(ent->getName());
-	delete ent;
+	//delete ent;
+	sObjectMgr.FreeObject(ent);
 }
 
 void WorldModule::removePlayer(uint32 accId)

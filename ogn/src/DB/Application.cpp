@@ -60,6 +60,7 @@ bool Application::Initialize()
 		cfMysql.DbName.c_str(),
 		cfMysql.Port);
 
+	
 	if (dbConnector)
 		LOG_DEBUG(LogSystem::csl_color_green, "Database connect %s %s %d success", cfMysql.DbName.c_str(), cfMysql.Host.c_str(), cfMysql.Port);
 	else
@@ -67,6 +68,30 @@ bool Application::Initialize()
 		LOG_ERROR("Database connect fail...");
 		return false;
 	}
+
+	sDBAngent.Connect(cfMysql.Host.c_str(),
+		cfMysql.User.c_str(),
+		cfMysql.Password.c_str(),
+		cfMysql.DbName.c_str(),
+		cfMysql.Port, 10);
+
+	for (uint32 i = 0; i < 10; ++i)
+	{
+		DBInsertRequest* request = (DBInsertRequest*)sDBAngent.DispatchRequest(new DBInsertRequest(new DBAccount));
+		request->addEventListener(DBEvent::DBEVENT_CMD, (EventCallback)&Application::onMysql, this);
+		DBAccount* insertDB = (DBAccount*)request->record;
+		request->record = insertDB;
+		insertDB->user = Shared::uint32tostr(i);
+		insertDB->createTime = time(NULL);
+	}
+
+	DBQueryRequest* qrequest = (DBQueryRequest*)sDBAngent.DispatchRequest(new DBQueryRequest(new DBAccount));
+	DBAccount* qaccount = (DBAccount*)qrequest->record;
+	qaccount->user = "1";
+	qrequest->record = qaccount;
+
+	//qrequest->compareRecord = "user";
+	qrequest->addEventListener(DBEvent::DBEVENT_CMD, (EventCallback)&Application::onMysql, this);
 
 	sRedisProxy.addEventListener(RedisEvent::CONNECT, (EventCallback)&Application::RedisConnect, this);
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("Redis");
@@ -77,6 +102,7 @@ bool Application::Initialize()
 
 bool Application::Update()
 {
+	sDBAngent.Update();
 	INSTANCE(Network).update(0.f, 0.f);
 	INSTANCE(DBProxy).update(0.f, 0.f);
 	sRedisProxy.loop();
@@ -224,5 +250,16 @@ int32 Application::RedisAuth(RedisEvent& e)
 {
 	ServerConfig& cfg = INSTANCE(ConfigManager).getConfig("Redis");
 	LOG_DEBUG(LogSystem::csl_color_green, "redis auth success  %s %d", cfg.Host.c_str(), cfg.Port);
+	return 0;
+}
+
+int32 Application::onMysql(DBEvent& e)
+{
+	DBRequest* request = (DBRequest*)e.targetDispatcher;
+	if (request->err != "")
+		LOG_ERROR("cmdstr:%s err:%s", request->cmd.c_str(), request->err.c_str());
+	else
+		LOG_DEBUG(LogSystem::csl_color_green, "cmdstr:%s", request->cmd.c_str());
+
 	return 0;
 }

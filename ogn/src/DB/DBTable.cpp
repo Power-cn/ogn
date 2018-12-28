@@ -1,6 +1,8 @@
 #include "stdafx.h"
 
 
+IMPLEMENT_CLASS(DBAccount, DBRecord);
+
 IMPLEMENT_TABLE_BEGIN(DBAccount, "account")
 
 IMPLEMENT_RECORD_INFO(DBAccount, id, Variant::TypeInt32, "NULL", KeyTypeAutoInc)
@@ -37,7 +39,7 @@ bool DBAccount::operator<<(BinaryStream& bytes)
 	return true;
 }
 
-
+IMPLEMENT_CLASS(DBUser, DBRecord);
 IMPLEMENT_TABLE_BEGIN(DBUser, "user")
 
 IMPLEMENT_RECORD_INFO(DBUser, id, Variant::TypeInt32, "NULL", KeyTypeAutoInc)
@@ -73,6 +75,9 @@ bool DBUser::operator<<(BinaryStream& bytes)
 	CHECK(bytes >> datastr);
 	return true;
 }
+
+
+IMPLEMENT_CLASS(DBProduct, DBRecord);
 
 IMPLEMENT_TABLE_BEGIN(DBProduct, "product")
 

@@ -228,6 +228,9 @@
     <ClInclude Include="..\..\src\Shared\core\json\json_batchallocator.h">
       <Filter>json</Filter>
     </ClInclude>
+    <ClInclude Include="..\..\src\Shared\core\core\ObjectManager.h">
+      <Filter>core</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="..\..\src\Shared\core\zlib\adler32.c">
@@ -433,6 +436,9 @@
     </ClCompile>
     <ClCompile Include="..\..\src\Shared\core\json\json_writer.cpp">
       <Filter>json</Filter>
+    </ClCompile>
+    <ClCompile Include="..\..\src\Shared\core\core\ObjectManager.cpp">
+      <Filter>core</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
